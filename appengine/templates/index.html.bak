@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<p> You can create notes <a href="/create">here.</a> </p>
+{% for note in notes %}
+<p class="sticky taped" style="width: 250px;"> 
+<big>{{ note.text }} </big> <br />
+    Priority : {{ note.priority }} <br />
+    Created: {{ note.date.strftime('%Y-%m-%d')  }} <br/>
+    Status: {{ note.status }} 
+    (<a href ="edit/{{ note.key().id() }}">edit </a>)
+        <br /> 
+    --{{ note.author }} </p>
+{% endfor %}
+</p>
+{% endblock content %}

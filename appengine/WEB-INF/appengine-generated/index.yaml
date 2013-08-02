@@ -1,7 +1,0 @@
-indexes:
-- kind: "_CloudMessages"
-  properties:
-  - name: "topicId"
-    direction: asc
-  - name: "_createdAt"
-    direction: desc
