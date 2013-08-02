@@ -46,9 +46,14 @@ class RegisterPage(BaseHandler):
         regId=self.request.get('regId')
         name=self.request.get('name')
         email=self.request.get('email')
+        
+        q = db.GqlQuery("SELECT * FROM Users WHERE regId = :1", regId)
 
-        n = Users(regId=regId, name=name, email=email)
-        n.put()
+        if q.count() > 0:
+          print "Device already registered with register id = %s"%regId
+        else:
+          n = Users(regId=regId, name=name, email=email)
+          n.put()
     
     def get(self):
         """

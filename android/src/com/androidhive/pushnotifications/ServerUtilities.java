@@ -24,17 +24,19 @@ public final class ServerUtilities {
      */
     static void register(final Context context, String name, String email, final String regId) {
     	Log.i(CommonUtilities.TAG, "registering device (regId = " + regId + ")");
-        Map<String, String> paramsPost = new HashMap<String, String>();
-        paramsPost.put("regId", regId);
-        paramsPost.put("name", name);
-        paramsPost.put("email", email);
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("regId", regId);
+        params.put("name", name);
+        params.put("email", email);
+        String message = "";
         try {
-			ServerUtilities.post(CommonUtilities.SERVER_URL, paramsPost);
-			CommonUtilities.displayMessage(context, "Device registered, registration id=" + regId);
+			ServerUtilities.post(CommonUtilities.REGISTER_URL, params);
+			message = context.getString(R.string.server_registered, regId);
 		} catch (IOException e) {
-			CommonUtilities.displayMessage(context, "Device not registered for exception, registration id=" + regId);
-			e.printStackTrace();
+			message = context.getString(R.string.server_register_error, regId, e.getMessage());
 		}
+        Log.i(CommonUtilities.TAG, message);
+		CommonUtilities.displayMessage(context, message);
     }
 
     /**
@@ -42,24 +44,18 @@ public final class ServerUtilities {
      */
     static void unregister(final Context context, final String regId) {
         Log.i(CommonUtilities.TAG, "unregistering device (regId = " + regId + ")");
-        String serverUrl = CommonUtilities.SERVER_URL + "/unregister";
         Map<String, String> params = new HashMap<String, String>();
         params.put("regId", regId);
+        String message = "";
         try {
-            post(serverUrl, params);
+            post(CommonUtilities.UNREGISTER_URL, params);
             GCMRegistrar.setRegisteredOnServer(context, false);
-            String message = context.getString(R.string.server_unregistered);
-            CommonUtilities.displayMessage(context, message);
+            message = context.getString(R.string.server_unregistered, regId);
         } catch (IOException e) {
-            // At this point the device is unregistered from GCM, but still
-            // registered in the server.
-            // We could try to unregister again, but it is not necessary:
-            // if the server tries to send a message to the device, it will get
-            // a "NotRegistered" error message and should unregister the device.
-            String message = context.getString(R.string.server_unregister_error,
-                    e.getMessage());
-            CommonUtilities.displayMessage(context, message);
+        	message = context.getString(R.string.server_unregister_error, regId, e.getMessage());
         }
+        Log.i(CommonUtilities.TAG, message);
+		CommonUtilities.displayMessage(context, message);
     }
 
     /**

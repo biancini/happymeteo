@@ -1,7 +1,5 @@
 package com.androidhive.pushnotifications;
 
-import static com.androidhive.pushnotifications.CommonUtilities.SENDER_ID;
-import static com.androidhive.pushnotifications.CommonUtilities.SERVER_URL;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,8 +39,8 @@ public class RegisterActivity extends Activity {
 		}
 
 		// Check if GCM configuration is set
-		if (SERVER_URL == null || SENDER_ID == null || SERVER_URL.length() == 0
-				|| SENDER_ID.length() == 0) {
+		if (CommonUtilities.BASE_URL == null || CommonUtilities.SENDER_ID == null || 
+				CommonUtilities.BASE_URL.length() == 0 || CommonUtilities.SENDER_ID.length() == 0) {
 			// GCM sernder id / server url is missing
 			alert.showAlertDialog(RegisterActivity.this, "Configuration Error!",
 					"Please set your Server URL and GCM Sender ID", false);

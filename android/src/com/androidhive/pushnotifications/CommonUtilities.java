@@ -6,7 +6,9 @@ import android.content.Intent;
 public final class CommonUtilities {
 	
 	// give your server registration url here
-    static final String SERVER_URL = "http://10.0.2.2:8080/register"; 
+    static final String BASE_URL = "http://10.0.2.2:8080";
+    static final String REGISTER_URL = BASE_URL + "/register"; 
+    static final String UNREGISTER_URL = BASE_URL + "/unregister"; 
 
     // Google project id
     static final String SENDER_ID = "347057775979"; 
@@ -14,7 +16,7 @@ public final class CommonUtilities {
     /**
      * Tag used on log messages.
      */
-    static final String TAG = "AndroidHive GCM";
+    static final String TAG = "HappyMeteo";
 
     static final String DISPLAY_MESSAGE_ACTION =
             "com.androidhive.pushnotifications.DISPLAY_MESSAGE";
