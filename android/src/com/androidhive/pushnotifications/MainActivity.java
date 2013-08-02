@@ -45,7 +45,6 @@ public class MainActivity extends Activity {
 			alert.showAlertDialog(MainActivity.this,
 					"Internet Connection Error",
 					"Please connect to working Internet connection", false);
-			// stop executing code by return
 			return;
 		}
 		
@@ -64,8 +63,7 @@ public class MainActivity extends Activity {
 
 		lblMessage = (TextView) findViewById(R.id.lblMessage);
 		
-		registerReceiver(mHandleMessageReceiver, new IntentFilter(
-				DISPLAY_MESSAGE_ACTION));
+		registerReceiver(mHandleMessageReceiver, new IntentFilter(DISPLAY_MESSAGE_ACTION));
 		
 		// Get GCM registration id
 		final String regId = GCMRegistrar.getRegistrationId(this);
@@ -89,6 +87,8 @@ public class MainActivity extends Activity {
 					@Override
 					protected Void doInBackground(Void... params) {
 						// Register on our server
+						GCMRegistrar.register(context, SENDER_ID);
+
 						// On server creates a new user
 						ServerUtilities.register(context, name, email, regId);
 						return null;

@@ -1,15 +1,15 @@
 import webapp2
-from views import MainPage
-"""
-from views import MainPage, CreateNote, DeleteNote, EditNote
-"""
+from views import MainPage, RegisterPage, UnregisterPage, SendMessagePage
+
 app = webapp2.WSGIApplication([
-        ('/', MainPage)
+        ('/', MainPage),
+        ('/register', RegisterPage),
+        ('/unregister', UnregisterPage),
+        ('/send_message', SendMessagePage)
         ],
         debug=True)
         
 """
-,
 ('/create', CreateNote), 
 ('/edit/([\d]+)', EditNote),
 ('/delete/([\d]+)', DeleteNote)

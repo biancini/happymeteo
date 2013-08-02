@@ -1,7 +1,5 @@
 package com.androidhive.pushnotifications;
 
-import static com.androidhive.pushnotifications.CommonUtilities.SENDER_ID;
-import static com.androidhive.pushnotifications.CommonUtilities.displayMessage;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,7 +14,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	private static final String TAG = "GCMIntentService";
 
     public GCMIntentService() {
-        super(SENDER_ID);
+        super(CommonUtilities.SENDER_ID);
     }
 
     /**
@@ -25,7 +23,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     protected void onRegistered(Context context, String registrationId) {
         Log.i(TAG, "Device registered: regId = " + registrationId);
-        displayMessage(context, "Your device registred with GCM");
+        CommonUtilities.displayMessage(context, "Your device registred with GCM");
         Log.d("NAME", MainActivity.name);
         ServerUtilities.register(context, MainActivity.name, MainActivity.email, registrationId);
     }
@@ -36,7 +34,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     protected void onUnregistered(Context context, String registrationId) {
         Log.i(TAG, "Device unregistered");
-        displayMessage(context, getString(R.string.gcm_unregistered));
+        CommonUtilities.displayMessage(context, getString(R.string.gcm_unregistered));
         ServerUtilities.unregister(context, registrationId);
     }
 
@@ -48,7 +46,7 @@ public class GCMIntentService extends GCMBaseIntentService {
         Log.i(TAG, "Received message");
         String message = intent.getExtras().getString("price");
         
-        displayMessage(context, message);
+        CommonUtilities.displayMessage(context, message);
         // notifies user
         generateNotification(context, message);
     }
@@ -60,7 +58,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     protected void onDeletedMessages(Context context, int total) {
         Log.i(TAG, "Received deleted messages notification");
         String message = getString(R.string.gcm_deleted, total);
-        displayMessage(context, message);
+        CommonUtilities.displayMessage(context, message);
         // notifies user
         generateNotification(context, message);
     }
@@ -71,14 +69,14 @@ public class GCMIntentService extends GCMBaseIntentService {
     @Override
     public void onError(Context context, String errorId) {
         Log.i(TAG, "Received error: " + errorId);
-        displayMessage(context, getString(R.string.gcm_error, errorId));
+        CommonUtilities.displayMessage(context, getString(R.string.gcm_error, errorId));
     }
 
     @Override
     protected boolean onRecoverableError(Context context, String errorId) {
         // log message
         Log.i(TAG, "Received recoverable error: " + errorId);
-        displayMessage(context, getString(R.string.gcm_recoverable_error,
+        CommonUtilities.displayMessage(context, getString(R.string.gcm_recoverable_error,
                 errorId));
         return super.onRecoverableError(context, errorId);
     }

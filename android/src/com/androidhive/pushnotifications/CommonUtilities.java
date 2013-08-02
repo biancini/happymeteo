@@ -6,7 +6,7 @@ import android.content.Intent;
 public final class CommonUtilities {
 	
 	// give your server registration url here
-    static final String SERVER_URL = "http://10.0.2.2/gcm_server_php/register.php"; 
+    static final String SERVER_URL = "http://10.0.2.2:8080/register"; 
 
     // Google project id
     static final String SENDER_ID = "347057775979"; 
@@ -19,7 +19,7 @@ public final class CommonUtilities {
     static final String DISPLAY_MESSAGE_ACTION =
             "com.androidhive.pushnotifications.DISPLAY_MESSAGE";
 
-    static final String EXTRA_MESSAGE = "message";
+    static final String EXTRA_MESSAGE = "data";
 
     /**
      * Notifies UI to display a message.
