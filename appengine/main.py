@@ -1,16 +1,42 @@
-import webapp2
-from views import MainPage, RegisterPage, UnregisterPage, SendMessagePage
+# -*- coding: utf-8 -*-
+import sys
+from secrets import SESSION_KEY
 
-app = webapp2.WSGIApplication([
-        ('/', MainPage),
-        ('/register', RegisterPage),
-        ('/unregister', UnregisterPage),
-        ('/send_message', SendMessagePage)
-        ],
-        debug=True)
-        
-"""
-('/create', CreateNote), 
-('/edit/([\d]+)', EditNote),
-('/delete/([\d]+)', DeleteNote)
-"""
+from webapp2 import WSGIApplication, Route
+
+# inject './lib' dir in the path so that we can simply do "import ndb" 
+# or whatever there's in the app lib dir.
+if 'lib' not in sys.path:
+    sys.path[0:0] = ['lib']
+
+# webapp2 config
+app_config = {
+  'webapp2_extras.sessions': {
+    'cookie_name': '_simpleauth_sess',
+    'secret_key': SESSION_KEY
+  },
+  'webapp2_extras.auth': {
+    'user_attributes': []
+  }
+}
+    
+# Map URLs to handlers
+routes = [
+  Route('/', handler='handlers.RootHandler'),
+
+  # device managment
+  Route('/index_device', handler='handlers.IndexDeviceHandler'),
+  Route('/register', handler='handlers.RegisterHandler'),
+  Route('/unregister', handler='handlers.UnregisterHandler'),
+  Route('/send_message', handler='handlers.SendMessageHandler'),
+
+  # profile user
+  Route('/profile', handler='handlers.ProfileHandler', name='profile'),
+  Route('/logout', handler='handlers.AuthHandler:logout', name='logout'),
+  Route('/auth/<provider>', 
+    handler='handlers.AuthHandler:_simple_auth', name='auth_login'),
+  Route('/auth/<provider>/callback', 
+    handler='handlers.AuthHandler:_auth_callback', name='auth_callback')
+]
+
+app = WSGIApplication(routes, config=app_config, debug=True)
