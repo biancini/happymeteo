@@ -1,4 +1,4 @@
-package com.androidhive.pushnotifications;
+package com.happymeteo.pushnotifications;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,23 +6,23 @@ import android.content.Intent;
 public final class CommonUtilities {
 	
 	// give your server registration url here
-    static final String BASE_URL = "http://happymeteo.appspot.com";
-    static final String LOGIN_FACEBOOK_URL = BASE_URL + "/auth/facebook"; 
-    static final String REGISTER_URL = BASE_URL + "/register"; 
-    static final String UNREGISTER_URL = BASE_URL + "/unregister"; 
+	public static final String BASE_URL = "http://happymeteo.appspot.com";
+	public static final String LOGIN_FACEBOOK_URL = BASE_URL + "/auth/facebook"; 
+	public static final String REGISTER_URL = BASE_URL + "/register"; 
+	public static final String UNREGISTER_URL = BASE_URL + "/unregister"; 
 
     // Google project id
-    static final String SENDER_ID = "347057775979"; 
+	public static final String SENDER_ID = "347057775979"; 
 
     /**
      * Tag used on log messages.
      */
-    static final String TAG = "HappyMeteo";
+	public static final String TAG = "HappyMeteo";
 
-    static final String DISPLAY_MESSAGE_ACTION =
+	public static final String DISPLAY_MESSAGE_ACTION =
             "com.androidhive.pushnotifications.DISPLAY_MESSAGE";
 
-    static final String EXTRA_MESSAGE = "message";
+	public static final String EXTRA_MESSAGE = "message";
 
     /**
      * Notifies UI to display a message.

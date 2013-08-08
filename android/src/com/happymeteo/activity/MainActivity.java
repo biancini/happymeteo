@@ -1,8 +1,5 @@
-package com.androidhive.pushnotifications;
+package com.happymeteo.activity;
 
-import static com.androidhive.pushnotifications.CommonUtilities.DISPLAY_MESSAGE_ACTION;
-import static com.androidhive.pushnotifications.CommonUtilities.EXTRA_MESSAGE;
-import static com.androidhive.pushnotifications.CommonUtilities.SENDER_ID;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,6 +12,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
+import com.happymeteo.R;
+import com.happymeteo.pushnotifications.AlertDialogManager;
+import com.happymeteo.pushnotifications.CommonUtilities;
+import com.happymeteo.pushnotifications.ConnectionDetector;
+import com.happymeteo.pushnotifications.ServerUtilities;
+import com.happymeteo.pushnotifications.WakeLocker;
 
 public class MainActivity extends Activity {
 	// label to display gcm messages
@@ -60,7 +63,7 @@ public class MainActivity extends Activity {
 
 		lblMessage = (TextView) findViewById(R.id.lblMessage);
 		
-		registerReceiver(mHandleMessageReceiver, new IntentFilter(DISPLAY_MESSAGE_ACTION));
+		registerReceiver(mHandleMessageReceiver, new IntentFilter(CommonUtilities.DISPLAY_MESSAGE_ACTION));
 		
 		// Get GCM registration id
 		final String regId = GCMRegistrar.getRegistrationId(this);
@@ -68,7 +71,7 @@ public class MainActivity extends Activity {
 		// Check if regid already presents
 		if (regId.equals("")) {
 			// Registration is not present, register now with GCM			
-			GCMRegistrar.register(this, SENDER_ID);
+			GCMRegistrar.register(this, CommonUtilities.SENDER_ID);
 		} else {
 			// Device is already registered on GCM
 			if (GCMRegistrar.isRegisteredOnServer(this)) {
@@ -84,7 +87,7 @@ public class MainActivity extends Activity {
 					@Override
 					protected Void doInBackground(Void... params) {
 						// Register on our server
-						GCMRegistrar.register(context, SENDER_ID);
+						GCMRegistrar.register(context, CommonUtilities.SENDER_ID);
 
 						// On server creates a new user
 						ServerUtilities.register(context, name, email, regId);
@@ -108,7 +111,7 @@ public class MainActivity extends Activity {
 	private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			String newMessage = intent.getExtras().getString(EXTRA_MESSAGE);
+			String newMessage = intent.getExtras().getString(CommonUtilities.EXTRA_MESSAGE);
 			// Waking up mobile if it is sleeping
 			WakeLocker.acquire(getApplicationContext());
 			

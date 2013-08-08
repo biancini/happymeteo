@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.androidhive.pushnotifications"
+    package="com.happymeteo"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -20,10 +20,10 @@
 
     <!-- Creates a custom permission so only this app can receive its messages. -->
     <permission
-        android:name="com.androidhive.pushnotifications.permission.C2D_MESSAGE"
+        android:name="com.happymeteo.pushnotifications.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.androidhive.pushnotifications.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.happymeteo.pushnotifications.permission.C2D_MESSAGE" />
 
     <!-- This app has permission to register and receive data message. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -34,24 +34,41 @@
     <!-- Permission to vibrate -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <!-- Main activity. -->
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
 
-        <!-- Register Activity -->
+        <!-- Activities -->
         <activity
-            android:name="com.androidhive.pushnotifications.RegisterActivity"
+            android:name=".activity.RegisterActivity"
             android:label="@string/app_name" >
         </activity>
-
-        <!-- Main Activity -->
         <activity
-            android:name="com.androidhive.pushnotifications.MainActivity"
+            android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".activity.IndexActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Facebook Login Activity -->
+        <activity
+            android:name="com.facebook.LoginActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/applicationId" />
+
+        <!-- GCM Service -->
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -62,25 +79,11 @@
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.androidhive.pushnotifications" />
+                <category android:name="com.happymeteo.pushnotifications" />
             </intent-filter>
         </receiver>
 
-        <service android:name="com.androidhive.pushnotifications.GCMIntentService" />
-
-        <activity
-            android:name="com.androidhive.pushnotifications.IndexActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        
-        <activity android:name="com.facebook.LoginActivity"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
-                  android:label="@string/app_name" />
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/applicationId" />
+        <service android:name="com.happymeteo.pushnotifications.GCMIntentService" />
     </application>
 
 </manifest>

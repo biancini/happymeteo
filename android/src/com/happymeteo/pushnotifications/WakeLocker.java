@@ -1,4 +1,4 @@
-package com.androidhive.pushnotifications;
+package com.happymeteo.pushnotifications;
 
 import android.content.Context;
 import android.os.PowerManager;

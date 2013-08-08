@@ -1,4 +1,4 @@
-package com.androidhive.pushnotifications;
+package com.happymeteo.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.happymeteo.R;
+import com.happymeteo.pushnotifications.AlertDialogManager;
+import com.happymeteo.pushnotifications.CommonUtilities;
+import com.happymeteo.pushnotifications.ConnectionDetector;
 
 public class RegisterActivity extends Activity {
 	// alert dialog manager

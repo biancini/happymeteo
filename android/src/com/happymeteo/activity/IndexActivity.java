@@ -1,4 +1,4 @@
-package com.androidhive.pushnotifications;
+package com.happymeteo.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import com.facebook.LoggingBehavior;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
+import com.happymeteo.R;
 
 public class IndexActivity extends Activity {
 

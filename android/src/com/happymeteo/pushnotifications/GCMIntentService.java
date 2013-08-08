@@ -1,4 +1,4 @@
-package com.androidhive.pushnotifications;
+package com.happymeteo.pushnotifications;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
+import com.happymeteo.R;
+import com.happymeteo.activity.MainActivity;
 
 public class GCMIntentService extends GCMBaseIntentService {
 

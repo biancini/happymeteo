@@ -1,4 +1,4 @@
-package com.androidhive.pushnotifications;
+package com.happymeteo.pushnotifications;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,6 +14,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.android.gcm.GCMRegistrar;
+import com.happymeteo.R;
 
 
 public final class ServerUtilities {
@@ -22,7 +23,7 @@ public final class ServerUtilities {
      * Register this account/device pair within the server.
      *
      */
-    static void register(final Context context, String name, String email, final String regId) {
+    public static void register(final Context context, String name, String email, final String regId) {
     	Log.i(CommonUtilities.TAG, "registering device (regId = " + regId + ")");
         Map<String, String> params = new HashMap<String, String>();
         params.put("regId", regId);
@@ -42,7 +43,7 @@ public final class ServerUtilities {
     /**
      * Unregister this account/device pair within the server.
      */
-    static void unregister(final Context context, final String regId) {
+    public static void unregister(final Context context, final String regId) {
         Log.i(CommonUtilities.TAG, "unregistering device (regId = " + regId + ")");
         Map<String, String> params = new HashMap<String, String>();
         params.put("regId", regId);
