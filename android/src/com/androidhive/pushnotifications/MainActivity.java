@@ -23,12 +23,6 @@ public class MainActivity extends Activity {
 	// Asyntask
 	AsyncTask<Void, Void, Void> mRegisterTask;
 	
-	// Alert dialog manager
-	AlertDialogManager alert = new AlertDialogManager();
-	
-	// Connection detector
-	ConnectionDetector cd;
-	
 	public static String name;
 	public static String email;
 
@@ -37,10 +31,13 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		cd = new ConnectionDetector(getApplicationContext());
+		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
 
 		// Check if Internet present
 		if (!cd.isConnectingToInternet()) {
+			// Alert dialog manager
+			AlertDialogManager alert = new AlertDialogManager();
+			
 			// Internet Connection is not present
 			alert.showAlertDialog(MainActivity.this,
 					"Internet Connection Error",

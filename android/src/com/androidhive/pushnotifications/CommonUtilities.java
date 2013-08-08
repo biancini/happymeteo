@@ -7,6 +7,7 @@ public final class CommonUtilities {
 	
 	// give your server registration url here
     static final String BASE_URL = "http://happymeteo.appspot.com";
+    static final String LOGIN_FACEBOOK_URL = BASE_URL + "/auth/facebook"; 
     static final String REGISTER_URL = BASE_URL + "/register"; 
     static final String UNREGISTER_URL = BASE_URL + "/unregister"; 
 

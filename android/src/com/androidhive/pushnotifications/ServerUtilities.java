@@ -48,7 +48,7 @@ public final class ServerUtilities {
         params.put("regId", regId);
         String message = "";
         try {
-            post(CommonUtilities.UNREGISTER_URL, params);
+        	ServerUtilities.post(CommonUtilities.UNREGISTER_URL, params);
             GCMRegistrar.setRegisteredOnServer(context, false);
             message = context.getString(R.string.server_unregistered, regId);
         } catch (IOException e) {
@@ -76,16 +76,20 @@ public final class ServerUtilities {
             throw new IllegalArgumentException("invalid url: " + endpoint);
         }
         StringBuilder bodyBuilder = new StringBuilder();
-        Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
-        // constructs the POST body using the parameters
-        while (iterator.hasNext()) {
-            Entry<String, String> param = iterator.next();
-            bodyBuilder.append(param.getKey()).append('=')
-                    .append(param.getValue());
-            if (iterator.hasNext()) {
-                bodyBuilder.append('&');
-            }
+        
+        if(params != null) {
+	        Iterator<Entry<String, String>> iterator = params.entrySet().iterator();
+	        // constructs the POST body using the parameters
+	        while (iterator.hasNext()) {
+	            Entry<String, String> param = iterator.next();
+	            bodyBuilder.append(param.getKey()).append('=')
+	                    .append(param.getValue());
+	            if (iterator.hasNext()) {
+	                bodyBuilder.append('&');
+	            }
+	        }
         }
+        
         String body = bodyBuilder.toString();
         Log.v(CommonUtilities.TAG, "Posting '" + body + "' to " + url);
         byte[] bytes = body.getBytes();
