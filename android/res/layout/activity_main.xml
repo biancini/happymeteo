@@ -3,13 +3,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ffffff" >    
-     
-     <TextView android:id="@+id/display" 
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:textSize="16dip"
-         android:layout_margin="10dip"
-         android:textColor="#000000"/>
+    android:background="#ffffff" >
+
+    <Button
+        android:id="@+id/btnInformationPage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/informationPage" />
+
+    <Button
+        android:id="@+id/btnMeteoDellaFelicita"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/meteoDellaFelicita" />
+
+    <Button
+        android:id="@+id/btnContestoDellaFelicita"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/contestoDellaFelicita" />
+
+    <Button
+        android:id="@+id/btnMappaDellaFelicita"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/mappaDellaFelicita" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/logout" />
 
 </LinearLayout>

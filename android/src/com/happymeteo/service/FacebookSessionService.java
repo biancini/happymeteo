@@ -78,7 +78,6 @@ public class FacebookSessionService {
 					// i.putExtra("name", name);
 					// i.putExtra("email", email);
 					activity.startActivity(i);
-					activity.finish();
 				} else {
 					/* Switch to menu activity if registered */
 					
@@ -90,7 +89,6 @@ public class FacebookSessionService {
 					//i.putExtra("name", name);
 					//i.putExtra("email", email);
 					activity.startActivity(i);
-					activity.finish();
 				}
 			}
 		} else {

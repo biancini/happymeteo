@@ -39,19 +39,23 @@ public class IndexActivity extends Activity {
 				getApplicationContext(), savedInstanceState, this);
 
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
-		Button btnloginHappyMeteo = (Button) findViewById(R.id.btnloginHappyMeteo);
+		Button btnLoginHappyMeteo = (Button) findViewById(R.id.btnLoginHappyMeteo);
 		Button btnLoginFacebook = (Button) findViewById(R.id.btnLoginFacebook);
-		Button btnLogoutFacebook = (Button) findViewById(R.id.btnLogoutFacebook);
+		//Button btnLogoutFacebook = (Button) findViewById(R.id.btnLogoutFacebook);
 
 		btnCreateAccount.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
+				
+				//TODO Create Account
 				Toast.makeText(getApplicationContext(), "Create Account",
 						Toast.LENGTH_SHORT).show();
 			}
 		});
 
-		btnloginHappyMeteo.setOnClickListener(new OnClickListener() {
+		btnLoginHappyMeteo.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
+				
+				//TODO Login Happy Meteo
 				Toast.makeText(getApplicationContext(), "Login Happy Meteo",
 						Toast.LENGTH_SHORT).show();
 			}
@@ -64,12 +68,12 @@ public class IndexActivity extends Activity {
 			}
 		});
 
-		btnLogoutFacebook.setOnClickListener(new OnClickListener() {
+		/*btnLogoutFacebook.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				HappyMeteoApplication.getFacebookSessionService()
 						.onClickLogout();
 			}
-		});
+		});*/
 	}
 
 	@Override

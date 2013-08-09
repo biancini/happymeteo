@@ -1,6 +1,5 @@
 package com.happymeteo.service;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -11,7 +10,7 @@ import com.happymeteo.utils.ConnectionDetector;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.WakeLocker;
 
-public class PushNotificationsService extends BroadcastReceiver {
+public class PushNotificationsService {
 	
 	private String registrationId;
 	
@@ -52,7 +51,6 @@ public class PushNotificationsService extends BroadcastReceiver {
 		}
 	}
 	
-	@Override
 	public void onReceive(Context context, Intent intent) {
 		for(String key : intent.getExtras().keySet()) {
 			Toast.makeText(context, "(k, v): (" + key + "," + 

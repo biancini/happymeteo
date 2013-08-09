@@ -31,4 +31,11 @@
 	<string name="loginFacebook">Login tramite Facebook</string>
 	<string name="logoutFacebook">Logout tramite Facebook</string>
 	
+	<!-- Main Activity -->
+	<string name="informationPage">Pagina Informativa</string>
+	<string name="meteoDellaFelicita">Meteo della felicità</string>
+	<string name="contestoDellaFelicita">Contesto della felicità</string>
+	<string name="mappaDellaFelicita">Mappa Della Felicità</string>
+	<string name="logout">Logout</string>
+	
 </resources>

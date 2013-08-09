@@ -17,9 +17,5 @@ public final class Const {
      */
 	public static final String TAG = "HappyMeteo";
 
-	/* DEVE ESSERE nello stesso category scelto nel manifest, da non modificare */
-	public static final String DISPLAY_MESSAGE_ACTION =
-            "com.happymeteo.DISPLAY_MESSAGE";
-
 	public static final String EXTRA_MESSAGE = "message";
 }
