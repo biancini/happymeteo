@@ -7,12 +7,22 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
-import com.happymeteo.pushnotifications.CommonUtilities;
-import com.happymeteo.pushnotifications.ConnectionDetector;
-import com.happymeteo.pushnotifications.WakeLocker;
+import com.happymeteo.utils.ConnectionDetector;
+import com.happymeteo.utils.Const;
+import com.happymeteo.utils.WakeLocker;
 
 public class PushNotificationsService extends BroadcastReceiver {
 	
+	private String registrationId;
+	
+	public String getRegistrationId() {
+		return registrationId;
+	}
+
+	public void setRegistrationId(String registrationId) {
+		this.registrationId = registrationId;
+	}
+
 	public void initialize(Context context) {
 		/* Check internet connection */
 		ConnectionDetector cd = new ConnectionDetector(context);
@@ -28,7 +38,7 @@ public class PushNotificationsService extends BroadcastReceiver {
 		GCMRegistrar.checkManifest(context);
 		
 		/* Get Registration Id */
-		final String registrationId = GCMRegistrar.getRegistrationId(context);
+		registrationId = GCMRegistrar.getRegistrationId(context);
 		
 		Toast.makeText(context, "registrationId: "+registrationId, Toast.LENGTH_SHORT).show();
 		Log.i("HappyMeteo", "registrationId: "+registrationId);
@@ -38,7 +48,7 @@ public class PushNotificationsService extends BroadcastReceiver {
 			Log.i("HappyMeteo", "Register now: "+GCMRegistrar.isRegisteredOnServer(context));
 			
 			/* Registration is not present, register now with GCM */			
-			GCMRegistrar.register(context, CommonUtilities.SENDER_ID);
+			GCMRegistrar.register(context, Const.SENDER_ID);
 		}
 	}
 	
@@ -49,7 +59,7 @@ public class PushNotificationsService extends BroadcastReceiver {
 				intent.getExtras().getString(key) + ")", Toast.LENGTH_LONG).show();
 		}
 		
-		String newMessage = intent.getExtras().getString(CommonUtilities.EXTRA_MESSAGE);
+		String newMessage = intent.getExtras().getString(Const.EXTRA_MESSAGE);
 		// Waking up mobile if it is sleeping
 		WakeLocker.acquire(context);
 		
@@ -62,13 +72,14 @@ public class PushNotificationsService extends BroadcastReceiver {
 		// Showing received message
 		Toast.makeText(context, "New Message: " + newMessage, Toast.LENGTH_LONG).show();
 		
+		Log.i(Const.TAG, "New Message: " + newMessage);
+		
 		// Releasing wake lock
 		WakeLocker.release();
 	}
 
 	public void terminate(Context context) {
 		Log.i("HappyMeteo", "unregister");
-		
 		GCMRegistrar.unregister(context);
 		GCMRegistrar.onDestroy(context);
 	}

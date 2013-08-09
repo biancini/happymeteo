@@ -1,4 +1,4 @@
-package com.happymeteo.pushnotifications;
+package com.happymeteo.utils;
 
 import com.happymeteo.R;
 

@@ -24,19 +24,16 @@ app_config = {
 routes = [
   Route('/', handler='handlers.RootHandler'),
 
+  # profile user
+  Route('/create_account', handler='handlers.CreateAccoutHandler'),
+  Route('/facebook_login', handler='handlers.FacebookLoginHandler'),
+  Route('/normal_login', handler='handlers.NormalLoginHandler'),
+
   # device managment
   Route('/index_device', handler='handlers.IndexDeviceHandler'),
   Route('/register', handler='handlers.RegisterHandler'),
   Route('/unregister', handler='handlers.UnregisterHandler'),
   Route('/send_message', handler='handlers.SendMessageHandler'),
-
-  # profile user
-  Route('/profile', handler='handlers.ProfileHandler', name='profile'),
-  Route('/logout', handler='handlers.AuthHandler:logout', name='logout'),
-  Route('/auth/<provider>', 
-    handler='handlers.AuthHandler:_simple_auth', name='auth_login'),
-  Route('/auth/<provider>/callback', 
-    handler='handlers.AuthHandler:_auth_callback', name='auth_callback')
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

@@ -2,12 +2,17 @@ package com.happymeteo.service;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.happymeteo.HappyMeteoApplication;
+import com.happymeteo.MainActivity;
+import com.happymeteo.RegisterActivity;
+import com.happymeteo.models.User;
+import com.happymeteo.utils.ServerUtilities;
 
 public class FacebookSessionService {
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
@@ -56,11 +61,38 @@ public class FacebookSessionService {
 		if (session.isOpened()) {
 			/* Logged */
 			Toast.makeText(this.context, "Logged with facebook", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "registrationId: "+HappyMeteoApplication.getPushNotificationsService().getRegistrationId(), Toast.LENGTH_SHORT).show();
 			
-			/* Initialize Push Notification Service */
-			HappyMeteoApplication.getPushNotificationsService().initialize(context);
+			/* Call CommonUtilities.FACEBOOK_LOGIN_URL */
+			User user = ServerUtilities.facebookLogin(context, Session.getActiveSession().getAccessToken());
 			
-			
+			if(user != null) {
+				if(user.getRegistered() == 0) {
+					/* Switch to create account activity if not registered */
+					
+					// Launch Main Activity
+					Intent i = new Intent(context, RegisterActivity.class);
+					
+					// Registering user on our server					
+					// Sending registraiton details to MainActivity
+					// i.putExtra("name", name);
+					// i.putExtra("email", email);
+					activity.startActivity(i);
+					activity.finish();
+				} else {
+					/* Switch to menu activity if registered */
+					
+					// Launch Main Activity
+					Intent i = new Intent(context, MainActivity.class);
+					
+					// Registering user on our server					
+					// Sending registraiton details to MainActivity
+					//i.putExtra("name", name);
+					//i.putExtra("email", email);
+					activity.startActivity(i);
+					activity.finish();
+				}
+			}
 		} else {
 			/* Not logged */
 			Toast.makeText(this.context, "Not logged with facebook", Toast.LENGTH_SHORT).show();
@@ -77,24 +109,4 @@ public class FacebookSessionService {
 			updateSession();
 		}
 	}
-
-	/*@Override
-	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public void onStart(Intent intent, int startid) {
-		Toast.makeText(this, "My Service Started", Toast.LENGTH_SHORT).show();
-		Log.d(CommonUtilities.TAG, "onStart");
-		Session.getActiveSession().addCallback(statusCallback);
-	}
-	
-	@Override
-	public void onDestroy() {
-		Toast.makeText(this, "My Service Stopped", Toast.LENGTH_SHORT).show();
-		Log.d(CommonUtilities.TAG, "onDestroy");
-		Session.getActiveSession().removeCallback(statusCallback);
-	}*/
 }

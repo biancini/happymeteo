@@ -8,9 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.happymeteo.R;
-import com.happymeteo.pushnotifications.AlertDialogManager;
-import com.happymeteo.pushnotifications.CommonUtilities;
-import com.happymeteo.pushnotifications.ConnectionDetector;
+import com.happymeteo.utils.AlertDialogManager;
+import com.happymeteo.utils.ConnectionDetector;
+import com.happymeteo.utils.Const;
 
 public class RegisterActivity extends Activity {
 	// alert dialog manager
@@ -44,8 +44,8 @@ public class RegisterActivity extends Activity {
 		}
 
 		// Check if GCM configuration is set
-		if (CommonUtilities.BASE_URL == null || CommonUtilities.SENDER_ID == null || 
-				CommonUtilities.BASE_URL.length() == 0 || CommonUtilities.SENDER_ID.length() == 0) {
+		if (Const.BASE_URL == null || Const.SENDER_ID == null || 
+				Const.BASE_URL.length() == 0 || Const.SENDER_ID.length() == 0) {
 			// GCM sernder id / server url is missing
 			alert.showAlertDialog(RegisterActivity.this, "Configuration Error!",
 					"Please set your Server URL and GCM Sender ID", false);

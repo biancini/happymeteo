@@ -13,8 +13,8 @@ import com.facebook.LoggingBehavior;
 import com.facebook.Session;
 import com.facebook.Settings;
 import com.happymeteo.R;
-import com.happymeteo.pushnotifications.AlertDialogManager;
-import com.happymeteo.pushnotifications.ConnectionDetector;
+import com.happymeteo.utils.AlertDialogManager;
+import com.happymeteo.utils.ConnectionDetector;
 
 public class IndexActivity extends Activity {
 

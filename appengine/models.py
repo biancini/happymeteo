@@ -1,6 +1,7 @@
 from google.appengine.ext import db
 
-class Users(db.Model):
-    regId = db.StringProperty()
-    name = db.StringProperty()
-    email = db.StringProperty()
+class Device(db.Model):
+    registrationId = db.StringProperty()
+
+class User(db.Model):
+    facebook_id = db.StringProperty()

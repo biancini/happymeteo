@@ -4,51 +4,7 @@
 # Get 'a random and long string' from here: 
 # http://clsc.net/tools/random-string-generator.php
 # or execute this from a python shell: import os; os.urandom(64)
-SESSION_KEY = "a very long and secret session key goes here"
+SESSION_KEY = "8\xa6\x1e\x11,\x93I\x1aP\xf9\\\xa0\xe1\xde\x8e+\x1dn\xd0\xe8\x1e\x92\xfa\x93\xed\xbf\xcd\xe1\x1f\xa1\x8b\xdf\xc6\xa0\xa73z\xe9\xf8\xb3\xee\x97\xc0\xba\xea\x9cOzXy\xe7\x1ca\x03j\xa7An\x94\x8e\x12"
 
-# Google APIs
-GOOGLE_APP_ID = 'app id'
-GOOGLE_APP_SECRET = 'app secret'
-
-# Facebook auth apis
-FACEBOOK_APP_ID = '405414319576008'
-FACEBOOK_APP_SECRET = 'd8b1b8290639bc9b936dcb1c5d9e01dc'
-
-# Key/secret for both LinkedIn OAuth 1.0a and OAuth 2.0
-# https://www.linkedin.com/secure/developer
-LINKEDIN_KEY = 'consumer key'
-LINKEDIN_SECRET = 'consumer secret'
-
-# https://manage.dev.live.com/AddApplication.aspx
-# https://manage.dev.live.com/Applications/Index
-WL_CLIENT_ID = 'client id'
-WL_CLIENT_SECRET = 'client secret'
-
-# https://dev.twitter.com/apps
-TWITTER_CONSUMER_KEY = 'oauth1.0a consumer key'
-TWITTER_CONSUMER_SECRET = 'oauth1.0a consumer secret'
-
-# https://foursquare.com/developers/apps
-FOURSQUARE_CLIENT_ID = 'client id'
-FOURSQUARE_CLIENT_SECRET = 'client secret'
-
-# config that summarizes the above
-AUTH_CONFIG = {
-  # OAuth 2.0 providers
-  'google'      : (GOOGLE_APP_ID, GOOGLE_APP_SECRET,
-                  'https://www.googleapis.com/auth/userinfo.profile'),
-  'linkedin2'   : (LINKEDIN_KEY, LINKEDIN_SECRET,
-                  'r_basicprofile'),
-  'facebook'    : (FACEBOOK_APP_ID, FACEBOOK_APP_SECRET,
-                  'user_about_me'),
-  'windows_live': (WL_CLIENT_ID, WL_CLIENT_SECRET,
-                  'wl.signin'),
-  'foursquare'  : (FOURSQUARE_CLIENT_ID,FOURSQUARE_CLIENT_SECRET,
-                  'authorization_code'),
-
-  # OAuth 1.0 providers don't have scopes
-  'twitter'     : (TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET),
-  'linkedin'    : (LINKEDIN_KEY, LINKEDIN_SECRET),
-
-  # OpenID doesn't need any key/secret
-}
+# Google API KEY for Happymeteo
+GOOGLE_API_KEY = 'AIzaSyBeMxlRchiwXkyD36N9F2JpkmEXvEEnIVk'
