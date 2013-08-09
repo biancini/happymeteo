@@ -1,23 +1,13 @@
-package com.happymeteo.activity;
+package com.happymeteo;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gcm.GCMRegistrar;
-import com.happymeteo.R;
-import com.happymeteo.pushnotifications.AlertDialogManager;
 import com.happymeteo.pushnotifications.CommonUtilities;
-import com.happymeteo.pushnotifications.ConnectionDetector;
-import com.happymeteo.pushnotifications.ServerUtilities;
-import com.happymeteo.pushnotifications.WakeLocker;
 
 public class MainActivity extends Activity {
 	// label to display gcm messages
@@ -25,16 +15,13 @@ public class MainActivity extends Activity {
 	
 	// Asyntask
 	AsyncTask<Void, Void, Void> mRegisterTask;
-	
-	public static String name;
-	public static String email;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
+		/*ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
 
 		// Check if Internet present
 		if (!cd.isConnectingToInternet()) {
@@ -46,13 +33,7 @@ public class MainActivity extends Activity {
 					"Internet Connection Error",
 					"Please connect to working Internet connection", false);
 			return;
-		}
-		
-		// Getting name, email from intent
-		Intent i = getIntent();
-		
-		name = i.getStringExtra("name");
-		email = i.getStringExtra("email");		
+		}	
 		
 		// Make sure the device has the proper dependencies.
 		GCMRegistrar.checkDevice(this);
@@ -61,15 +42,21 @@ public class MainActivity extends Activity {
 		// while developing the app, then uncomment it when it's ready.
 		GCMRegistrar.checkManifest(this);
 
-		lblMessage = (TextView) findViewById(R.id.lblMessage);
+		lblMessage = (TextView) findViewById(R.id.display);
+		
+		lblMessage.append("registerReceiver\n");
 		
 		registerReceiver(mHandleMessageReceiver, new IntentFilter(CommonUtilities.DISPLAY_MESSAGE_ACTION));
 		
 		// Get GCM registration id
 		final String regId = GCMRegistrar.getRegistrationId(this);
+		
+		lblMessage.append("regId: "+regId+"\n");
 
 		// Check if regid already presents
 		if (regId.equals("")) {
+			lblMessage.append("GCMRegistrar.register(*) \n");
+			
 			// Registration is not present, register now with GCM			
 			GCMRegistrar.register(this, CommonUtilities.SENDER_ID);
 		} else {
@@ -90,7 +77,7 @@ public class MainActivity extends Activity {
 						GCMRegistrar.register(context, CommonUtilities.SENDER_ID);
 
 						// On server creates a new user
-						ServerUtilities.register(context, name, email, regId);
+						//ServerUtilities.register(context, name, email, regId);
 						return null;
 					}
 
@@ -102,12 +89,15 @@ public class MainActivity extends Activity {
 				};
 				mRegisterTask.execute(null, null, null);
 			}
-		}
+		}*/
+		
+		/* Register Receiver */
+		registerReceiver(HappyMeteoApplication.getPushNotificationsService(), new IntentFilter(CommonUtilities.DISPLAY_MESSAGE_ACTION));
 	}		
 
 	/**
 	 * Receiving push messages
-	 * */
+	
 	private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -119,7 +109,7 @@ public class MainActivity extends Activity {
 			 * Take appropriate action on this message
 			 * depending upon your app requirement
 			 * For now i am just displaying it on the screen
-			 * */
+			 /
 			
 			// Showing received message
 			lblMessage.append(newMessage + "\n");			
@@ -128,16 +118,12 @@ public class MainActivity extends Activity {
 			// Releasing wake lock
 			WakeLocker.release();
 		}
-	};
+	};  */
 	
 	@Override
 	protected void onDestroy() {
-		if (mRegisterTask != null) {
-			mRegisterTask.cancel(true);
-		}
 		try {
-			unregisterReceiver(mHandleMessageReceiver);
-			GCMRegistrar.onDestroy(this);
+			unregisterReceiver(HappyMeteoApplication.getPushNotificationsService());
 		} catch (Exception e) {
 			Log.e("UnRegister Receiver Error", "> " + e.getMessage());
 		}

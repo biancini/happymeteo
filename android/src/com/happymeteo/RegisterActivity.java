@@ -1,4 +1,4 @@
-package com.happymeteo.activity;
+package com.happymeteo;
 
 import android.app.Activity;
 import android.content.Intent;

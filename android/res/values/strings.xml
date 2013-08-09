@@ -21,8 +21,14 @@
     <string name="options_clear">Clear</string>
     <string name="options_exit">Exit</string>
     <string name="action_settings">Settings</string>
-    <string name="login">Login</string>
-    <string name="logout">Logout</string>
+    
+     <!-- Facebook Happy Meteo applicationId -->
     <string name="applicationId">405414319576008</string>
-
+    
+    <!-- Index Activity -->
+    <string name="createAccount">Crea Account</string>
+    <string name="loginHappyMeteo">Login tramite Happy Meteo</string>
+	<string name="loginFacebook">Login tramite Facebook</string>
+	<string name="logoutFacebook">Logout tramite Facebook</string>
+	
 </resources>

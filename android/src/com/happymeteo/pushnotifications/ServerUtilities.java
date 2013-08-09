@@ -37,7 +37,6 @@ public final class ServerUtilities {
 			message = context.getString(R.string.server_register_error, regId, e.getMessage());
 		}
         Log.i(CommonUtilities.TAG, message);
-		CommonUtilities.displayMessage(context, message);
     }
 
     /**
@@ -56,7 +55,6 @@ public final class ServerUtilities {
         	message = context.getString(R.string.server_unregister_error, regId, e.getMessage());
         }
         Log.i(CommonUtilities.TAG, message);
-		CommonUtilities.displayMessage(context, message);
     }
 
     /**
