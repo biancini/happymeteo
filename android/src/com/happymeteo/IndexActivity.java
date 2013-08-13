@@ -1,18 +1,16 @@
 package com.happymeteo;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.facebook.LoggingBehavior;
 import com.facebook.Session;
 import com.facebook.Settings;
-import com.happymeteo.R;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.ConnectionDetector;
 
@@ -41,23 +39,20 @@ public class IndexActivity extends Activity {
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		Button btnLoginHappyMeteo = (Button) findViewById(R.id.btnLoginHappyMeteo);
 		Button btnLoginFacebook = (Button) findViewById(R.id.btnLoginFacebook);
-		//Button btnLogoutFacebook = (Button) findViewById(R.id.btnLogoutFacebook);
 
 		btnCreateAccount.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				
-				//TODO Create Account
-				Toast.makeText(getApplicationContext(), "Create Account",
-						Toast.LENGTH_SHORT).show();
+				Context context = view.getContext();
+				Intent i = new Intent(context, CreateAccountActivity.class);
+				context.startActivity(i);
 			}
 		});
 
 		btnLoginHappyMeteo.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				
-				//TODO Login Happy Meteo
-				Toast.makeText(getApplicationContext(), "Login Happy Meteo",
-						Toast.LENGTH_SHORT).show();
+				Context context = view.getContext();
+				Intent i = new Intent(context, NormalLoginActivity.class);
+				context.startActivity(i);
 			}
 		});
 
@@ -67,13 +62,6 @@ public class IndexActivity extends Activity {
 						.onClickLogin();
 			}
 		});
-
-		/*btnLogoutFacebook.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				HappyMeteoApplication.getFacebookSessionService()
-						.onClickLogout();
-			}
-		});*/
 	}
 
 	@Override
@@ -92,12 +80,5 @@ public class IndexActivity extends Activity {
 		// TODO move in FacebookSessionService
 		Session session = Session.getActiveSession();
 		Session.saveSession(session, outState);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.index, menu);
-		return true;
 	}
 }

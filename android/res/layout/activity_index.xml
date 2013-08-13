@@ -14,20 +14,20 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
-        android:text="@string/createAccount" />
+        android:text="@string/create_account" />
     
     <Button
         android:id="@+id/btnLoginHappyMeteo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
-        android:text="@string/loginHappyMeteo" />
+        android:text="@string/normal_login" />
     
     <Button
         android:id="@+id/btnLoginFacebook"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
-        android:text="@string/loginFacebook" />
+        android:text="@string/facebook_login" />
 
 </LinearLayout>

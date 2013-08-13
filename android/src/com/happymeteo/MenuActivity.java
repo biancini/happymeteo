@@ -2,17 +2,19 @@ package com.happymeteo;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
-public class MainActivity extends Activity {
+public class MenuActivity extends Activity {
 	
 	/* The BroadcastReceiver needs to be in the same class where registerReceiver is called */
 	public BroadcastReceiver broadcastReceiver;
@@ -20,7 +22,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_menu);
 
 		/* Initialize PushNotificationsService */
 		HappyMeteoApplication.getPushNotificationsService().initialize(
@@ -32,44 +34,40 @@ public class MainActivity extends Activity {
 		}
 		
 		Button btnInformationPage = (Button) findViewById(R.id.btnInformationPage);
-		Button btnMeteoDellaFelicita = (Button) findViewById(R.id.btnMeteoDellaFelicita);
-		Button btnContestoDellaFelicita = (Button) findViewById(R.id.btnContestoDellaFelicita);
-		Button btnMappaDellaFelicita = (Button) findViewById(R.id.btnMappaDellaFelicita);
+		Button btnHappyMeteo = (Button) findViewById(R.id.btnHappyMeteo);
+		Button btnHappyContext = (Button) findViewById(R.id.btnHappyContext);
+		Button btnHappyMap = (Button) findViewById(R.id.btnHappyMap);
 		Button btnLogout = (Button) findViewById(R.id.btnLogout);
 		
 		btnInformationPage.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				
-				//TODO Information Page
-				Toast.makeText(getApplicationContext(), "Information Page",
-						Toast.LENGTH_SHORT).show();
+				Context context = view.getContext();
+				Intent i = new Intent(context, InformationPageActivity.class);
+				context.startActivity(i);
 			}
 		});
 		
-		btnMeteoDellaFelicita.setOnClickListener(new OnClickListener() {
+		btnHappyMeteo.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				
-				//TODO Meteo della felicita
-				Toast.makeText(getApplicationContext(), "Meteo della felicita",
-						Toast.LENGTH_SHORT).show();
+				Context context = view.getContext();
+				Intent i = new Intent(context, HappyMeteoActivity.class);
+				context.startActivity(i);
 			}
 		});
 		
-		btnContestoDellaFelicita.setOnClickListener(new OnClickListener() {
+		btnHappyContext.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				
-				//TODO Contesto della felicita
-				Toast.makeText(getApplicationContext(), "Contesto della felicita",
-						Toast.LENGTH_SHORT).show();
+				Context context = view.getContext();
+				Intent i = new Intent(context, HappyContextActivity.class);
+				context.startActivity(i);
 			}
 		});
 		
-		btnMappaDellaFelicita.setOnClickListener(new OnClickListener() {
+		btnHappyMap.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				
-				//TODO Mappa della felicita
-				Toast.makeText(getApplicationContext(), "Mappa della felicita",
-						Toast.LENGTH_SHORT).show();
+				Context context = view.getContext();
+				Intent i = new Intent(context, HappyMapActivity.class);
+				context.startActivity(i);
 			}
 		});
 		
@@ -93,6 +91,14 @@ public class MainActivity extends Activity {
 				getApplicationContext());
 
 		super.onDestroy();
+	}
+
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.menu, menu);
+		return true;
 	}
 
 }

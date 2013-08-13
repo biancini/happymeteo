@@ -2,36 +2,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:orientation="vertical"
-    android:background="#ffffff" >
+    tools:context=".MenuActivity" >
 
     <Button
         android:id="@+id/btnInformationPage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="@string/informationPage" />
+        android:text="@string/information_page" />
 
     <Button
-        android:id="@+id/btnMeteoDellaFelicita"
+        android:id="@+id/btnHappyMeteo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="@string/meteoDellaFelicita" />
+        android:text="@string/happy_meteo" />
 
     <Button
-        android:id="@+id/btnContestoDellaFelicita"
+        android:id="@+id/btnHappyContext"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="@string/contestoDellaFelicita" />
+        android:text="@string/happy_context" />
 
     <Button
-        android:id="@+id/btnMappaDellaFelicita"
+        android:id="@+id/btnHappyMap"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="@string/mappaDellaFelicita" />
+        android:text="@string/happy_map" />
 
     <Button
         android:id="@+id/btnLogout"

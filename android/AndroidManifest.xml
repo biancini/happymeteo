@@ -41,21 +41,41 @@
 
         <!-- Activities -->
         <activity
-            android:name="com.happymeteo.RegisterActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name="com.happymeteo.MainActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
             android:name="com.happymeteo.IndexActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.happymeteo.MenuActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.happymeteo.CreateAccountActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.happymeteo.NormalLoginActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.happymeteo.InformationPageActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.happymeteo.HappyMeteoActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.happymeteo.HappyContextActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.happymeteo.HappyMapActivity"
+            android:label="@string/app_name" >
         </activity>
         
         <!-- Facebook Login Activity -->

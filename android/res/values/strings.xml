@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Facebook Happy Meteo applicationId -->
+    <string name="applicationId">405414319576008</string>
 
     <string name="app_name">Happy Meteo</string>
     <string name="menu_settings">Settings</string>
@@ -21,21 +23,14 @@
     <string name="options_clear">Clear</string>
     <string name="options_exit">Exit</string>
     <string name="action_settings">Settings</string>
-    
-     <!-- Facebook Happy Meteo applicationId -->
-    <string name="applicationId">405414319576008</string>
-    
-    <!-- Index Activity -->
-    <string name="createAccount">Crea Account</string>
-    <string name="loginHappyMeteo">Login tramite Happy Meteo</string>
-	<string name="loginFacebook">Login tramite Facebook</string>
-	<string name="logoutFacebook">Logout tramite Facebook</string>
-	
-	<!-- Main Activity -->
-	<string name="informationPage">Pagina Informativa</string>
-	<string name="meteoDellaFelicita">Meteo della felicità</string>
-	<string name="contestoDellaFelicita">Contesto della felicità</string>
-	<string name="mappaDellaFelicita">Mappa Della Felicità</string>
+    <string name="create_account">Crea Account</string>
+    <string name="normal_login">Login tramite Happy Meteo</string>
+	<string name="facebook_login">Login tramite Facebook</string>
+	<string name="facebook_logout">Logout tramite Facebook</string>
+	<string name="information_page">Pagina Informativa</string>
+	<string name="happy_meteo">Meteo della felicità</string>
+	<string name="happy_context">Contesto della felicità</string>
+	<string name="happy_map">Mappa della Felicità</string>
 	<string name="logout">Logout</string>
-	
+	<string name="back">Indietro</string>
 </resources>

@@ -9,8 +9,8 @@ import android.widget.Toast;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.happymeteo.HappyMeteoApplication;
-import com.happymeteo.MainActivity;
-import com.happymeteo.RegisterActivity;
+import com.happymeteo.MenuActivity;
+import com.happymeteo.CreateAccountActivity;
 import com.happymeteo.models.User;
 import com.happymeteo.utils.ServerUtilities;
 
@@ -42,8 +42,7 @@ public class FacebookSessionService {
 	public void onClickLogin() {
 		Session session = Session.getActiveSession();
 		if (!session.isOpened() && !session.isClosed()) {
-			session.openForRead(new Session.OpenRequest(this.activity)
-					.setCallback(statusCallback));
+			session.openForRead(new Session.OpenRequest(this.activity).setCallback(statusCallback));
 		} else {
 			Session.openActiveSession(this.activity, true, statusCallback);
 		}
@@ -69,25 +68,17 @@ public class FacebookSessionService {
 			if(user != null) {
 				if(user.getRegistered() == 0) {
 					/* Switch to create account activity if not registered */
-					
-					// Launch Main Activity
-					Intent i = new Intent(context, RegisterActivity.class);
-					
-					// Registering user on our server					
-					// Sending registraiton details to MainActivity
-					// i.putExtra("name", name);
-					// i.putExtra("email", email);
-					activity.startActivity(i);
-				} else {
-					/* Switch to menu activity if registered */
-					
-					// Launch Main Activity
-					Intent i = new Intent(context, MainActivity.class);
+					Intent i = new Intent(context, CreateAccountActivity.class);
 					
 					// Registering user on our server					
 					// Sending registraiton details to MainActivity
 					//i.putExtra("name", name);
 					//i.putExtra("email", email);
+					
+					activity.startActivity(i);
+				} else {
+					/* Switch to menu activity if registered */
+					Intent i = new Intent(context, MenuActivity.class);
 					activity.startActivity(i);
 				}
 			}
