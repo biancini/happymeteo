@@ -4,18 +4,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".HappyMapActivity" >
-     
-     <TextView android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="@string/happy_map"
-         android:layout_marginLeft="10dip"
-         android:layout_marginRight="10dip"
-         android:layout_marginTop="20dip"/>
-     
-     <Button android:id="@+id/btnBackHappyMap"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="@string/back"
-         android:layout_margin="10dip"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="20dip"
+        android:text="@string/happy_map" />
+
+    <WebView
+        android:id="@+id/webmapview"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dip"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btnBackHappyMap"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:text="@string/back" />
 
 </LinearLayout>
