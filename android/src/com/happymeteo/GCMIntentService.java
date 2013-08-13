@@ -37,8 +37,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onUnregistered(Context context, String registrationId) {
 		Log.i(TAG, "Device unregistered");
-		HappyMeteoApplication.getPushNotificationsService().setRegistrationId(
-				"");
+		HappyMeteoApplication.getPushNotificationsService().setRegistrationId("");
 	}
 
 	/**
@@ -52,7 +51,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		Log.i(TAG, "onMessage: " + message);
 
 		// notifies user
-		// generateNotification(context, message);
+		generateNotification(context, "Le domande del giorno");
 	}
 
 	/**
@@ -95,7 +94,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		String title = context.getString(R.string.app_name);
 
-		Intent notificationIntent = new Intent(context, MenuActivity.class);
+		Intent notificationIntent = new Intent(context, QuestionBeginActivity.class);
 		// set intent so it does not start a new activity
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_ACTIVITY_SINGLE_TOP);

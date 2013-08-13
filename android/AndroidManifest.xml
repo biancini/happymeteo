@@ -77,6 +77,10 @@
             android:name="com.happymeteo.HappyMapActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.happymeteo.QuestionBeginActivity"
+            android:label="@string/app_name" >
+        </activity>
         
         <!-- Facebook Login Activity -->
         <activity
