@@ -4,18 +4,104 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".CreateAccountActivity" >
-     
-     <TextView android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="@string/create_account"
-         android:layout_marginLeft="10dip"
-         android:layout_marginRight="10dip"
-         android:layout_marginTop="20dip"/>
-     
-     <Button android:id="@+id/btnBackCreateAccount"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="@string/back"
-         android:layout_margin="10dip"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="20dip"
+        android:text="@string/create_account" />
+
+    <EditText
+        android:id="@+id/create_account_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ems="10"
+        android:hint="@string/insert_email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/create_account_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ems="10"
+        android:hint="@string/insert_name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/create_account_surname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ems="10"
+        android:hint="@string/insert_surname"
+        android:inputType="textPersonName" />
+
+    <Spinner
+        android:id="@+id/create_account_gender"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:entries="@array/genderlist"
+        android:prompt="@string/select_gender" />
+
+    <Spinner
+        android:id="@+id/create_account_age"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:entries="@array/agelist"
+        android:prompt="@string/select_age" />
+
+    <Spinner
+        android:id="@+id/create_account_education"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:entries="@array/educationlist"
+        android:prompt="@string/select_education" />
+
+    <Spinner
+        android:id="@+id/create_account_work"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:entries="@array/worklist"
+        android:prompt="@string/select_work" />
+
+    <EditText
+        android:id="@+id/create_account_residenza"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ems="10"
+        android:hint="@string/insert_residenza"
+        android:inputType="textPersonName" />
+    
+    <EditText
+        android:id="@+id/create_account_facebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ems="10"
+        android:visibility="invisible"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/btnCreateUser"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:text="@string/create_profile_user" />
+
+    <Button
+        android:id="@+id/btnBackCreateAccount"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:text="@string/back" />
 
 </LinearLayout>

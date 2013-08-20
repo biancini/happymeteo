@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="genderlist">
+        <item>@string/male</item>
+        <item>@string/female</item>
+    </string-array>
+    
+    <string-array name="agelist">
+        <item>@string/agelist1</item>
+        <item>@string/agelist2</item>
+        <item>@string/agelist3</item>
+        <item>@string/agelist4</item>
+    </string-array>
+    
+    <string-array name="educationlist">
+        <item>@string/educationlist1</item>
+        <item>@string/educationlist2</item>
+        <item>@string/educationlist3</item>
+    </string-array>
+    
+    <string-array name="worklist">
+        <item>@string/worklist1</item>
+        <item>@string/worklist2</item>
+        <item>@string/worklist3</item>
+        <item>@string/worklist4</item>
+    </string-array>
+
+</resources>

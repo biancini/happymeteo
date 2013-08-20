@@ -96,31 +96,41 @@ class FacebookLoginHandler(BaseRequestHandler):
         accessToken=self.request.get('accessToken')
         facebook_profile = json.load(urllib2.urlopen("https://graph.facebook.com/me?access_token=%s"%accessToken))
         
-        data = {
-          'facebook_id': facebook_profile['id'],
-          'first_name': facebook_profile['first_name'],
-          'last_name': facebook_profile['last_name'],
-          'gender': facebook_profile['gender'],
-          'birthday': 'manca',
-          'education': '?',
-          'work': '?',
-          # citta di residenza
-          'location': facebook_profile['location']['name'],
-          'registered': '0'
-        }
+        print "https://graph.facebook.com/me?access_token=%s"%accessToken
 
-        q = db.GqlQuery("SELECT * FROM User WHERE facebook_id = :1",
-            facebook_profile['id'])
+        try:
+          data = {
+            'facebook_id': facebook_profile['id'],
+            'first_name': facebook_profile['first_name'],
+            'last_name': facebook_profile['last_name'],
+            'gender': facebook_profile['gender'],
+            'age': '0',
+            'education': '0',
+            'work': '0',
+            # citta di residenza
+            'location': facebook_profile['location']['name'],
+            'registered': '0'
+          }
 
-        if q.count() > 0:
-          print "User already registered with facebook id = %s, update the informations"%facebook_profile['id']
-          data['registered'] = '1'
-        else:
-          n = User(facebook_id=facebook_profile['id'])
-          n.put()
+          q = db.GqlQuery("SELECT * FROM User WHERE facebook_id = :1",
+              facebook_profile['id'])
 
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(data))
+          if q.count() > 0:
+            print "User already registered with facebook id = %s, update the informations"%facebook_profile['id']
+            data['registered'] = '1'
+          #else:
+          #  n = User(facebook_id=facebook_profile['id'])
+          #  n.put()
+
+          self.response.headers['Content-Type'] = 'application/json'
+          self.response.out.write(json.dumps(data))
+        except urllib2.HTTPError, error:
+          data = {
+              'error': 'Invalid Access Token',
+              'type': 1
+          }
+          self.response.headers['Content-Type'] = 'application/json'
+          self.response.out.write(json.dumps(data))
 
 class IndexDeviceHandler(BaseRequestHandler):
     

@@ -1,5 +1,7 @@
 package com.happymeteo.service;
 
+import java.util.Arrays;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -42,7 +44,7 @@ public class FacebookSessionService {
 	public void onClickLogin() {
 		Session session = Session.getActiveSession();
 		if (!session.isOpened() && !session.isClosed()) {
-			session.openForRead(new Session.OpenRequest(this.activity).setCallback(statusCallback));
+			session.openForRead(new Session.OpenRequest(this.activity).setCallback(statusCallback).setPermissions(Arrays.asList("user_birthday", "email")));
 		} else {
 			Session.openActiveSession(this.activity, true, statusCallback);
 		}
@@ -70,10 +72,9 @@ public class FacebookSessionService {
 					/* Switch to create account activity if not registered */
 					Intent i = new Intent(context, CreateAccountActivity.class);
 					
-					// Registering user on our server					
-					// Sending registraiton details to MainActivity
-					//i.putExtra("name", name);
-					//i.putExtra("email", email);
+					i.putExtra("facebook_id", user.getFacebook_id());
+					i.putExtra("name", user.getFirst_name());
+					i.putExtra("surname", user.getLast_name());
 					
 					activity.startActivity(i);
 				} else {

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- Facebook Happy Meteo applicationId -->
     <string name="applicationId">405414319576008</string>
-
+    
     <string name="app_name">Happy Meteo</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">Push Notifications</string>
@@ -25,14 +26,54 @@
     <string name="action_settings">Settings</string>
     <string name="create_account">Crea Account</string>
     <string name="normal_login">Login tramite Happy Meteo</string>
-	<string name="facebook_login">Login tramite Facebook</string>
-	<string name="facebook_logout">Logout tramite Facebook</string>
-	<string name="information_page">Pagina Informativa</string>
-	<string name="happy_meteo">Meteo della felicità</string>
-	<string name="happy_context">Contesto della felicità</string>
-	<string name="happy_map">Mappa della Felicità</string>
-	<string name="logout">Logout</string>
-	<string name="back">Indietro</string>
-	<string name="begin_questions">Il momento delle domande!</string>
-	<string name="begin_questions_btn">Inizia con il questionario</string>
+    <string name="facebook_login">Login tramite Facebook</string>
+    <string name="facebook_logout">Logout tramite Facebook</string>
+    <string name="information_page">Pagina Informativa</string>
+    <string name="happy_meteo">Meteo della felicità</string>
+    <string name="happy_context">Contesto della felicità</string>
+    <string name="happy_map">Mappa della Felicità</string>
+    <string name="logout">Logout</string>
+    <string name="back">Indietro</string>
+    <string name="begin_questions">Il momento delle domande!</string>
+    <string name="begin_questions_btn">Inizia con il questionario</string>
+    <string name="create_profile_user">Crea utente</string>
+    <string name="select_gender">Seleziona il sesso</string>
+    <string name="male">Maschio</string>
+    <string name="female">Femmina</string>
+    <string name="select_age">Seleziona l\'età</string>
+    <string name="agelist1">15-24 anni</string>
+    <string name="agelist2">25-35</string>
+    <string name="agelist3">35-50</string>
+    <string name="agelist4">over 50</string>
+    <string name="select_education">Seleziona il titolo di istruzione</string>
+    <string name="educationlist1">Scuola Primaria</string>
+    <string name="educationlist2">Diploma</string>
+    <string name="educationlist3">Laurea</string>
+    <string name="select_work">Seleziona la tua condizione lavorativa</string>
+    <string name="worklist1">Disoccupato</string>
+    <string name="worklist2">Impiegato fisso</string>
+    <string name="worklist3">Impiegato precario</string>
+    <string name="worklist4">Pensionato</string>
+    <string name="help_page">Innanzitutto benvenuta/o! Lo scopo di Happy Meteo è quello di raccogliere una mole di dati che coprano l\'intero territorio italiano per produrre delle previsioni meteo di felicità su tutto il Paese. Le previsioni riguarderanno sia tu che leggi, sia l\'area geografica che ti sta intorno. 
+Vuoi vedere quanto è felice il tuo quartiere? Vuoi vedere se c\'è una zona di bassa pressione della felicità in città da cui stare al largo? O se qualche nube di cattivo umore si addensa nel tuo futuro prossimo? Vuoi tenere un diario della tua felicità, consultabile nel tempo? Questa è l\'app giusta per te!
+
+Come funziona
+Una volta iscritta/o, riceverai 4 impulsi in momenti casuali, durante la giornata. Con il minimo sforzo, e in modo non invasivo, ti verrà chiesto di rispondere a due domande  molto semplici. 
+Sì, ma in parole semplici?
+Registrati / crea un account
+Aspetta gli impulsi del tuo smartphone e rispondi alle domande che ti verranno poste
+Ricevi di sera le previsioni meteo della tua felicità e divertiti a guardare cosa ti succede intorno
+Se vuoi, sfida in un duello di felicità i tuoi amici
+
+Perchè mai dovrei fare questa scocciatura?
+
+Innanzitutto, perché è divertente
+E poi perché ogni risposta ti fa guadagnare punti che, nel tempo, danno diritto a buoni sconto su Amazon.it o Groupon!
+
+Buon divertimento! E happy meteo!</string>
+    <string name="insert_email">Inserisci la tua email</string>
+    <string name="insert_name">Inserisci il tuo nome</string>
+    <string name="insert_surname">Inserisci il tuo cognome</string>
+    <string name="insert_residenza">Inserisci la tua città di residenza</string>
+
 </resources>

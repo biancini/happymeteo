@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.happymeteo.utils.Const;
@@ -29,15 +28,11 @@ public class QuestionBeginActivity extends Activity {
 		setContentView(R.layout.activity_question_begin);
 
 		final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layoutBeginQuestion);
-
-		Button btnBeginQuestions = (Button) findViewById(R.id.btnBeginQuestions);
+		final Button btnBeginQuestions = (Button) findViewById(R.id.btnBeginQuestions);
 		btnBeginQuestions.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				Toast.makeText(view.getContext(), "Begin questions",
-						Toast.LENGTH_LONG).show();
-
 				JSONArray jsonArray = ServerUtilities
 						.getQuestions(getApplicationContext());
 
@@ -113,11 +108,12 @@ public class QuestionBeginActivity extends Activity {
 								linearLayout.addView(toggleButton);
 							}
 						} catch (JSONException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 				}
+				
+				btnBeginQuestions.setEnabled(false);
 			}
 		});
 	}

@@ -39,6 +39,8 @@ public class IndexActivity extends Activity {
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		Button btnLoginHappyMeteo = (Button) findViewById(R.id.btnLoginHappyMeteo);
 		Button btnLoginFacebook = (Button) findViewById(R.id.btnLoginFacebook);
+		
+		Button btnLogout = (Button) findViewById(R.id.btnLogoutFacebook);
 
 		btnCreateAccount.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
@@ -60,6 +62,13 @@ public class IndexActivity extends Activity {
 			public void onClick(View view) {
 				HappyMeteoApplication.getFacebookSessionService()
 						.onClickLogin();
+			}
+		});
+		
+		btnLogout.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				/* Close Facebook Session */
+				HappyMeteoApplication.getFacebookSessionService().onClickLogout();
 			}
 		});
 	}

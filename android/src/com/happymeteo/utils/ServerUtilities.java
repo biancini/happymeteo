@@ -17,8 +17,10 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
+import com.happymeteo.HappyMeteoApplication;
 import com.happymeteo.R;
 import com.happymeteo.models.User;
 
@@ -62,6 +64,7 @@ public final class ServerUtilities {
 		String message = "";
 		try {
 			String json = ServerUtilities.postRequest(Const.FACEBOOK_LOGIN_URL, params);
+			Toast.makeText(context, "facebookLogin json: "+json, Toast.LENGTH_SHORT).show();
 			
 			JSONObject jsonObject = new JSONObject(json);
 			
