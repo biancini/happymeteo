@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -23,9 +23,37 @@ import com.happymeteo.R;
 import com.happymeteo.models.User;
 
 public final class ServerUtilities {
+	
+	/**
+	 * Get questions
+	 */
+	public static JSONArray getQuestions(Context context) {
+		Log.i(Const.TAG, "getQuestions");
+		Map<String, String> params = new HashMap<String, String>();
+		
+		String message = "";
+		try {
+			String json = ServerUtilities.postRequest(Const.GET_QUESTIONS_URL, params);
+			JSONArray jsonArray = new JSONArray(json);
+			
+			message = context.getString(R.string.server_registered, "ok");
+			
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject jsonObject = jsonArray.getJSONObject(i);
+				Log.i(Const.TAG, jsonObject.toString());
+			}
+			
+			return jsonArray;
+		} catch (Exception e) {
+			message = context.getString(R.string.server_register_error,
+					"", e.getMessage());
+		}
+		Log.i(Const.TAG, message);
+		return null;
+	}
 
 	/**
-	 * Verify access token and register the user
+	 * Verify access token and register the user through facebook
 	 */
 	public static User facebookLogin(Context context, String accessToken) {
 		Log.i(Const.TAG, "facebookLogin (accessToken = " + accessToken + ")");
@@ -41,22 +69,19 @@ public final class ServerUtilities {
 					.getString(R.string.server_registered, jsonObject.get("facebook_id"));
 			
 			return new User(jsonObject);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			message = context.getString(R.string.server_register_error,
-					accessToken, e.getMessage());
-		} catch (JSONException e) {
-			message = context.getString(R.string.server_register_error,
-					accessToken, e.getMessage());
+					"", e.getMessage());
 		}
 		Log.i(Const.TAG, message);
 		return null;
 	}
 
 	/**
-	 * Register this account/device pair within the server.
+	 * Register this device within the server.
 	 * 
 	 */
-	public static void register(Context context, String registrationId) {
+	public static void registerDevice(Context context, String registrationId) {
 		Log.i(Const.TAG, "registering device (regId = " + registrationId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("registrationId", registrationId);
@@ -72,9 +97,9 @@ public final class ServerUtilities {
 	}
 
 	/**
-	 * Unregister this account/device pair within the server.
+	 * Unregister this device within the server.
 	 */
-	public static void unregister(Context context, String registrationId) {
+	public static void unregisterDevice(Context context, String registrationId) {
 		Log.i(Const.TAG, "unregistering device (registrationId = " + registrationId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("registrationId", registrationId);
@@ -83,9 +108,9 @@ public final class ServerUtilities {
 			ServerUtilities.postRequest(Const.UNREGISTER_URL, params);
 			GCMRegistrar.setRegisteredOnServer(context, false);
 			message = context.getString(R.string.server_unregistered, registrationId);
-		} catch (IOException e) {
-			message = context.getString(R.string.server_unregister_error,
-					registrationId, e.getMessage());
+		} catch (Exception e) {
+			message = context.getString(R.string.server_register_error,
+					"", e.getMessage());
 		}
 		Log.i(Const.TAG, message);
 	}

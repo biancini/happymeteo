@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutBeginQuestion"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -7,7 +8,7 @@
      
      <TextView android:layout_width="fill_parent"
          android:layout_height="wrap_content"
-         android:text="@string/information_page"
+         android:text="@string/begin_questions"
          android:layout_marginLeft="10dip"
          android:layout_marginRight="10dip"
          android:layout_marginTop="20dip"/>
@@ -15,7 +16,7 @@
      <Button android:id="@+id/btnBeginQuestions"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
-         android:text="@string/begin_questions"
+         android:text="@string/begin_questions_btn"
          android:layout_margin="10dip"/>
 
 </LinearLayout>

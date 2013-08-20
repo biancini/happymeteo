@@ -180,3 +180,29 @@ class SendMessageHandler(BaseRequestHandler):
 
         response = urllib2.urlopen(req, json.dumps(data))
         print response.read()
+
+class GetQuestionsHandler(BaseRequestHandler):
+
+    def post(self):
+        # questions: 
+        #  -> question: con il testo della domanda
+        #  -> type:
+        #      -> 1 -> [1-10]
+        #      -> 2 -> Si/No
+        questions = [
+        {
+          'question': 'Quanto ti senti felice, da uno 1 a 10?',
+          'type': '1' 
+        },
+        {
+          'question': 'Sei in compagnia?',
+          'type': '2' 
+        },
+        {
+          'question': 'Sei concentrato/a?',
+          'type': '2' 
+        }
+        ]
+
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(questions))

@@ -34,6 +34,10 @@ routes = [
   Route('/register', handler='handlers.RegisterHandler'),
   Route('/unregister', handler='handlers.UnregisterHandler'),
   Route('/send_message', handler='handlers.SendMessageHandler'),
+
+  # question managment
+  Route('/get_questions', handler='handlers.GetQuestionsHandler'),
+  #Route('/submit_questions', handler='handlers.SubmitQuestionsHandler'),
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

@@ -30,13 +30,14 @@ public class MenuActivity extends Activity {
 		
 		if(!HappyMeteoApplication.getPushNotificationsService().getRegistrationId().equals("")) {
 			/* Register device on happymeteo backend */
-			ServerUtilities.register(getApplicationContext(), HappyMeteoApplication.getPushNotificationsService().getRegistrationId());
+			ServerUtilities.registerDevice(getApplicationContext(), HappyMeteoApplication.getPushNotificationsService().getRegistrationId());
 		}
 		
 		Button btnInformationPage = (Button) findViewById(R.id.btnInformationPage);
 		Button btnHappyMeteo = (Button) findViewById(R.id.btnHappyMeteo);
 		Button btnHappyContext = (Button) findViewById(R.id.btnHappyContext);
 		Button btnHappyMap = (Button) findViewById(R.id.btnHappyMap);
+		Button btnBeginQuestions = (Button) findViewById(R.id.btnQuestionBegin);
 		Button btnLogout = (Button) findViewById(R.id.btnLogout);
 		
 		btnInformationPage.setOnClickListener(new OnClickListener() {
@@ -67,6 +68,14 @@ public class MenuActivity extends Activity {
 			public void onClick(View view) {
 				Context context = view.getContext();
 				Intent i = new Intent(context, HappyMapActivity.class);
+				context.startActivity(i);
+			}
+		});
+		
+		btnBeginQuestions.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				Context context = view.getContext();
+				Intent i = new Intent(context, QuestionBeginActivity.class);
 				context.startActivity(i);
 			}
 		});

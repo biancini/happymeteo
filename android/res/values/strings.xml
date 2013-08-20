@@ -33,5 +33,6 @@
 	<string name="happy_map">Mappa della Felicità</string>
 	<string name="logout">Logout</string>
 	<string name="back">Indietro</string>
-	<string name="begin_questions">Iniziare con il questionario</string>
+	<string name="begin_questions">Il momento delle domande!</string>
+	<string name="begin_questions_btn">Inizia con il questionario</string>
 </resources>
