@@ -16,3 +16,4 @@ class User(db.Model):
     location = db.StringProperty()
     confirmation_code = db.StringProperty()
     password = db.StringProperty()
+    status = db.IntegerProperty()

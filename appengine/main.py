@@ -24,7 +24,6 @@ routes = [
   Route('/facebook_login', handler='handlers.FacebookLoginHandler'),
   Route('/normal_login', handler='handlers.NormalLoginHandler'),
   Route('/confirm_user', handler='handlers.ConfirmUserHandler'),
-  Route('/submit_pwd', handler='handlers.SubmitPwdHandler'),
 
   # device managment
   Route('/index_device', handler='handlers.IndexDeviceHandler'),

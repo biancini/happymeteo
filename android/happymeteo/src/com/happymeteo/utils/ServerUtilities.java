@@ -24,7 +24,7 @@ public final class ServerUtilities {
 	/**
 	 * Create account
 	 */
-	public static Const.CREATE_ACCOUNT_STATUS createAccount(String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location) {
+	public static Const.CREATE_ACCOUNT_STATUS createAccount(String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, String password) {
 		Log.i(Const.TAG, "createAccount");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("facebook_id", facebook_id);
@@ -36,6 +36,7 @@ public final class ServerUtilities {
 		params.put("education", String.valueOf(education));
 		params.put("work", String.valueOf(work));
 		params.put("location", location);
+		params.put("password", password);
 		String json = ServerUtilities.postRequest(Const.CREATE_ACCOUNT, params);
 		Log.i(Const.TAG, json);
 		try {

@@ -170,6 +170,7 @@ class CreateAccountHandler(BaseRequestHandler):
         education=self.request.get('education')
         work=self.request.get('work')
         location=self.request.get('location')
+        password=self.request.get('password')
           
         user = User(facebook_id=facebook_id, 
             first_name=first_name,
@@ -179,7 +180,9 @@ class CreateAccountHandler(BaseRequestHandler):
             age=age,
             education=education,
             work=work,
-            location=location)
+            location=location,
+            status=0,
+            password=password)
 
         if facebook_id and facebook_id != "0":
           print "facebook user"
@@ -187,6 +190,7 @@ class CreateAccountHandler(BaseRequestHandler):
           data = {
             'message': 'CONFIRMED_OR_FACEBOOK',
           }
+          user.status=2
         else:
           # send an email to confirm the user
           print "normal user"
@@ -195,6 +199,7 @@ class CreateAccountHandler(BaseRequestHandler):
           }
           import os
           user.confirmation_code = os.urandom(32).encode('hex')
+          user.status=1
 
           from google.appengine.api import mail
           message = mail.EmailMessage(sender="happymeteo <VoxSim@gmail.com>",
@@ -233,7 +238,7 @@ class NormalLoginHandler(BaseRequestHandler):
         data = {}
         email=self.request.get('email')
         pwd_parameter=self.request.get('password')
-        q = db.GqlQuery("SELECT * FROM User WHERE email = :1", email)
+        q = db.GqlQuery("SELECT * FROM User WHERE email = :1 and status = 2", email)
 
         if q.count() > 0:
           user = q.get()
@@ -244,6 +249,7 @@ class NormalLoginHandler(BaseRequestHandler):
               'first_name': user.first_name,
               'last_name': user.last_name,
               'email':  user.email,
+              'gender':  user.gender,
               'age': user.age,
               'education': user.education,
               'work': user.work,
@@ -258,14 +264,11 @@ class NormalLoginHandler(BaseRequestHandler):
         else:
           data = {
             'error': 'Normal Login error',
-            'message': 'User not found',
+            'message': 'User not found or not confirmed',
           }
 
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(data))
-
-        #import hashlib
-        #pwd_generated=hashlib.sha1(PASSWORD_SECRET_KEY+pwd).hexdigest()
       except:
         data = {
           'error': 'Normal Login error',
@@ -285,25 +288,11 @@ class ConfirmUserHandler(BaseRequestHandler):
         data = {}
         if q.count() > 0:
           user = q.get()
-          data = {
-            'facebook_id': user.facebook_id,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'email':  user.email,
-            'age': user.age,
-            'education': user.education,
-            'work': user.work,
-            'location': user.location,
-            'registered': '1'
-          }
-        else:
-          data = {
-            'error': 'Normal Login error',
-            'message': 'User not found',
-          }
+          user.status = 2
+          user.confirmation_code = ""
+          user.put()
 
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(data))
+        self.response.out.write("User confirmed")
         
 class IndexDeviceHandler(BaseRequestHandler):
   def get(self):
