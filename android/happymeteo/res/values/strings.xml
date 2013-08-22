@@ -75,5 +75,5 @@ Buon divertimento! E happy meteo!</string>
     <string name="insert_fist_name">Inserisci il tuo nome</string>
     <string name="insert_last_name">Inserisci il tuo cognome</string>
     <string name="insert_location">Inserisci la tua città di residenza</string>
-
+	<string name="insert_password">Inserisci la tua password</string>
 </resources>

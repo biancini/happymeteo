@@ -72,13 +72,10 @@ public class FacebookSessionService {
 			Log.i(Const.TAG, "accessToken: "+Session.getActiveSession().getAccessToken());
 			
 			/* Call CommonUtilities.FACEBOOK_LOGIN_URL */
-			User user = ServerUtilities.facebookLogin(context, Session.getActiveSession().getAccessToken());
+			User user = ServerUtilities.facebookLogin(Session.getActiveSession().getAccessToken());
 			
 			/* Put user in session */
 			HappyMeteoApplication.getSessionService().put("user", user);
-			
-			/* Put activity in session */
-			HappyMeteoApplication.getSessionService().put("activity", activity);
 			
 			if(user != null) {
 				if(user.getRegistered() == User.USER_NOT_REGISTERED) {

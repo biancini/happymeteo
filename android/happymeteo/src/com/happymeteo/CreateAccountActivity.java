@@ -1,10 +1,7 @@
 package com.happymeteo;
 
-import com.happymeteo.models.User;
-import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
-
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.happymeteo.models.User;
+import com.happymeteo.utils.AlertDialogManager;
+import com.happymeteo.utils.Const;
+import com.happymeteo.utils.ServerUtilities;
 
 public class CreateAccountActivity extends Activity {
 	
@@ -73,7 +75,7 @@ public class CreateAccountActivity extends Activity {
 				Log.i(Const.TAG, "create_account_work: "+create_account_work.getSelectedItemPosition());
 				Log.i(Const.TAG, "create_account_location: "+create_account_location.getText());
 				
-				if(ServerUtilities.createAccount(getApplicationContext(), 
+				switch(ServerUtilities.createAccount(
 						create_account_facebook.getText().toString(), 
 						create_account_fist_name.getText().toString(), 
 						create_account_last_name.getText().toString(), 
@@ -84,28 +86,44 @@ public class CreateAccountActivity extends Activity {
 						create_account_work.getSelectedItemPosition(), 
 						create_account_location.getText().toString())) {
 					
-					User user = new User(Integer.parseInt(create_account_facebook.getText().toString()), 
-						create_account_fist_name.getText().toString(), 
-						create_account_last_name.getText().toString(), 
-						create_account_gender.getSelectedItemPosition(), 
-						create_account_email.getText().toString(), 
-						create_account_age.getSelectedItemPosition(), 
-						create_account_education.getSelectedItemPosition(), 
-						create_account_work.getSelectedItemPosition(), 
-						create_account_location.getText().toString(), 
-						User.USER_REGISTERED);
+					case CONFIRMED_OR_FACEBOOK:
+						User user = new User(Integer.parseInt(create_account_facebook.getText().toString()), 
+							create_account_fist_name.getText().toString(), 
+							create_account_last_name.getText().toString(), 
+							create_account_gender.getSelectedItemPosition(), 
+							create_account_email.getText().toString(), 
+							create_account_age.getSelectedItemPosition(), 
+							create_account_education.getSelectedItemPosition(), 
+							create_account_work.getSelectedItemPosition(), 
+							create_account_location.getText().toString(), 
+							User.USER_REGISTERED);
+						
+						/* Put user in session */
+						HappyMeteoApplication.getSessionService().put("user", user);
+						
+						/* get activity from session */
+						Activity activity = (Activity) HappyMeteoApplication.getSessionService().get("activity");
+						
+						/* Switch to menu activity if registered */
+						Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+						activity.startActivity(intent);
+						break;
 					
-					/* Put user in session */
-					HappyMeteoApplication.getSessionService().put("user", user);
-					
-					/* get activity from session */
-					Activity activity = (Activity) HappyMeteoApplication.getSessionService().get("activity");
-					
-					/* Switch to menu activity if registered */
-					Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-					activity.startActivity(intent);
-				} else {
-					// TODO: Error
+					case NOT_CONFIRMED:
+						AlertDialogManager alert = new AlertDialogManager();
+						alert.showAlertDialog(view.getContext(), "Creazione completata!",
+								"Presto verrà inviata una email di conferma all'email indicata", true, new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int which) {
+										finish();
+									}
+								});
+						
+						
+						break;
+						
+					case ERROR:
+						// TODO
+						break;
 				}
 			}
 		});

@@ -16,53 +16,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.happymeteo.models.User;
 
 public final class ServerUtilities {
-	
-	/**
-	 * Get questions
-	 */
-	public static JSONArray getQuestions(Context context) {
-		Log.i(Const.TAG, "getQuestions");
-		Map<String, String> params = new HashMap<String, String>();
-		String json = ServerUtilities.postRequest(Const.GET_QUESTIONS_URL, params);
-		JSONArray jsonArray;
-		Log.i(Const.TAG, json);
-		try {
-			jsonArray = new JSONArray(json);
-		} catch (JSONException e) {
-			e.printStackTrace();
-			jsonArray = null;
-		}
-		return jsonArray;
-	}
-
-	/**
-	 * Verify access token and register the user through facebook
-	 */
-	public static User facebookLogin(Context context, String accessToken) {
-		Log.i(Const.TAG, "facebookLogin (accessToken = " + accessToken + ")");
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("accessToken", accessToken);
-		String json = ServerUtilities.postRequest(Const.FACEBOOK_LOGIN_URL, params);
-		Log.i(Const.TAG, json);
-		try {
-			JSONObject jsonObject = new JSONObject(json);
-			return new User(jsonObject);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	/**
 	 * Create account
 	 */
-	public static boolean createAccount(Context context, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location) {
+	public static Const.CREATE_ACCOUNT_STATUS createAccount(String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location) {
 		Log.i(Const.TAG, "createAccount");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("facebook_id", facebook_id);
@@ -78,17 +40,65 @@ public final class ServerUtilities {
 		Log.i(Const.TAG, json);
 		try {
 			JSONObject jsonObject = new JSONObject(json);
-			return jsonObject.get("message").equals("OK");
+			if(!isError(jsonObject)) {
+				if(jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) {
+					return Const.CREATE_ACCOUNT_STATUS.CONFIRMED_OR_FACEBOOK;
+				} else {
+					return Const.CREATE_ACCOUNT_STATUS.NOT_CONFIRMED;
+				}
+			}
 		} catch (JSONException e) {
-			return false;
+			e.printStackTrace();
 		}
+		return Const.CREATE_ACCOUNT_STATUS.ERROR;
+	}
+	
+	/**
+	 * Verify access token and register the user through facebook
+	 */
+	public static User facebookLogin(String accessToken) {
+		Log.i(Const.TAG, "facebookLogin (accessToken = " + accessToken + ")");
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("accessToken", accessToken);
+		String json = ServerUtilities.postRequest(Const.FACEBOOK_LOGIN_URL, params);
+		Log.i(Const.TAG, json);
+		try {
+			JSONObject jsonObject = new JSONObject(json);
+			if(!isError(jsonObject)) {
+				return new User(jsonObject);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Login with email and password
+	 */
+	public static User normalLogin(String email, String password) {
+		Log.i(Const.TAG, "normalLogin (email = " + email + ", password = " + password +")");
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("email", email);
+		params.put("password", password);
+		String json = ServerUtilities.postRequest(Const.NORMAL_LOGIN_URL, params);
+		Log.i(Const.TAG, json);
+		try {
+			JSONObject jsonObject = new JSONObject(json);
+			if(!isError(jsonObject)) {
+				return new User(jsonObject);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
 	 * Register this device within the server.
 	 * 
 	 */
-	public static void registerDevice(Context context, String registrationId) {
+	public static void registerDevice(String registrationId) {
 		Log.i(Const.TAG, "registering device (regId = " + registrationId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("registrationId", registrationId);
@@ -98,11 +108,39 @@ public final class ServerUtilities {
 	/**
 	 * Unregister this device within the server.
 	 */
-	public static void unregisterDevice(Context context, String registrationId) {
+	public static void unregisterDevice(String registrationId) {
 		Log.i(Const.TAG, "unregistering device (registrationId = " + registrationId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("registrationId", registrationId);
 		ServerUtilities.postRequest(Const.UNREGISTER_URL, params);
+	}
+	
+	/**
+	 * Get questions
+	 */
+	public static JSONArray getQuestions() {
+		Log.i(Const.TAG, "getQuestions");
+		Map<String, String> params = new HashMap<String, String>();
+		String json = ServerUtilities.postRequest(Const.GET_QUESTIONS_URL, params);
+		JSONArray jsonArray;
+		Log.i(Const.TAG, json);
+		try {
+			jsonArray = new JSONArray(json);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			jsonArray = null;
+		}
+		return jsonArray;
+	}
+	
+	private static boolean isError(JSONObject jsonObject) {
+		try {
+			String error = jsonObject.getString("error");
+			Log.e(Const.TAG, error + ":" + jsonObject.getString("message"));
+			return true;
+		} catch (JSONException e) {
+			return false;
+		}
 	}
 
 	private static String postRequest(String serverUrl, Map<String, String> parameters) {

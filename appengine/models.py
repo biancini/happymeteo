@@ -13,3 +13,6 @@ class User(db.Model):
     age = db.StringProperty()
     education = db.StringProperty()
     work = db.StringProperty()
+    location = db.StringProperty()
+    confirmation_code = db.StringProperty()
+    password = db.StringProperty()

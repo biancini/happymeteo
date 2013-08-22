@@ -12,6 +12,30 @@
          android:layout_marginRight="10dip"
          android:layout_marginTop="20dip"/>
      
+     <EditText
+        android:id="@+id/normal_login_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ems="10"
+        android:hint="@string/insert_email"
+        android:inputType="textEmailAddress" />
+     
+     <EditText
+        android:id="@+id/normal_login_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ems="10"
+        android:hint="@string/insert_password"
+        android:inputType="textPassword" />
+     
+     <Button android:id="@+id/btnGoNormalLogin"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:text="@string/normal_login"
+         android:layout_margin="10dip"/>
+     
      <Button android:id="@+id/btnBackNormalLogin"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"

@@ -4,11 +4,6 @@ from secrets import SESSION_KEY
 
 from webapp2 import WSGIApplication, Route
 
-# inject './lib' dir in the path so that we can simply do "import ndb" 
-# or whatever there's in the app lib dir.
-if 'lib' not in sys.path:
-    sys.path[0:0] = ['lib']
-
 # webapp2 config
 app_config = {
   'webapp2_extras.sessions': {
@@ -28,6 +23,8 @@ routes = [
   Route('/create_account', handler='handlers.CreateAccountHandler'),
   Route('/facebook_login', handler='handlers.FacebookLoginHandler'),
   Route('/normal_login', handler='handlers.NormalLoginHandler'),
+  Route('/confirm_user', handler='handlers.ConfirmUserHandler'),
+  Route('/submit_pwd', handler='handlers.SubmitPwdHandler'),
 
   # device managment
   Route('/index_device', handler='handlers.IndexDeviceHandler'),

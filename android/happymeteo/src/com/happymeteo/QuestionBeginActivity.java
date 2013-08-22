@@ -33,8 +33,7 @@ public class QuestionBeginActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
-				JSONArray jsonArray = ServerUtilities
-						.getQuestions(getApplicationContext());
+				JSONArray jsonArray = ServerUtilities.getQuestions();
 
 				Log.i(Const.TAG, "jsonArray: " + jsonArray);
 

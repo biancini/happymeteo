@@ -30,7 +30,7 @@ public class MenuActivity extends Activity {
 		
 		if(!HappyMeteoApplication.getPushNotificationsService().getRegistrationId().equals("")) {
 			/* Register device on happymeteo backend */
-			ServerUtilities.registerDevice(getApplicationContext(), HappyMeteoApplication.getPushNotificationsService().getRegistrationId());
+			ServerUtilities.registerDevice(HappyMeteoApplication.getPushNotificationsService().getRegistrationId());
 		}
 		
 		Button btnInformationPage = (Button) findViewById(R.id.btnInformationPage);

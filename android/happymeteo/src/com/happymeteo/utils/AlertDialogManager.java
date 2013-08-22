@@ -21,7 +21,7 @@ public class AlertDialogManager {
 	 *            want icon
 	 * */
 	public void showAlertDialog(Context context, String title, String message,
-			Boolean status) {
+			Boolean status, DialogInterface.OnClickListener clickListener) {
 		AlertDialog alertDialog = new AlertDialog.Builder(context).create();
 
 		// Setting Dialog Title
@@ -36,10 +36,7 @@ public class AlertDialogManager {
 					.setIcon((status) ? R.drawable.success : R.drawable.fail);
 
 		// Setting OK Button
-		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		});
+		alertDialog.setButton("OK", clickListener);
 
 		// Showing Alert Message
 		alertDialog.show();

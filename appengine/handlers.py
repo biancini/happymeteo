@@ -14,7 +14,7 @@ from google.appengine.ext import db
 
 from models import User, Device
 
-from secrets import GOOGLE_API_KEY
+from secrets import GOOGLE_API_KEY, PASSWORD_SECRET_KEY
 
 class BaseRequestHandler(webapp2.RequestHandler):
   def dispatch(self):
@@ -150,7 +150,6 @@ class FacebookLoginHandler(BaseRequestHandler):
       data = {
         'error': 'Facebook Login error',
         'message': '%s'%sys.exc_info()[0],
-        'type': 1
       }
 
       self.response.headers['Content-Type'] = 'application/json'
@@ -171,38 +170,57 @@ class CreateAccountHandler(BaseRequestHandler):
         education=self.request.get('education')
         work=self.request.get('work')
         location=self.request.get('location')
+          
+        user = User(facebook_id=facebook_id, 
+            first_name=first_name,
+            last_name=last_name,
+            gender=gender,
+            email=email,
+            age=age,
+            education=education,
+            work=work,
+            location=location)
 
-        if facebook_id and facebook_id is not 0:
+        if facebook_id and facebook_id != "0":
           print "facebook user"
           # already confirmed
-          user = User(facebook_id=facebook_id, 
-              first_name=first_name,
-              last_name=last_name,
-              gender=gender,
-              email=email,
-              age=age,
-              education=education,
-              work=work,
-              location=location)
-          user.put()
-          
           data = {
-            'message': 'OK',
+            'message': 'CONFIRMED_OR_FACEBOOK',
           }
         else:
           # send an email to confirm the user
           print "normal user"
           data = {
-            'message': 'TO_CONFIRM',
+            'message': 'NOT_CONFIRMED',
           }
+          import os
+          user.confirmation_code = os.urandom(32).encode('hex')
+
+          from google.appengine.api import mail
+          message = mail.EmailMessage(sender="happymeteo <VoxSim@gmail.com>",
+                                      subject="Conferma del tuo account su Happy Meteo")
+
+          message.to = "%s %s <%s>"%(first_name, last_name, email)
+          message.body = """
+Benvenuto %s,
+
+Il tuo account su Happy Meteo ha bisogno di essere verificato, per
+farlo clicca sul link sottostante:
+https://happymeteo.appspot.com/confirm_user?confirmation_code=%s
+
+Saluti,
+Happy Meteo Team
+          """%(first_name,user.confirmation_code)
+
+          message.send()
         
+        user.put()
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(data))
       except:
         data = {
           'error': 'Create Account error',
           'message': '%s'%sys.exc_info()[0],
-          'type': 2
         }
 
         self.response.headers['Content-Type'] = 'application/json'
@@ -211,9 +229,82 @@ class CreateAccountHandler(BaseRequestHandler):
 
 class NormalLoginHandler(BaseRequestHandler):
     def post(self):
-      # TODO
-      print "normal login handler"
+      try:
+        data = {}
+        email=self.request.get('email')
+        pwd_parameter=self.request.get('password')
+        q = db.GqlQuery("SELECT * FROM User WHERE email = :1", email)
 
+        if q.count() > 0:
+          user = q.get()
+
+          if user.password == pwd_parameter:
+            data = {
+              'facebook_id': user.facebook_id,
+              'first_name': user.first_name,
+              'last_name': user.last_name,
+              'email':  user.email,
+              'age': user.age,
+              'education': user.education,
+              'work': user.work,
+              'location': user.location,
+              'registered': '1'
+            }
+          else:
+            data = {
+              'error': 'Normal Login error',
+              'message': 'Password didn\'t match',
+            }
+        else:
+          data = {
+            'error': 'Normal Login error',
+            'message': 'User not found',
+          }
+
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(data))
+
+        #import hashlib
+        #pwd_generated=hashlib.sha1(PASSWORD_SECRET_KEY+pwd).hexdigest()
+      except:
+        data = {
+          'error': 'Normal Login error',
+          'message': '%s'%sys.exc_info()[0],
+        }
+
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(data))
+        raise
+
+class ConfirmUserHandler(BaseRequestHandler):
+    def get(self):
+        confirmation_code=self.request.get('confirmation_code')
+        q = db.GqlQuery("SELECT * FROM User WHERE confirmation_code = :1",
+            confirmation_code)
+
+        data = {}
+        if q.count() > 0:
+          user = q.get()
+          data = {
+            'facebook_id': user.facebook_id,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email':  user.email,
+            'age': user.age,
+            'education': user.education,
+            'work': user.work,
+            'location': user.location,
+            'registered': '1'
+          }
+        else:
+          data = {
+            'error': 'Normal Login error',
+            'message': 'User not found',
+          }
+
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(data))
+        
 class IndexDeviceHandler(BaseRequestHandler):
   def get(self):
     devices = Device.all()

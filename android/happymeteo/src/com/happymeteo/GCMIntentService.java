@@ -28,7 +28,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		HappyMeteoApplication.getPushNotificationsService().setRegistrationId(registrationId);
 
 		/* Register device on happymeteo backend */
-		ServerUtilities.registerDevice(getApplicationContext(), registrationId);
+		ServerUtilities.registerDevice(registrationId);
 	}
 
 	/**

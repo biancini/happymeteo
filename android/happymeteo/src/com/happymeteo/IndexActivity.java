@@ -2,6 +2,7 @@ package com.happymeteo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -27,9 +28,17 @@ public class IndexActivity extends Activity {
 		if (!cd.isConnectingToInternet()) {
 			AlertDialogManager alert = new AlertDialogManager();
 			alert.showAlertDialog(this, "Internet Connection Error",
-					"Please connect to working Internet connection", false);
+					"Please connect to working Internet connection", false,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							finish();
+						}
+					});
 			return;
 		}
+
+		/* Put activity in session */
+		HappyMeteoApplication.getSessionService().put("activity", this);
 
 		Settings.addLoggingBehavior(LoggingBehavior.CACHE);
 
@@ -39,8 +48,6 @@ public class IndexActivity extends Activity {
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		Button btnLoginHappyMeteo = (Button) findViewById(R.id.btnLoginHappyMeteo);
 		Button btnLoginFacebook = (Button) findViewById(R.id.btnLoginFacebook);
-		
-		Button btnLogout = (Button) findViewById(R.id.btnLogoutFacebook);
 
 		btnCreateAccount.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
@@ -62,13 +69,6 @@ public class IndexActivity extends Activity {
 			public void onClick(View view) {
 				HappyMeteoApplication.getFacebookSessionService()
 						.onClickLogin();
-			}
-		});
-		
-		btnLogout.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				/* Close Facebook Session */
-				HappyMeteoApplication.getFacebookSessionService().onClickLogout();
 			}
 		});
 	}
