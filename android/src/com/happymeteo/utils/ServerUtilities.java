@@ -13,15 +13,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gcm.GCMRegistrar;
-import com.happymeteo.HappyMeteoApplication;
-import com.happymeteo.R;
 import com.happymeteo.models.User;
 
 public final class ServerUtilities {
@@ -32,26 +29,16 @@ public final class ServerUtilities {
 	public static JSONArray getQuestions(Context context) {
 		Log.i(Const.TAG, "getQuestions");
 		Map<String, String> params = new HashMap<String, String>();
-		
-		String message = "";
+		String json = ServerUtilities.postRequest(Const.GET_QUESTIONS_URL, params);
+		JSONArray jsonArray;
+		Log.i(Const.TAG, json);
 		try {
-			String json = ServerUtilities.postRequest(Const.GET_QUESTIONS_URL, params);
-			JSONArray jsonArray = new JSONArray(json);
-			
-			message = context.getString(R.string.server_registered, "ok");
-			
-			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject jsonObject = jsonArray.getJSONObject(i);
-				Log.i(Const.TAG, jsonObject.toString());
-			}
-			
-			return jsonArray;
-		} catch (Exception e) {
-			message = context.getString(R.string.server_register_error,
-					"", e.getMessage());
+			jsonArray = new JSONArray(json);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			jsonArray = null;
 		}
-		Log.i(Const.TAG, message);
-		return null;
+		return jsonArray;
 	}
 
 	/**
@@ -61,23 +48,40 @@ public final class ServerUtilities {
 		Log.i(Const.TAG, "facebookLogin (accessToken = " + accessToken + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("accessToken", accessToken);
-		String message = "";
+		String json = ServerUtilities.postRequest(Const.FACEBOOK_LOGIN_URL, params);
+		Log.i(Const.TAG, json);
 		try {
-			String json = ServerUtilities.postRequest(Const.FACEBOOK_LOGIN_URL, params);
-			Toast.makeText(context, "facebookLogin json: "+json, Toast.LENGTH_SHORT).show();
-			
 			JSONObject jsonObject = new JSONObject(json);
-			
-			message = context
-					.getString(R.string.server_registered, jsonObject.get("facebook_id"));
-			
 			return new User(jsonObject);
-		} catch (Exception e) {
-			message = context.getString(R.string.server_register_error,
-					"", e.getMessage());
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-		Log.i(Const.TAG, message);
 		return null;
+	}
+	
+	/**
+	 * Create account
+	 */
+	public static boolean createAccount(Context context, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location) {
+		Log.i(Const.TAG, "createAccount");
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("facebook_id", facebook_id);
+		params.put("first_name", first_name);
+		params.put("last_name", last_name);
+		params.put("gender", String.valueOf(gender));
+		params.put("email", email);
+		params.put("age", String.valueOf(age));
+		params.put("education", String.valueOf(education));
+		params.put("work", String.valueOf(work));
+		params.put("location", location);
+		String json = ServerUtilities.postRequest(Const.CREATE_ACCOUNT, params);
+		Log.i(Const.TAG, json);
+		try {
+			JSONObject jsonObject = new JSONObject(json);
+			return jsonObject.get("message").equals("OK");
+		} catch (JSONException e) {
+			return false;
+		}
 	}
 
 	/**
@@ -88,15 +92,7 @@ public final class ServerUtilities {
 		Log.i(Const.TAG, "registering device (regId = " + registrationId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("registrationId", registrationId);
-		String message = "";
-		try {
-			ServerUtilities.postRequest(Const.REGISTER_URL, params);
-			message = context.getString(R.string.server_registered, registrationId);
-		} catch (IOException e) {
-			message = context.getString(R.string.server_register_error, registrationId,
-					e.getMessage());
-		}
-		Log.i(Const.TAG, message);
+		ServerUtilities.postRequest(Const.REGISTER_URL, params);
 	}
 
 	/**
@@ -106,20 +102,10 @@ public final class ServerUtilities {
 		Log.i(Const.TAG, "unregistering device (registrationId = " + registrationId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("registrationId", registrationId);
-		String message = "";
-		try {
-			ServerUtilities.postRequest(Const.UNREGISTER_URL, params);
-			GCMRegistrar.setRegisteredOnServer(context, false);
-			message = context.getString(R.string.server_unregistered, registrationId);
-		} catch (Exception e) {
-			message = context.getString(R.string.server_register_error,
-					"", e.getMessage());
-		}
-		Log.i(Const.TAG, message);
+		ServerUtilities.postRequest(Const.UNREGISTER_URL, params);
 	}
 
-	private static String postRequest(String serverUrl,
-			Map<String, String> parameters) throws IOException {
+	private static String postRequest(String serverUrl, Map<String, String> parameters) {
 		URL url;
 		try {
 			url = new URL(serverUrl);
@@ -138,7 +124,6 @@ public final class ServerUtilities {
 		}
 
 		String output = "";
-
 		byte[] data = requestBody.toString().getBytes();
 		HttpURLConnection conn = null;
 		try {
@@ -165,6 +150,8 @@ public final class ServerUtilities {
 				Log.i(Const.TAG, "r:" + line);
 				output += line;
 			}
+		} catch(Exception e) {
+			Log.e(Const.TAG, e.getMessage(), e);
 		} finally {
 			if (conn != null) {
 				conn.disconnect();

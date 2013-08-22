@@ -23,21 +23,21 @@
         android:inputType="textEmailAddress" />
 
     <EditText
-        android:id="@+id/create_account_name"
+        android:id="@+id/create_account_fist_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
         android:ems="10"
-        android:hint="@string/insert_name"
+        android:hint="@string/insert_fist_name"
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/create_account_surname"
+        android:id="@+id/create_account_last_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
         android:ems="10"
-        android:hint="@string/insert_surname"
+        android:hint="@string/insert_last_name"
         android:inputType="textPersonName" />
 
     <Spinner
@@ -73,12 +73,12 @@
         android:prompt="@string/select_work" />
 
     <EditText
-        android:id="@+id/create_account_residenza"
+        android:id="@+id/create_account_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
         android:ems="10"
-        android:hint="@string/insert_residenza"
+        android:hint="@string/insert_location"
         android:inputType="textPersonName" />
     
     <EditText

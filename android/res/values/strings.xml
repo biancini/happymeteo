@@ -72,8 +72,8 @@ E poi perché ogni risposta ti fa guadagnare punti che, nel tempo, danno diritto
 
 Buon divertimento! E happy meteo!</string>
     <string name="insert_email">Inserisci la tua email</string>
-    <string name="insert_name">Inserisci il tuo nome</string>
-    <string name="insert_surname">Inserisci il tuo cognome</string>
-    <string name="insert_residenza">Inserisci la tua città di residenza</string>
+    <string name="insert_fist_name">Inserisci il tuo nome</string>
+    <string name="insert_last_name">Inserisci il tuo cognome</string>
+    <string name="insert_location">Inserisci la tua città di residenza</string>
 
 </resources>

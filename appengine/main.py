@@ -25,7 +25,7 @@ routes = [
   Route('/', handler='handlers.RootHandler'),
 
   # profile user
-  Route('/create_account', handler='handlers.CreateAccoutHandler'),
+  Route('/create_account', handler='handlers.CreateAccountHandler'),
   Route('/facebook_login', handler='handlers.FacebookLoginHandler'),
   Route('/normal_login', handler='handlers.NormalLoginHandler'),
 
