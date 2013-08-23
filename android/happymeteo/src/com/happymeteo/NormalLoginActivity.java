@@ -43,13 +43,12 @@ public class NormalLoginActivity extends Activity {
 				User user = ServerUtilities.normalLogin(email, password);
 				
 				if(user != null) {
-					/* Put user in session */
-					HappyMeteoApplication.getSessionService().put("user", user);
-					
-					/* get activity from session */
-					Activity activity = (Activity) HappyMeteoApplication.getSessionService().get("activity");
+					/* Set current user */
+					HappyMeteoApplication.setCurrentUser(user);
+					HappyMeteoApplication.setFacebookSession(false);
 					
 					/* Switch to menu activity if registered */
+					Activity activity = HappyMeteoApplication.getMainActivity();
 					Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
 					activity.startActivity(intent);
 				} else {

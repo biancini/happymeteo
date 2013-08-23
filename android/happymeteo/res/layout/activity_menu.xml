@@ -6,6 +6,12 @@
     android:orientation="vertical"
     tools:context=".MenuActivity" >
 
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/userImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal" />
+
     <Button
         android:id="@+id/btnInformationPage"
         android:layout_width="fill_parent"

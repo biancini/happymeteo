@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.facebook.widget.ProfilePictureView;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
@@ -32,7 +33,13 @@ public class MenuActivity extends Activity {
 			/* Register device on happymeteo backend */
 			ServerUtilities.registerDevice(HappyMeteoApplication.getPushNotificationsService().getRegistrationId());
 		}
-		
+
+		if(HappyMeteoApplication.isFacebookSession()) {
+			ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.userImage);
+			userImage.setProfileId(String.valueOf(HappyMeteoApplication.getCurrentUser().getFacebook_id()));
+		    userImage.setCropped(true);
+		}
+	    
 		Button btnInformationPage = (Button) findViewById(R.id.btnInformationPage);
 		Button btnHappyMeteo = (Button) findViewById(R.id.btnHappyMeteo);
 		Button btnHappyContext = (Button) findViewById(R.id.btnHappyContext);
@@ -101,7 +108,6 @@ public class MenuActivity extends Activity {
 
 		super.onDestroy();
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

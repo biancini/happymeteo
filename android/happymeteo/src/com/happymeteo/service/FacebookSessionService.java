@@ -74,15 +74,14 @@ public class FacebookSessionService {
 			/* Call CommonUtilities.FACEBOOK_LOGIN_URL */
 			User user = ServerUtilities.facebookLogin(Session.getActiveSession().getAccessToken());
 			
-			/* Put user in session */
-			HappyMeteoApplication.getSessionService().put("user", user);
+			/* Set current user */
+			HappyMeteoApplication.setCurrentUser(user);
+			HappyMeteoApplication.setFacebookSession(true);
 			
 			if(user != null) {
 				if(user.getRegistered() == User.USER_NOT_REGISTERED) {
 					/* Switch to create account activity if not registered */
 					Intent intent = new Intent(context, CreateAccountActivity.class);
-					
-					intent.putExtra("from", "facebook");
 					intent.putExtra("facebook_id", user.getFacebook_id());
 					intent.putExtra("first_name", user.getFirst_name());
 					intent.putExtra("last_name", user.getLast_name());

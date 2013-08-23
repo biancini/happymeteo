@@ -1,16 +1,19 @@
 package com.happymeteo;
 
+import android.app.Activity;
 import android.app.Application;
 
+import com.happymeteo.models.User;
 import com.happymeteo.service.FacebookSessionService;
 import com.happymeteo.service.PushNotificationsService;
-import com.happymeteo.service.SessionService;
 
 public class HappyMeteoApplication extends Application {
 	
 	private static FacebookSessionService facebookSessionService;
 	private static PushNotificationsService pushNotificationsService;
-	private static SessionService sessionService;
+	private static User currentUser;
+	private static boolean isFacebookSession;
+	private static Activity mainActivity;
 
 	public static FacebookSessionService getFacebookSessionService() {
 		if(facebookSessionService == null) {
@@ -26,10 +29,27 @@ public class HappyMeteoApplication extends Application {
 		return pushNotificationsService;
 	}
 	
-	public static SessionService getSessionService() {
-		if(sessionService == null) {
-			sessionService = new SessionService();
-		}
-		return sessionService;
+	public static User getCurrentUser() {
+		return currentUser;
+	}
+
+	public static void setCurrentUser(User currentUser) {
+		HappyMeteoApplication.currentUser = currentUser;
+	}
+	
+	public static boolean isFacebookSession() {
+		return isFacebookSession;
+	}
+
+	public static void setFacebookSession(boolean isFacebookSession) {
+		HappyMeteoApplication.isFacebookSession = isFacebookSession;
+	}
+	
+	public static Activity getMainActivity() {
+		return mainActivity;
+	}
+
+	public static void setMainActivity(Activity mainActivity) {
+		HappyMeteoApplication.mainActivity = mainActivity;
 	}
 }

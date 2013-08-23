@@ -34,14 +34,11 @@ public class CreateAccountActivity extends Activity {
 		final Spinner create_account_work = (Spinner) findViewById(R.id.create_account_work);
 		final EditText create_account_location = (EditText) findViewById(R.id.create_account_location);
 		
-		
-		String from = getIntent().getStringExtra("from");
-		
-		if(from != null && from.equals("facebook")) {
+		if(HappyMeteoApplication.isFacebookSession()) {
 			create_account_password.setVisibility(View.INVISIBLE);
 			
 			/* Get parameters */
-			int facebook_id = getIntent().getIntExtra("facebook_id", 0);
+			String facebook_id = getIntent().getStringExtra("facebook_id");
 			String first_name = getIntent().getStringExtra("first_name") == null ? "" : getIntent().getStringExtra("first_name");
 			String last_name = getIntent().getStringExtra("last_name") == null ? "" : getIntent().getStringExtra("last_name");
 			int gender = getIntent().getIntExtra("gender", 0);
@@ -98,7 +95,7 @@ public class CreateAccountActivity extends Activity {
 						password)) {
 					
 					case CONFIRMED_OR_FACEBOOK:
-						User user = new User(Integer.parseInt(create_account_facebook.getText().toString()), 
+						User user = new User(create_account_facebook.getText().toString(), 
 							create_account_fist_name.getText().toString(), 
 							create_account_last_name.getText().toString(), 
 							create_account_gender.getSelectedItemPosition(), 
@@ -109,13 +106,11 @@ public class CreateAccountActivity extends Activity {
 							create_account_location.getText().toString(), 
 							User.USER_REGISTERED);
 						
-						/* Put user in session */
-						HappyMeteoApplication.getSessionService().put("user", user);
-						
-						/* get activity from session */
-						Activity activity = (Activity) HappyMeteoApplication.getSessionService().get("activity");
+						/* Set current user */
+						HappyMeteoApplication.setCurrentUser(user);
 						
 						/* Switch to menu activity if registered */
+						Activity activity = HappyMeteoApplication.getMainActivity();
 						Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
 						activity.startActivity(intent);
 						break;
@@ -128,8 +123,6 @@ public class CreateAccountActivity extends Activity {
 										finish();
 									}
 								});
-						
-						
 						break;
 						
 					case ERROR:

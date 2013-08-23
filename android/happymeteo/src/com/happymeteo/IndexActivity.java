@@ -37,11 +37,12 @@ public class IndexActivity extends Activity {
 			return;
 		}
 
-		/* Put activity in session */
-		HappyMeteoApplication.getSessionService().put("activity", this);
-
 		Settings.addLoggingBehavior(LoggingBehavior.CACHE);
-
+		
+		/* Initialize HappyMeteoApplication */
+		HappyMeteoApplication.setCurrentUser(null);
+		HappyMeteoApplication.setFacebookSession(false);
+		HappyMeteoApplication.setMainActivity(this);
 		HappyMeteoApplication.getFacebookSessionService().initialize(
 				getApplicationContext(), savedInstanceState, this);
 
