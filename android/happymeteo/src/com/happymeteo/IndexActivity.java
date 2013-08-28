@@ -5,15 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.facebook.LoggingBehavior;
-import com.facebook.Session;
-import com.facebook.Settings;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.ConnectionDetector;
+import com.happymeteo.utils.Const;
 
 public class IndexActivity extends Activity {
 
@@ -21,7 +20,8 @@ public class IndexActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_index);
-
+		
+		Log.i(Const.TAG, "Create IndexActivity");
 		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
 
 		/* Check internet */
@@ -36,15 +36,21 @@ public class IndexActivity extends Activity {
 					});
 			return;
 		}
-
-		Settings.addLoggingBehavior(LoggingBehavior.CACHE);
 		
 		/* Initialize HappyMeteoApplication */
 		HappyMeteoApplication.setCurrentUser(null);
 		HappyMeteoApplication.setFacebookSession(false);
 		HappyMeteoApplication.setMainActivity(this);
-		HappyMeteoApplication.getFacebookSessionService().initialize(
+		
+		boolean alreadyLogged = HappyMeteoApplication.getFacebookSessionService().initialize(
 				getApplicationContext(), savedInstanceState, this);
+		
+		Log.i(Const.TAG, "alreadyLogged in facebook: "+alreadyLogged);
+		
+		if(alreadyLogged) {
+			Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+			startActivity(i);
+		}
 
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		Button btnLoginHappyMeteo = (Button) findViewById(R.id.btnLoginHappyMeteo);
@@ -53,42 +59,26 @@ public class IndexActivity extends Activity {
 		btnCreateAccount.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
-				Intent i = new Intent(context, CreateAccountActivity.class);
-				context.startActivity(i);
+				Intent intent = new Intent(context, CreateAccountActivity.class);
+				context.startActivity(intent);
 			}
 		});
 
 		btnLoginHappyMeteo.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
-				Intent i = new Intent(context, NormalLoginActivity.class);
-				context.startActivity(i);
+				Intent intent = new Intent(context, NormalLoginActivity.class);
+				context.startActivity(intent);
 			}
 		});
 
 		btnLoginFacebook.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				HappyMeteoApplication.getFacebookSessionService()
-						.onClickLogin();
+				Context context = view.getContext();
+				Intent intent = new Intent(context, LoadingActivity.class);
+				intent.putExtra("action", 1);
+				context.startActivity(intent);
 			}
 		});
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-
-		// TODO move in FacebookSessionService
-		Session.getActiveSession().onActivityResult(this, requestCode,
-				resultCode, data);
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-
-		// TODO move in FacebookSessionService
-		Session session = Session.getActiveSession();
-		Session.saveSession(session, outState);
 	}
 }

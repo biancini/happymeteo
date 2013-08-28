@@ -23,6 +23,8 @@ public class CreateAccountActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_account);
 		
+		Log.i(Const.TAG, "Create CreateAccountActivity");
+		
 		final EditText create_account_facebook = (EditText) findViewById(R.id.create_account_facebook);
 		final EditText create_account_fist_name = (EditText) findViewById(R.id.create_account_fist_name);
 		final EditText create_account_last_name = (EditText) findViewById(R.id.create_account_last_name);

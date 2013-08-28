@@ -1,7 +1,6 @@
 package com.happymeteo;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,92 +15,98 @@ import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
 public class MenuActivity extends Activity {
-	
-	/* The BroadcastReceiver needs to be in the same class where registerReceiver is called */
-	public BroadcastReceiver broadcastReceiver;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
 
+		Log.i(Const.TAG, "Create MenuActivity");
+
 		/* Initialize PushNotificationsService */
 		HappyMeteoApplication.getPushNotificationsService().initialize(
 				getApplicationContext());
-		
-		if(!HappyMeteoApplication.getPushNotificationsService().getRegistrationId().equals("")) {
+
+		if (!HappyMeteoApplication.getPushNotificationsService()
+				.getRegistrationId().equals("")) {
 			/* Register device on happymeteo backend */
-			ServerUtilities.registerDevice(HappyMeteoApplication.getPushNotificationsService().getRegistrationId());
+			ServerUtilities.registerDevice(HappyMeteoApplication
+					.getPushNotificationsService().getRegistrationId());
 		}
 
-		if(HappyMeteoApplication.isFacebookSession()) {
+		if (HappyMeteoApplication.isFacebookSession()) {
 			ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.userImage);
-			userImage.setProfileId(String.valueOf(HappyMeteoApplication.getCurrentUser().getFacebook_id()));
-		    userImage.setCropped(true);
+			userImage.setProfileId(String.valueOf(HappyMeteoApplication
+					.getCurrentUser().getFacebook_id()));
+			userImage.setCropped(true);
 		}
-	    
+
 		Button btnInformationPage = (Button) findViewById(R.id.btnInformationPage);
 		Button btnHappyMeteo = (Button) findViewById(R.id.btnHappyMeteo);
 		Button btnHappyContext = (Button) findViewById(R.id.btnHappyContext);
 		Button btnHappyMap = (Button) findViewById(R.id.btnHappyMap);
 		Button btnBeginQuestions = (Button) findViewById(R.id.btnQuestionBegin);
 		Button btnLogout = (Button) findViewById(R.id.btnLogout);
-		
+
 		btnInformationPage.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
-				Intent i = new Intent(context, InformationPageActivity.class);
-				context.startActivity(i);
+				Intent intent = new Intent(context,
+						InformationPageActivity.class);
+				context.startActivity(intent);
 			}
 		});
-		
+
 		btnHappyMeteo.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
-				Intent i = new Intent(context, HappyMeteoActivity.class);
-				context.startActivity(i);
+				Intent intent = new Intent(context, HappyMeteoActivity.class);
+				context.startActivity(intent);
 			}
 		});
-		
+
 		btnHappyContext.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
-				Intent i = new Intent(context, HappyContextActivity.class);
-				context.startActivity(i);
+				Intent intent = new Intent(context, HappyContextActivity.class);
+				context.startActivity(intent);
 			}
 		});
-		
+
 		btnHappyMap.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
-				Intent i = new Intent(context, HappyMapActivity.class);
-				context.startActivity(i);
+				Intent intent = new Intent(context, HappyMapActivity.class);
+				context.startActivity(intent);
 			}
 		});
-		
+
 		btnBeginQuestions.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
-				Intent i = new Intent(context, QuestionBeginActivity.class);
-				context.startActivity(i);
+				Intent intent = new Intent(context, QuestionBeginActivity.class);
+				context.startActivity(intent);
 			}
 		});
-		
+
 		btnLogout.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				/* Close Facebook Session */
-				HappyMeteoApplication.getFacebookSessionService().onClickLogout();
-				
+				HappyMeteoApplication.getFacebookSessionService()
+						.onClickLogout();
+
 				/* Return to index activity */
-				finish();
+				//finish();
+				Context context = view.getContext();
+				Intent intent = new Intent(context, IndexActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				context.startActivity(intent);
 			}
 		});
 	}
 
 	@Override
 	protected void onDestroy() {
-		Log.i(Const.TAG, "unregisterReceiver "+broadcastReceiver);
-		
 		/* Terminate PushNotificationsService */
 		HappyMeteoApplication.getPushNotificationsService().terminate(
 				getApplicationContext());
