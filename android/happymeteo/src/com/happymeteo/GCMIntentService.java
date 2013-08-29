@@ -25,7 +25,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onRegistered(Context context, String registrationId) {
 		Log.i(TAG, "Device registered: regId = " + registrationId);
-		HappyMeteoApplication.getPushNotificationsService().setRegistrationId(registrationId);
+		HappyMeteoApplication.i().getPushNotificationsService().setRegistrationId(registrationId);
 
 		/* Register device on happymeteo backend */
 		ServerUtilities.registerDevice(registrationId);
@@ -37,7 +37,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onUnregistered(Context context, String registrationId) {
 		Log.i(TAG, "Device unregistered");
-		HappyMeteoApplication.getPushNotificationsService().setRegistrationId("");
+		HappyMeteoApplication.i().getPushNotificationsService().setRegistrationId("");
 	}
 
 	/**

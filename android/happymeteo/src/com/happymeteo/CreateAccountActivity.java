@@ -36,7 +36,7 @@ public class CreateAccountActivity extends Activity {
 		final Spinner create_account_work = (Spinner) findViewById(R.id.create_account_work);
 		final EditText create_account_location = (EditText) findViewById(R.id.create_account_location);
 		
-		if(HappyMeteoApplication.isFacebookSession()) {
+		if(HappyMeteoApplication.i().isFacebookSession()) {
 			create_account_password.setVisibility(View.INVISIBLE);
 			
 			/* Get parameters */
@@ -109,12 +109,11 @@ public class CreateAccountActivity extends Activity {
 							User.USER_REGISTERED);
 						
 						/* Set current user */
-						HappyMeteoApplication.setCurrentUser(user);
+						HappyMeteoApplication.i().setCurrentUser(user);
 						
 						/* Switch to menu activity if registered */
-						Activity activity = HappyMeteoApplication.getMainActivity();
 						Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-						activity.startActivity(intent);
+						startActivity(intent);
 						break;
 					
 					case NOT_CONFIRMED:

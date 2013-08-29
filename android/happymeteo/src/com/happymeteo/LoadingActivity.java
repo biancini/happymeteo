@@ -19,7 +19,7 @@ public class LoadingActivity extends Activity {
 		
 		switch(action) {
 			case 1:
-				HappyMeteoApplication.getFacebookSessionService().onClickLogin(this);
+				HappyMeteoApplication.i().getFacebookSessionService().onClickLogin(this);
 				break;
 		}
 	}

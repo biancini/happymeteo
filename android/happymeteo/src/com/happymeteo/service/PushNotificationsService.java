@@ -6,7 +6,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
-import com.happymeteo.utils.ConnectionDetector;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.WakeLocker;
 
@@ -23,13 +22,6 @@ public class PushNotificationsService {
 	}
 
 	public void initialize(Context context) {
-		/* Check internet connection */
-		ConnectionDetector cd = new ConnectionDetector(context);
-		if (!cd.isConnectingToInternet()) {
-			Toast.makeText(context, "Please connect to working Internet connection", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		
 		/* Make sure the device has the proper dependencies. */
 		GCMRegistrar.checkDevice(context);
 		

@@ -20,7 +20,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -55,8 +54,6 @@ import com.happymeteo.utils.Const;
  */
 public class FacebookAuthDialog extends Dialog {
 	private static final String LOG_TAG = Const.TAG;
-	private static final String DISPLAY_TOUCH = "touch";
-	private static final String USER_AGENT = "user_agent";
 	static final String REDIRECT_URI = Const.BASE_URL;
 	static final String CANCEL_URI = "fbconnect://cancel";
 	static final boolean DISABLE_SSL_CHECK_FOR_TESTING = false;
@@ -86,8 +83,10 @@ public class FacebookAuthDialog extends Dialog {
 		 *            on success, contains the values returned by the dialog
 		 * @param error
 		 *            on an error, contains an exception describing the error
+		 * @param caller
+		 *            activity that call the FacebookAuthDialog
 		 */
-		void onComplete(Bundle values, FacebookException error);
+		void onComplete(Bundle values, FacebookException error, Activity caller);
 	}
 
 	/**
@@ -222,7 +221,7 @@ public class FacebookAuthDialog extends Dialog {
 	private void sendSuccessToListener(Bundle values) {
 		if (onCompleteListener != null && !listenerCalled) {
 			listenerCalled = true;
-			onCompleteListener.onComplete(values, null);
+			onCompleteListener.onComplete(values, null, activity);
 		}
 	}
 
@@ -235,7 +234,7 @@ public class FacebookAuthDialog extends Dialog {
 			} else {
 				facebookException = new FacebookException(error);
 			}
-			onCompleteListener.onComplete(null, facebookException);
+			onCompleteListener.onComplete(null, facebookException, activity);
 		}
 	}
 

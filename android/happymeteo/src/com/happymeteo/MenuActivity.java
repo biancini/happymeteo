@@ -24,20 +24,20 @@ public class MenuActivity extends Activity {
 		Log.i(Const.TAG, "Create MenuActivity");
 
 		/* Initialize PushNotificationsService */
-		HappyMeteoApplication.getPushNotificationsService().initialize(
+		HappyMeteoApplication.i().getPushNotificationsService().initialize(
 				getApplicationContext());
 
-		if (!HappyMeteoApplication.getPushNotificationsService()
+		if (!HappyMeteoApplication.i().getPushNotificationsService()
 				.getRegistrationId().equals("")) {
 			/* Register device on happymeteo backend */
 			ServerUtilities.registerDevice(HappyMeteoApplication
-					.getPushNotificationsService().getRegistrationId());
+					.i().getPushNotificationsService().getRegistrationId());
 		}
 
-		if (HappyMeteoApplication.isFacebookSession()) {
+		if (HappyMeteoApplication.i().isFacebookSession()) {
 			ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.userImage);
 			userImage.setProfileId(String.valueOf(HappyMeteoApplication
-					.getCurrentUser().getFacebook_id()));
+					.i().getCurrentUser().getFacebook_id()));
 			userImage.setCropped(true);
 		}
 
@@ -91,13 +91,14 @@ public class MenuActivity extends Activity {
 
 		btnLogout.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
+				Context context = view.getContext();
+				
 				/* Close Facebook Session */
-				HappyMeteoApplication.getFacebookSessionService()
-						.onClickLogout();
+				HappyMeteoApplication.i().getFacebookSessionService()
+						.onClickLogout(context);
 
 				/* Return to index activity */
-				//finish();
-				Context context = view.getContext();
+				
 				Intent intent = new Intent(context, IndexActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				context.startActivity(intent);
@@ -108,7 +109,7 @@ public class MenuActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		/* Terminate PushNotificationsService */
-		HappyMeteoApplication.getPushNotificationsService().terminate(
+		HappyMeteoApplication.i().getPushNotificationsService().terminate(
 				getApplicationContext());
 
 		super.onDestroy();

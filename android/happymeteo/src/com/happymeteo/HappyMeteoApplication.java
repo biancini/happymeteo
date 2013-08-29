@@ -1,7 +1,7 @@
 package com.happymeteo;
 
-import android.app.Activity;
 import android.app.Application;
+import android.content.SharedPreferences;
 
 import com.happymeteo.models.User;
 import com.happymeteo.service.FacebookSessionService;
@@ -9,47 +9,55 @@ import com.happymeteo.service.PushNotificationsService;
 
 public class HappyMeteoApplication extends Application {
 	
-	private static FacebookSessionService facebookSessionService;
-	private static PushNotificationsService pushNotificationsService;
-	private static User currentUser;
-	private static boolean isFacebookSession;
-	private static Activity mainActivity;
+	private static HappyMeteoApplication instance;
+	
+	private FacebookSessionService facebookSessionService;
+	private PushNotificationsService pushNotificationsService;
+	private User currentUser;
+	private boolean isFacebookSession;
+	private SharedPreferences preferences;
+	
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		
+		instance = this;
+		facebookSessionService = new FacebookSessionService();
+		pushNotificationsService = new PushNotificationsService();
+		currentUser = null;
+		isFacebookSession = false;
+		preferences = getApplicationContext().getSharedPreferences("HappyMeteo", MODE_PRIVATE);
+	}
 
-	public static FacebookSessionService getFacebookSessionService() {
-		if(facebookSessionService == null) {
-			facebookSessionService = new FacebookSessionService();
-		}
+	public static HappyMeteoApplication i() {
+		return instance;
+	}
+	
+	public FacebookSessionService getFacebookSessionService() {
 		return facebookSessionService;
 	}
 	
-	public static PushNotificationsService getPushNotificationsService() {
-		if(pushNotificationsService == null) {
-			pushNotificationsService = new PushNotificationsService();
-		}
+	public PushNotificationsService getPushNotificationsService() {
 		return pushNotificationsService;
 	}
 	
-	public static User getCurrentUser() {
+	public User getCurrentUser() {
 		return currentUser;
 	}
 
-	public static void setCurrentUser(User currentUser) {
-		HappyMeteoApplication.currentUser = currentUser;
+	public void setCurrentUser(User currentUser) {
+		this.currentUser = currentUser;
 	}
 	
-	public static boolean isFacebookSession() {
+	public boolean isFacebookSession() {
 		return isFacebookSession;
 	}
 
-	public static void setFacebookSession(boolean isFacebookSession) {
-		HappyMeteoApplication.isFacebookSession = isFacebookSession;
+	public void setFacebookSession(boolean isFacebookSession) {
+		this.isFacebookSession = isFacebookSession;
 	}
 	
-	public static Activity getMainActivity() {
-		return mainActivity;
-	}
-
-	public static void setMainActivity(Activity mainActivity) {
-		HappyMeteoApplication.mainActivity = mainActivity;
+	public SharedPreferences getSharedPreferences() {
+		return preferences;
 	}
 }

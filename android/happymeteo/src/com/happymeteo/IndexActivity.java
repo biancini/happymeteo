@@ -38,20 +38,8 @@ public class IndexActivity extends Activity {
 		}
 		
 		/* Initialize HappyMeteoApplication */
-		HappyMeteoApplication.setCurrentUser(null);
-		HappyMeteoApplication.setFacebookSession(false);
-		HappyMeteoApplication.setMainActivity(this);
+		HappyMeteoApplication.i().getFacebookSessionService().initialize(this);
 		
-		boolean alreadyLogged = HappyMeteoApplication.getFacebookSessionService().initialize(
-				getApplicationContext(), savedInstanceState, this);
-		
-		Log.i(Const.TAG, "alreadyLogged in facebook: "+alreadyLogged);
-		
-		if(alreadyLogged) {
-			Intent i = new Intent(getApplicationContext(), MenuActivity.class);
-			startActivity(i);
-		}
-
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		Button btnLoginHappyMeteo = (Button) findViewById(R.id.btnLoginHappyMeteo);
 		Button btnLoginFacebook = (Button) findViewById(R.id.btnLoginFacebook);
