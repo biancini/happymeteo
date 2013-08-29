@@ -35,7 +35,7 @@ public class FacebookSessionService implements OnCompleteListener {
 		facebookAuthDialog.show();
 	}
 	
-	private void tryLoginUser(Activity activity) {
+	private boolean tryLoginUser(Activity activity) {
 		SharedPreferences preferences = HappyMeteoApplication.i().getSharedPreferences();
 		String accessToken = preferences.getString("accessToken", null);
 		Log.i(Const.TAG, "accessToken: "+accessToken);
@@ -72,8 +72,10 @@ public class FacebookSessionService implements OnCompleteListener {
 					Intent intent = new Intent(activity.getApplicationContext(), MenuActivity.class);
 					activity.startActivity(intent);
 				}
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	public void initialize(Activity activity) {
@@ -81,7 +83,9 @@ public class FacebookSessionService implements OnCompleteListener {
 	}
 	
 	public void onClickLogin(Activity activity) {
-		openConnession(activity);
+		if(tryLoginUser(activity)) {
+			openConnession(activity);
+		}
 	}
 
 	public void onClickLogout(Context context) {
