@@ -45,15 +45,11 @@ public class FacebookSessionService implements OnCompleteListener {
 		if(accessToken != null) {
 			// Logged
 			Log.i(Const.TAG, "Logged");
-			
-			// Call CommonUtilities.FACEBOOK_LOGIN_URL
 			User user = ServerUtilities.facebookLogin(accessToken);
 			
-			// Set current user
-			HappyMeteoApplication.i().setCurrentUser(user);
-			HappyMeteoApplication.i().setFacebookSession(true);
-			
 			if(user != null) {
+				HappyMeteoApplication.i().setFacebookSession(true);
+				
 				if(user.getRegistered() == User.USER_NOT_REGISTERED) {
 					// Switch to create account activity if not registered
 					Intent intent = new Intent(activity.getApplicationContext(), CreateAccountActivity.class);
@@ -70,6 +66,8 @@ public class FacebookSessionService implements OnCompleteListener {
 					Log.i(Const.TAG, "CreateAccountActivity startActivity");
 					activity.startActivity(intent);
 				} else {
+					HappyMeteoApplication.i().setCurrentUser(user);
+					
 					// Switch to menu activity if registered
 					Intent intent = new Intent(activity.getApplicationContext(), MenuActivity.class);
 					activity.startActivity(intent);

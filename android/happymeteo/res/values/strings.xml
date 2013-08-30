@@ -32,6 +32,7 @@
     <string name="back">Indietro</string>
     <string name="begin_questions">Il momento delle domande!</string>
     <string name="begin_questions_btn">Inizia con il questionario</string>
+    <string name="answer_questions_btn">Rispondi!</string>
     <string name="create_profile_user">Crea utente</string>
     <string name="select_gender">Seleziona il sesso</string>
     <string name="male">Maschio</string>

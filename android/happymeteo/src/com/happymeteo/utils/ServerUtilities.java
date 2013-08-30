@@ -94,7 +94,8 @@ public final class ServerUtilities {
 		}
 		return null;
 	}
-
+	
+	
 	/**
 	 * Register this device within the server.
 	 * 
@@ -132,6 +133,15 @@ public final class ServerUtilities {
 			jsonArray = null;
 		}
 		return jsonArray;
+	}
+	
+	/**
+	 * Submit question
+	 */
+	public static boolean submitQuestions(Map<String, String> params) {
+		Log.i(Const.TAG, "submit questions (params = " + params + ")");
+		ServerUtilities.postRequest(Const.SUBMIT_QUESTIONS_URL, params);
+		return true;
 	}
 	
 	private static boolean isError(JSONObject jsonObject) {

@@ -33,7 +33,7 @@ routes = [
 
   # question managment
   Route('/get_questions', handler='handlers.GetQuestionsHandler'),
-  #Route('/submit_questions', handler='handlers.SubmitQuestionsHandler'),
+  Route('/submit_questions', handler='handlers.SubmitQuestionsHandler'),
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

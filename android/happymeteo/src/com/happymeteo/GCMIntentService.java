@@ -59,7 +59,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	/**
 	 * Method called on receiving a deleted message
-	 * */
+	 * 
 	@Override
 	protected void onDeletedMessages(Context context, int total) {
 		Log.i(TAG, "Received deleted messages notification");
@@ -67,7 +67,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		// notifies user
 		generateNotification(context, message);
-	}
+	} */
 
 	/**
 	 * Method called on Error
@@ -99,8 +99,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		Intent notificationIntent = new Intent(context, QuestionBeginActivity.class);
 		// set intent so it does not start a new activity
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-				| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		// notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+		// 		| Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent intent = PendingIntent.getActivity(context, 0,
 				notificationIntent, 0);
 		notification.setLatestEventInfo(context, title, message, intent);

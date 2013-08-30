@@ -354,14 +354,17 @@ class GetQuestionsHandler(BaseRequestHandler):
     #      -> 2 -> Si/No
     questions = [
         {
+          'id': '1',
           'question': 'Quanto ti senti felice, da uno 1 a 10?',
           'type': '1' 
           },
         {
+          'id': '2',
           'question': 'Sei in compagnia?',
           'type': '2' 
           },
         {
+          'id': '3',
           'question': 'Sei concentrato/a?',
           'type': '2' 
           }
@@ -369,3 +372,15 @@ class GetQuestionsHandler(BaseRequestHandler):
 
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(questions))
+
+class SubmitQuestionsHandler(BaseRequestHandler):
+
+  def post(self):
+    # questions: 
+    #  -> question: con il testo della domanda
+    #  -> type:
+    #      -> 1 -> [1-10]
+    #      -> 2 -> Si/No
+    ok = { 'message': 'ok' }
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(ok))
