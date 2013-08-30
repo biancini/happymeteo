@@ -25,10 +25,12 @@ public class FacebookSessionService implements OnCompleteListener {
 	private void openConnession(Activity activity) {
 		Log.i(Const.TAG, "openConnession");
 		String url = "https://m.facebook.com/dialog/oauth?display=touch"
-				+ "&client_id=405414319576008"
-				+ "&scope=email%2Cuser_birthday"
+				+ "&client_id="+Const.FACEBOOK_ID
+				+ "&scope="+Const.getFacebookReadPermission()
 				+ "&type=user_agent"
 				+ "&redirect_uri="+Const.BASE_URL;
+		
+		Log.i(Const.TAG, "url open facebook connession: "+url);
 		
 		FacebookAuthDialog facebookAuthDialog = new FacebookAuthDialog(activity, url);
 		facebookAuthDialog.setOnCompleteListener(this);
@@ -83,7 +85,7 @@ public class FacebookSessionService implements OnCompleteListener {
 	}
 	
 	public void onClickLogin(Activity activity) {
-		if(tryLoginUser(activity)) {
+		if(!tryLoginUser(activity)) {
 			openConnession(activity);
 		}
 	}
@@ -144,6 +146,7 @@ public class FacebookSessionService implements OnCompleteListener {
 		} else {
 			// Not logged
 			Log.i(Const.TAG, "Not logged");
+			activity.finish();
 		}
 	}
 }

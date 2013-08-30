@@ -16,7 +16,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	private static final String TAG = "GCMIntentService";
 
 	public GCMIntentService() {
-		super(Const.SENDER_ID);
+		super(Const.GOOGLE_ID);
 	}
 
 	/**
@@ -38,6 +38,9 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onUnregistered(Context context, String registrationId) {
 		Log.i(TAG, "Device unregistered");
 		HappyMeteoApplication.i().getPushNotificationsService().setRegistrationId("");
+		
+		/* Unregister device on happymeteo backend */
+		ServerUtilities.unregisterDevice(registrationId);
 	}
 
 	/**

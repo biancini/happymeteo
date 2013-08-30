@@ -98,7 +98,6 @@ public class MenuActivity extends Activity {
 						.onClickLogout(context);
 
 				/* Return to index activity */
-				
 				Intent intent = new Intent(context, IndexActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				context.startActivity(intent);

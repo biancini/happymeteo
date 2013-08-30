@@ -3,7 +3,6 @@ package com.happymeteo.service;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.utils.Const;
@@ -31,24 +30,16 @@ public class PushNotificationsService {
 		/* Get Registration Id */
 		registrationId = GCMRegistrar.getRegistrationId(context);
 		
-		Toast.makeText(context, "registrationId: "+registrationId, Toast.LENGTH_SHORT).show();
 		Log.i("HappyMeteo", "registrationId: "+registrationId);
-		
 		if (registrationId.equals("")) {
-			Toast.makeText(context, "Register now: "+GCMRegistrar.isRegisteredOnServer(context), Toast.LENGTH_SHORT).show();
 			Log.i("HappyMeteo", "Register now: "+GCMRegistrar.isRegisteredOnServer(context));
 			
 			/* Registration is not present, register now with GCM */			
-			GCMRegistrar.register(context, Const.SENDER_ID);
+			GCMRegistrar.register(context, Const.GOOGLE_ID);
 		}
 	}
 	
 	public void onReceive(Context context, Intent intent) {
-		for(String key : intent.getExtras().keySet()) {
-			Toast.makeText(context, "(k, v): (" + key + "," + 
-				intent.getExtras().getString(key) + ")", Toast.LENGTH_LONG).show();
-		}
-		
 		String newMessage = intent.getExtras().getString(Const.EXTRA_MESSAGE);
 		// Waking up mobile if it is sleeping
 		WakeLocker.acquire(context);
@@ -60,8 +51,6 @@ public class PushNotificationsService {
 		 * */
 		
 		// Showing received message
-		Toast.makeText(context, "New Message: " + newMessage, Toast.LENGTH_LONG).show();
-		
 		Log.i(Const.TAG, "New Message: " + newMessage);
 		
 		// Releasing wake lock
