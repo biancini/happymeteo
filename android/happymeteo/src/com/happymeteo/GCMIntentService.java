@@ -53,7 +53,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		
 		Log.i(TAG, "onMessage: " + message);
 
-		// notifies user
+		/* Notifies user */
 		generateNotification(context, "Le domande del giorno");
 	}
 

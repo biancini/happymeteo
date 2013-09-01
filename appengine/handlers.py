@@ -329,47 +329,34 @@ class SendMessageHandler(BaseRequestHandler):
   def get(self):
     registrationId=self.request.get('registrationId')
     data = {
-        'registration_ids': [registrationId],
-        'data': {
-          'message': 'ciao'
-          }
-        }
+      'registration_ids': [registrationId],
+      'collapse_key': 'questions'
+    }
 
     req = urllib2.Request('https://android.googleapis.com/gcm/send')
     req.add_header('Content-Type', 'application/json')
     req.add_header('Authorization', 'key=%s'%GOOGLE_API_KEY)
-
-    print json.dumps(data)
-
     response = urllib2.urlopen(req, json.dumps(data))
     print response.read()
 
 class GetQuestionsHandler(BaseRequestHandler):
 
   def post(self):
-    # questions: 
-    #  -> question: con il testo della domanda
-    #  -> type:
-    #      -> 1 -> [1-10]
-    #      -> 2 -> Si/No
-    questions = [
-        {
-          'id': '1',
-          'question': 'Quanto ti senti felice, da uno 1 a 10?',
-          'type': '1' 
-          },
-        {
-          'id': '2',
-          'question': 'Sei in compagnia?',
-          'type': '2' 
-          },
-        {
-          'id': '3',
-          'question': 'Sei concentrato/a?',
-          'type': '2' 
-          }
-        ]
+    req = urllib2.Request('https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%201x82FO5LkeHto6NfHJedrXUtcTl8QkSxoqxelpkI&key=AIzaSyBeMxlRchiwXkyD36N9F2JpkmEXvEEnIVk')
+    req.add_header('Content-Type', 'application/json')
+    #req.add_header('Authorization', 'key=%s'%GOOGLE_API_KEY)
+    response = urllib2.urlopen(req)
+    questions_list = json.loads(response.read())
+    questions = []
+    
 
+    for question in questions_list['rows']:
+      questions.append({
+          'id': question[0],
+          'question': question[1],
+          'type': question[2]
+      })
+    
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(questions))
 

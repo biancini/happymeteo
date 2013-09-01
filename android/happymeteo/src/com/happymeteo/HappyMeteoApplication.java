@@ -2,6 +2,8 @@ package com.happymeteo;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 
 import com.happymeteo.models.User;
 import com.happymeteo.service.FacebookSessionService;
@@ -59,5 +61,10 @@ public class HappyMeteoApplication extends Application {
 	
 	public SharedPreferences getSharedPreferences() {
 		return preferences;
+	}
+	
+	public boolean isEmulator() {
+		SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		return manager.getSensorList(Sensor.TYPE_ALL).isEmpty();
 	}
 }

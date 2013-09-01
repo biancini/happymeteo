@@ -13,6 +13,7 @@
                       registrationId: registrationId
                     },
                     success: function(data, textStatus, xhr) {
+                      console.log("message sended");
                     },
                     error: function(xhr, textStatus, errorThrown) {
                        console.log(errorThrown); 
@@ -48,6 +49,7 @@
             }
             div.clear{
                 clear: both;
+                padding-bottom: 10px;
             }
             ul.devices{
                 margin: 0;
@@ -65,24 +67,6 @@
                 box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
                 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
                 color: #555;
-            }
-            ul.devices li label, ul.devices li span{
-                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-                font-size: 12px;
-                font-style: normal;
-                font-variant: normal;
-                font-weight: bold;
-                color: #393939;
-                display: block;
-                float: left;
-            }
-            ul.devices li label{
-                height: 25px;
-                width: 50px;                
-            }
-            ul.devices li textarea{
-                float: left;
-                resize: none;
             }
             ul.devices li .send_btn{
                 background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0096FF), to(#005DFF));
@@ -103,14 +87,12 @@
               {% if lendevices > 0 %}
                 {% for device in devices %}
                     <li>
-                        <label>registrationId: </label> <span>{{ device.registrationId }} </span>
-                        <div class="clear"></div>
-                        <div class="send_container">                                
-                            <input type="submit" class="send_btn" value="Send" onclick="sendPushNotification('{{device.registrationId }}')"/>
-                        </div>
-                        <div class="send_container">                                
-                            <input type="submit" class="send_btn" value="Unregister" onclick="unregisterNotification('{{device.registrationId }}')"/>
-                        </div>
+                      <div>{{ device.registrationId }} </div>
+                      <div class="clear"></div>
+                      <div class="send_container">                                
+                          <input type="submit" class="send_btn" value="Send" onclick="sendPushNotification('{{device.registrationId }}')"/>
+                          <input type="submit" class="send_btn" value="Unregister" onclick="unregisterNotification('{{device.registrationId }}')"/>
+                      </div>
                     </li>
                 {% endfor %}
               {% else %}
