@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -22,6 +24,14 @@ import com.happymeteo.models.Friend;
 import com.happymeteo.utils.Const;
 
 public class FriendsFacebookActivity extends Activity {
+	
+	public class MyFriendComparable implements Comparator<Friend>{
+	 
+	    @Override
+	    public int compare(Friend o1, Friend o2) {
+	        return o1.getName().compareTo(o2.getName());
+	    }
+	} 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +81,9 @@ public class FriendsFacebookActivity extends Activity {
 					}
 				}
 			}
+			
+			Collections.sort(friendsWithApp, new MyFriendComparable());
+			Collections.sort(friendsNoApp, new MyFriendComparable());
 			
 			FacebookFriendsAdapter withApp = new FacebookFriendsAdapter(getApplicationContext(), friendsWithApp);
 			FacebookFriendsAdapter noApp = new FacebookFriendsAdapter(getApplicationContext(), friendsNoApp);
