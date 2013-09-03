@@ -78,4 +78,6 @@ Buon divertimento! E happy meteo!</string>
 	<string name="challenge_happymeteo">Sfida un tuo amico di happymeteo</string>
 	<string name="challenge_facebook">Sfida un tuo amico di facebook</string>
 	<string name="challenge_random">Sfida una persona a caso</string>
+	<string name="titleWithApp">Amici che hanno Happy Meteo</string>
+	<string name="titleNoApp">Amici che non hanno Happy Meteo</string>
 </resources>

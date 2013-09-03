@@ -312,6 +312,7 @@ public class FacebookAuthDialog extends Dialog {
 
 	private class DialogWebViewClient extends WebViewClient {
 		
+		@SuppressWarnings("deprecation")
 		private void parseUrl(String url) {
 			Bundle values = Util.parseUrl(url);
 
@@ -353,7 +354,6 @@ public class FacebookAuthDialog extends Dialog {
 		}
 
 		@Override
-		@SuppressWarnings("deprecation")
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 			Log.i(LOG_TAG, "Redirect URL: " + url);
 			if (url.startsWith(FacebookAuthDialog.REDIRECT_URI)) {

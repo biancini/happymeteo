@@ -1,9 +1,10 @@
 package com.happymeteo;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,6 +26,10 @@ public class ChallengeActivity extends Activity {
 
 		btnChallengeFacebook.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
+				Context context = view.getContext();
+				Intent intent = new Intent(context,
+						FriendsFacebookActivity.class);
+				context.startActivity(intent);
 			}
 		});
 		
@@ -39,21 +44,4 @@ public class ChallengeActivity extends Activity {
 			}
 		});
 	}
-
-	@Override
-	protected void onDestroy() {
-		/* Terminate PushNotificationsService */
-		HappyMeteoApplication.i().getPushNotificationsService().terminate(
-				getApplicationContext());
-
-		super.onDestroy();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu, menu);
-		return true;
-	}
-
 }

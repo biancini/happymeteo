@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF" 
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/facebookPickerListTitleWithApp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="20dip"
+        android:text="@string/titleWithApp" />
+
+    <ListView
+        android:id="@+id/facebookPickerListViewWithApp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="#FFFFFF"
+        android:divider="@drawable/com_facebook_list_divider"
+        android:listSelector="@drawable/com_facebook_picker_list_selector"
+        android:fastScrollEnabled="true"
+        android:scrollbars="vertical"/>
+
+    <TextView
+        android:id="@+id/facebookPickerListTitleNoApp"
+       	android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="20dip"
+        android:text="@string/titleNoApp" />
+
+    <ListView
+        android:id="@+id/facebookPickerListViewNoApp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="#FFFFFF"
+        android:divider="@drawable/com_facebook_list_divider"
+        android:listSelector="@drawable/com_facebook_picker_list_selector" 
+        android:fastScrollEnabled="true" 
+        android:scrollbars="vertical"/>
+
+</LinearLayout>

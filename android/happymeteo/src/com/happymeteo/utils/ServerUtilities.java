@@ -195,9 +195,7 @@ public final class ServerUtilities {
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					(conn.getInputStream())));
 			String line;
-			Log.i(Const.TAG, "Output from Server .... \n");
 			while ((line = br.readLine()) != null) {
-				Log.i(Const.TAG, "r:" + line);
 				output += line;
 			}
 		} catch(Exception e) {

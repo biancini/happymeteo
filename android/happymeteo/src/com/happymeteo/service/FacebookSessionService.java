@@ -3,8 +3,6 @@ package com.happymeteo.service;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.CookieManager;
@@ -39,8 +37,7 @@ public class FacebookSessionService implements OnCompleteListener {
 	
 	private boolean tryLoginUser(Activity activity) {
 		try {
-			SharedPreferences preferences = HappyMeteoApplication.i().getSharedPreferences();
-			String accessToken = preferences.getString("accessToken", null);
+			String accessToken = HappyMeteoApplication.i().getAccessToken();
 			Log.i(Const.TAG, "accessToken: "+accessToken);
 			
 			if(accessToken != null) {
@@ -135,13 +132,7 @@ public class FacebookSessionService implements OnCompleteListener {
 				Log.i(Const.TAG, key+": "+values.getString(key));
 			}
 			
-			SharedPreferences preferences = HappyMeteoApplication.i().getSharedPreferences();
-			Editor editor = preferences.edit();
-			editor.putString("accessToken", values.getString("access_token"));
-			editor.commit();
-			
-			Log.i(Const.TAG, "access_token from v: "+values.getString("access_token"));
-			Log.i(Const.TAG, "access_token from p: "+preferences.getString("accessToken", null));
+			HappyMeteoApplication.i().setAccessToken(values.getString("access_token"));
 		}
 		
 		if(error == null) {
