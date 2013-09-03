@@ -176,6 +176,7 @@ public final class ServerUtilities {
 		byte[] data = requestBody.toString().getBytes();
 		HttpURLConnection conn = null;
 		try {
+			Log.i(Const.TAG, "POST: "+serverUrl+" "+url);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setUseCaches(false);

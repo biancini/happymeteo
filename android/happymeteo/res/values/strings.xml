@@ -74,4 +74,8 @@ Buon divertimento! E happy meteo!</string>
     <string name="insert_location">Inserisci la tua città di residenza</string>
 	<string name="insert_password">Inserisci la tua password</string>
 	<string name="loading">Caricamento..</string>
+	<string name="challenge">Sfida un tuo amico!</string>
+	<string name="challenge_happymeteo">Sfida un tuo amico di happymeteo</string>
+	<string name="challenge_facebook">Sfida un tuo amico di facebook</string>
+	<string name="challenge_random">Sfida una persona a caso</string>
 </resources>

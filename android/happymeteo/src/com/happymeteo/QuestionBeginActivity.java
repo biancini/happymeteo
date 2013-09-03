@@ -95,14 +95,10 @@ public class QuestionBeginActivity extends Activity {
 										
 										@Override
 										public void onStopTrackingTouch(SeekBar seekBar) {
-											// TODO Auto-generated method stub
-											
 										}
 										
 										@Override
 										public void onStartTrackingTouch(SeekBar seekBar) {
-											// TODO Auto-generated method stub
-											
 										}
 										
 										@Override
@@ -142,22 +138,16 @@ public class QuestionBeginActivity extends Activity {
 					questionsStarted = true;
 				} else {
 					Location location = getBestLocation();
-					
-					if(location == null && HappyMeteoApplication.i().isEmulator()) {
-						Location fakeloc = new Location(LocationManager.GPS_PROVIDER);
-			    		fakeloc.setLatitude(37.123456);
-			    		fakeloc.setLongitude(-87.654321);
-			    		location = fakeloc;
-					}
+					Log.d(Const.TAG, "location: "+location);
 					
 					if(location != null) {
-						Log.i("Geo_Location", "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude());
+						Log.i(Const.TAG, "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude());
 						params.put("latitude", String.valueOf(location.getLatitude()));
 						params.put("longitude", String.valueOf(location.getLongitude()));
-						
-						if(ServerUtilities.submitQuestions(params)) {
-							finish();
-						}
+					}
+					
+					if(ServerUtilities.submitQuestions(params)) {
+						finish();
 					}
 				}
 			}

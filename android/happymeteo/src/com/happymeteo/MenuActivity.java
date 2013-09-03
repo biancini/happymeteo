@@ -46,6 +46,7 @@ public class MenuActivity extends Activity {
 		Button btnHappyContext = (Button) findViewById(R.id.btnHappyContext);
 		Button btnHappyMap = (Button) findViewById(R.id.btnHappyMap);
 		Button btnBeginQuestions = (Button) findViewById(R.id.btnQuestionBegin);
+		Button btnChallenge = (Button) findViewById(R.id.btnChallenge);
 		Button btnLogout = (Button) findViewById(R.id.btnLogout);
 
 		btnInformationPage.setOnClickListener(new OnClickListener() {
@@ -85,6 +86,14 @@ public class MenuActivity extends Activity {
 			public void onClick(View view) {
 				Context context = view.getContext();
 				Intent intent = new Intent(context, QuestionBeginActivity.class);
+				context.startActivity(intent);
+			}
+		});
+		
+		btnChallenge.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				Context context = view.getContext();
+				Intent intent = new Intent(context, ChallengeActivity.class);
 				context.startActivity(intent);
 			}
 		});

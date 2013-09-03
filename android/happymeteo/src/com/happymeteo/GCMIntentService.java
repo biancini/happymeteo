@@ -13,8 +13,6 @@ import com.happymeteo.utils.ServerUtilities;
 
 public class GCMIntentService extends GCMBaseIntentService {
 
-	private static final String TAG = "GCMIntentService";
-
 	public GCMIntentService() {
 		super(Const.GOOGLE_ID);
 	}
@@ -24,7 +22,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 **/
 	@Override
 	protected void onRegistered(Context context, String registrationId) {
-		Log.i(TAG, "Device registered: regId = " + registrationId);
+		Log.i(Const.TAG, "Device registered: regId = " + registrationId);
 		HappyMeteoApplication.i().getPushNotificationsService().setRegistrationId(registrationId);
 
 		/* Register device on happymeteo backend */
@@ -36,7 +34,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * */
 	@Override
 	protected void onUnregistered(Context context, String registrationId) {
-		Log.i(TAG, "Device unregistered");
+		Log.i(Const.TAG, "Device unregistered");
 		HappyMeteoApplication.i().getPushNotificationsService().setRegistrationId("");
 		
 		/* Unregister device on happymeteo backend */
@@ -48,10 +46,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * */
 	@Override
 	protected void onMessage(Context context, Intent intent) {
-		Log.i(TAG, "Received message");
+		Log.i(Const.TAG, "Received message");
 		String message = intent.getExtras().getString("message");
 		
-		Log.i(TAG, "onMessage: " + message);
+		Log.i(Const.TAG, "onMessage: " + message);
 
 		/* Notifies user */
 		generateNotification(context, "Le domande del giorno");
@@ -62,7 +60,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * 
 	@Override
 	protected void onDeletedMessages(Context context, int total) {
-		Log.i(TAG, "Received deleted messages notification");
+		Log.i(Const.TAG, "Received deleted messages notification");
 		String message = getString(R.string.gcm_deleted, total);
 
 		// notifies user
@@ -74,13 +72,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * */
 	@Override
 	public void onError(Context context, String errorId) {
-		Log.i(TAG, "Received error: " + errorId);
+		Log.i(Const.TAG, "Received error: " + errorId);
 	}
 
 	@Override
 	protected boolean onRecoverableError(Context context, String errorId) {
-		// log message
-		Log.i(TAG, "Received recoverable error: " + errorId);
+		Log.i(Const.TAG, "Received recoverable error: " + errorId);
 
 		return super.onRecoverableError(context, errorId);
 	}
