@@ -311,49 +311,53 @@ public class FacebookAuthDialog extends Dialog {
 	}
 
 	private class DialogWebViewClient extends WebViewClient {
+		
+		private void parseUrl(String url) {
+			Bundle values = Util.parseUrl(url);
+
+			String error = values.getString("error");
+			if (error == null) {
+				error = values.getString("error_type");
+			}
+
+			String errorMessage = values.getString("error_msg");
+			if (errorMessage == null) {
+				errorMessage = values.getString("error_description");
+			}
+			String errorCodeString = values.getString("error_code");
+			int errorCode = FacebookRequestError.INVALID_ERROR_CODE;
+			if (!Utility.isNullOrEmpty(errorCodeString)) {
+				try {
+					errorCode = Integer.parseInt(errorCodeString);
+				} catch (NumberFormatException ex) {
+					errorCode = FacebookRequestError.INVALID_ERROR_CODE;
+				}
+			}
+
+			if (Utility.isNullOrEmpty(error)
+					&& Utility.isNullOrEmpty(errorMessage)
+					&& errorCode == FacebookRequestError.INVALID_ERROR_CODE) {
+				sendSuccessToListener(values);
+			} else if (error != null
+					&& (error.equals("access_denied") || error
+							.equals("OAuthAccessDeniedException"))) {
+				sendCancelToListener();
+			} else {
+				FacebookRequestError requestError = new FacebookRequestError(
+						errorCode, error, errorMessage);
+				sendErrorToListener(new FacebookServiceException(
+						requestError, errorMessage));
+			}
+
+			FacebookAuthDialog.this.dismiss();
+		}
 
 		@Override
 		@SuppressWarnings("deprecation")
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
 			Log.i(LOG_TAG, "Redirect URL: " + url);
 			if (url.startsWith(FacebookAuthDialog.REDIRECT_URI)) {
-				Bundle values = Util.parseUrl(url);
-
-				String error = values.getString("error");
-				if (error == null) {
-					error = values.getString("error_type");
-				}
-
-				String errorMessage = values.getString("error_msg");
-				if (errorMessage == null) {
-					errorMessage = values.getString("error_description");
-				}
-				String errorCodeString = values.getString("error_code");
-				int errorCode = FacebookRequestError.INVALID_ERROR_CODE;
-				if (!Utility.isNullOrEmpty(errorCodeString)) {
-					try {
-						errorCode = Integer.parseInt(errorCodeString);
-					} catch (NumberFormatException ex) {
-						errorCode = FacebookRequestError.INVALID_ERROR_CODE;
-					}
-				}
-
-				if (Utility.isNullOrEmpty(error)
-						&& Utility.isNullOrEmpty(errorMessage)
-						&& errorCode == FacebookRequestError.INVALID_ERROR_CODE) {
-					sendSuccessToListener(values);
-				} else if (error != null
-						&& (error.equals("access_denied") || error
-								.equals("OAuthAccessDeniedException"))) {
-					sendCancelToListener();
-				} else {
-					FacebookRequestError requestError = new FacebookRequestError(
-							errorCode, error, errorMessage);
-					sendErrorToListener(new FacebookServiceException(
-							requestError, errorMessage));
-				}
-
-				FacebookAuthDialog.this.dismiss();
+				parseUrl(url);
 				return true;
 			} else if (url.startsWith(FacebookAuthDialog.CANCEL_URI)) {
 				sendCancelToListener();
@@ -390,10 +394,15 @@ public class FacebookAuthDialog extends Dialog {
 		@Override
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
 			Log.i(LOG_TAG, "Webview loading URL: " + url);
-			super.onPageStarted(view, url, favicon);
-			if (!isDetached) {
-				spinner.show();
-				webView.setVisibility(View.INVISIBLE);
+			if (!url.startsWith(FacebookAuthDialog.REDIRECT_URI)) {
+				super.onPageStarted(view, url, favicon);
+				if (!isDetached) {
+					spinner.show();
+					webView.setVisibility(View.INVISIBLE);
+				}
+			} else {
+				Log.i(LOG_TAG, "Parse url");
+				parseUrl(url);
 			}
 		}
 
@@ -409,6 +418,10 @@ public class FacebookAuthDialog extends Dialog {
 			 * background to be transparent and make visible the 'x' image.
 			 */
 			view.loadUrl("javascript:window.MY_JS.showHTML(document.getElementsByTagName('html')[0].innerHTML);");
+			
+			/*contentFrameLayout.setBackgroundColor(Color.TRANSPARENT);
+			webView.setVisibility(View.VISIBLE);
+			crossImageView.setVisibility(View.VISIBLE);*/
 		}
 	}
 }

@@ -38,43 +38,48 @@ public class FacebookSessionService implements OnCompleteListener {
 	}
 	
 	private boolean tryLoginUser(Activity activity) {
-		SharedPreferences preferences = HappyMeteoApplication.i().getSharedPreferences();
-		String accessToken = preferences.getString("accessToken", null);
-		Log.i(Const.TAG, "accessToken: "+accessToken);
-		
-		if(accessToken != null) {
-			// Logged
-			Log.i(Const.TAG, "Logged");
-			User user = ServerUtilities.facebookLogin(accessToken);
+		try {
+			SharedPreferences preferences = HappyMeteoApplication.i().getSharedPreferences();
+			String accessToken = preferences.getString("accessToken", null);
+			Log.i(Const.TAG, "accessToken: "+accessToken);
 			
-			if(user != null) {
-				HappyMeteoApplication.i().setFacebookSession(true);
+			if(accessToken != null) {
+				// Logged
+				Log.i(Const.TAG, "Logged");
+				User user = ServerUtilities.facebookLogin(accessToken);
 				
-				if(user.getRegistered() == User.USER_NOT_REGISTERED) {
-					// Switch to create account activity if not registered
-					Intent intent = new Intent(activity.getApplicationContext(), CreateAccountActivity.class);
-					intent.putExtra("facebook_id", user.getFacebook_id());
-					intent.putExtra("first_name", user.getFirst_name());
-					intent.putExtra("last_name", user.getLast_name());
-					intent.putExtra("gender", user.getGender());
-					intent.putExtra("email", user.getEmail());
-					intent.putExtra("age", user.getAge());
-					intent.putExtra("education", user.getEducation());
-					intent.putExtra("work", user.getWork());
-					intent.putExtra("location", user.getLocation());
+				if(user != null) {
+					HappyMeteoApplication.i().setFacebookSession(true);
 					
-					Log.i(Const.TAG, "CreateAccountActivity startActivity");
-					activity.startActivity(intent);
-				} else {
-					HappyMeteoApplication.i().setCurrentUser(user);
-					
-					// Switch to menu activity if registered
-					Intent intent = new Intent(activity.getApplicationContext(), MenuActivity.class);
-					activity.startActivity(intent);
+					if(user.getRegistered() == User.USER_NOT_REGISTERED) {
+						// Switch to create account activity if not registered
+						Intent intent = new Intent(activity.getApplicationContext(), CreateAccountActivity.class);
+						intent.putExtra("facebook_id", user.getFacebook_id());
+						intent.putExtra("first_name", user.getFirst_name());
+						intent.putExtra("last_name", user.getLast_name());
+						intent.putExtra("gender", user.getGender());
+						intent.putExtra("email", user.getEmail());
+						intent.putExtra("age", user.getAge());
+						intent.putExtra("education", user.getEducation());
+						intent.putExtra("work", user.getWork());
+						intent.putExtra("location", user.getLocation());
+						
+						Log.i(Const.TAG, "CreateAccountActivity startActivity");
+						activity.startActivity(intent);
+					} else {
+						HappyMeteoApplication.i().setCurrentUser(user);
+						
+						// Switch to menu activity if registered
+						Intent intent = new Intent(activity.getApplicationContext(), MenuActivity.class);
+						activity.startActivity(intent);
+					}
+					return true;
 				}
-				return true;
 			}
+		} catch(Exception e) {
+			Log.e(Const.TAG, "Error tryLoginUser", e);
 		}
+		
 		return false;
 	}
 	
