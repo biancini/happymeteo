@@ -22,4 +22,7 @@
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold" />
+    
+    <Button 
+        android:id="@+id/picker_button"/>
 </LinearLayout>

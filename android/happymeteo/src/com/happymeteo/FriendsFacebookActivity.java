@@ -81,7 +81,5 @@ public class FriendsFacebookActivity extends Activity {
 		} catch (Exception e) {
 			Log.e(Const.TAG, e.getMessage(), e);
 		}
-
-		
 	}
 }

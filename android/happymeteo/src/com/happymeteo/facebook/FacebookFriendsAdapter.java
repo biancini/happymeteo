@@ -1,29 +1,26 @@
 package com.happymeteo.facebook;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
 import com.happymeteo.R;
 import com.happymeteo.models.Friend;
-import com.happymeteo.utils.Const;
 
 public class FacebookFriendsAdapter extends ArrayAdapter<Friend> {
+
+	public FacebookFriendsAdapter(Context context, List<Friend> values) {
+		super(context, R.layout.activity_friends_facebook_list_row, values);
+		//cachedPictures = new HashMap<String, Bitmap>();
+	}
+	
+	/*
 	private static final String PROFILEPIC_URL_FORMAT =
             "https://graph.facebook.com/%s/picture";
 	private static final String HEIGHT_PARAM = "height";
@@ -31,13 +28,7 @@ public class FacebookFriendsAdapter extends ArrayAdapter<Friend> {
     private static final String MIGRATION_PARAM = "migration_overrides";
     private static final String MIGRATION_VALUE = "{october_2012:true}";
     private HashMap<String, Bitmap> cachedPictures;
-
-	public FacebookFriendsAdapter(Context context, List<Friend> values) {
-		super(context, R.layout.activity_friends_facebook_list_row, values);
-		cachedPictures = new HashMap<String, Bitmap>();
-	}
-	
-	/*private Bitmap getProfilePicture(String profileId, int width, int height) {
+	private Bitmap getProfilePicture(String profileId, int width, int height) {
 		if(cachedPictures.get(profileId) == null) {
 			try {
 	        	Uri.Builder builder = new Uri.Builder().encodedPath(String.format(PROFILEPIC_URL_FORMAT, profileId));
@@ -54,7 +45,8 @@ public class FacebookFriendsAdapter extends ArrayAdapter<Friend> {
 			}
 		}
         return cachedPictures.get(profileId);
-    }*/
+    }
+    */
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
