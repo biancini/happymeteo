@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
@@ -66,6 +67,15 @@ public class FacebookFriendsAdapter extends ArrayAdapter<Friend> {
 		/* Set Profile name */
 		TextView picker_title = (TextView) rowView.findViewById(R.id.picker_title);
 		picker_title.setText(getItem(position).getName());
+		
+		/* Set Button text */
+		Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
+		
+		if(getItem(position).isInstalled()) {
+			picker_button.setText(R.string.challenge_friend_with_app);
+		} else {
+			picker_button.setText(R.string.challenge_friend_no_app);
+		}
 		
 		return rowView;
 	}

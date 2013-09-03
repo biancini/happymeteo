@@ -80,4 +80,6 @@ Buon divertimento! E happy meteo!</string>
 	<string name="challenge_random">Sfida una persona a caso</string>
 	<string name="titleWithApp">Amici che hanno Happy Meteo</string>
 	<string name="titleNoApp">Amici che non hanno Happy Meteo</string>
+	<string name="challenge_friend_with_app">Sfida!</string>
+	<string name="challenge_friend_no_app">Invita!</string>
 </resources>
