@@ -21,7 +21,7 @@ public final class Const {
 	
 	/* Facebook */
 	public static final String FACEBOOK_ID = "405414319576008";
-	public static final String[] FACEBOOK_PERMISSION_ARRAY_READ = {"email","user_birthday"};
+	public static final String[] FACEBOOK_PERMISSION_ARRAY_READ = {"email","user_birthday", "publish_actions"};
 	
 	public static String getFacebookReadPermission() {
 		String r = "";

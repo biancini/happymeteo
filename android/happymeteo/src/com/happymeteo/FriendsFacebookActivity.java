@@ -19,7 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
-import com.happymeteo.facebook.FacebookFriendsAdapter;
+import com.happymeteo.facebook.FriendsAdapter;
 import com.happymeteo.models.Friend;
 import com.happymeteo.utils.Const;
 
@@ -85,8 +85,8 @@ public class FriendsFacebookActivity extends Activity {
 			Collections.sort(friendsWithApp, new MyFriendComparable());
 			Collections.sort(friendsNoApp, new MyFriendComparable());
 			
-			FacebookFriendsAdapter withApp = new FacebookFriendsAdapter(getApplicationContext(), friendsWithApp);
-			FacebookFriendsAdapter noApp = new FacebookFriendsAdapter(getApplicationContext(), friendsNoApp);
+			FriendsAdapter withApp = new FriendsAdapter(this, friendsWithApp);
+			FriendsAdapter noApp = new FriendsAdapter(this, friendsNoApp);
 			ListView facebookPickerListViewWithApp = (ListView) findViewById(R.id.facebookPickerListViewWithApp);
 			facebookPickerListViewWithApp.setAdapter(withApp);
 			ListView facebookPickerListViewNoApp = (ListView) findViewById(R.id.facebookPickerListViewNoApp);

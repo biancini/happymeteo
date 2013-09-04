@@ -12,8 +12,8 @@ import com.facebook.FacebookException;
 import com.happymeteo.CreateAccountActivity;
 import com.happymeteo.HappyMeteoApplication;
 import com.happymeteo.MenuActivity;
-import com.happymeteo.facebook.FacebookAuthDialog;
-import com.happymeteo.facebook.FacebookAuthDialog.OnCompleteListener;
+import com.happymeteo.facebook.AuthDialog;
+import com.happymeteo.facebook.WebDialog.OnCompleteListener;
 import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
@@ -30,7 +30,7 @@ public class FacebookSessionService implements OnCompleteListener {
 		
 		Log.i(Const.TAG, "url open facebook connession: "+url);
 		
-		FacebookAuthDialog facebookAuthDialog = new FacebookAuthDialog(activity, url);
+		AuthDialog facebookAuthDialog = new AuthDialog(activity, url);
 		facebookAuthDialog.setOnCompleteListener(this);
 		facebookAuthDialog.show();
 	}

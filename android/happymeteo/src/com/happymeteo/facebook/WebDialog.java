@@ -16,7 +16,6 @@
 
 package com.happymeteo.facebook;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -52,23 +51,21 @@ import com.happymeteo.utils.Const;
  * Dialog. Helper methods are provided to construct commonly-used dialogs, or a
  * caller can specify arbitrary parameters to call other dialogs.
  */
-public class FacebookAuthDialog extends Dialog {
-	private static final String LOG_TAG = Const.TAG;
+public class WebDialog extends Dialog {
 	static final String REDIRECT_URI = Const.BASE_URL;
 	static final String CANCEL_URI = "fbconnect://cancel";
-	static final boolean DISABLE_SSL_CHECK_FOR_TESTING = false;
-
+	
 	public static final int DEFAULT_THEME = android.R.style.Theme_Translucent_NoTitleBar;
 
-	private Activity activity;
-	private String url;
-	private OnCompleteListener onCompleteListener;
-	private WebView webView;
-	private ProgressDialog spinner;
-	private ImageView crossImageView;
-	private FrameLayout contentFrameLayout;
-	private boolean listenerCalled = false;
-	private boolean isDetached = false;
+	protected OnCompleteListener onCompleteListener;
+	protected ProgressDialog spinner;
+	protected boolean isDetached = false;
+	protected String url;
+	protected Activity activity;
+	protected WebView webView;
+	protected ImageView crossImageView;
+	protected FrameLayout contentFrameLayout;
+	protected boolean listenerCalled = false;
 
 	/**
 	 * Interface that implements a listener to be called when the user's
@@ -84,7 +81,7 @@ public class FacebookAuthDialog extends Dialog {
 		 * @param error
 		 *            on an error, contains an exception describing the error
 		 * @param caller
-		 *            activity that call the FacebookAuthDialog
+		 *            activity that call the FacebookWebDialog
 		 */
 		void onComplete(Bundle values, FacebookException error, Activity caller);
 	}
@@ -100,7 +97,7 @@ public class FacebookAuthDialog extends Dialog {
 	 *            this URL, but it should be a valid URL pointing to a Facebook
 	 *            Web Dialog
 	 */
-	public FacebookAuthDialog(Activity activity, String url) {
+	public WebDialog(Activity activity, String url) {
 		this(activity, url, DEFAULT_THEME);
 	}
 
@@ -117,7 +114,7 @@ public class FacebookAuthDialog extends Dialog {
 	 * @param theme
 	 *            identifier of a theme to pass to the Dialog class
 	 */
-	public FacebookAuthDialog(Activity activity, String url, int theme) {
+	public WebDialog(Activity activity, String url, int theme) {
 		super(activity, theme);
 		this.url = url;
 		this.activity = activity;
@@ -185,7 +182,7 @@ public class FacebookAuthDialog extends Dialog {
 			@Override
 			public void onCancel(DialogInterface dialogInterface) {
 				sendCancelToListener();
-				FacebookAuthDialog.this.dismiss();
+				WebDialog.this.dismiss();
 			}
 		});
 
@@ -249,7 +246,7 @@ public class FacebookAuthDialog extends Dialog {
 			@Override
 			public void onClick(View v) {
 				sendCancelToListener();
-				FacebookAuthDialog.this.dismiss();
+				WebDialog.this.dismiss();
 			}
 		});
 		Drawable crossDrawable = getContext().getResources().getDrawable(
@@ -261,43 +258,17 @@ public class FacebookAuthDialog extends Dialog {
 		 */
 		crossImageView.setVisibility(View.INVISIBLE);
 	}
+	
+	protected WebViewClient getWebViewClient() {
+		return new DialogWebViewClient();
+	}
 
-	@SuppressLint("SetJavaScriptEnabled")
-	private void setUpWebView(int margin) {
-		final DialogWebViewClient dialogWebViewClient = new DialogWebViewClient();
-
+	protected void setUpWebView(int margin) {
 		LinearLayout webViewContainer = new LinearLayout(getContext());
 		webView = new WebView(getContext());
 		webView.setVerticalScrollBarEnabled(false);
 		webView.setHorizontalScrollBarEnabled(false);
-		webView.setWebViewClient(dialogWebViewClient);
-		webView.getSettings().setJavaScriptEnabled(true);
-		webView.addJavascriptInterface(new JavaScriptInterface() {
-			public void showHTML(String html) {
-				Log.i(Const.TAG, "showHTML.length(): " + html.length());
-				Log.i(Const.TAG,
-						"check error: "
-								+ html.contains("Torna alla pagina precedente"));
-
-				if (!listenerCalled) {
-					if (html.contains("Torna alla pagina precedente")) {
-						webView.loadUrl(url);
-						Log.i(Const.TAG,
-								"showHTML: "
-										+ html.substring(html
-												.indexOf("Torna alla pagina precedente") - 1000));
-					} else {
-						activity.runOnUiThread(new Runnable() {
-							public void run() {
-								contentFrameLayout.setBackgroundColor(Color.TRANSPARENT);
-								webView.setVisibility(View.VISIBLE);
-								crossImageView.setVisibility(View.VISIBLE);
-							}
-						});
-					}
-				}
-			}
-		}, "MY_JS");
+		webView.setWebViewClient(getWebViewClient());
 		webView.loadUrl(url);
 		webView.setLayoutParams(new FrameLayout.LayoutParams(
 				ViewGroup.LayoutParams.MATCH_PARENT,
@@ -310,7 +281,7 @@ public class FacebookAuthDialog extends Dialog {
 		contentFrameLayout.addView(webViewContainer);
 	}
 
-	private class DialogWebViewClient extends WebViewClient {
+	protected class DialogWebViewClient extends WebViewClient {
 		
 		@SuppressWarnings("deprecation")
 		private void parseUrl(String url) {
@@ -350,18 +321,18 @@ public class FacebookAuthDialog extends Dialog {
 						requestError, errorMessage));
 			}
 
-			FacebookAuthDialog.this.dismiss();
+			WebDialog.this.dismiss();
 		}
 
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			Log.i(LOG_TAG, "Redirect URL: " + url);
-			if (url.startsWith(FacebookAuthDialog.REDIRECT_URI)) {
+			Log.i(Const.TAG, "Redirect URL: " + url);
+			if (url.startsWith(WebDialog.REDIRECT_URI)) {
 				parseUrl(url);
 				return true;
-			} else if (url.startsWith(FacebookAuthDialog.CANCEL_URI)) {
+			} else if (url.startsWith(WebDialog.CANCEL_URI)) {
 				sendCancelToListener();
-				FacebookAuthDialog.this.dismiss();
+				WebDialog.this.dismiss();
 				return true;
 			}
 			return false;
@@ -373,42 +344,38 @@ public class FacebookAuthDialog extends Dialog {
 			super.onReceivedError(view, errorCode, description, failingUrl);
 			sendErrorToListener(new FacebookDialogException(description,
 					errorCode, failingUrl));
-			FacebookAuthDialog.this.dismiss();
+			WebDialog.this.dismiss();
 		}
 
 		@Override
 		public void onReceivedSslError(WebView view, SslErrorHandler handler,
 				SslError error) {
-			if (DISABLE_SSL_CHECK_FOR_TESTING) {
-				handler.proceed();
-			} else {
-				super.onReceivedSslError(view, handler, error);
+			super.onReceivedSslError(view, handler, error);
 
-				sendErrorToListener(new FacebookDialogException(null,
-						ERROR_FAILED_SSL_HANDSHAKE, null));
-				handler.cancel();
-				FacebookAuthDialog.this.dismiss();
-			}
+			sendErrorToListener(new FacebookDialogException(null,
+					ERROR_FAILED_SSL_HANDSHAKE, null));
+			handler.cancel();
+			WebDialog.this.dismiss();
 		}
 
 		@Override
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
-			Log.i(LOG_TAG, "Webview loading URL: " + url);
-			if (!url.startsWith(FacebookAuthDialog.REDIRECT_URI)) {
+			Log.i(Const.TAG, "Webview loading URL: " + url);
+			if (!url.startsWith(WebDialog.REDIRECT_URI)) {
 				super.onPageStarted(view, url, favicon);
 				if (!isDetached) {
 					spinner.show();
 					webView.setVisibility(View.INVISIBLE);
 				}
 			} else {
-				Log.i(LOG_TAG, "Parse url");
+				Log.i(Const.TAG, "Parse url");
 				parseUrl(url);
 			}
 		}
 
 		@Override
 		public void onPageFinished(WebView view, String url) {
-			Log.i(LOG_TAG, "Webview finished URL: " + url);
+			Log.i(Const.TAG, "Webview finished URL: " + url);
 			super.onPageFinished(view, url);
 			if (!isDetached) {
 				spinner.dismiss();
@@ -417,11 +384,9 @@ public class FacebookAuthDialog extends Dialog {
 			 * Once web view is fully loaded, set the contentFrameLayout
 			 * background to be transparent and make visible the 'x' image.
 			 */
-			view.loadUrl("javascript:window.MY_JS.showHTML(document.getElementsByTagName('html')[0].innerHTML);");
-			
-			/*contentFrameLayout.setBackgroundColor(Color.TRANSPARENT);
+			contentFrameLayout.setBackgroundColor(Color.TRANSPARENT);
 			webView.setVisibility(View.VISIBLE);
-			crossImageView.setVisibility(View.VISIBLE);*/
+			crossImageView.setVisibility(View.VISIBLE);
 		}
 	}
 }
