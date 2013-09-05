@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
-import secrets
 import sys
 import json
 import urllib2
@@ -82,12 +80,14 @@ class RootHandler(BaseRequestHandler):
     self.render('home.html')
 
 class FacebookLoginHandler(BaseRequestHandler):
-  def calculate_age(self, birthday):
-    today = date.today()
+  def calculate_age(self, born):
+    import datetime
+    
+    today = datetime.date.today()
     try:
       birthday = born.replace(year=today.year)
-    except ValueError: # raised when birth date is February 29 and the current year is not a leap year
-      birthday = born.replace(year=today.year, day=born.day-1)
+    except ValueError:  # raised when birth date is February 29 and the current year is not a leap year
+      birthday = born.replace(year=today.year, day=born.day - 1)
     if birthday > today:
       return today.year - born.year - 1
     else:
@@ -98,9 +98,9 @@ class FacebookLoginHandler(BaseRequestHandler):
   # 1 => 25 - 35 years
   # 2 => 35 - 50 years
   # 3 => > 50 years 
-  def get_age(self, birthday):
+  def get_age(self, born):
     try:
-      age = self.calculate_age(datetime.strptime(birthday, "%m/%d/%Y"))
+      age = self.calculate_age(datetime.strptime(born, "%m/%d/%Y"))
 
       if age < 25:
         return 0
@@ -117,8 +117,8 @@ class FacebookLoginHandler(BaseRequestHandler):
 
   def post(self):
     try:
-      accessToken=self.request.get('accessToken')
-      facebook_profile = json.load(urllib2.urlopen("https://graph.facebook.com/me?access_token=%s"%accessToken))
+      accessToken = self.request.get('accessToken')
+      facebook_profile = json.load(urllib2.urlopen("https://graph.facebook.com/me?access_token=%s" % accessToken))
 
       data = {
         'facebook_id': facebook_profile['id'],
@@ -127,10 +127,13 @@ class FacebookLoginHandler(BaseRequestHandler):
         'email':  facebook_profile['email'],
         'age': self.get_age(facebook_profile['birthday']),
         'education': '0',
+        'location': '',
         'work': '0',
-        'location': facebook_profile['location']['name'],
         'registered': '0'
       }
+	  
+      try: data['location'] = facebook_profile['location']['name']
+      except KeyError: pass
 
       if facebook_profile['gender'] == "male":
         data['gender'] = 1
@@ -141,7 +144,7 @@ class FacebookLoginHandler(BaseRequestHandler):
           facebook_profile['id'])
 
       if q.count() > 0:
-        print "User already registered with facebook id = %s, update the informations"%facebook_profile['id']
+        print "User already registered with facebook id = %s, update the informations" % facebook_profile['id']
         data['registered'] = '1'
 
       self.response.headers['Content-Type'] = 'application/json'
@@ -149,7 +152,7 @@ class FacebookLoginHandler(BaseRequestHandler):
     except:
       data = {
         'error': 'Facebook Login error',
-        'message': '%s'%sys.exc_info()[0],
+        'message': '%s' % sys.exc_info()[0],
       }
 
       self.response.headers['Content-Type'] = 'application/json'
@@ -161,18 +164,18 @@ class CreateAccountHandler(BaseRequestHandler):
       try:
         data = {}
 
-        facebook_id=self.request.get('facebook_id')
-        first_name=self.request.get('first_name')
-        last_name=self.request.get('last_name')
-        gender=self.request.get('gender')
-        email=self.request.get('email')
-        age=self.request.get('age')
-        education=self.request.get('education')
-        work=self.request.get('work')
-        location=self.request.get('location')
-        password=self.request.get('password')
+        facebook_id = self.request.get('facebook_id')
+        first_name = self.request.get('first_name')
+        last_name = self.request.get('last_name')
+        gender = self.request.get('gender')
+        email = self.request.get('email')
+        age = self.request.get('age')
+        education = self.request.get('education')
+        work = self.request.get('work')
+        location = self.request.get('location')
+        password = self.request.get('password')
           
-        user = User(facebook_id=facebook_id, 
+        user = User(facebook_id=facebook_id,
             first_name=first_name,
             last_name=last_name,
             gender=gender,
@@ -190,7 +193,7 @@ class CreateAccountHandler(BaseRequestHandler):
           data = {
             'message': 'CONFIRMED_OR_FACEBOOK',
           }
-          user.status=2
+          user.status = 2
         else:
           # send an email to confirm the user
           print "normal user"
@@ -199,13 +202,13 @@ class CreateAccountHandler(BaseRequestHandler):
           }
           import os
           user.confirmation_code = os.urandom(32).encode('hex')
-          user.status=1
+          user.status = 1
 
           from google.appengine.api import mail
           message = mail.EmailMessage(sender="happymeteo <VoxSim@gmail.com>",
                                       subject="Conferma del tuo account su Happy Meteo")
 
-          message.to = "%s %s <%s>"%(first_name, last_name, email)
+          message.to = "%s %s <%s>" % (first_name, last_name, email)
           message.body = """
 Benvenuto %s,
 
@@ -215,7 +218,7 @@ https://happymeteo.appspot.com/confirm_user?confirmation_code=%s
 
 Saluti,
 Happy Meteo Team
-          """%(first_name,user.confirmation_code)
+          """ % (first_name, user.confirmation_code)
 
           message.send()
         
@@ -225,7 +228,7 @@ Happy Meteo Team
       except:
         data = {
           'error': 'Create Account error',
-          'message': '%s'%sys.exc_info()[0],
+          'message': '%s' % sys.exc_info()[0],
         }
 
         self.response.headers['Content-Type'] = 'application/json'
@@ -236,8 +239,8 @@ class NormalLoginHandler(BaseRequestHandler):
     def post(self):
       try:
         data = {}
-        email=self.request.get('email')
-        pwd_parameter=self.request.get('password')
+        email = self.request.get('email')
+        pwd_parameter = self.request.get('password')
         q = db.GqlQuery("SELECT * FROM User WHERE email = :1 and status = 2", email)
 
         if q.count() > 0:
@@ -272,7 +275,7 @@ class NormalLoginHandler(BaseRequestHandler):
       except:
         data = {
           'error': 'Normal Login error',
-          'message': '%s'%sys.exc_info()[0],
+          'message': '%s' % sys.exc_info()[0],
         }
 
         self.response.headers['Content-Type'] = 'application/json'
@@ -281,7 +284,7 @@ class NormalLoginHandler(BaseRequestHandler):
 
 class ConfirmUserHandler(BaseRequestHandler):
     def get(self):
-        confirmation_code=self.request.get('confirmation_code')
+        confirmation_code = self.request.get('confirmation_code')
         q = db.GqlQuery("SELECT * FROM User WHERE confirmation_code = :1",
             confirmation_code)
 
@@ -297,7 +300,7 @@ class ConfirmUserHandler(BaseRequestHandler):
 class IndexDeviceHandler(BaseRequestHandler):
   def get(self):
     devices = Device.all()
-    self.render('index_device.html', 
+    self.render('index_device.html',
       {
         'devices': devices,
         'lendevices': db.Query(Device).count()
@@ -305,11 +308,11 @@ class IndexDeviceHandler(BaseRequestHandler):
 
 class RegisterHandler(BaseRequestHandler):
   def post(self):
-    registrationId=self.request.get('registrationId')
+    registrationId = self.request.get('registrationId')
     q = db.GqlQuery("SELECT * FROM Device WHERE registrationId = :1", registrationId)
 
     if q.count() > 0:
-      print "Device already registered with register id = %s"%registrationId
+      print "Device already registered with register id = %s" % registrationId
     else:
       n = Device(registrationId=registrationId)
       n.put()
@@ -317,17 +320,17 @@ class RegisterHandler(BaseRequestHandler):
 class UnregisterHandler(BaseRequestHandler):
 
   def post(self):
-    registrationId=self.request.get('registrationId')
+    registrationId = self.request.get('registrationId')
     q = db.GqlQuery("SELECT * FROM Device WHERE registrationId = :1", registrationId)
     for p in q.run(limit=1):
-      print "delete %s"%(p.registrationId)
+      print "delete %s" % (p.registrationId)
       db.delete(p)
     return webapp2.redirect('/')
 
 class SendMessageHandler(BaseRequestHandler):
 
   def get(self):
-    registrationId=self.request.get('registrationId')
+    registrationId = self.request.get('registrationId')
     data = {
       'registration_ids': [registrationId],
       'collapse_key': 'questions'
@@ -335,7 +338,7 @@ class SendMessageHandler(BaseRequestHandler):
 
     req = urllib2.Request('https://android.googleapis.com/gcm/send')
     req.add_header('Content-Type', 'application/json')
-    req.add_header('Authorization', 'key=%s'%GOOGLE_API_KEY)
+    req.add_header('Authorization', 'key=%s' % GOOGLE_API_KEY)
     response = urllib2.urlopen(req, json.dumps(data))
     print response.read()
 
@@ -344,7 +347,7 @@ class GetQuestionsHandler(BaseRequestHandler):
   def post(self):
     req = urllib2.Request('https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%201x82FO5LkeHto6NfHJedrXUtcTl8QkSxoqxelpkI&key=AIzaSyBeMxlRchiwXkyD36N9F2JpkmEXvEEnIVk')
     req.add_header('Content-Type', 'application/json')
-    #req.add_header('Authorization', 'key=%s'%GOOGLE_API_KEY)
+    # req.add_header('Authorization', 'key=%s'%GOOGLE_API_KEY)
     response = urllib2.urlopen(req)
     questions_list = json.loads(response.read())
     questions = []

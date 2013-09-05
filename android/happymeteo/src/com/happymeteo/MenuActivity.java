@@ -48,6 +48,7 @@ public class MenuActivity extends Activity {
 		Button btnBeginQuestions = (Button) findViewById(R.id.btnQuestionBegin);
 		Button btnChallenge = (Button) findViewById(R.id.btnChallenge);
 		Button btnLogout = (Button) findViewById(R.id.btnLogout);
+		Button btnLogout2 = (Button) findViewById(R.id.btnLogout2);
 
 		btnInformationPage.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
@@ -101,6 +102,23 @@ public class MenuActivity extends Activity {
 		btnLogout.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
+				
+				/* Close Facebook Session */
+				HappyMeteoApplication.i().getFacebookSessionService()
+						.onClickLogout(context);
+
+				/* Return to index activity */
+				Intent intent = new Intent(context, IndexActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				context.startActivity(intent);
+			}
+		});
+		
+		btnLogout2.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				Context context = view.getContext();
+				
+				HappyMeteoApplication.i().setAccessToken("");
 				
 				/* Close Facebook Session */
 				HappyMeteoApplication.i().getFacebookSessionService()
