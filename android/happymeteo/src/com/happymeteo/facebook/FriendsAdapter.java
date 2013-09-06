@@ -16,6 +16,7 @@ import com.facebook.widget.ProfilePictureView;
 import com.happymeteo.R;
 import com.happymeteo.models.Friend;
 import com.happymeteo.utils.Const;
+import com.happymeteo.utils.ServerUtilities;
 
 public class FriendsAdapter extends ArrayAdapter<Friend> {
 	private Activity activity;
@@ -57,6 +58,8 @@ public class FriendsAdapter extends ArrayAdapter<Friend> {
 					// TODO HappyMeteo manda notifiche ad a e b
 					// TODO Ognuno risponde ad HappyMeteo
 					// TODO HappyMeteo manda il risultato tuo con l'avversario
+					
+					ServerUtilities.sendMessage(friend.getId());
 				}
 			});
 		} else {

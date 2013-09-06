@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.happymeteo.models.CreateAccountDTO;
 import com.happymeteo.models.User;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
@@ -84,7 +85,7 @@ public class CreateAccountActivity extends Activity {
 					password = "";
 				}
 				
-				switch(ServerUtilities.createAccount(
+				CreateAccountDTO cDto = ServerUtilities.createAccount(
 						create_account_facebook.getText().toString(), 
 						create_account_fist_name.getText().toString(), 
 						create_account_last_name.getText().toString(), 
@@ -94,10 +95,14 @@ public class CreateAccountActivity extends Activity {
 						create_account_education.getSelectedItemPosition(), 
 						create_account_work.getSelectedItemPosition(), 
 						create_account_location.getText().toString(),
-						password)) {
+						password);
+				
+				switch(cDto.status) {
 					
 					case CONFIRMED_OR_FACEBOOK:
-						User user = new User(create_account_facebook.getText().toString(), 
+						User user = new User(
+							cDto.user_id,
+							create_account_facebook.getText().toString(), 
 							create_account_fist_name.getText().toString(), 
 							create_account_last_name.getText().toString(), 
 							create_account_gender.getSelectedItemPosition(), 
@@ -119,7 +124,7 @@ public class CreateAccountActivity extends Activity {
 					case NOT_CONFIRMED:
 						AlertDialogManager alert = new AlertDialogManager();
 						alert.showAlertDialog(view.getContext(), "Creazione completata!",
-								"Presto verr√† inviata una email di conferma all'email indicata", true, new DialogInterface.OnClickListener() {
+								"Presto verra† inviata una email di conferma all'email indicata", true, new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog, int which) {
 										finish();
 									}

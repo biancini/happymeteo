@@ -8,10 +8,9 @@ public final class Const {
 	public static final String FACEBOOK_LOGIN_URL = BASE_URL + "/facebook_login";
 	public static final String NORMAL_LOGIN_URL = BASE_URL + "/normal_login";
 	
-	
-	
 	public static final String REGISTER_URL = BASE_URL + "/register"; 
 	public static final String UNREGISTER_URL = BASE_URL + "/unregister";
+	public static final String SEND_MESSAGE = BASE_URL + "/send_message"; 
 	
 	public static final String GET_QUESTIONS_URL = BASE_URL + "/get_questions";
 	public static final String SUBMIT_QUESTIONS_URL = BASE_URL + "/submit_questions";

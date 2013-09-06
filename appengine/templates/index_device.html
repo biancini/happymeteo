@@ -87,11 +87,12 @@
               {% if lendevices > 0 %}
                 {% for device in devices %}
                     <li>
-                      <div>{{ device.registrationId }} </div>
+                      <div>{{ device.user_id }} </div>
+                      <div>{{ device.registration_id }} </div>
                       <div class="clear"></div>
                       <div class="send_container">                                
-                          <input type="submit" class="send_btn" value="Send" onclick="sendPushNotification('{{device.registrationId }}')"/>
-                          <input type="submit" class="send_btn" value="Unregister" onclick="unregisterNotification('{{device.registrationId }}')"/>
+                          <input type="submit" class="send_btn" value="Send" onclick="sendPushNotification('{{device.registration_id }}')"/>
+                          <input type="submit" class="send_btn" value="Unregister" onclick="unregisterNotification('{{device.registration_id }}')"/>
                       </div>
                     </li>
                 {% endfor %}

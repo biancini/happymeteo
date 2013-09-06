@@ -7,6 +7,7 @@ public class User {
 	public static int USER_NOT_REGISTERED = 0;
 	public static int USER_REGISTERED = 1;
 	
+	private String user_id;
 	private String facebook_id;
 	private String first_name;
 	private String last_name;
@@ -19,6 +20,7 @@ public class User {
 	private int registered;
 	
 	public User(JSONObject jsonObject) throws JSONException {
+		this.user_id = jsonObject.getString("user_id");
 		this.facebook_id = jsonObject.getString("facebook_id");
 		this.first_name = jsonObject.getString("first_name");
 		this.last_name = jsonObject.getString("last_name");
@@ -31,7 +33,8 @@ public class User {
 		this.registered = jsonObject.getInt("registered");
 	}
 	
-	public User(String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, int registered) {
+	public User(String user_id, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, int registered) {
+		this.user_id = user_id;
 		this.facebook_id = facebook_id;
 		this.first_name = first_name;
 		this.last_name = last_name;
@@ -42,6 +45,10 @@ public class User {
 		this.work = work;
 		this.location = location;
 		this.registered = registered;
+	}
+	
+	public String getUser_id() {
+		return user_id;
 	}
 
 	public String getFacebook_id() {

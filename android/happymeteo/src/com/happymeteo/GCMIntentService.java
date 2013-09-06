@@ -23,10 +23,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onRegistered(Context context, String registrationId) {
 		Log.i(Const.TAG, "Device registered: regId = " + registrationId);
-		HappyMeteoApplication.i().getPushNotificationsService().setRegistrationId(registrationId);
-
-		/* Register device on happymeteo backend */
-		ServerUtilities.registerDevice(registrationId);
+		if(HappyMeteoApplication.i().getCurrentUser() != null) {
+			HappyMeteoApplication.i().getPushNotificationsService().setRegistrationId(registrationId);
+			
+			/* Register device on happymeteo backend */
+			ServerUtilities.registerDevice(registrationId, HappyMeteoApplication.i().getCurrentUser().getUser_id());
+		}
 	}
 
 	/**
@@ -48,11 +50,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onMessage(Context context, Intent intent) {
 		Log.i(Const.TAG, "Received message");
 		String message = intent.getExtras().getString("message");
+		String collapse_key = intent.getExtras().getString("collapse_key");
 		
-		Log.i(Const.TAG, "onMessage: " + message);
+		Log.i(Const.TAG, "message: " + message);
+		Log.i(Const.TAG, "collapse_key: " + collapse_key);
 
 		/* Notifies user */
-		generateNotification(context, "Le domande del giorno");
+		generateNotification(context, collapse_key);
 	}
 
 	/**

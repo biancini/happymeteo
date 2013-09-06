@@ -12,7 +12,7 @@ from google.appengine.ext import db
 
 from models import User, Device
 
-from secrets import GOOGLE_API_KEY, PASSWORD_SECRET_KEY
+from secrets import GOOGLE_API_KEY, EMAIL, PASSWORD_SECRET_KEY
 
 class BaseRequestHandler(webapp2.RequestHandler):
   def dispatch(self):
@@ -120,32 +120,35 @@ class FacebookLoginHandler(BaseRequestHandler):
       accessToken = self.request.get('accessToken')
       facebook_profile = json.load(urllib2.urlopen("https://graph.facebook.com/me?access_token=%s" % accessToken))
 
-      data = {
-        'facebook_id': facebook_profile['id'],
-        'first_name': facebook_profile['first_name'],
-        'last_name': facebook_profile['last_name'],
-        'email':  facebook_profile['email'],
-        'age': self.get_age(facebook_profile['birthday']),
-        'education': '0',
-        'location': '',
-        'work': '0',
-        'registered': '0'
-      }
+      data = {}
 	  
-      try: data['location'] = facebook_profile['location']['name']
-      except KeyError: pass
-
-      if facebook_profile['gender'] == "male":
-        data['gender'] = 1
-      else:
-        data['gender'] = 0
-
-      q = db.GqlQuery("SELECT * FROM User WHERE facebook_id = :1",
+      query = db.GqlQuery("SELECT * FROM User WHERE facebook_id = :1",
           facebook_profile['id'])
 
-      if q.count() > 0:
-        print "User already registered with facebook id = %s, update the informations" % facebook_profile['id']
-        data['registered'] = '1'
+      if query.count() > 0:
+        user = query.get()
+        data = user.toJson()
+      else:
+        data = {
+            'user_id': '',    
+            'facebook_id': facebook_profile['id'],
+            'first_name': facebook_profile['first_name'],
+            'last_name': facebook_profile['last_name'],
+            'email':  facebook_profile['email'],
+            'age': self.get_age(facebook_profile['birthday']),
+            'education': '0',
+            'location': '',
+            'work': '0',
+            'registered': '0'
+        }
+        
+        try: data['location'] = facebook_profile['location']['name']
+        except KeyError: pass
+        
+        if facebook_profile['gender'] == "male":
+          data['gender'] = 1
+        else:
+          data['gender'] = 0
 
       self.response.headers['Content-Type'] = 'application/json'
       self.response.out.write(json.dumps(data))
@@ -188,7 +191,6 @@ class CreateAccountHandler(BaseRequestHandler):
             password=password)
 
         if facebook_id and facebook_id != "0":
-          print "facebook user"
           # already confirmed
           data = {
             'message': 'CONFIRMED_OR_FACEBOOK',
@@ -205,7 +207,7 @@ class CreateAccountHandler(BaseRequestHandler):
           user.status = 1
 
           from google.appengine.api import mail
-          message = mail.EmailMessage(sender="happymeteo <VoxSim@gmail.com>",
+          message = mail.EmailMessage(sender="happymeteo <%s>"%EMAIL,
                                       subject="Conferma del tuo account su Happy Meteo")
 
           message.to = "%s %s <%s>" % (first_name, last_name, email)
@@ -223,6 +225,7 @@ Happy Meteo Team
           message.send()
         
         user.put()
+        data['user_id'] = user.key().id()
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(data))
       except:
@@ -247,18 +250,7 @@ class NormalLoginHandler(BaseRequestHandler):
           user = q.get()
 
           if user.password == pwd_parameter:
-            data = {
-              'facebook_id': user.facebook_id,
-              'first_name': user.first_name,
-              'last_name': user.last_name,
-              'email':  user.email,
-              'gender':  user.gender,
-              'age': user.age,
-              'education': user.education,
-              'work': user.work,
-              'location': user.location,
-              'registered': '1'
-            }
+            data = user.toJson()
           else:
             data = {
               'error': 'Normal Login error',
@@ -309,22 +301,23 @@ class IndexDeviceHandler(BaseRequestHandler):
 class RegisterHandler(BaseRequestHandler):
   def post(self):
     registrationId = self.request.get('registrationId')
-    q = db.GqlQuery("SELECT * FROM Device WHERE registrationId = :1", registrationId)
+    userId = self.request.get('userId')
+    q = db.GqlQuery("SELECT * FROM Device WHERE registration_id = :1 and userId = :2", registrationId, userId)
 
     if q.count() > 0:
       print "Device already registered with register id = %s" % registrationId
     else:
-      n = Device(registrationId=registrationId)
+      n = Device(registration_id=registrationId, user_id=userId)
       n.put()
 
 class UnregisterHandler(BaseRequestHandler):
 
   def post(self):
     registrationId = self.request.get('registrationId')
-    q = db.GqlQuery("SELECT * FROM Device WHERE registrationId = :1", registrationId)
-    for p in q.run(limit=1):
-      print "delete %s" % (p.registrationId)
-      db.delete(p)
+    query = db.GqlQuery("SELECT * FROM Device WHERE registration_id = :1", registrationId)
+    for device in query.run(limit=1):
+      print "delete %s" % (device.registration_id)
+      db.delete(device)
     return webapp2.redirect('/')
 
 class SendMessageHandler(BaseRequestHandler):
@@ -341,6 +334,47 @@ class SendMessageHandler(BaseRequestHandler):
     req.add_header('Authorization', 'key=%s' % GOOGLE_API_KEY)
     response = urllib2.urlopen(req, json.dumps(data))
     print response.read()
+    
+  def post(self):
+    facebookId = self.request.get('facebookId')
+    
+    query1 = db.GqlQuery("SELECT * FROM User WHERE facebook_id = :1", str(facebookId))
+    data = {}
+    
+    if query1.count() > 0:
+        user = query1.get()
+        query2 = db.GqlQuery("SELECT * FROM Device WHERE user_id = :1", str(user.key().id()))
+        
+        if query2.count() > 0:
+            device = query2.get()
+            print "send message to %s"%device.registration_id
+            
+            data = {
+              'registration_ids': [device.registration_id],
+              'collapse_key': 'challenge'
+            }
+        
+            req = urllib2.Request('https://android.googleapis.com/gcm/send')
+            req.add_header('Content-Type', 'application/json')
+            req.add_header('Authorization', 'key=%s' % GOOGLE_API_KEY)
+            response = urllib2.urlopen(req, json.dumps(data))
+            print response
+            data = {
+              'message': 'ok'
+            }
+        else:
+            data = {
+              'error': 'Send Message error',
+              'message': 'No device found'
+            }
+    else:
+        data = {
+          'error': 'Send Message error',
+          'message': 'No user found'
+        }
+    
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
 
 class GetQuestionsHandler(BaseRequestHandler):
 
@@ -352,7 +386,6 @@ class GetQuestionsHandler(BaseRequestHandler):
     questions_list = json.loads(response.read())
     questions = []
     
-
     for question in questions_list['rows']:
       questions.append({
           'id': question[0],

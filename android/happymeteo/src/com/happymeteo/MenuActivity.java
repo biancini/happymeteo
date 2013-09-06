@@ -27,11 +27,12 @@ public class MenuActivity extends Activity {
 		HappyMeteoApplication.i().getPushNotificationsService().initialize(
 				getApplicationContext());
 
-		if (!HappyMeteoApplication.i().getPushNotificationsService()
-				.getRegistrationId().equals("")) {
+		if (!HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId().equals("") 
+				&& HappyMeteoApplication.i().getCurrentUser() != null) {
 			/* Register device on happymeteo backend */
-			ServerUtilities.registerDevice(HappyMeteoApplication
-					.i().getPushNotificationsService().getRegistrationId());
+			ServerUtilities.registerDevice(
+					HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId(),
+					HappyMeteoApplication.i().getCurrentUser().getUser_id());
 		}
 
 		if (HappyMeteoApplication.i().isFacebookSession()) {
@@ -103,6 +104,10 @@ public class MenuActivity extends Activity {
 			public void onClick(View view) {
 				Context context = view.getContext();
 				
+				/* Terminate PushNotificationsService */
+				HappyMeteoApplication.i().getPushNotificationsService().terminate(
+						getApplicationContext());
+				
 				/* Close Facebook Session */
 				HappyMeteoApplication.i().getFacebookSessionService()
 						.onClickLogout(context);
@@ -119,6 +124,10 @@ public class MenuActivity extends Activity {
 				Context context = view.getContext();
 				
 				HappyMeteoApplication.i().setAccessToken("");
+				
+				/* Terminate PushNotificationsService */
+				HappyMeteoApplication.i().getPushNotificationsService().terminate(
+						getApplicationContext());
 				
 				/* Close Facebook Session */
 				HappyMeteoApplication.i().getFacebookSessionService()

@@ -18,13 +18,14 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.happymeteo.models.CreateAccountDTO;
 import com.happymeteo.models.User;
 
 public final class ServerUtilities {
 	/**
 	 * Create account
 	 */
-	public static Const.CREATE_ACCOUNT_STATUS createAccount(String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, String password) {
+	public static CreateAccountDTO createAccount(String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, String password) {
 		Log.i(Const.TAG, "createAccount");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("facebook_id", facebook_id);
@@ -43,15 +44,15 @@ public final class ServerUtilities {
 			JSONObject jsonObject = new JSONObject(json);
 			if(!isError(jsonObject)) {
 				if(jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) {
-					return Const.CREATE_ACCOUNT_STATUS.CONFIRMED_OR_FACEBOOK;
+					return new CreateAccountDTO(Const.CREATE_ACCOUNT_STATUS.CONFIRMED_OR_FACEBOOK, jsonObject.getString("user_id"));
 				} else {
-					return Const.CREATE_ACCOUNT_STATUS.NOT_CONFIRMED;
+					return new CreateAccountDTO(Const.CREATE_ACCOUNT_STATUS.NOT_CONFIRMED, jsonObject.getString("user_id"));
 				}
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		return Const.CREATE_ACCOUNT_STATUS.ERROR;
+		return new CreateAccountDTO(Const.CREATE_ACCOUNT_STATUS.ERROR, "");
 	}
 	
 	/**
@@ -97,24 +98,43 @@ public final class ServerUtilities {
 	
 	
 	/**
-	 * Register this device within the server.
-	 * 
+	 * Register this device within the server
 	 */
-	public static void registerDevice(String registrationId) {
-		Log.i(Const.TAG, "registering device (regId = " + registrationId + ")");
+	public static void registerDevice(String registrationId, String userId) {
+		Log.i(Const.TAG, "registering device (regId = " + registrationId + ", userId = " + userId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("registrationId", registrationId);
+		params.put("userId", userId);
 		ServerUtilities.postRequest(Const.REGISTER_URL, params);
 	}
 
 	/**
-	 * Unregister this device within the server.
+	 * Unregister this device within the server
 	 */
 	public static void unregisterDevice(String registrationId) {
 		Log.i(Const.TAG, "unregistering device (registrationId = " + registrationId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("registrationId", registrationId);
 		ServerUtilities.postRequest(Const.UNREGISTER_URL, params);
+	}
+	
+	/**
+	 * Register this device within the server
+	 */
+	public static void sendMessage(String facebookId) {
+		Log.i(Const.TAG, "send message (facebookId = " + facebookId + ")");
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("facebookId", facebookId);
+		String json = ServerUtilities.postRequest(Const.SEND_MESSAGE, params);
+		Log.i(Const.TAG, json);
+		/*try {
+			JSONObject jsonObject = new JSONObject(json);
+			if(!isError(jsonObject)) {
+				return new User(jsonObject);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}*/
 	}
 	
 	/**
