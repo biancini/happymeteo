@@ -1,10 +1,12 @@
 package com.happymeteo;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
@@ -49,14 +51,9 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onMessage(Context context, Intent intent) {
 		Log.i(Const.TAG, "Received message");
-		String message = intent.getExtras().getString("message");
-		String collapse_key = intent.getExtras().getString("collapse_key");
-		
-		Log.i(Const.TAG, "message: " + message);
-		Log.i(Const.TAG, "collapse_key: " + collapse_key);
 
 		/* Notifies user */
-		generateNotification(context, collapse_key);
+		generateNotification(context, intent.getExtras());
 	}
 
 	/**
@@ -85,20 +82,37 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		return super.onRecoverableError(context, errorId);
 	}
+	
+	private static String getMessageFromCollapseKey(String collapse_key) {
+		return collapse_key;
+	}
+	
+	private static Class<? extends Activity> getActivityFromCollapseKey(String collapse_key) {
+		if(collapse_key.equals("questions"))
+			return QuestionBeginActivity.class;
+		if(collapse_key.equals("request_challenge"))
+			return ChallengeRequestActivity.class;
+		return null;
+	}
 
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
-	private static void generateNotification(Context context, String message) {
+	private static void generateNotification(Context context, Bundle extras) {
 		int icon = R.drawable.ic_launcher;
 		long when = System.currentTimeMillis();
 		NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		String collapse_key = extras.getString("collapse_key");
+		String message = getMessageFromCollapseKey(collapse_key);
+		Class<? extends Activity> clazz = getActivityFromCollapseKey(collapse_key);
+		
 		Notification notification = new Notification(icon, message, when);
-
 		String title = context.getString(R.string.app_name);
 
-		Intent notificationIntent = new Intent(context, QuestionBeginActivity.class);
+		Intent notificationIntent = new Intent(context, clazz);
+		notificationIntent.putExtra("data", extras.getString("data"));
 		// set intent so it does not start a new activity
 		// notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 		// 		| Intent.FLAG_ACTIVITY_SINGLE_TOP);

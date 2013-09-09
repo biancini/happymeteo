@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
 from secrets import SESSION_KEY
 
 from webapp2 import WSGIApplication, Route
@@ -25,15 +24,20 @@ routes = [
   Route('/normal_login', handler='handlers.NormalLoginHandler'),
   Route('/confirm_user', handler='handlers.ConfirmUserHandler'),
 
-  # device managment
+  # device management
   Route('/index_device', handler='handlers.IndexDeviceHandler'),
   Route('/register', handler='handlers.RegisterHandler'),
   Route('/unregister', handler='handlers.UnregisterHandler'),
   Route('/send_message', handler='handlers.SendMessageHandler'),
 
-  # question managment
+  # question management
   Route('/get_questions', handler='handlers.GetQuestionsHandler'),
   Route('/submit_questions', handler='handlers.SubmitQuestionsHandler'),
+  
+  # challenge management
+  Route('/request_challenge', handler='handlers.RequestChallengeHandler'),
+  Route('/accept_challenge', handler='handlers.AcceptChallengeHandler'),
+  Route('/send_score_challenge', handler='handlers.SendScoreChallengeHandler')
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

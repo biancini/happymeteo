@@ -10,9 +10,11 @@ from jinja2.runtime import TemplateNotFound
 
 from google.appengine.ext import db
 
-from models import User, Device
+from models import User, Device, Challenge
 
-from secrets import GOOGLE_API_KEY, EMAIL, PASSWORD_SECRET_KEY
+from secrets import EMAIL
+
+from utils import sendToSyncMessage
 
 class BaseRequestHandler(webapp2.RequestHandler):
   def dispatch(self):
@@ -51,7 +53,6 @@ class BaseRequestHandler(webapp2.RequestHandler):
     """Returns true if a user is currently logged in, false otherwise"""
     return self.auth.get_user_by_session() is not None
 
-
   def render(self, template_name, template_vars={}):
     # Preset values for the template
     values = {
@@ -70,19 +71,16 @@ class BaseRequestHandler(webapp2.RequestHandler):
       self.abort(404)
 
   def head(self, *args):
-    """Head is used by Twitter. If not there the tweet button shows 0"""
     pass
-
 
 class RootHandler(BaseRequestHandler):
   def get(self):
     """Handles default langing page"""
     self.render('home.html')
 
+""" Profile user """
 class FacebookLoginHandler(BaseRequestHandler):
   def calculate_age(self, born):
-    import datetime
-    
     today = datetime.date.today()
     try:
       birthday = born.replace(year=today.year)
@@ -116,12 +114,12 @@ class FacebookLoginHandler(BaseRequestHandler):
       return 0
 
   def post(self):
+    data = {}
+    
     try:
       accessToken = self.request.get('accessToken')
       facebook_profile = json.load(urllib2.urlopen("https://graph.facebook.com/me?access_token=%s" % accessToken))
-
-      data = {}
-	  
+ 
       query = db.GqlQuery("SELECT * FROM User WHERE facebook_id = :1",
           facebook_profile['id'])
 
@@ -130,7 +128,7 @@ class FacebookLoginHandler(BaseRequestHandler):
         data = user.toJson()
       else:
         data = {
-            'user_id': '',    
+            'user_id': '',
             'facebook_id': facebook_profile['id'],
             'first_name': facebook_profile['first_name'],
             'last_name': facebook_profile['last_name'],
@@ -150,23 +148,20 @@ class FacebookLoginHandler(BaseRequestHandler):
         else:
           data['gender'] = 0
 
-      self.response.headers['Content-Type'] = 'application/json'
-      self.response.out.write(json.dumps(data))
     except:
       data = {
         'error': 'Facebook Login error',
         'message': '%s' % sys.exc_info()[0],
       }
-
-      self.response.headers['Content-Type'] = 'application/json'
-      self.response.out.write(json.dumps(data))
-      raise
+      
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
 
 class CreateAccountHandler(BaseRequestHandler):
     def post(self):
+      data = {}
+      
       try:
-        data = {}
-
         facebook_id = self.request.get('facebook_id')
         first_name = self.request.get('first_name')
         last_name = self.request.get('last_name')
@@ -198,7 +193,6 @@ class CreateAccountHandler(BaseRequestHandler):
           user.status = 2
         else:
           # send an email to confirm the user
-          print "normal user"
           data = {
             'message': 'NOT_CONFIRMED',
           }
@@ -207,7 +201,7 @@ class CreateAccountHandler(BaseRequestHandler):
           user.status = 1
 
           from google.appengine.api import mail
-          message = mail.EmailMessage(sender="happymeteo <%s>"%EMAIL,
+          message = mail.EmailMessage(sender="happymeteo <%s>" % EMAIL,
                                       subject="Conferma del tuo account su Happy Meteo")
 
           message.to = "%s %s <%s>" % (first_name, last_name, email)
@@ -226,22 +220,21 @@ Happy Meteo Team
         
         user.put()
         data['user_id'] = user.key().id()
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(data))
       except:
         data = {
           'error': 'Create Account error',
           'message': '%s' % sys.exc_info()[0],
         }
-
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(data))
         raise
+    
+      self.response.headers['Content-Type'] = 'application/json'
+      self.response.out.write(json.dumps(data))
 
 class NormalLoginHandler(BaseRequestHandler):
     def post(self):
+      data = {}
+      
       try:
-        data = {}
         email = self.request.get('email')
         pwd_parameter = self.request.get('password')
         q = db.GqlQuery("SELECT * FROM User WHERE email = :1 and status = 2", email)
@@ -261,18 +254,14 @@ class NormalLoginHandler(BaseRequestHandler):
             'error': 'Normal Login error',
             'message': 'User not found or not confirmed',
           }
-
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(data))
       except:
         data = {
           'error': 'Normal Login error',
           'message': '%s' % sys.exc_info()[0],
         }
-
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(data))
-        raise
+      
+      self.response.headers['Content-Type'] = 'application/json'
+      self.response.out.write(json.dumps(data))
 
 class ConfirmUserHandler(BaseRequestHandler):
     def get(self):
@@ -280,7 +269,6 @@ class ConfirmUserHandler(BaseRequestHandler):
         q = db.GqlQuery("SELECT * FROM User WHERE confirmation_code = :1",
             confirmation_code)
 
-        data = {}
         if q.count() > 0:
           user = q.get()
           user.status = 2
@@ -289,6 +277,7 @@ class ConfirmUserHandler(BaseRequestHandler):
 
         self.response.out.write("User confirmed")
         
+""" Device Management """
 class IndexDeviceHandler(BaseRequestHandler):
   def get(self):
     devices = Device.all()
@@ -324,58 +313,9 @@ class SendMessageHandler(BaseRequestHandler):
 
   def get(self):
     registrationId = self.request.get('registrationId')
-    data = {
-      'registration_ids': [registrationId],
-      'collapse_key': 'questions'
-    }
+    sendToSyncMessage(registrationId, 'questions')
 
-    req = urllib2.Request('https://android.googleapis.com/gcm/send')
-    req.add_header('Content-Type', 'application/json')
-    req.add_header('Authorization', 'key=%s' % GOOGLE_API_KEY)
-    response = urllib2.urlopen(req, json.dumps(data))
-    print response.read()
-    
-  def post(self):
-    facebookId = self.request.get('facebookId')
-    
-    query1 = db.GqlQuery("SELECT * FROM User WHERE facebook_id = :1", str(facebookId))
-    data = {}
-    
-    if query1.count() > 0:
-        user = query1.get()
-        query2 = db.GqlQuery("SELECT * FROM Device WHERE user_id = :1", str(user.key().id()))
-        
-        if query2.count() > 0:
-            device = query2.get()
-            print "send message to %s"%device.registration_id
-            
-            data = {
-              'registration_ids': [device.registration_id],
-              'collapse_key': 'challenge'
-            }
-        
-            req = urllib2.Request('https://android.googleapis.com/gcm/send')
-            req.add_header('Content-Type', 'application/json')
-            req.add_header('Authorization', 'key=%s' % GOOGLE_API_KEY)
-            response = urllib2.urlopen(req, json.dumps(data))
-            print response
-            data = {
-              'message': 'ok'
-            }
-        else:
-            data = {
-              'error': 'Send Message error',
-              'message': 'No device found'
-            }
-    else:
-        data = {
-          'error': 'Send Message error',
-          'message': 'No user found'
-        }
-    
-    self.response.headers['Content-Type'] = 'application/json'
-    self.response.out.write(json.dumps(data))
-
+""" Questions Management """
 class GetQuestionsHandler(BaseRequestHandler):
 
   def post(self):
@@ -407,3 +347,108 @@ class SubmitQuestionsHandler(BaseRequestHandler):
     ok = { 'message': 'ok' }
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(ok))
+    
+""" Challenge Management """
+class RequestChallengeHandler(BaseRequestHandler):
+    
+  def post(self):
+    userId = self.request.get('userId')
+    registrationId = self.request.get('registrationId')
+    facebookId = self.request.get('facebookId')
+    
+    query1 = db.GqlQuery("SELECT * FROM User WHERE facebook_id = :1", str(facebookId))
+    data = {}
+    
+    if query1.count() > 0:
+        user = query1.get()
+        query2 = db.GqlQuery("SELECT * FROM Device WHERE user_id = :1", str(user.key().id()))
+        
+        if query2.count() > 0:
+            # Get the device
+            device = query2.get()
+            
+            # Save challenge
+            challenge = Challenge(user_id_a = userId, user_id_b = '%s'%user.key().id(), registration_id_a = registrationId, registration_id_b = device.registration_id)
+            challenge.put()
+            
+            # Send message to the device
+            sendToSyncMessage(device.registration_id, 'request_challenge', {'challenge': challenge.toJson()})
+            data = {
+              'message': 'ok',
+              'challenge': challenge.toJson()
+            }
+        else:
+            data = {
+              'error': 'Send Message error',
+              'message': 'No device found'
+            }
+    else:
+        data = {
+          'error': 'Send Message error',
+          'message': 'No user found'
+        }
+    
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
+    
+class AcceptChallengeHandler(BaseRequestHandler):
+    
+  def post(self):
+    challengeId = self.request.get('challengeId')
+    accepted = self.request.get('accepted')
+    
+    data = {}
+    challenge = Challenge.get_by_id(challengeId)
+    
+    if challenge:
+        #sendToSyncMessage(challenge.registration_id_a, 'accepted_challenge', {'accept': accept})
+        challenge.accepted = accepted
+        challenge.put()
+        data = {
+          'message': 'ok'
+        }
+    else:
+        data = {
+          'error': 'Accept Challenge error',
+          'message': 'No challenge found'
+        }
+    
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
+    
+class SendScoreChallengeHandler(BaseRequestHandler):
+    
+  def post(self):
+    userId = self.request.get('userId')
+    challengeId = self.request.get('challengeId')
+    score = self.request.get('score')
+    
+    user = User.get_by_id(userId)
+    data = {}
+    
+    if user:
+      challenge = Challenge.get_by_id(challengeId)
+      
+      if challenge:
+        if userId == challenge.user_id_a:
+            challenge.score_a = score
+        if userId == challenge.user_id_b:
+            challenge.score_b = score
+        
+        challenge.put()
+        data = {
+          'message': 'ok'
+        }
+      else:
+        data = {
+          'error': 'Accept Challenge error',
+          'message': 'No challenge found'
+        }
+    else:
+        data = {
+          'error': 'Accept Challenge error',
+          'message': 'No user found'
+        }
+    
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))

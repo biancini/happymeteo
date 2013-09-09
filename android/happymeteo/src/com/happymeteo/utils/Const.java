@@ -10,10 +10,13 @@ public final class Const {
 	
 	public static final String REGISTER_URL = BASE_URL + "/register"; 
 	public static final String UNREGISTER_URL = BASE_URL + "/unregister";
-	public static final String SEND_MESSAGE = BASE_URL + "/send_message"; 
 	
 	public static final String GET_QUESTIONS_URL = BASE_URL + "/get_questions";
 	public static final String SUBMIT_QUESTIONS_URL = BASE_URL + "/submit_questions";
+	
+	public static final String REQUEST_CHALLENGE = BASE_URL + "/request_challenge"; 
+	public static final String ACCEPT_CHALLENGE = BASE_URL + "/accept_challenge"; 
+	public static final String SEND_SCORE_CHALLENGE = BASE_URL + "/send_score_challenge";
 
     /* Google */
 	public static final String GOOGLE_ID = "347057775979";

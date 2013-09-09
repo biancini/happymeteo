@@ -3,6 +3,7 @@ from google.appengine.ext import db
 class Device(db.Model):
     registration_id = db.StringProperty()
     user_id = db.StringProperty()
+    created = db.DateTimeProperty(auto_now_add=True)
     
 class User(db.Model):
     facebook_id = db.StringProperty()
@@ -31,4 +32,23 @@ class User(db.Model):
             'work': self.work,
             'location': self.location,
             'registered': '1'
+        }
+
+class Challenge(db.Model):
+    user_id_a = db.StringProperty() # sfidante
+    user_id_b = db.StringProperty() # sfidato
+    registration_id_a = db.StringProperty() # registration_id sfidante
+    registration_id_b = db.StringProperty() # registration_id sfidato
+    score_a = db.IntegerProperty()
+    score_b = db.IntegerProperty()
+    created = db.DateTimeProperty(auto_now_add=True)
+    accepted = db.BooleanProperty(False)
+    
+    def toJson(self):
+        return {
+            'challenge_id': self.key().id(),
+            'user_id_a': self.user_id_a,
+            'user_id_b': self.user_id_b,
+            'registration_id_a': self.registration_id_a,
+            'registration_id_b':  self.registration_id_b
         }

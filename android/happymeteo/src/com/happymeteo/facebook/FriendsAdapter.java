@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
+import com.happymeteo.HappyMeteoApplication;
 import com.happymeteo.R;
 import com.happymeteo.models.Friend;
 import com.happymeteo.utils.Const;
@@ -52,14 +53,10 @@ public class FriendsAdapter extends ArrayAdapter<Friend> {
 			picker_button.setOnClickListener(new OnClickListener() {
 				
 				public void onClick(View view) {
-					// TODO Manda richiesta a happymeteo
-					// TODO Happymeteo manda notifica push a b
-					// TODO b risponde ok a happymeteo
-					// TODO HappyMeteo manda notifiche ad a e b
-					// TODO Ognuno risponde ad HappyMeteo
-					// TODO HappyMeteo manda il risultato tuo con l'avversario
-					
-					ServerUtilities.sendMessage(friend.getId());
+					ServerUtilities.requestChallenge(
+							HappyMeteoApplication.i().getCurrentUser().getUser_id(),
+							friend.getId(),
+							HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId());
 				}
 			});
 		} else {

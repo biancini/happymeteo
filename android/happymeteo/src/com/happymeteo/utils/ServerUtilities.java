@@ -119,25 +119,6 @@ public final class ServerUtilities {
 	}
 	
 	/**
-	 * Register this device within the server
-	 */
-	public static void sendMessage(String facebookId) {
-		Log.i(Const.TAG, "send message (facebookId = " + facebookId + ")");
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("facebookId", facebookId);
-		String json = ServerUtilities.postRequest(Const.SEND_MESSAGE, params);
-		Log.i(Const.TAG, json);
-		/*try {
-			JSONObject jsonObject = new JSONObject(json);
-			if(!isError(jsonObject)) {
-				return new User(jsonObject);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}*/
-	}
-	
-	/**
 	 * Get questions
 	 */
 	public static JSONArray getQuestions() {
@@ -162,6 +143,31 @@ public final class ServerUtilities {
 		Log.i(Const.TAG, "submit questions (params = " + params + ")");
 		ServerUtilities.postRequest(Const.SUBMIT_QUESTIONS_URL, params);
 		return true;
+	}
+	
+	/**
+	 * Request challenge
+	 */
+	public static void requestChallenge(String userId, String facebookId, String registrationId) {
+		Log.i(Const.TAG, "send message (userId = " + userId + ", facebookId = " + facebookId + ", registrationId = "+registrationId + ")");
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("userId", userId);
+		params.put("facebookId", facebookId);
+		params.put("registrationId", registrationId);
+		String json = ServerUtilities.postRequest(Const.REQUEST_CHALLENGE, params);
+		Log.i(Const.TAG, json);
+	}
+	
+	/**
+	 * Accept challenge
+	 */
+	public static void acceptChallenge(String challengeId, Boolean accepted) {
+		Log.i(Const.TAG, "send message (challengeId = " + challengeId + ", accepted = "+accepted.toString() + ")");
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("challengeId", challengeId);
+		params.put("accepted", accepted.toString());
+		String json = ServerUtilities.postRequest(Const.ACCEPT_CHALLENGE, params);
+		Log.i(Const.TAG, json);
 	}
 	
 	private static boolean isError(JSONObject jsonObject) {

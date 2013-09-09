@@ -86,6 +86,9 @@
         <activity
             android:name="com.happymeteo.FriendsFacebookActivity"
             android:label="@string/app_name" />
+        <activity
+            android:name="com.happymeteo.ChallengeRequestActivity"
+            android:label="@string/app_name" />
 
         <!-- GCM Service -->
         <receiver

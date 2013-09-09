@@ -82,4 +82,6 @@ Buon divertimento! E happy meteo!</string>
 	<string name="titleNoApp">Amici che non hanno Happy Meteo</string>
 	<string name="challenge_friend_with_app">Sfida!</string>
 	<string name="challenge_friend_no_app">Invita!</string>
+	<string name="accept_challenge">Accetta</string>
+	<string name="refuse_challenge">Rifiuta</string>
 </resources>
