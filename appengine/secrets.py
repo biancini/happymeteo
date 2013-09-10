@@ -15,3 +15,7 @@ PASSWORD_SECRET_KEY = 'f01a1a0bd409957b9305d2dc21c6b066859f51447c04adfb0b21c9fb5
 # Email and password appymeteo account
 EMAIL = 'appymeteo@gmail.com'
 PASSWORD = 'vivaappymeteo!'
+
+REFRESH_TOKEN = "1/wPP3yPNcYI03ShShIiarFkpxZ70MRRM8wqdvVTrxbNs"
+CLIENT_ID = "1098861155184-h0sqvu2qbhufj1lt76aakvpo94vv18gr.apps.googleusercontent.com"
+CLIENT_SECRET = "qI-vQbzlU8qgUpPeWJeH3nhh"

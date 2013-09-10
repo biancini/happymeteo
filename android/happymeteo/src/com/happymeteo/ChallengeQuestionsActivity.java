@@ -26,7 +26,7 @@ import android.widget.ToggleButton;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
-public class ChallengeQuestionActivity extends Activity {
+public class ChallengeQuestionsActivity extends Activity {
 	
 	private boolean questionsStarted;
 	private Map<String, String> params;
@@ -147,7 +147,7 @@ public class ChallengeQuestionActivity extends Activity {
 						params.put("longitude", String.valueOf(location.getLongitude()));
 					}
 					
-					if(ServerUtilities.submitQuestions(params)) {
+					if(ServerUtilities.submitChallenge(params)) {
 						finish();
 					}
 				}

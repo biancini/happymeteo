@@ -93,7 +93,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if(collapse_key.equals("request_challenge"))
 			return ChallengeRequestActivity.class;
 		if(collapse_key.equals("accepted_challenge"))
-			return ChallengeQuestionActivity.class;
+			return ChallengeQuestionsActivity.class;
 		return null;
 	}
 

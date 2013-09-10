@@ -1,7 +1,11 @@
 package com.happymeteo;
 
+import com.happymeteo.utils.Const;
+import com.happymeteo.utils.ServerUtilities;
+
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,6 +24,9 @@ public class HappyContextActivity extends Activity {
 				finish();
 			}
 		});
+		
+		String json = ServerUtilities.happyContext();
+		Log.i(Const.TAG, "json: " + json);
 	}
 
 }

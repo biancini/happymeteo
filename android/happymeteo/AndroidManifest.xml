@@ -78,7 +78,7 @@
             android:name="com.happymeteo.HappyMapActivity"
             android:label="@string/app_name" />
         <activity
-            android:name="com.happymeteo.QuestionBeginActivity"
+            android:name="com.happymeteo.QuestionActivity"
             android:label="@string/app_name" />
         <activity
             android:name="com.happymeteo.ChallengeActivity"
@@ -88,6 +88,9 @@
             android:label="@string/app_name" />
         <activity
             android:name="com.happymeteo.ChallengeRequestActivity"
+            android:label="@string/app_name" />
+       	<activity
+            android:name="com.happymeteo.ChallengeQuestionsActivity"
             android:label="@string/app_name" />
 
         <!-- GCM Service -->

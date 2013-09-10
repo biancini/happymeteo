@@ -17,7 +17,10 @@ public final class Const {
 	public static final String REQUEST_CHALLENGE_URL = BASE_URL + "/request_challenge"; 
 	public static final String ACCEPT_CHALLENGE_URL = BASE_URL + "/accept_challenge";
 	public static final String QUESTIONS_CHALLENGE_URL = BASE_URL + "/questions_challenge";
-	public static final String SEND_SCORE_CHALLENGE_URL = BASE_URL + "/send_score_challenge";
+	public static final String SUBMIT_CHALLENGE_URL = BASE_URL + "/submit_challenge";
+	
+	public static final String HAPPY_METEO_URL = BASE_URL + "/happy_meteo";
+	public static final String HAPPY_CONTEXT_URL = BASE_URL + "/happy_context";
 
     /* Google */
 	public static final String GOOGLE_ID = "347057775979";

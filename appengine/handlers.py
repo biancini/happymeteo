@@ -12,7 +12,7 @@ from google.appengine.ext import db
 
 from models import User, Device, Challenge
 
-from secrets import EMAIL
+from secrets import EMAIL, REFRESH_TOKEN, CLIENT_ID, CLIENT_SECRET
 
 from utils import sendToSyncMessage
 
@@ -136,6 +136,7 @@ class FacebookLoginHandler(BaseRequestHandler):
             'age': self.get_age(facebook_profile['birthday']),
             'education': '0',
             'location': '',
+            'cap': '',
             'work': '0',
             'registered': '0'
         }
@@ -171,6 +172,7 @@ class CreateAccountHandler(BaseRequestHandler):
         education = self.request.get('education')
         work = self.request.get('work')
         location = self.request.get('location')
+        cap = self.request.get('cap')
         password = self.request.get('password')
           
         user = User(facebook_id=facebook_id,
@@ -182,6 +184,7 @@ class CreateAccountHandler(BaseRequestHandler):
             education=education,
             work=work,
             location=location,
+            cap=cap,
             status=0,
             password=password)
 
@@ -322,11 +325,28 @@ class SendMessageHandler(BaseRequestHandler):
 class GetQuestionsHandler(BaseRequestHandler):
 
   def post(self):
-    req = urllib2.Request('https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%201x82FO5LkeHto6NfHJedrXUtcTl8QkSxoqxelpkI&key=AIzaSyBeMxlRchiwXkyD36N9F2JpkmEXvEEnIVk')
-    req.add_header('Content-Type', 'application/json')
-    # req.add_header('Authorization', 'key=%s'%GOOGLE_API_KEY)
-    response = urllib2.urlopen(req)
-    questions_list = json.loads(response.read())
+    import urllib
+    
+    data = urllib.urlencode({
+      'client_id': CLIENT_ID,
+      'client_secret': CLIENT_SECRET,
+      'refresh_token': REFRESH_TOKEN,
+      'grant_type': 'refresh_token'})
+    request = urllib2.Request(
+      url='https://accounts.google.com/o/oauth2/token',
+      data=data)
+    request_open = urllib2.urlopen(request)
+    response = request_open.read()
+    request_open.close()
+    tokens = json.loads(response)
+    access_token = tokens['access_token']
+    request = urllib2.Request(url='https://www.googleapis.com/fusiontables/v1/query?%s' % \
+                              (urllib.urlencode({'access_token': access_token,
+                               'sql': 'SELECT * FROM 18GPlkUTN9Qbi_JaZVkAvFKWyiQNgO-OD8v8M5W8'})))
+    request_open = urllib2.urlopen(request)
+    response = request_open.read()
+    request_open.close()
+    questions_list = json.loads(response)
     questions = []
     
     for question in questions_list['rows']:
@@ -342,14 +362,9 @@ class GetQuestionsHandler(BaseRequestHandler):
 class SubmitQuestionsHandler(BaseRequestHandler):
 
   def post(self):
-    # questions: 
-    #  -> question: con il testo della domanda
-    #  -> type:
-    #      -> 1 -> [1-10]
-    #      -> 2 -> Si/No
-    ok = { 'message': 'ok' }
+    response = { 'message': 'ok' }
     self.response.headers['Content-Type'] = 'application/json'
-    self.response.out.write(json.dumps(ok))
+    self.response.out.write(json.dumps(response))
     
 """ Challenge Management """
 class RequestChallengeHandler(BaseRequestHandler):
@@ -426,54 +441,32 @@ class AcceptChallengeHandler(BaseRequestHandler):
     
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))
-
-"""    
-class SendScoreChallengeHandler(BaseRequestHandler):
-    
-  def post(self):
-    userId = self.request.get('userId')
-    challengeId = self.request.get('challengeId')
-    score = self.request.get('score')
-    
-    user = User.get_by_id(userId)
-    data = {}
-    
-    if user:
-      challenge = Challenge.get_by_id(challengeId)
-      
-      if challenge:
-        if userId == challenge.user_id_a:
-            challenge.score_a = score
-        if userId == challenge.user_id_b:
-            challenge.score_b = score
-        
-        challenge.put()
-        data = {
-          'message': 'ok'
-        }
-      else:
-        data = {
-          'error': 'Accept Challenge error',
-          'message': 'No challenge found'
-        }
-    else:
-        data = {
-          'error': 'Accept Challenge error',
-          'message': 'No user found'
-        }
-    
-    self.response.headers['Content-Type'] = 'application/json'
-    self.response.out.write(json.dumps(data))
-"""
     
 class QuestionsChallengeHandler(BaseRequestHandler):
 
   def post(self):
-    req = urllib2.Request('https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%201x82FO5LkeHto6NfHJedrXUtcTl8QkSxoqxelpkI&key=AIzaSyBeMxlRchiwXkyD36N9F2JpkmEXvEEnIVk')
-    req.add_header('Content-Type', 'application/json')
-    # req.add_header('Authorization', 'key=%s'%GOOGLE_API_KEY)
-    response = urllib2.urlopen(req)
-    questions_list = json.loads(response.read())
+    import urllib
+    
+    data = urllib.urlencode({
+      'client_id': CLIENT_ID,
+      'client_secret': CLIENT_SECRET,
+      'refresh_token': REFRESH_TOKEN,
+      'grant_type': 'refresh_token'})
+    request = urllib2.Request(
+      url='https://accounts.google.com/o/oauth2/token',
+      data=data)
+    request_open = urllib2.urlopen(request)
+    response = request_open.read()
+    request_open.close()
+    tokens = json.loads(response)
+    access_token = tokens['access_token']
+    request = urllib2.Request(url='https://www.googleapis.com/fusiontables/v1/query?%s' % \
+                              (urllib.urlencode({'access_token': access_token,
+                               'sql': 'SELECT * FROM 1dRqKaRI4lCRT6TRnbqloYM4U7m2UK3d7oVM4W0o'})))
+    request_open = urllib2.urlopen(request)
+    response = request_open.read()
+    request_open.close()
+    questions_list = json.loads(response)
     questions = []
     
     for question in questions_list['rows']:
@@ -489,11 +482,21 @@ class QuestionsChallengeHandler(BaseRequestHandler):
 class SubmitChallengeHandler(BaseRequestHandler):
 
   def post(self):
-    # questions: 
-    #  -> question: con il testo della domanda
-    #  -> type:
-    #      -> 1 -> [1-10]
-    #      -> 2 -> Si/No
-    ok = { 'message': 'ok' }
+    response = { 'message': 'ok', 'score': '10'}
     self.response.headers['Content-Type'] = 'application/json'
-    self.response.out.write(json.dumps(ok))
+    self.response.out.write(json.dumps(response))
+
+# happy management
+class HappyMeteoHandler(BaseRequestHandler):
+
+  def post(self):
+    response = { 'yesterday': '3', 'today': '5', 'tomorrow': '7'}
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(response))
+
+class HappyContextHandler(BaseRequestHandler):
+
+  def post(self):
+    response = { 'happiness': '6'}
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(response))

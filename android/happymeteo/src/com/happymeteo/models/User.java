@@ -17,6 +17,7 @@ public class User {
 	private int education;
 	private int work;
 	private String location;
+	private String cap;
 	private int registered;
 	
 	public User(JSONObject jsonObject) throws JSONException {
@@ -30,10 +31,11 @@ public class User {
 		this.education = jsonObject.getInt("education");
 		this.work = jsonObject.getInt("work");
 		this.location = jsonObject.getString("location");
+		this.cap = jsonObject.getString("cap");
 		this.registered = jsonObject.getInt("registered");
 	}
 	
-	public User(String user_id, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, int registered) {
+	public User(String user_id, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, String cap, int registered) {
 		this.user_id = user_id;
 		this.facebook_id = facebook_id;
 		this.first_name = first_name;
@@ -44,6 +46,7 @@ public class User {
 		this.education = education;
 		this.work = work;
 		this.location = location;
+		this.cap = cap;
 		this.registered = registered;
 	}
 	
@@ -89,5 +92,9 @@ public class User {
 
 	public int getRegistered() {
 		return registered;
+	}
+
+	public String getCap() {
+		return cap;
 	}
 }

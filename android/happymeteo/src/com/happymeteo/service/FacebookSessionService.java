@@ -60,6 +60,7 @@ public class FacebookSessionService implements OnCompleteListener {
 						intent.putExtra("education", user.getEducation());
 						intent.putExtra("work", user.getWork());
 						intent.putExtra("location", user.getLocation());
+						intent.putExtra("cap", user.getCap());
 						
 						Log.i(Const.TAG, "CreateAccountActivity startActivity");
 						activity.startActivity(intent);

@@ -25,7 +25,7 @@ public final class ServerUtilities {
 	/**
 	 * Create account
 	 */
-	public static CreateAccountDTO createAccount(String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, String password) {
+	public static CreateAccountDTO createAccount(String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, String cap, String password) {
 		Log.i(Const.TAG, "createAccount");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("facebook_id", facebook_id);
@@ -37,6 +37,7 @@ public final class ServerUtilities {
 		params.put("education", String.valueOf(education));
 		params.put("work", String.valueOf(work));
 		params.put("location", location);
+		params.put("cap", cap);
 		params.put("password", password);
 		String json = ServerUtilities.postRequest(Const.CREATE_ACCOUNT, params);
 		Log.i(Const.TAG, json);
@@ -186,6 +187,36 @@ public final class ServerUtilities {
 			jsonArray = null;
 		}
 		return jsonArray;
+	}
+	
+	/**
+	 * Submit challenge question
+	 */
+	public static boolean submitChallenge(Map<String, String> params) {
+		Log.i(Const.TAG, "submit challenge (params = " + params + ")");
+		String response = ServerUtilities.postRequest(Const.SUBMIT_CHALLENGE_URL, params);
+		Log.i(Const.TAG, "response: "+response);
+		return true;
+	}
+	
+	/**
+	 * happy meteo
+	 */
+	public static String happyMeteo() {
+		Log.i(Const.TAG, "happyMeteo");
+		Map<String, String> params = new HashMap<String, String>();
+		String json = ServerUtilities.postRequest(Const.HAPPY_METEO_URL, params);
+		return json;
+	}
+	
+	/**
+	 * happy context
+	 */
+	public static String happyContext() {
+		Log.i(Const.TAG, "happyContext");
+		Map<String, String> params = new HashMap<String, String>();
+		String json = ServerUtilities.postRequest(Const.HAPPY_CONTEXT_URL, params);
+		return json;
 	}
 	
 	private static boolean isError(JSONObject jsonObject) {

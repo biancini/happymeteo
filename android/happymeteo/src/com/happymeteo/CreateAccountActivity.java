@@ -36,9 +36,10 @@ public class CreateAccountActivity extends Activity {
 		final Spinner create_account_education = (Spinner) findViewById(R.id.create_account_education);
 		final Spinner create_account_work = (Spinner) findViewById(R.id.create_account_work);
 		final EditText create_account_location = (EditText) findViewById(R.id.create_account_location);
+		final EditText create_account_cap = (EditText) findViewById(R.id.create_account_cap);
 		
 		if(HappyMeteoApplication.i().isFacebookSession()) {
-			create_account_password.setVisibility(View.INVISIBLE);
+			create_account_password.setVisibility(View.GONE);
 			
 			/* Get parameters */
 			String facebook_id = getIntent().getStringExtra("facebook_id");
@@ -50,6 +51,7 @@ public class CreateAccountActivity extends Activity {
 			int education = getIntent().getIntExtra("education", 0);
 			int work = getIntent().getIntExtra("work", 0);
 			String location = getIntent().getStringExtra("location") == null ? "" : getIntent().getStringExtra("location");
+			String cap = getIntent().getStringExtra("cap") == null ? "" : getIntent().getStringExtra("cap");
 			
 			create_account_facebook.setText(String.valueOf(facebook_id));
 			create_account_fist_name.setText(first_name);
@@ -60,6 +62,7 @@ public class CreateAccountActivity extends Activity {
 			create_account_education.setSelection(education);
 			create_account_work.setSelection(work);
 			create_account_location.setText(location);
+			create_account_cap.setText(cap);
 		}
 		
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
@@ -76,6 +79,7 @@ public class CreateAccountActivity extends Activity {
 				Log.i(Const.TAG, "create_account_education: "+create_account_education.getSelectedItemPosition());
 				Log.i(Const.TAG, "create_account_work: "+create_account_work.getSelectedItemPosition());
 				Log.i(Const.TAG, "create_account_location: "+create_account_location.getText());
+				Log.i(Const.TAG, "create_account_cap: "+create_account_cap.getText());
 				
 				String password;
 				try {
@@ -95,6 +99,7 @@ public class CreateAccountActivity extends Activity {
 						create_account_education.getSelectedItemPosition(), 
 						create_account_work.getSelectedItemPosition(), 
 						create_account_location.getText().toString(),
+						create_account_cap.getText().toString(),
 						password);
 				
 				switch(cDto.status) {
@@ -111,6 +116,7 @@ public class CreateAccountActivity extends Activity {
 							create_account_education.getSelectedItemPosition(), 
 							create_account_work.getSelectedItemPosition(), 
 							create_account_location.getText().toString(), 
+							create_account_cap.getText().toString(), 
 							User.USER_REGISTERED);
 						
 						/* Set current user */
