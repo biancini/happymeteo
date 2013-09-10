@@ -48,6 +48,7 @@ public class MenuActivity extends Activity {
 		Button btnHappyMap = (Button) findViewById(R.id.btnHappyMap);
 		Button btnBeginQuestions = (Button) findViewById(R.id.btnQuestionBegin);
 		Button btnChallenge = (Button) findViewById(R.id.btnChallenge);
+		Button btnChallengeTry = (Button) findViewById(R.id.btnChallengeTry);
 		Button btnLogout = (Button) findViewById(R.id.btnLogout);
 		Button btnLogout2 = (Button) findViewById(R.id.btnLogout2);
 
@@ -97,6 +98,15 @@ public class MenuActivity extends Activity {
 				Context context = view.getContext();
 				Intent intent = new Intent(context, ChallengeActivity.class);
 				context.startActivity(intent);
+			}
+		});
+		
+		btnChallengeTry.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				ServerUtilities.requestChallenge(
+					HappyMeteoApplication.i().getCurrentUser().getUser_id(),
+					HappyMeteoApplication.i().getCurrentUser().getFacebook_id(),
+					HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId());
 			}
 		});
 

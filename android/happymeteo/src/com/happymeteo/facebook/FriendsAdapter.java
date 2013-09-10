@@ -54,9 +54,9 @@ public class FriendsAdapter extends ArrayAdapter<Friend> {
 				
 				public void onClick(View view) {
 					ServerUtilities.requestChallenge(
-							HappyMeteoApplication.i().getCurrentUser().getUser_id(),
-							friend.getId(),
-							HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId());
+						HappyMeteoApplication.i().getCurrentUser().getUser_id(),
+						friend.getId(),
+						HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId());
 				}
 			});
 		} else {

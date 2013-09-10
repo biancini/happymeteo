@@ -149,7 +149,7 @@ public final class ServerUtilities {
 	 * Request challenge
 	 */
 	public static void requestChallenge(String userId, String facebookId, String registrationId) {
-		Log.i(Const.TAG, "send message (userId = " + userId + ", facebookId = " + facebookId + ", registrationId = "+registrationId + ")");
+		Log.i(Const.TAG, "request challenge (userId = " + userId + ", facebookId = " + facebookId + ", registrationId = "+registrationId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("userId", userId);
 		params.put("facebookId", facebookId);
@@ -162,7 +162,7 @@ public final class ServerUtilities {
 	 * Accept challenge
 	 */
 	public static void acceptChallenge(String challengeId, Boolean accepted) {
-		Log.i(Const.TAG, "send message (challengeId = " + challengeId + ", accepted = "+accepted.toString() + ")");
+		Log.i(Const.TAG, "accept challenge (challengeId = " + challengeId + ", accepted = "+accepted.toString() + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("challengeId", challengeId);
 		params.put("accepted", accepted.toString());

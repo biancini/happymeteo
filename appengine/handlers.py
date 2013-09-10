@@ -291,13 +291,16 @@ class RegisterHandler(BaseRequestHandler):
   def post(self):
     registrationId = self.request.get('registrationId')
     userId = self.request.get('userId')
-    q = db.GqlQuery("SELECT * FROM Device WHERE registration_id = :1 and userId = :2", registrationId, userId)
+    query = Device.gql("WHERE user_id = :1", userId)
 
-    if q.count() > 0:
-      print "Device already registered with register id = %s" % registrationId
+    if query.count() > 0:
+      device = query.get()
+      if device.registrationId != registrationId:
+        device.registrationId = registrationId
+        device.put()
     else:
-      n = Device(registration_id=registrationId, user_id=userId)
-      n.put()
+      device = Device(registration_id=registrationId, user_id=userId)
+      device.put()
 
 class UnregisterHandler(BaseRequestHandler):
 
@@ -368,8 +371,16 @@ class RequestChallengeHandler(BaseRequestHandler):
             device = query2.get()
             
             # Save challenge
-            challenge = Challenge(user_id_a = userId, user_id_b = '%s'%user.key().id(), registration_id_a = registrationId, registration_id_b = device.registration_id)
-            challenge.put()
+            query = Challenge.gql("WHERE user_id_a = :1 and user_id_b = :2 and accepted = false", userId, '%s'%user.key().id())
+            if query.count() > 0:
+              challenge = query.get()
+              challenge.registration_id_a = registrationId
+              challenge.registration_id_b = device.registration_id
+              challenge.created = datetime.now()
+              challenge.put()
+            else:
+              challenge = Challenge(user_id_a = userId, user_id_b = '%s'%user.key().id(), registration_id_a = registrationId, registration_id_b = device.registration_id, accepted = False)
+              challenge.put()
             
             # Send message to the device
             sendToSyncMessage(device.registration_id, 'request_challenge', {'challenge': challenge.toJson()})
@@ -397,12 +408,14 @@ class AcceptChallengeHandler(BaseRequestHandler):
     challengeId = self.request.get('challengeId')
     accepted = self.request.get('accepted')
     
+    print "accepted: %s"%accepted
+    
     data = {}
-    challenge = Challenge.get_by_id(challengeId)
+    challenge = Challenge.get_by_id(int(challengeId))
     
     if challenge:
         #sendToSyncMessage(challenge.registration_id_a, 'accepted_challenge', {'accept': accept})
-        challenge.accepted = accepted
+        challenge.accepted = (accepted == "true")
         challenge.put()
         data = {
           'message': 'ok'

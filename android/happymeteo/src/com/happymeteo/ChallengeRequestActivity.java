@@ -20,22 +20,19 @@ public class ChallengeRequestActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_challenge_request);
-		final String data = getIntent().getStringExtra("data");
-		
-		Log.i(Const.TAG, "data: "+data);
+		final String challengeJson = getIntent().getStringExtra("challenge");
 		
 		try {
-			JSONObject object = new JSONObject(data);
-			JSONObject challengeJson = object.getJSONObject("challenge");
-			final Challenge challenge = new Challenge(challengeJson);
+			JSONObject object = new JSONObject(challengeJson);
+			final Challenge challenge = new Challenge(object);
 			
 			Button btnAcceptChallenge = (Button) findViewById(R.id.btnAcceptChallenge);
 			
 			btnAcceptChallenge.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
-					ServerUtilities.acceptChallenge(challenge.getChallenge_id(), false);
+					ServerUtilities.acceptChallenge(challenge.getChallenge_id(), true);
 					
-					finish();
+					//finish();
 				}
 			});
 			
@@ -43,9 +40,9 @@ public class ChallengeRequestActivity extends Activity {
 			
 			btnRefuseChallenge.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
-					ServerUtilities.acceptChallenge(challenge.getChallenge_id(), true);
+					ServerUtilities.acceptChallenge(challenge.getChallenge_id(), false);
 					
-					finish();
+					//finish();
 				}
 			});
 		} catch (JSONException e) {
