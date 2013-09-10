@@ -295,8 +295,8 @@ class RegisterHandler(BaseRequestHandler):
 
     if query.count() > 0:
       device = query.get()
-      if device.registrationId != registrationId:
-        device.registrationId = registrationId
+      if device.registration_id != registrationId:
+        device.registration_id = registrationId
         device.put()
     else:
       device = Device(registration_id=registrationId, user_id=userId)
@@ -408,13 +408,11 @@ class AcceptChallengeHandler(BaseRequestHandler):
     challengeId = self.request.get('challengeId')
     accepted = self.request.get('accepted')
     
-    print "accepted: %s"%accepted
-    
     data = {}
     challenge = Challenge.get_by_id(int(challengeId))
     
     if challenge:
-        #sendToSyncMessage(challenge.registration_id_a, 'accepted_challenge', {'accept': accept})
+        sendToSyncMessage(challenge.registration_id_a, 'accepted_challenge', {'accept': accepted})
         challenge.accepted = (accepted == "true")
         challenge.put()
         data = {
@@ -428,7 +426,8 @@ class AcceptChallengeHandler(BaseRequestHandler):
     
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))
-    
+
+"""    
 class SendScoreChallengeHandler(BaseRequestHandler):
     
   def post(self):
@@ -465,3 +464,36 @@ class SendScoreChallengeHandler(BaseRequestHandler):
     
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))
+"""
+    
+class QuestionsChallengeHandler(BaseRequestHandler):
+
+  def post(self):
+    req = urllib2.Request('https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%201x82FO5LkeHto6NfHJedrXUtcTl8QkSxoqxelpkI&key=AIzaSyBeMxlRchiwXkyD36N9F2JpkmEXvEEnIVk')
+    req.add_header('Content-Type', 'application/json')
+    # req.add_header('Authorization', 'key=%s'%GOOGLE_API_KEY)
+    response = urllib2.urlopen(req)
+    questions_list = json.loads(response.read())
+    questions = []
+    
+    for question in questions_list['rows']:
+      questions.append({
+          'id': question[0],
+          'question': question[1],
+          'type': question[2]
+      })
+    
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(questions))
+
+class SubmitChallengeHandler(BaseRequestHandler):
+
+  def post(self):
+    # questions: 
+    #  -> question: con il testo della domanda
+    #  -> type:
+    #      -> 1 -> [1-10]
+    #      -> 2 -> Si/No
+    ok = { 'message': 'ok' }
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(ok))

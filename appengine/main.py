@@ -37,7 +37,9 @@ routes = [
   # challenge management
   Route('/request_challenge', handler='handlers.RequestChallengeHandler'),
   Route('/accept_challenge', handler='handlers.AcceptChallengeHandler'),
-  Route('/send_score_challenge', handler='handlers.SendScoreChallengeHandler')
+  Route('/questions_challenge', handler='handlers.QuestionsChallengeHandler'),
+  Route('/submit_challenge', handler='handlers.SubmitChallengeHandler'),
+  #Route('/send_score_challenge', handler='handlers.SendScoreChallengeHandler')
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

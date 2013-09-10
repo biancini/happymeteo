@@ -89,9 +89,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 	
 	private static Class<? extends Activity> getActivityFromCollapseKey(String collapse_key) {
 		if(collapse_key.equals("questions"))
-			return QuestionBeginActivity.class;
+			return QuestionActivity.class;
 		if(collapse_key.equals("request_challenge"))
 			return ChallengeRequestActivity.class;
+		if(collapse_key.equals("accepted_challenge"))
+			return ChallengeQuestionActivity.class;
 		return null;
 	}
 

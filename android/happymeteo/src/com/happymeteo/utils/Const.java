@@ -14,9 +14,10 @@ public final class Const {
 	public static final String GET_QUESTIONS_URL = BASE_URL + "/get_questions";
 	public static final String SUBMIT_QUESTIONS_URL = BASE_URL + "/submit_questions";
 	
-	public static final String REQUEST_CHALLENGE = BASE_URL + "/request_challenge"; 
-	public static final String ACCEPT_CHALLENGE = BASE_URL + "/accept_challenge"; 
-	public static final String SEND_SCORE_CHALLENGE = BASE_URL + "/send_score_challenge";
+	public static final String REQUEST_CHALLENGE_URL = BASE_URL + "/request_challenge"; 
+	public static final String ACCEPT_CHALLENGE_URL = BASE_URL + "/accept_challenge";
+	public static final String QUESTIONS_CHALLENGE_URL = BASE_URL + "/questions_challenge";
+	public static final String SEND_SCORE_CHALLENGE_URL = BASE_URL + "/send_score_challenge";
 
     /* Google */
 	public static final String GOOGLE_ID = "347057775979";
@@ -39,9 +40,7 @@ public final class Const {
 	/* Password secret key */
 	public static final String PASSWORD_SECRET_KEY = "f01a1a0bd409957b9305d2dc21c6b066859f51447c04adfb0b21c9fb5cff9eb0a6573c69e62fcb97321d878bfecb7d2cc8e6650ac6db1a1ef3125373d3e81b85";
 
-    public static final String TAG = "HappyMeteo";
-
-	public static final String EXTRA_MESSAGE = "message";
+    public static final String TAG = "AppyMeteo";
 	
 	public enum CREATE_ACCOUNT_STATUS {
 		CONFIRMED_OR_FACEBOOK, NOT_CONFIRMED, ERROR

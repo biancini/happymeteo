@@ -88,7 +88,7 @@ public class MenuActivity extends Activity {
 		btnBeginQuestions.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
-				Intent intent = new Intent(context, QuestionBeginActivity.class);
+				Intent intent = new Intent(context, QuestionActivity.class);
 				context.startActivity(intent);
 			}
 		});

@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutChallengeQuestions"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+     
+     <TextView android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:text="@string/begin_questions"
+         android:layout_marginLeft="10dip"
+         android:layout_marginRight="10dip"
+         android:layout_marginTop="20dip"/>
+     
+     <Button android:id="@+id/btnBeginChallengeQuestions"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:text="@string/begin_questions_btn"
+         android:layout_margin="10dip"/>
+
+</LinearLayout>

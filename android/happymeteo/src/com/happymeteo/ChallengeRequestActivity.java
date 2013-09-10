@@ -32,7 +32,7 @@ public class ChallengeRequestActivity extends Activity {
 				public void onClick(View view) {
 					ServerUtilities.acceptChallenge(challenge.getChallenge_id(), true);
 					
-					//finish();
+					finish();
 				}
 			});
 			
@@ -42,7 +42,7 @@ public class ChallengeRequestActivity extends Activity {
 				public void onClick(View view) {
 					ServerUtilities.acceptChallenge(challenge.getChallenge_id(), false);
 					
-					//finish();
+					finish();
 				}
 			});
 		} catch (JSONException e) {

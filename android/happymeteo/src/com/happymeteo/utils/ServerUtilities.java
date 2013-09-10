@@ -154,7 +154,7 @@ public final class ServerUtilities {
 		params.put("userId", userId);
 		params.put("facebookId", facebookId);
 		params.put("registrationId", registrationId);
-		String json = ServerUtilities.postRequest(Const.REQUEST_CHALLENGE, params);
+		String json = ServerUtilities.postRequest(Const.REQUEST_CHALLENGE_URL, params);
 		Log.i(Const.TAG, json);
 	}
 	
@@ -166,8 +166,26 @@ public final class ServerUtilities {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("challengeId", challengeId);
 		params.put("accepted", accepted.toString());
-		String json = ServerUtilities.postRequest(Const.ACCEPT_CHALLENGE, params);
+		String json = ServerUtilities.postRequest(Const.ACCEPT_CHALLENGE_URL, params);
 		Log.i(Const.TAG, json);
+	}
+	
+	/**
+	 * Get challenge questions
+	 */
+	public static JSONArray getChallengeQuestions() {
+		Log.i(Const.TAG, "getChallengeQuestions");
+		Map<String, String> params = new HashMap<String, String>();
+		String json = ServerUtilities.postRequest(Const.QUESTIONS_CHALLENGE_URL, params);
+		JSONArray jsonArray;
+		Log.i(Const.TAG, json);
+		try {
+			jsonArray = new JSONArray(json);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			jsonArray = null;
+		}
+		return jsonArray;
 	}
 	
 	private static boolean isError(JSONObject jsonObject) {

@@ -26,7 +26,7 @@ import android.widget.ToggleButton;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
-public class QuestionBeginActivity extends Activity {
+public class QuestionActivity extends Activity {
 	
 	private boolean questionsStarted;
 	private Map<String, String> params;
@@ -34,11 +34,12 @@ public class QuestionBeginActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_question_begin);
+		setContentView(R.layout.activity_questions);
+		
 		questionsStarted = false;
 		params = new HashMap<String, String>();
 		
-		final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layoutBeginQuestion);
+		final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layoutQuestions);
 		final Button btnBeginQuestions = (Button) findViewById(R.id.btnBeginQuestions);
 		btnBeginQuestions.setOnClickListener(new View.OnClickListener() {
 
