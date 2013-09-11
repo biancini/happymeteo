@@ -19,3 +19,8 @@ PASSWORD = 'vivaappymeteo!'
 REFRESH_TOKEN = "1/wPP3yPNcYI03ShShIiarFkpxZ70MRRM8wqdvVTrxbNs"
 CLIENT_ID = "1098861155184-h0sqvu2qbhufj1lt76aakvpo94vv18gr.apps.googleusercontent.com"
 CLIENT_SECRET = "qI-vQbzlU8qgUpPeWJeH3nhh"
+
+# fusion tables
+DOMANDA = "18GPlkUTN9Qbi_JaZVkAvFKWyiQNgO-OD8v8M5W8"
+SFIDA = "1dRqKaRI4lCRT6TRnbqloYM4U7m2UK3d7oVM4W0o"
+RISPOSTA = "1JMpJQMAWxqF3Kd18TFgqvyCBZUBH8N1Vx6YAZ3Y"

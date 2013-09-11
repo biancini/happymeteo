@@ -12,9 +12,9 @@ from google.appengine.ext import db
 
 from models import User, Device, Challenge
 
-from secrets import EMAIL, REFRESH_TOKEN, CLIENT_ID, CLIENT_SECRET
+from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA
 
-from utils import sendToSyncMessage
+from utils import sendToSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable
 
 class BaseRequestHandler(webapp2.RequestHandler):
   def dispatch(self):
@@ -325,27 +325,9 @@ class SendMessageHandler(BaseRequestHandler):
 class GetQuestionsHandler(BaseRequestHandler):
 
   def post(self):
-    import urllib
+    access_token = getGoogleAccessToken()
+    response = sqlGetFusionTable(access_token, 'SELECT * FROM %s'%DOMANDA)
     
-    data = urllib.urlencode({
-      'client_id': CLIENT_ID,
-      'client_secret': CLIENT_SECRET,
-      'refresh_token': REFRESH_TOKEN,
-      'grant_type': 'refresh_token'})
-    request = urllib2.Request(
-      url='https://accounts.google.com/o/oauth2/token',
-      data=data)
-    request_open = urllib2.urlopen(request)
-    response = request_open.read()
-    request_open.close()
-    tokens = json.loads(response)
-    access_token = tokens['access_token']
-    request = urllib2.Request(url='https://www.googleapis.com/fusiontables/v1/query?%s' % \
-                              (urllib.urlencode({'access_token': access_token,
-                               'sql': 'SELECT * FROM 18GPlkUTN9Qbi_JaZVkAvFKWyiQNgO-OD8v8M5W8'})))
-    request_open = urllib2.urlopen(request)
-    response = request_open.read()
-    request_open.close()
     questions_list = json.loads(response)
     questions = []
     
@@ -362,9 +344,35 @@ class GetQuestionsHandler(BaseRequestHandler):
 class SubmitQuestionsHandler(BaseRequestHandler):
 
   def post(self):
-    response = { 'message': 'ok' }
+    data = {}
+    try:
+        questions = self.request.get('questions')
+        id_user = self.request.get('id_user')
+        longitude = self.request.get('longitude')
+        latitude = self.request.get('latitude')
+        
+        print questions
+        
+        questions = json.loads(questions)
+        
+        access_token = getGoogleAccessToken()
+        
+        for q in questions:
+            print "%s %s"%(q, questions[q])
+            response = sqlPostFusionTable(access_token, 'INSERT INTO %s (id_user, id_question, location, date, value) VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\')'%(
+                         RISPOSTA, id_user, q, latitude+" "+longitude, datetime.now(), questions[q]))
+            print response
+            
+        data = { 'message': 'ok' }
+    except:
+        data = {
+          'error': 'Submit Question error',
+          'message': '%s' % sys.exc_info()[0],
+        }
+        raise
+    
     self.response.headers['Content-Type'] = 'application/json'
-    self.response.out.write(json.dumps(response))
+    self.response.out.write(json.dumps(data))
     
 """ Challenge Management """
 class RequestChallengeHandler(BaseRequestHandler):
@@ -445,27 +453,9 @@ class AcceptChallengeHandler(BaseRequestHandler):
 class QuestionsChallengeHandler(BaseRequestHandler):
 
   def post(self):
-    import urllib
-    
-    data = urllib.urlencode({
-      'client_id': CLIENT_ID,
-      'client_secret': CLIENT_SECRET,
-      'refresh_token': REFRESH_TOKEN,
-      'grant_type': 'refresh_token'})
-    request = urllib2.Request(
-      url='https://accounts.google.com/o/oauth2/token',
-      data=data)
-    request_open = urllib2.urlopen(request)
-    response = request_open.read()
-    request_open.close()
-    tokens = json.loads(response)
-    access_token = tokens['access_token']
-    request = urllib2.Request(url='https://www.googleapis.com/fusiontables/v1/query?%s' % \
-                              (urllib.urlencode({'access_token': access_token,
-                               'sql': 'SELECT * FROM 1dRqKaRI4lCRT6TRnbqloYM4U7m2UK3d7oVM4W0o'})))
-    request_open = urllib2.urlopen(request)
-    response = request_open.read()
-    request_open.close()
+    access_token = getGoogleAccessToken()
+    response = sqlGetFusionTable(access_token, 'SELECT * FROM %s'%SFIDA)
+
     questions_list = json.loads(response)
     questions = []
     

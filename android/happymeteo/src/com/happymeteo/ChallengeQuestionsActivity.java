@@ -24,17 +24,35 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.happymeteo.utils.Const;
+import com.happymeteo.utils.LocationManagerHelper;
 import com.happymeteo.utils.ServerUtilities;
 
 public class ChallengeQuestionsActivity extends Activity {
 	
 	private boolean questionsStarted;
 	private Map<String, String> params;
+	private LocationManagerHelper locationListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_challenge_questions);
+		
+		// Get the location manager
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		
+		locationListener = new LocationManagerHelper();
+		
+		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 100, locationListener);
+		} else {
+		    Log.i(Const.TAG, "GPS is not turned on...");
+		    if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+		    	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 30000, 100, locationListener);
+		    } else {
+		    	Log.i(Const.TAG, "Network is not turned on...");
+		    }
+		}
 		
 		questionsStarted = false;
 		params = new HashMap<String, String>();
@@ -138,7 +156,7 @@ public class ChallengeQuestionsActivity extends Activity {
 					btnBeginQuestions.setText(R.string.answer_questions_btn);
 					questionsStarted = true;
 				} else {
-					Location location = getBestLocation();
+					Location location = locationListener.getLocation();
 					Log.d(Const.TAG, "location: "+location);
 					
 					if(location != null) {
@@ -153,67 +171,5 @@ public class ChallengeQuestionsActivity extends Activity {
 				}
 			}
 		});
-	}
-	
-	/**
-	 * try to get the 'best' location selected from all providers
-	 */
-	private Location getBestLocation() {
-	    Location gpslocation = getLocationByProvider(LocationManager.GPS_PROVIDER);
-	    Location networkLocation = getLocationByProvider(LocationManager.NETWORK_PROVIDER);
-	    // if we have only one location available, the choice is easy
-	    if (gpslocation == null) {
-	        Log.d(Const.TAG, "No GPS Location available.");
-	        return networkLocation;
-	    }
-	    if (networkLocation == null) {
-	        Log.d(Const.TAG, "No Network Location available");
-	        return gpslocation;
-	    }
-	    // a locationupdate is considered 'old' if its older than the configured
-	    // update interval. this means, we didn't get a
-	    // update from this provider since the last check
-	    long old = System.currentTimeMillis() - getGPSCheckMilliSecsFromPrefs();
-	    boolean gpsIsOld = (gpslocation.getTime() < old);
-	    boolean networkIsOld = (networkLocation.getTime() < old);
-	    // gps is current and available, gps is better than network
-	    if (!gpsIsOld) {
-	        Log.d(Const.TAG, "Returning current GPS Location");
-	        return gpslocation;
-	    }
-	    // gps is old, we can't trust it. use network location
-	    if (!networkIsOld) {
-	        Log.d(Const.TAG, "GPS is old, Network is current, returning network");
-	        return networkLocation;
-	    }
-	    // both are old return the newer of those two
-	    if (gpslocation.getTime() > networkLocation.getTime()) {
-	        Log.d(Const.TAG, "Both are old, returning gps(newer)");
-	        return gpslocation;
-	    } else {
-	        Log.d(Const.TAG, "Both are old, returning network(newer)");
-	        return networkLocation;
-	    }
-	}
-	
-	private long getGPSCheckMilliSecsFromPrefs() {
-		return 5 * 60 * 1000;
-	}
-
-	/**
-	 * get the last known location from a specific provider (network/gps)
-	 */
-	private Location getLocationByProvider(String provider) {
-	    Location location = null;
-	    LocationManager locationManager = (LocationManager) getApplicationContext()
-	            .getSystemService(Context.LOCATION_SERVICE);
-	    try {
-	        if (locationManager.isProviderEnabled(provider)) {
-	            location = locationManager.getLastKnownLocation(provider);
-	        }
-	    } catch (IllegalArgumentException e) {
-	        Log.d(Const.TAG, "Cannot acces Provider " + provider);
-	    }
-	    return location;
 	}
 }
