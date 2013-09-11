@@ -28,10 +28,10 @@ import com.happymeteo.utils.LocationManagerHelper;
 import com.happymeteo.utils.ServerUtilities;
 
 public class ChallengeQuestionsActivity extends Activity {
-	
 	private boolean questionsStarted;
 	private Map<String, String> params;
 	private LocationManagerHelper locationListener;
+	private JSONObject questions;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,7 @@ public class ChallengeQuestionsActivity extends Activity {
 		
 		questionsStarted = false;
 		params = new HashMap<String, String>();
+		questions = new JSONObject();
 		
 		final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layoutChallengeQuestions);
 		final Button btnBeginQuestions = (Button) findViewById(R.id.btnBeginChallengeQuestions);
@@ -65,8 +66,6 @@ public class ChallengeQuestionsActivity extends Activity {
 			public void onClick(View view) {
 				if(!questionsStarted) {
 					JSONArray jsonArray = ServerUtilities.getChallengeQuestions();
-	
-					Log.i(Const.TAG, "jsonArray: " + jsonArray);
 	
 					if (jsonArray != null) {
 						for (int i = 0; i < jsonArray.length(); i++) {
@@ -124,13 +123,18 @@ public class ChallengeQuestionsActivity extends Activity {
 										public void onProgressChanged(SeekBar seekBar, int progress,
 												boolean fromUser) {
 											String value = String.valueOf((progress/10)+1);
-											params.put(id, value);
+											try {
+												questions.put(id, value);
+											} catch (JSONException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
 											tvText.setText(value);
 										}
 									});
 									
 									linearLayout.addView(seekBar);
-									params.put(id, "1");
+									questions.put(id, "1");
 								} else {
 									final ToggleButton toggleButton = new ToggleButton(getApplicationContext());
 									toggleButton.setLayoutParams(llp);
@@ -138,14 +142,20 @@ public class ChallengeQuestionsActivity extends Activity {
 									toggleButton.setTextOff("No");
 									toggleButton.setChecked(false);
 									toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-									    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-									    	params.put(id, String.valueOf(isChecked));
-									    }
+										
+										@Override
+										public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+											try {
+												questions.put(id, isChecked ? "1" : "0");
+											} catch (JSONException e) {
+												e.printStackTrace();
+											}
+										}
 									});
 									
 									linearLayout1.addView(toggleButton);
 									linearLayout.addView(linearLayout1);
-									params.put(id, String.valueOf(false));
+									questions.put(id, "0");
 								}
 							} catch (JSONException e) {
 								Log.e(Const.TAG, "JSONException", e);
@@ -164,6 +174,9 @@ public class ChallengeQuestionsActivity extends Activity {
 						params.put("latitude", String.valueOf(location.getLatitude()));
 						params.put("longitude", String.valueOf(location.getLongitude()));
 					}
+					
+					params.put("id_user", HappyMeteoApplication.i().getCurrentUser().getUser_id());
+					params.put("questions", questions.toString());
 					
 					if(ServerUtilities.submitChallenge(params)) {
 						finish();

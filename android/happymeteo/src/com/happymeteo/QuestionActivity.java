@@ -123,7 +123,12 @@ public class QuestionActivity extends Activity {
 										public void onProgressChanged(SeekBar seekBar, int progress,
 												boolean fromUser) {
 											String value = String.valueOf((progress/10)+1);
-											params.put(id, value);
+											try {
+												questions.put(id, value);
+											} catch (JSONException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
 											tvText.setText(value);
 										}
 									});
@@ -143,7 +148,6 @@ public class QuestionActivity extends Activity {
 											try {
 												questions.put(id, isChecked ? "1" : "0");
 											} catch (JSONException e) {
-												// TODO Auto-generated catch block
 												e.printStackTrace();
 											}
 										}

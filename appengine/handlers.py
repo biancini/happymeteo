@@ -12,7 +12,7 @@ from google.appengine.ext import db
 
 from models import User, Device, Challenge
 
-from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA
+from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA
 
 from utils import sendToSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable
 
@@ -369,7 +369,6 @@ class SubmitQuestionsHandler(BaseRequestHandler):
           'error': 'Submit Question error',
           'message': '%s' % sys.exc_info()[0],
         }
-        raise
     
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))
@@ -472,15 +471,69 @@ class QuestionsChallengeHandler(BaseRequestHandler):
 class SubmitChallengeHandler(BaseRequestHandler):
 
   def post(self):
-    response = { 'message': 'ok', 'score': '10'}
+    data = {}
+    try:
+        questions = self.request.get('questions')
+        id_user = self.request.get('id_user')
+        longitude = self.request.get('longitude')
+        latitude = self.request.get('latitude')
+        
+        questions = json.loads(questions)
+        access_token = getGoogleAccessToken()
+        
+        for q in questions:
+            print "%s %s"%(q, questions[q])
+            response = sqlPostFusionTable(access_token, 'INSERT INTO %s (id_user, id_question, location, date, value) VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\')'%(
+                         RISPOSTA_SFIDA, id_user, q, latitude+" "+longitude, datetime.now(), questions[q]))
+            print response
+            
+        data = { 'message': 'ok', 'score': '10'}
+    except:
+        data = {
+          'error': 'Submit Challenge error',
+          'message': '%s' % sys.exc_info()[0],
+        }
+    
     self.response.headers['Content-Type'] = 'application/json'
-    self.response.out.write(json.dumps(response))
+    self.response.out.write(json.dumps(data))
 
 # happy management
 class HappyMeteoHandler(BaseRequestHandler):
 
   def post(self):
-    response = { 'yesterday': '3', 'today': '5', 'tomorrow': '7'}
+    access_token = getGoogleAccessToken()
+    from datetime import date, timedelta
+
+    today = date.today()
+    tomorrow = today + timedelta(1)
+    yesterday = today - timedelta(1)
+    beforeyesterday = yesterday - timedelta(1)
+    
+    response_today = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1'%(RISPOSTA, today, tomorrow))
+    response_yesterday = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1'%(RISPOSTA, yesterday, today))
+    response_beforeyesterday = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1'%(RISPOSTA, beforeyesterday, yesterday))
+    
+    response_today_json = json.loads(response_today)
+    if "rows" in response_today_json:
+        value_today = float(response_today_json["rows"][0][0])
+    else:
+        value_today = 0.0
+        
+    response_yesterday_json = json.loads(response_yesterday)
+    if "rows" in response_yesterday_json:
+        value_yesterday = float(response_yesterday_json["rows"][0][0])
+    else:
+        value_yesterday = 0.0
+        
+    response_beforeyesterday_json = json.loads(response_beforeyesterday)
+    if "rows" in response_beforeyesterday_json:
+        value_beforeyesterday = float(response_beforeyesterday_json["rows"][0][0])
+    else:
+        value_beforeyesterday = 0.0
+        
+    value_tomorrow = (value_today + value_yesterday + value_beforeyesterday)/3
+    
+    response = { 'yesterday': value_yesterday, 'today': value_today, 'tomorrow': value_tomorrow}
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(response))
 
