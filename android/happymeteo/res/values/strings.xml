@@ -86,4 +86,6 @@ Buon divertimento! E happy meteo!</string>
 	<string name="accept_challenge">Accetta</string>
 	<string name="refuse_challenge">Rifiuta</string>
 	<string name="modify_account">Modifica Profilo</string>
+	<string name="link_user_to_facebook">Collega Profilo a facebook</string>
+	<string name="unlink_user_to_facebook">Scollega Profilo a facebook</string>
 </resources>

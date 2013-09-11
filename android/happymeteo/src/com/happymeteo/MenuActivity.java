@@ -35,12 +35,16 @@ public class MenuActivity extends Activity {
 					HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId(),
 					HappyMeteoApplication.i().getCurrentUser().getUser_id());
 		}
+		
+		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.userImage);
 
 		if (HappyMeteoApplication.i().isFacebookSession()) {
-			ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.userImage);
+			
 			userImage.setProfileId(String.valueOf(HappyMeteoApplication
 					.i().getCurrentUser().getFacebook_id()));
 			userImage.setCropped(true);
+		} else {
+			userImage.setProfileId(null);
 		}
 
 		Button btnModifyAccount = (Button) findViewById(R.id.btnModifyAccount);

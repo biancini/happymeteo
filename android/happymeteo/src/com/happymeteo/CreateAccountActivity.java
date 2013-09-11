@@ -1,5 +1,7 @@
 package com.happymeteo;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.facebook.FacebookException;
+import com.happymeteo.facebook.WebDialog.OnCompleteListener;
 import com.happymeteo.models.CreateAccountDTO;
 import com.happymeteo.models.User;
 import com.happymeteo.utils.AlertDialogManager;
@@ -17,16 +21,20 @@ import com.happymeteo.utils.Const;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
 
-public class CreateAccountActivity extends Activity {
+public class CreateAccountActivity extends Activity implements OnCompleteListener {
 	private String user_id;
 	private String facebook_id;
+	private Activity activity;
+	private OnCompleteListener onCompleteListener;
+	private Button btnCreateUserFacebook;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_account);
 		
-		Log.i(Const.TAG, "Create CreateAccountActivity");
+		this.activity = this;
+		this.onCompleteListener = this;
 		
 		this.user_id = "";
 		
@@ -41,6 +49,7 @@ public class CreateAccountActivity extends Activity {
 		final EditText create_account_location = (EditText) findViewById(R.id.create_account_location);
 		final EditText create_account_cap = (EditText) findViewById(R.id.create_account_cap);
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
+		btnCreateUserFacebook = (Button) findViewById(R.id.btnCreateUserFacebook);
 		
 		if(HappyMeteoApplication.i().isFacebookSession()) {
 			create_account_password.setVisibility(View.GONE);
@@ -50,7 +59,6 @@ public class CreateAccountActivity extends Activity {
 		
 		if(user != null) {
 			this.user_id = user.getUser_id();
-			Log.i(Const.TAG, "Create CreateAccountActivity: "+user.getUser_id());
 			this.facebook_id = user.getFacebook_id();
 			create_account_fist_name.setText(user.getFirst_name());
 			create_account_last_name.setText(user.getLast_name());
@@ -62,10 +70,29 @@ public class CreateAccountActivity extends Activity {
 			create_account_location.setText(user.getLocation());
 			create_account_cap.setText(user.getCap());
 			
-			if(this.user_id != "") {
+			if(!this.user_id.equals("")) {
 				btnCreateUser.setText(R.string.modify_account);
 			}
 		}
+		
+		if(!facebook_id.equals("")) {
+			btnCreateUserFacebook.setText(R.string.unlink_user_to_facebook);
+		} else {
+			btnCreateUserFacebook.setText(R.string.link_user_to_facebook);
+		}
+		
+		btnCreateUserFacebook.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(facebook_id.equals("")) {
+					HappyMeteoApplication.i().getFacebookSessionService().openConnession(activity, onCompleteListener);
+					
+				} else {
+					facebook_id = "";
+					btnCreateUserFacebook.setText(R.string.link_user_to_facebook);
+				}
+			}
+		});
 		
 		
 		btnCreateUser.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +182,23 @@ public class CreateAccountActivity extends Activity {
 				finish();
 			}
 		});
+	}
+
+	@Override
+	public void onComplete(Bundle values, FacebookException error, Activity caller) {
+		if(values != null) {
+			String accessToken = values.getString("access_token");
+			String serverUrl = "https://graph.facebook.com/me?access_token="+accessToken;		
+			String response = ServerUtilities.getRequest(serverUrl);
+			try {
+				JSONObject facebook_profile = new JSONObject(response);
+				this.facebook_id = facebook_profile.getString("id");
+				Log.i(Const.TAG, "new facebook_id: "+facebook_id);
+				btnCreateUserFacebook.setText(R.string.unlink_user_to_facebook);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

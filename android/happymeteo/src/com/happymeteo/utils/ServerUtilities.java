@@ -235,7 +235,7 @@ public final class ServerUtilities {
 		}
 	}
 
-	private static String postRequest(Context context, String serverUrl, Map<String, String> parameters) {
+	public static String postRequest(Context context, String serverUrl, Map<String, String> parameters) {
 		try {
 			URL url;
 			try {
@@ -308,6 +308,30 @@ public final class ServerUtilities {
 					}); 
 		}
 
+		return null;
+	}
+	
+	public static String getRequest(String serverUrl) {
+		try {
+			StringBuffer output = new StringBuffer();
+			URL url = new URL(serverUrl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			int status = conn.getResponseCode();
+			if (status != 200) {
+				throw new IOException("Request failed with status: " + status);
+			}
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				output.append(inputLine);
+			}
+			in.close();
+			return output.toString();
+		} catch (Exception e) {
+			Log.e(Const.TAG, e.getMessage(), e);
+		}
 		return null;
 	}
 }

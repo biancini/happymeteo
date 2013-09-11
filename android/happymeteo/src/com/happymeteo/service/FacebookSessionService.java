@@ -11,7 +11,6 @@ import android.webkit.CookieSyncManager;
 import com.facebook.FacebookException;
 import com.happymeteo.CreateAccountActivity;
 import com.happymeteo.HappyMeteoApplication;
-import com.happymeteo.IndexActivity;
 import com.happymeteo.MenuActivity;
 import com.happymeteo.facebook.AuthDialog;
 import com.happymeteo.facebook.WebDialog.OnCompleteListener;
@@ -21,18 +20,15 @@ import com.happymeteo.utils.ServerUtilities;
 
 public class FacebookSessionService implements OnCompleteListener {
 	
-	private void openConnession(Activity activity) {
-		Log.i(Const.TAG, "openConnession");
+	public void openConnession(Activity activity, OnCompleteListener onCompleteListener) {
 		String url = "https://m.facebook.com/dialog/oauth?display=touch"
 				+ "&client_id="+Const.FACEBOOK_ID
 				+ "&scope="+Const.getFacebookReadPermission()
 				+ "&type=user_agent"
 				+ "&redirect_uri="+Const.BASE_URL;
 		
-		Log.i(Const.TAG, "url open facebook connession: "+url);
-		
 		AuthDialog facebookAuthDialog = new AuthDialog(activity, url);
-		facebookAuthDialog.setOnCompleteListener(this);
+		facebookAuthDialog.setOnCompleteListener(onCompleteListener);
 		facebookAuthDialog.show();
 	}
 	
@@ -75,7 +71,7 @@ public class FacebookSessionService implements OnCompleteListener {
 	
 	public void onClickLogin(Activity activity) {
 		if(!tryLoginUser(activity)) {
-			openConnession(activity);
+			openConnession(activity, this);
 		}
 	}
 
@@ -115,20 +111,13 @@ public class FacebookSessionService implements OnCompleteListener {
 
 	@Override
 	public void onComplete(Bundle values, FacebookException error, Activity activity) {
-		Log.i(Const.TAG, "OnCompleteListener");
 		if(values != null) {
-			for(String key : values.keySet()) {
-				Log.i(Const.TAG, key+": "+values.getString(key));
-			}
-			
 			HappyMeteoApplication.i().setAccessToken(values.getString("access_token"));
 		}
 		
 		if(error == null) {
 			tryLoginUser(activity);
 		} else {
-			// Not logged
-			Log.i(Const.TAG, "Not logged");
 			activity.finish();
 		}
 	}
