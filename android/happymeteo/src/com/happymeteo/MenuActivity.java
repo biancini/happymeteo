@@ -31,6 +31,7 @@ public class MenuActivity extends Activity {
 				&& HappyMeteoApplication.i().getCurrentUser() != null) {
 			/* Register device on happymeteo backend */
 			ServerUtilities.registerDevice(
+					getApplicationContext(), 
 					HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId(),
 					HappyMeteoApplication.i().getCurrentUser().getUser_id());
 		}
@@ -104,6 +105,7 @@ public class MenuActivity extends Activity {
 		btnChallengeTry.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				ServerUtilities.requestChallenge(
+					view.getContext(),
 					HappyMeteoApplication.i().getCurrentUser().getUser_id(),
 					HappyMeteoApplication.i().getCurrentUser().getFacebook_id(),
 					HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId());
@@ -114,13 +116,7 @@ public class MenuActivity extends Activity {
 			public void onClick(View view) {
 				Context context = view.getContext();
 				
-				/* Terminate PushNotificationsService */
-				HappyMeteoApplication.i().getPushNotificationsService().terminate(
-						getApplicationContext());
-				
-				/* Close Facebook Session */
-				HappyMeteoApplication.i().getFacebookSessionService()
-						.onClickLogout(context);
+				HappyMeteoApplication.i().logout(context);
 
 				/* Return to index activity */
 				Intent intent = new Intent(context, IndexActivity.class);
@@ -135,13 +131,7 @@ public class MenuActivity extends Activity {
 				
 				HappyMeteoApplication.i().setAccessToken("");
 				
-				/* Terminate PushNotificationsService */
-				HappyMeteoApplication.i().getPushNotificationsService().terminate(
-						getApplicationContext());
-				
-				/* Close Facebook Session */
-				HappyMeteoApplication.i().getFacebookSessionService()
-						.onClickLogout(context);
+				HappyMeteoApplication.i().logout(context);
 
 				/* Return to index activity */
 				Intent intent = new Intent(context, IndexActivity.class);
@@ -153,9 +143,7 @@ public class MenuActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		/* Terminate PushNotificationsService */
-		HappyMeteoApplication.i().getPushNotificationsService().terminate(
-				getApplicationContext());
+		HappyMeteoApplication.i().logout(getApplicationContext());
 
 		super.onDestroy();
 	}

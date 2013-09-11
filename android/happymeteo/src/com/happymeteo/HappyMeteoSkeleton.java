@@ -17,12 +17,17 @@ public class HappyMeteoSkeleton {
 	private SharedPreferences preferences;
 	private String ACCESS_TOKEN = "accessToken";
 	
+	private void reset() {
+		currentUser = null;
+		isFacebookSession = false;
+	}
+	
 	public HappyMeteoSkeleton(Context context) {
 		facebookSessionService = new FacebookSessionService();
 		pushNotificationsService = new PushNotificationsService();
-		currentUser = null;
-		isFacebookSession = false;
 		preferences = context.getSharedPreferences("HappyMeteo", android.content.Context.MODE_PRIVATE);
+		
+		reset();
 	}
 	
 	public FacebookSessionService getFacebookSessionService() {
@@ -57,5 +62,16 @@ public class HappyMeteoSkeleton {
 		Editor editor = preferences.edit();
 		editor.putString(ACCESS_TOKEN, accessToken);
 		editor.commit();
+	}
+	
+	public void logout(Context context) {
+		/* Terminate PushNotificationsService */
+		getPushNotificationsService().terminate(context);
+		
+		/* Close Facebook Session */
+		getFacebookSessionService().onClickLogout(context);
+		
+		/* Reset skeleton */
+		reset();
 	}
 }

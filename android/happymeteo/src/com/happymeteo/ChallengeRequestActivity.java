@@ -30,7 +30,7 @@ public class ChallengeRequestActivity extends Activity {
 			
 			btnAcceptChallenge.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
-					ServerUtilities.acceptChallenge(challenge.getChallenge_id(), true);
+					ServerUtilities.acceptChallenge(view.getContext(), challenge.getChallenge_id(), true);
 					
 					finish();
 				}
@@ -40,7 +40,7 @@ public class ChallengeRequestActivity extends Activity {
 			
 			btnRefuseChallenge.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
-					ServerUtilities.acceptChallenge(challenge.getChallenge_id(), false);
+					ServerUtilities.acceptChallenge(view.getContext(), challenge.getChallenge_id(), false);
 					
 					finish();
 				}

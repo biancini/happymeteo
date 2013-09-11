@@ -16,6 +16,8 @@ from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA
 
 from utils import sendToSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable
 
+import traceback
+
 class BaseRequestHandler(webapp2.RequestHandler):
   def dispatch(self):
     # Get a session store for this request.
@@ -174,61 +176,65 @@ class CreateAccountHandler(BaseRequestHandler):
         location = self.request.get('location')
         cap = self.request.get('cap')
         password = self.request.get('password')
-          
-        user = User(facebook_id=facebook_id,
-            first_name=first_name,
-            last_name=last_name,
-            gender=gender,
-            email=email,
-            age=age,
-            education=education,
-            work=work,
-            location=location,
-            cap=cap,
-            status=0,
-            password=password)
-
-        if facebook_id and facebook_id != "0":
-          # already confirmed
-          data = {
-            'message': 'CONFIRMED_OR_FACEBOOK',
-          }
-          user.status = 2
-        else:
-          # send an email to confirm the user
-          data = {
-            'message': 'NOT_CONFIRMED',
-          }
-          import os
-          user.confirmation_code = os.urandom(32).encode('hex')
-          user.status = 1
-
-          from google.appengine.api import mail
-          message = mail.EmailMessage(sender="happymeteo <%s>" % EMAIL,
-                                      subject="Conferma del tuo account su Happy Meteo")
-
-          message.to = "%s %s <%s>" % (first_name, last_name, email)
-          message.body = """
-Benvenuto %s,
-
+        
+        query = User.gql('WHERE email = \'%s\''%email)
+        
+        if query.count() == 0:
+            user = User(facebook_id=facebook_id,
+                first_name=first_name,
+                last_name=last_name,
+                gender=gender,
+                email=email,
+                age=age,
+                education=education,
+                work=work,
+                location=location,
+                cap=cap,
+                status=0,
+                password=password)
+    
+            if facebook_id and facebook_id != "0":
+              # already confirmed
+              data = {
+                'message': 'CONFIRMED_OR_FACEBOOK',
+              }
+              user.status = 2
+            else:
+              # send an email to confirm the user
+              data = {
+                'message': 'NOT_CONFIRMED',
+              }
+              import os
+              user.confirmation_code = os.urandom(32).encode('hex')
+              user.status = 1
+    
+              from google.appengine.api import mail
+              message = mail.EmailMessage(sender="happymeteo <%s>" % EMAIL,
+                                          subject="Conferma del tuo account su Happy Meteo")
+    
+              message.to = "%s %s <%s>" % (first_name, last_name, email)
+              message.body = """Benvenuto %s,\n\n
 Il tuo account su Happy Meteo ha bisogno di essere verificato, per
 farlo clicca sul link sottostante:
-https://happymeteo.appspot.com/confirm_user?confirmation_code=%s
-
+https://happymeteo.appspot.com/confirm_user?confirmation_code=%s\n\n
 Saluti,
 Happy Meteo Team
-          """ % (first_name, user.confirmation_code)
-
-          message.send()
-        
-        user.put()
-        data['user_id'] = user.key().id()
+              """ % (first_name, user.confirmation_code)
+    
+              message.send()
+            
+            user.put()
+            data['user_id'] = user.key().id()
+        else:
+            data = {
+              'error': 'Create Account error',
+              'message': 'user with same email already exists',
+            }
       except:
         data = {
           'error': 'Create Account error',
-          'message': '%s' % sys.exc_info()[0],
+          'message': '%s' % traceback.format_exc(),
         }
-        raise
     
       self.response.headers['Content-Type'] = 'application/json'
       self.response.out.write(json.dumps(data))
@@ -244,6 +250,8 @@ class NormalLoginHandler(BaseRequestHandler):
 
         if q.count() > 0:
           user = q.get()
+          
+          print '%s %s'%(user.password, pwd_parameter) 
 
           if user.password == pwd_parameter:
             data = user.toJson()
@@ -304,6 +312,10 @@ class RegisterHandler(BaseRequestHandler):
     else:
       device = Device(registration_id=registrationId, user_id=userId)
       device.put()
+      
+    data = { 'message': 'ok' }
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
 
 class UnregisterHandler(BaseRequestHandler):
 
@@ -313,7 +325,10 @@ class UnregisterHandler(BaseRequestHandler):
     for device in query.run(limit=1):
       print "delete %s" % (device.registration_id)
       db.delete(device)
-    return webapp2.redirect('/')
+    
+    data = { 'message': 'ok' }
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
 
 class SendMessageHandler(BaseRequestHandler):
 
@@ -487,6 +502,10 @@ class SubmitChallengeHandler(BaseRequestHandler):
                          RISPOSTA_SFIDA, id_user, q, latitude+" "+longitude, datetime.now(), questions[q]))
             print response
             
+        # TODO Calcolare lo score
+        # TODO aggiornare il challenge
+        # TODO Se primo turno manda la notifica a utente b
+            
         data = { 'message': 'ok', 'score': '10'}
     except:
         data = {
@@ -533,13 +552,25 @@ class HappyMeteoHandler(BaseRequestHandler):
         
     value_tomorrow = (value_today + value_yesterday + value_beforeyesterday)/3
     
-    response = { 'yesterday': value_yesterday, 'today': value_today, 'tomorrow': value_tomorrow}
+    response = {'yesterday': value_yesterday, 'today': value_today, 'tomorrow': value_tomorrow}
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(response))
 
 class HappyContextHandler(BaseRequestHandler):
 
   def post(self):
-    response = { 'happiness': '6'}
+    access_token = getGoogleAccessToken()
+    from datetime import date, timedelta
+
+    today = date.today()
+    tomorrow = today + timedelta(1)
+    response_today = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1'%(RISPOSTA, today, tomorrow))
+    response_today_json = json.loads(response_today)
+    if "rows" in response_today_json:
+        value_today = float(response_today_json["rows"][0][0])
+    else:
+        value_today = 0.0
+        
+    response = {'you': value_today, 'around': '6'}
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(response))

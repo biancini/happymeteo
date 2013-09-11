@@ -29,7 +29,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			HappyMeteoApplication.i().getPushNotificationsService().setRegistrationId(registrationId);
 			
 			/* Register device on happymeteo backend */
-			ServerUtilities.registerDevice(registrationId, HappyMeteoApplication.i().getCurrentUser().getUser_id());
+			ServerUtilities.registerDevice(getApplicationContext(), registrationId, HappyMeteoApplication.i().getCurrentUser().getUser_id());
 		}
 	}
 
@@ -42,7 +42,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		HappyMeteoApplication.i().getPushNotificationsService().setRegistrationId("");
 		
 		/* Unregister device on happymeteo backend */
-		ServerUtilities.unregisterDevice(registrationId);
+		ServerUtilities.unregisterDevice(getApplicationContext(), registrationId);
 	}
 
 	/**

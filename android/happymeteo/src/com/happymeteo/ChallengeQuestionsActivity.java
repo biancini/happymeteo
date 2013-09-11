@@ -65,7 +65,7 @@ public class ChallengeQuestionsActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				if(!questionsStarted) {
-					JSONArray jsonArray = ServerUtilities.getChallengeQuestions();
+					JSONArray jsonArray = ServerUtilities.getChallengeQuestions(view.getContext());
 	
 					if (jsonArray != null) {
 						for (int i = 0; i < jsonArray.length(); i++) {
@@ -126,7 +126,6 @@ public class ChallengeQuestionsActivity extends Activity {
 											try {
 												questions.put(id, value);
 											} catch (JSONException e) {
-												// TODO Auto-generated catch block
 												e.printStackTrace();
 											}
 											tvText.setText(value);
@@ -178,7 +177,7 @@ public class ChallengeQuestionsActivity extends Activity {
 					params.put("id_user", HappyMeteoApplication.i().getCurrentUser().getUser_id());
 					params.put("questions", questions.toString());
 					
-					if(ServerUtilities.submitChallenge(params)) {
+					if(ServerUtilities.submitChallenge(view.getContext(), params)) {
 						finish();
 					}
 				}

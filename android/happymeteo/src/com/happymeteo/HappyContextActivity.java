@@ -1,5 +1,7 @@
 package com.happymeteo;
 
+import org.json.JSONObject;
+
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
@@ -25,7 +27,7 @@ public class HappyContextActivity extends Activity {
 			}
 		});
 		
-		String json = ServerUtilities.happyContext();
+		JSONObject json = ServerUtilities.happyContext(getApplicationContext());
 		Log.i(Const.TAG, "json: " + json);
 	}
 

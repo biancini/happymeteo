@@ -16,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 
 import com.happymeteo.models.CreateAccountDTO;
@@ -25,7 +27,7 @@ public final class ServerUtilities {
 	/**
 	 * Create account
 	 */
-	public static CreateAccountDTO createAccount(String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, String cap, String password) {
+	public static CreateAccountDTO createAccount(Context context, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, String cap, String password) {
 		Log.i(Const.TAG, "createAccount");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("facebook_id", facebook_id);
@@ -39,16 +41,13 @@ public final class ServerUtilities {
 		params.put("location", location);
 		params.put("cap", cap);
 		params.put("password", password);
-		String json = ServerUtilities.postRequest(Const.CREATE_ACCOUNT, params);
-		Log.i(Const.TAG, json);
+		String json = ServerUtilities.postRequest(context, Const.CREATE_ACCOUNT, params);
 		try {
 			JSONObject jsonObject = new JSONObject(json);
-			if(!isError(jsonObject)) {
-				if(jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) {
-					return new CreateAccountDTO(Const.CREATE_ACCOUNT_STATUS.CONFIRMED_OR_FACEBOOK, jsonObject.getString("user_id"));
-				} else {
-					return new CreateAccountDTO(Const.CREATE_ACCOUNT_STATUS.NOT_CONFIRMED, jsonObject.getString("user_id"));
-				}
+			if(jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) {
+				return new CreateAccountDTO(Const.CREATE_ACCOUNT_STATUS.CONFIRMED_OR_FACEBOOK, jsonObject.getString("user_id"));
+			} else {
+				return new CreateAccountDTO(Const.CREATE_ACCOUNT_STATUS.NOT_CONFIRMED, jsonObject.getString("user_id"));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -59,15 +58,14 @@ public final class ServerUtilities {
 	/**
 	 * Verify access token and register the user through facebook
 	 */
-	public static User facebookLogin(String accessToken) {
+	public static User facebookLogin(Context context, String accessToken) {
 		Log.i(Const.TAG, "facebookLogin (accessToken = " + accessToken + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("accessToken", accessToken);
-		String json = ServerUtilities.postRequest(Const.FACEBOOK_LOGIN_URL, params);
-		Log.i(Const.TAG, json);
+		String json = ServerUtilities.postRequest(context, Const.FACEBOOK_LOGIN_URL, params);
 		try {
-			JSONObject jsonObject = new JSONObject(json);
-			if(!isError(jsonObject)) {
+			if(json != null) {
+				JSONObject jsonObject = new JSONObject(json);
 				return new User(jsonObject);
 			}
 		} catch (JSONException e) {
@@ -79,16 +77,15 @@ public final class ServerUtilities {
 	/**
 	 * Login with email and password
 	 */
-	public static User normalLogin(String email, String password) {
+	public static User normalLogin(Context context, String email, String password) {
 		Log.i(Const.TAG, "normalLogin (email = " + email + ", password = " + password +")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("email", email);
 		params.put("password", password);
-		String json = ServerUtilities.postRequest(Const.NORMAL_LOGIN_URL, params);
-		Log.i(Const.TAG, json);
+		String json = ServerUtilities.postRequest(context, Const.NORMAL_LOGIN_URL, params);
 		try {
-			JSONObject jsonObject = new JSONObject(json);
-			if(!isError(jsonObject)) {
+			if(json != null) {
+				JSONObject jsonObject = new JSONObject(json);
 				return new User(jsonObject);
 			}
 		} catch (JSONException e) {
@@ -101,35 +98,34 @@ public final class ServerUtilities {
 	/**
 	 * Register this device within the server
 	 */
-	public static void registerDevice(String registrationId, String userId) {
+	public static void registerDevice(Context context, String registrationId, String userId) {
 		Log.i(Const.TAG, "registering device (regId = " + registrationId + ", userId = " + userId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("registrationId", registrationId);
 		params.put("userId", userId);
-		ServerUtilities.postRequest(Const.REGISTER_URL, params);
+		ServerUtilities.postRequest(context, Const.REGISTER_URL, params);
 	}
 
 	/**
 	 * Unregister this device within the server
 	 */
-	public static void unregisterDevice(String registrationId) {
+	public static void unregisterDevice(Context context, String registrationId) {
 		Log.i(Const.TAG, "unregistering device (registrationId = " + registrationId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("registrationId", registrationId);
-		ServerUtilities.postRequest(Const.UNREGISTER_URL, params);
+		ServerUtilities.postRequest(context, Const.UNREGISTER_URL, params);
 	}
 	
 	/**
 	 * Get questions
 	 */
-	public static JSONArray getQuestions() {
+	public static JSONArray getQuestions(Context context) {
 		Log.i(Const.TAG, "getQuestions");
 		Map<String, String> params = new HashMap<String, String>();
-		String json = ServerUtilities.postRequest(Const.GET_QUESTIONS_URL, params);
+		String json = ServerUtilities.postRequest(context, Const.GET_QUESTIONS_URL, params);
 		JSONArray jsonArray;
-		Log.i(Const.TAG, json);
 		try {
-			jsonArray = new JSONArray(json);
+			jsonArray = new JSONArray(json.toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 			jsonArray = null;
@@ -140,46 +136,43 @@ public final class ServerUtilities {
 	/**
 	 * Submit question
 	 */
-	public static boolean submitQuestions(Map<String, String> params) {
+	public static boolean submitQuestions(Context context, Map<String, String> params) {
 		Log.i(Const.TAG, "submit questions (params = " + params + ")");
-		ServerUtilities.postRequest(Const.SUBMIT_QUESTIONS_URL, params);
+		ServerUtilities.postRequest(context, Const.SUBMIT_QUESTIONS_URL, params);
 		return true;
 	}
 	
 	/**
 	 * Request challenge
 	 */
-	public static void requestChallenge(String userId, String facebookId, String registrationId) {
+	public static void requestChallenge(Context context, String userId, String facebookId, String registrationId) {
 		Log.i(Const.TAG, "request challenge (userId = " + userId + ", facebookId = " + facebookId + ", registrationId = "+registrationId + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("userId", userId);
 		params.put("facebookId", facebookId);
 		params.put("registrationId", registrationId);
-		String json = ServerUtilities.postRequest(Const.REQUEST_CHALLENGE_URL, params);
-		Log.i(Const.TAG, json);
+		ServerUtilities.postRequest(context, Const.REQUEST_CHALLENGE_URL, params);
 	}
 	
 	/**
 	 * Accept challenge
 	 */
-	public static void acceptChallenge(String challengeId, Boolean accepted) {
+	public static void acceptChallenge(Context context, String challengeId, Boolean accepted) {
 		Log.i(Const.TAG, "accept challenge (challengeId = " + challengeId + ", accepted = "+accepted.toString() + ")");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("challengeId", challengeId);
 		params.put("accepted", accepted.toString());
-		String json = ServerUtilities.postRequest(Const.ACCEPT_CHALLENGE_URL, params);
-		Log.i(Const.TAG, json);
+		ServerUtilities.postRequest(context, Const.ACCEPT_CHALLENGE_URL, params);
 	}
 	
 	/**
 	 * Get challenge questions
 	 */
-	public static JSONArray getChallengeQuestions() {
+	public static JSONArray getChallengeQuestions(Context context) {
 		Log.i(Const.TAG, "getChallengeQuestions");
 		Map<String, String> params = new HashMap<String, String>();
-		String json = ServerUtilities.postRequest(Const.QUESTIONS_CHALLENGE_URL, params);
+		String json = ServerUtilities.postRequest(context, Const.QUESTIONS_CHALLENGE_URL, params);
 		JSONArray jsonArray;
-		Log.i(Const.TAG, json);
 		try {
 			jsonArray = new JSONArray(json);
 		} catch (JSONException e) {
@@ -192,95 +185,128 @@ public final class ServerUtilities {
 	/**
 	 * Submit challenge question
 	 */
-	public static boolean submitChallenge(Map<String, String> params) {
+	public static boolean submitChallenge(Context context, Map<String, String> params) {
 		Log.i(Const.TAG, "submit challenge (params = " + params + ")");
-		String response = ServerUtilities.postRequest(Const.SUBMIT_CHALLENGE_URL, params);
-		Log.i(Const.TAG, "response: "+response);
+		ServerUtilities.postRequest(context, Const.SUBMIT_CHALLENGE_URL, params);
 		return true;
 	}
 	
 	/**
 	 * happy meteo
 	 */
-	public static String happyMeteo() {
+	public static JSONObject happyMeteo(Context context) {
 		Log.i(Const.TAG, "happyMeteo");
 		Map<String, String> params = new HashMap<String, String>();
-		String json = ServerUtilities.postRequest(Const.HAPPY_METEO_URL, params);
-		return json;
+		String json = ServerUtilities.postRequest(context, Const.HAPPY_METEO_URL, params);
+		try {
+			JSONObject jsonObject = new JSONObject(json);
+			return jsonObject;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**
 	 * happy context
 	 */
-	public static String happyContext() {
+	public static JSONObject happyContext(Context context) {
 		Log.i(Const.TAG, "happyContext");
 		Map<String, String> params = new HashMap<String, String>();
-		String json = ServerUtilities.postRequest(Const.HAPPY_CONTEXT_URL, params);
-		return json;
+		String json = ServerUtilities.postRequest(context, Const.HAPPY_CONTEXT_URL, params);
+		try {
+			JSONObject jsonObject = new JSONObject(json);
+			return jsonObject;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	private static boolean isError(JSONObject jsonObject) {
+	private static JSONObject isError(String json) {
 		try {
+			JSONObject jsonObject = new JSONObject(json);
 			String error = jsonObject.getString("error");
 			Log.e(Const.TAG, error + ":" + jsonObject.getString("message"));
-			return true;
+			return jsonObject;
 		} catch (JSONException e) {
-			return false;
+			return null;
 		}
 	}
 
-	private static String postRequest(String serverUrl, Map<String, String> parameters) {
-		URL url;
+	private static String postRequest(Context context, String serverUrl, Map<String, String> parameters) {
 		try {
-			url = new URL(serverUrl);
-		} catch (MalformedURLException e) {
-			throw new IllegalArgumentException("Wrong URL: " + serverUrl);
-		}
-
-		StringBuilder requestBody = new StringBuilder();
-		Iterator<Entry<String, String>> it = parameters.entrySet().iterator();
-		while (it.hasNext()) {
-			Entry<String, String> entry = it.next();
-			requestBody.append(entry.toString());
-			if (it.hasNext()) {
-				requestBody.append('&');
+			URL url;
+			try {
+				url = new URL(serverUrl);
+			} catch (MalformedURLException e) {
+				throw new IllegalArgumentException("Wrong URL: " + serverUrl);
 			}
-		}
-
-		String output = "";
-		byte[] data = requestBody.toString().getBytes();
-		HttpURLConnection conn = null;
-		try {
-			Log.i(Const.TAG, "POST: "+serverUrl+" "+url);
-			conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setUseCaches(false);
-			conn.setFixedLengthStreamingMode(data.length);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded;charset=UTF-8");
-			OutputStream out = conn.getOutputStream();
-			out.write(data);
-			out.close();
-			int status = conn.getResponseCode();
-			if (status != 200) {
-				throw new IOException("Request failed with status: " + status);
+	
+			StringBuilder requestBody = new StringBuilder();
+			Iterator<Entry<String, String>> it = parameters.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry<String, String> entry = it.next();
+				requestBody.append(entry.toString());
+				if (it.hasNext()) {
+					requestBody.append('&');
+				}
 			}
-
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					(conn.getInputStream())));
-			String line;
-			while ((line = br.readLine()) != null) {
-				output += line;
+	
+			String output = "";
+			byte[] data = requestBody.toString().getBytes();
+			HttpURLConnection conn = null;
+			try {
+				Log.i(Const.TAG, "POST: "+serverUrl+" "+url);
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setDoOutput(true);
+				conn.setUseCaches(false);
+				conn.setFixedLengthStreamingMode(data.length);
+				conn.setRequestMethod("POST");
+				conn.setRequestProperty("Content-Type",
+						"application/x-www-form-urlencoded;charset=UTF-8");
+				OutputStream out = conn.getOutputStream();
+				out.write(data);
+				out.close();
+				int status = conn.getResponseCode();
+				if (status != 200) {
+					throw new IOException("Request failed with status: " + status);
+				}
+	
+				BufferedReader br = new BufferedReader(new InputStreamReader(
+						(conn.getInputStream())));
+				String line;
+				while ((line = br.readLine()) != null) {
+					output += line;
+				}
+			} catch(Exception e) {
+				Log.e(Const.TAG, e.getMessage(), e);
+			} finally {
+				if (conn != null) {
+					conn.disconnect();
+				}
 			}
+			
+			JSONObject jsonObject = isError(output);
+			
+			if(jsonObject != null) {
+				AlertDialogManager alert = new AlertDialogManager();
+				alert.showAlertDialog(context, jsonObject.getString("error"),
+						jsonObject.getString("message"), false, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {}
+						}); 
+			}
+			
+			return output;
 		} catch(Exception e) {
-			Log.e(Const.TAG, e.getMessage(), e);
-		} finally {
-			if (conn != null) {
-				conn.disconnect();
-			}
+			e.printStackTrace();
+			AlertDialogManager alert = new AlertDialogManager();
+			alert.showAlertDialog(context, "Errore",
+					e.getStackTrace().toString(), false, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {}
+					}); 
 		}
 
-		return output;
+		return null;
 	}
 }

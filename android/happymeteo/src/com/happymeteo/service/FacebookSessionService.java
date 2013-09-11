@@ -43,7 +43,7 @@ public class FacebookSessionService implements OnCompleteListener {
 			if(accessToken != null) {
 				// Logged
 				Log.i(Const.TAG, "Logged");
-				User user = ServerUtilities.facebookLogin(accessToken);
+				User user = ServerUtilities.facebookLogin(activity.getApplicationContext(), accessToken);
 				
 				if(user != null) {
 					HappyMeteoApplication.i().setFacebookSession(true);

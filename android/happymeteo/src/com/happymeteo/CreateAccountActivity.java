@@ -90,6 +90,7 @@ public class CreateAccountActivity extends Activity {
 				}
 				
 				CreateAccountDTO cDto = ServerUtilities.createAccount(
+						view.getContext(),
 						create_account_facebook.getText().toString(), 
 						create_account_fist_name.getText().toString(), 
 						create_account_last_name.getText().toString(), 
@@ -129,7 +130,7 @@ public class CreateAccountActivity extends Activity {
 					
 					case NOT_CONFIRMED:
 						AlertDialogManager alert = new AlertDialogManager();
-						alert.showAlertDialog(view.getContext(), "Creazione completata!",
+						alert.showAlertDialog(view.getContext(), "Account non verificato",
 								"Presto verra  inviata una email di conferma all'email indicata", true, new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog, int which) {
 										finish();

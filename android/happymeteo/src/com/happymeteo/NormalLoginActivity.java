@@ -27,7 +27,7 @@ public class NormalLoginActivity extends Activity {
 		btnGoNormalLogin.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View arg0) {
+			public void onClick(View view) {
 				/* GO */
 				String email = normal_login_email.getText().toString();
 				String password = "";
@@ -40,7 +40,7 @@ public class NormalLoginActivity extends Activity {
 				Log.i(Const.TAG, "email: " + email);
 				Log.i(Const.TAG, "password: " + password);
 				
-				User user = ServerUtilities.normalLogin(email, password);
+				User user = ServerUtilities.normalLogin(view.getContext(), email, password);
 				
 				if(user != null) {
 					/* Set current user */

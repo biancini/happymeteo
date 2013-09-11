@@ -65,7 +65,7 @@ public class QuestionActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				if(!questionsStarted) {
-					JSONArray jsonArray = ServerUtilities.getQuestions();
+					JSONArray jsonArray = ServerUtilities.getQuestions(view.getContext());
 	
 					if (jsonArray != null) {
 						for (int i = 0; i < jsonArray.length(); i++) {
@@ -178,7 +178,7 @@ public class QuestionActivity extends Activity {
 					params.put("id_user", HappyMeteoApplication.i().getCurrentUser().getUser_id());
 					params.put("questions", questions.toString());
 					
-					if(ServerUtilities.submitQuestions(params)) {
+					if(ServerUtilities.submitQuestions(view.getContext(), params)) {
 						finish();
 					}
 				}

@@ -23,6 +23,10 @@ public class ChallengeActivity extends Activity {
 		Button btnChallengeFacebook = (Button) findViewById(R.id.btnChallengeFacebook);
 		Button btnChallengeRandom = (Button) findViewById(R.id.btnChallengeRandom);
 		Button btnBackChallenge = (Button) findViewById(R.id.btnBackChallenge);
+		
+		if(!HappyMeteoApplication.i().isFacebookSession()) {
+			btnChallengeFacebook.setVisibility(View.GONE);
+		}
 
 		btnChallengeFacebook.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
