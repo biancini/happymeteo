@@ -43,6 +43,7 @@ public class MenuActivity extends Activity {
 			userImage.setCropped(true);
 		}
 
+		Button btnModifyAccount = (Button) findViewById(R.id.btnModifyAccount);
 		Button btnInformationPage = (Button) findViewById(R.id.btnInformationPage);
 		Button btnHappyMeteo = (Button) findViewById(R.id.btnHappyMeteo);
 		Button btnHappyContext = (Button) findViewById(R.id.btnHappyContext);
@@ -52,6 +53,14 @@ public class MenuActivity extends Activity {
 		Button btnChallengeTry = (Button) findViewById(R.id.btnChallengeTry);
 		Button btnLogout = (Button) findViewById(R.id.btnLogout);
 		Button btnLogout2 = (Button) findViewById(R.id.btnLogout2);
+		
+		btnModifyAccount.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				Context context = view.getContext();
+				Intent intent = new Intent(context, CreateAccountActivity.class);
+				context.startActivity(intent);
+			}
+		});
 
 		btnInformationPage.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {

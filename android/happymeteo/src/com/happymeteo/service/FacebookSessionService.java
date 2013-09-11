@@ -11,6 +11,7 @@ import android.webkit.CookieSyncManager;
 import com.facebook.FacebookException;
 import com.happymeteo.CreateAccountActivity;
 import com.happymeteo.HappyMeteoApplication;
+import com.happymeteo.IndexActivity;
 import com.happymeteo.MenuActivity;
 import com.happymeteo.facebook.AuthDialog;
 import com.happymeteo.facebook.WebDialog.OnCompleteListener;
@@ -47,28 +48,15 @@ public class FacebookSessionService implements OnCompleteListener {
 				
 				if(user != null) {
 					HappyMeteoApplication.i().setFacebookSession(true);
+					HappyMeteoApplication.i().setCurrentUser(user);
 					
 					if(user.getRegistered() == User.USER_NOT_REGISTERED) {
 						// Switch to create account activity if not registered
-						Intent intent = new Intent(activity.getApplicationContext(), CreateAccountActivity.class);
-						intent.putExtra("facebook_id", user.getFacebook_id());
-						intent.putExtra("first_name", user.getFirst_name());
-						intent.putExtra("last_name", user.getLast_name());
-						intent.putExtra("gender", user.getGender());
-						intent.putExtra("email", user.getEmail());
-						intent.putExtra("age", user.getAge());
-						intent.putExtra("education", user.getEducation());
-						intent.putExtra("work", user.getWork());
-						intent.putExtra("location", user.getLocation());
-						intent.putExtra("cap", user.getCap());
-						
-						Log.i(Const.TAG, "CreateAccountActivity startActivity");
+						Intent intent = new Intent(activity, CreateAccountActivity.class);
 						activity.startActivity(intent);
 					} else {
-						HappyMeteoApplication.i().setCurrentUser(user);
-						
-						// Switch to menu activity if registered
-						Intent intent = new Intent(activity.getApplicationContext(), MenuActivity.class);
+						Intent intent = new Intent(activity, MenuActivity.class);
+						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						activity.startActivity(intent);
 					}
 					return true;
@@ -81,8 +69,8 @@ public class FacebookSessionService implements OnCompleteListener {
 		return false;
 	}
 	
-	public void initialize(Activity activity) {
-		tryLoginUser(activity);
+	public boolean initialize(Activity activity) {
+		return tryLoginUser(activity);
 	}
 	
 	public void onClickLogin(Activity activity) {

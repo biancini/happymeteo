@@ -27,9 +27,10 @@ public final class ServerUtilities {
 	/**
 	 * Create account
 	 */
-	public static CreateAccountDTO createAccount(Context context, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, String cap, String password) {
+	public static CreateAccountDTO createAccount(Context context, String user_id, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String location, String cap, String password) {
 		Log.i(Const.TAG, "createAccount");
 		Map<String, String> params = new HashMap<String, String>();
+		params.put("user_id", user_id);
 		params.put("facebook_id", facebook_id);
 		params.put("first_name", first_name);
 		params.put("last_name", last_name);
@@ -257,7 +258,6 @@ public final class ServerUtilities {
 			byte[] data = requestBody.toString().getBytes();
 			HttpURLConnection conn = null;
 			try {
-				Log.i(Const.TAG, "POST: "+serverUrl+" "+url);
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setDoOutput(true);
 				conn.setUseCaches(false);
@@ -294,7 +294,8 @@ public final class ServerUtilities {
 				alert.showAlertDialog(context, jsonObject.getString("error"),
 						jsonObject.getString("message"), false, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int which) {}
-						}); 
+						});
+				return null;
 			}
 			
 			return output;

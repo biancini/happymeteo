@@ -12,7 +12,7 @@ from google.appengine.ext import db
 
 from models import User, Device, Challenge
 
-from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA
+from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA, CREATE_ACCOUNT_EMAIL
 
 from utils import sendToSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable
 
@@ -165,6 +165,7 @@ class CreateAccountHandler(BaseRequestHandler):
       data = {}
       
       try:
+        user_id = self.request.get('user_id')
         facebook_id = self.request.get('facebook_id')
         first_name = self.request.get('first_name')
         last_name = self.request.get('last_name')
@@ -177,58 +178,68 @@ class CreateAccountHandler(BaseRequestHandler):
         cap = self.request.get('cap')
         password = self.request.get('password')
         
-        query = User.gql('WHERE email = \'%s\''%email)
-        
-        if query.count() == 0:
-            user = User(facebook_id=facebook_id,
-                first_name=first_name,
-                last_name=last_name,
-                gender=gender,
-                email=email,
-                age=age,
-                education=education,
-                work=work,
-                location=location,
-                cap=cap,
-                status=0,
-                password=password)
-    
-            if facebook_id and facebook_id != "0":
-              # already confirmed
-              data = {
-                'message': 'CONFIRMED_OR_FACEBOOK',
-              }
-              user.status = 2
-            else:
-              # send an email to confirm the user
-              data = {
-                'message': 'NOT_CONFIRMED',
-              }
-              import os
-              user.confirmation_code = os.urandom(32).encode('hex')
-              user.status = 1
-    
-              from google.appengine.api import mail
-              message = mail.EmailMessage(sender="happymeteo <%s>" % EMAIL,
-                                          subject="Conferma del tuo account su Happy Meteo")
-    
-              message.to = "%s %s <%s>" % (first_name, last_name, email)
-              message.body = """Benvenuto %s,\n\n
-Il tuo account su Happy Meteo ha bisogno di essere verificato, per
-farlo clicca sul link sottostante:
-https://happymeteo.appspot.com/confirm_user?confirmation_code=%s\n\n
-Saluti,
-Happy Meteo Team
-              """ % (first_name, user.confirmation_code)
-    
-              message.send()
+        if user_id == "":
+            query = User.gql('WHERE email = \'%s\''%email)
             
-            user.put()
-            data['user_id'] = user.key().id()
+            if query.count() == 0:
+                user = User(facebook_id=facebook_id,
+                    first_name=first_name,
+                    last_name=last_name,
+                    gender=gender,
+                    email=email,
+                    age=age,
+                    education=education,
+                    work=work,
+                    location=location,
+                    cap=cap,
+                    status=0,
+                    password=password)
+        
+                if facebook_id and facebook_id != "0":
+                  # already confirmed
+                  data = {
+                    'message': 'CONFIRMED_OR_FACEBOOK',
+                  }
+                  user.status = 2
+                else:
+                  # send an email to confirm the user
+                  data = {
+                    'message': 'NOT_CONFIRMED',
+                  }
+                  import os
+                  user.confirmation_code = os.urandom(32).encode('hex')
+                  user.status = 1
+        
+                  from google.appengine.api import mail
+                  message = mail.EmailMessage(sender="happymeteo <%s>" % EMAIL,
+                                              subject="Conferma del tuo account su Happy Meteo")
+                  message.to = "%s %s <%s>" % (first_name, last_name, email)
+                  message.body = CREATE_ACCOUNT_EMAIL % (first_name, user.confirmation_code)
+                  message.send()
+                
+                user.put()
+                data['user_id'] = user.key().id()
+            else:
+                data = {
+                  'error': 'Create Account error',
+                  'message': 'user with same email already exists',
+                }
         else:
+            user = User.get_by_id(int(user_id))
+            user.facebook_id=facebook_id
+            user.first_name=first_name
+            user.last_name=last_name
+            user.gender=gender
+            user.email=email
+            user.age=age
+            user.education=education
+            user.work=work
+            user.location=location
+            user.cap=cap
+            user.put()
             data = {
-              'error': 'Create Account error',
-              'message': 'user with same email already exists',
+                'message': 'CONFIRMED_OR_FACEBOOK',
+                'user_id': user.key().id()
             }
       except:
         data = {

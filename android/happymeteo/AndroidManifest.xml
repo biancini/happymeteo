@@ -59,7 +59,8 @@
         <activity
             android:name="com.happymeteo.MenuActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_name" />
+            android:label="@string/app_name" 
+            android:launchMode="singleInstance"/>
         <activity
             android:name="com.happymeteo.CreateAccountActivity"
             android:label="@string/app_name" />

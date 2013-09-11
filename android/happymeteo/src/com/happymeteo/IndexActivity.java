@@ -38,7 +38,11 @@ public class IndexActivity extends Activity {
 		}
 		
 		/* Initialize HappyMeteoApplication */
-		HappyMeteoApplication.i().getFacebookSessionService().initialize(this);
+		if(HappyMeteoApplication.i().getFacebookSessionService().initialize(this)) {
+			Intent intent = new Intent(this, MenuActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			this.startActivity(intent);
+		}
 		
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		Button btnLoginHappyMeteo = (Button) findViewById(R.id.btnLoginHappyMeteo);

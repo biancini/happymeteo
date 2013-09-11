@@ -25,3 +25,10 @@ DOMANDA = "18GPlkUTN9Qbi_JaZVkAvFKWyiQNgO-OD8v8M5W8"
 SFIDA = "1dRqKaRI4lCRT6TRnbqloYM4U7m2UK3d7oVM4W0o"
 RISPOSTA = "1JMpJQMAWxqF3Kd18TFgqvyCBZUBH8N1Vx6YAZ3Y"
 RISPOSTA_SFIDA = "1xlr5InohkX_CElhTaMU4PZeRhfjBQs--Pe54d2s"
+
+CREATE_ACCOUNT_EMAIL = """Benvenuto %s,\n\n
+Il tuo account su Happy Meteo ha bisogno di essere verificato, per
+farlo clicca sul link sottostante:
+https://happymeteo.appspot.com/confirm_user?confirmation_code=%s\n\n
+Saluti,
+Appy Meteo Team"""

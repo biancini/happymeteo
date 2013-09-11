@@ -18,6 +18,8 @@ import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
 
 public class CreateAccountActivity extends Activity {
+	private String user_id;
+	private String facebook_id;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,8 @@ public class CreateAccountActivity extends Activity {
 		
 		Log.i(Const.TAG, "Create CreateAccountActivity");
 		
-		final EditText create_account_facebook = (EditText) findViewById(R.id.create_account_facebook);
+		this.user_id = "";
+		
 		final EditText create_account_fist_name = (EditText) findViewById(R.id.create_account_fist_name);
 		final EditText create_account_last_name = (EditText) findViewById(R.id.create_account_last_name);
 		final Spinner create_account_gender = (Spinner) findViewById(R.id.create_account_gender);
@@ -37,40 +40,39 @@ public class CreateAccountActivity extends Activity {
 		final Spinner create_account_work = (Spinner) findViewById(R.id.create_account_work);
 		final EditText create_account_location = (EditText) findViewById(R.id.create_account_location);
 		final EditText create_account_cap = (EditText) findViewById(R.id.create_account_cap);
+		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
 		
 		if(HappyMeteoApplication.i().isFacebookSession()) {
 			create_account_password.setVisibility(View.GONE);
-			
-			/* Get parameters */
-			String facebook_id = getIntent().getStringExtra("facebook_id");
-			String first_name = getIntent().getStringExtra("first_name") == null ? "" : getIntent().getStringExtra("first_name");
-			String last_name = getIntent().getStringExtra("last_name") == null ? "" : getIntent().getStringExtra("last_name");
-			int gender = getIntent().getIntExtra("gender", 0);
-			String email = getIntent().getStringExtra("email") == null ? "" : getIntent().getStringExtra("email");
-			int age = getIntent().getIntExtra("age", 0);
-			int education = getIntent().getIntExtra("education", 0);
-			int work = getIntent().getIntExtra("work", 0);
-			String location = getIntent().getStringExtra("location") == null ? "" : getIntent().getStringExtra("location");
-			String cap = getIntent().getStringExtra("cap") == null ? "" : getIntent().getStringExtra("cap");
-			
-			create_account_facebook.setText(String.valueOf(facebook_id));
-			create_account_fist_name.setText(first_name);
-			create_account_last_name.setText(last_name);
-			create_account_gender.setSelection(gender);
-			create_account_email.setText(email);
-			create_account_age.setSelection(age);
-			create_account_education.setSelection(education);
-			create_account_work.setSelection(work);
-			create_account_location.setText(location);
-			create_account_cap.setText(cap);
 		}
 		
-		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
+		User user = HappyMeteoApplication.i().getCurrentUser();
+		
+		if(user != null) {
+			this.user_id = user.getUser_id();
+			Log.i(Const.TAG, "Create CreateAccountActivity: "+user.getUser_id());
+			this.facebook_id = user.getFacebook_id();
+			create_account_fist_name.setText(user.getFirst_name());
+			create_account_last_name.setText(user.getLast_name());
+			create_account_gender.setSelection(user.getGender());
+			create_account_email.setText(user.getEmail());
+			create_account_age.setSelection(user.getAge());
+			create_account_education.setSelection(user.getEducation());
+			create_account_work.setSelection(user.getWork());
+			create_account_location.setText(user.getLocation());
+			create_account_cap.setText(user.getCap());
+			
+			if(this.user_id != "") {
+				btnCreateUser.setText(R.string.modify_account);
+			}
+		}
+		
+		
 		btnCreateUser.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View view) {
-				Log.i(Const.TAG, "create_account_facebook: "+create_account_facebook.getText());
+				Log.i(Const.TAG, "this.facebook_id: "+facebook_id);
 				Log.i(Const.TAG, "create_account_fist_name: "+create_account_fist_name.getText());
 				Log.i(Const.TAG, "create_account_last_name: "+create_account_last_name.getText());
 				Log.i(Const.TAG, "create_account_gender: "+create_account_gender.getSelectedItemPosition());
@@ -91,7 +93,8 @@ public class CreateAccountActivity extends Activity {
 				
 				CreateAccountDTO cDto = ServerUtilities.createAccount(
 						view.getContext(),
-						create_account_facebook.getText().toString(), 
+						user_id,
+						facebook_id, 
 						create_account_fist_name.getText().toString(), 
 						create_account_last_name.getText().toString(), 
 						create_account_gender.getSelectedItemPosition(), 
@@ -108,7 +111,7 @@ public class CreateAccountActivity extends Activity {
 					case CONFIRMED_OR_FACEBOOK:
 						User user = new User(
 							cDto.user_id,
-							create_account_facebook.getText().toString(), 
+							facebook_id, 
 							create_account_fist_name.getText().toString(), 
 							create_account_last_name.getText().toString(), 
 							create_account_gender.getSelectedItemPosition(), 
@@ -139,7 +142,6 @@ public class CreateAccountActivity extends Activity {
 						break;
 						
 					case ERROR:
-						// TODO
 						break;
 				}
 			}
