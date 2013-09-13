@@ -1,0 +1,21 @@
+<resources>
+
+    <style name="AppTheme" parent="android:Theme.Light" />
+
+    <style name="AppyMeteoTheme" parent="Theme.Sherlock.Light.DarkActionBar">
+        <item name="android:homeAsUpIndicator">@null</item>
+        <item name="actionBarStyle">@style/AppyMeteoTheme.ActionBarStyle</item>
+        <item name="android:actionBarStyle">@style/AppyMeteoTheme.ActionBarStyle</item>
+        <item name="actionButtonStyle">@style/AppyMeteoTheme.ActionButtonStyle</item>
+    	<item name="android:actionButtonStyle">@style/AppyMeteoTheme.ActionButtonStyle</item>
+    </style>
+
+    <style name="AppyMeteoTheme.ActionBarStyle" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+    </style>
+    
+    <style name="AppyMeteoTheme.ActionButtonStyle" parent="Widget.Sherlock.ActionButton">
+	    <item name="android:minWidth">32dip</item>
+	    <item name="android:padding">0dip</item>
+	</style>
+
+</resources>

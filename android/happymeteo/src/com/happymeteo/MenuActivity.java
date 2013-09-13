@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -119,7 +122,28 @@ public class MenuActivity extends SherlockActivity implements ISideNavigationCal
         sideNavigationView.setMenuClickCallback(this);
         sideNavigationView.setMode(Mode.LEFT);
 
+        getSupportActionBar().setIcon(R.drawable.icona_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        
+        LayoutInflater inflator = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflator.inflate(R.layout.action_bar_style, null);
+        
+        /* 
+         *  TextView titleTV = (TextView) v.findViewById(R.id.title);
+        Typeface font = Typeface.createFromAsset(getAssets(),
+                "fonts/your_custom_font.ttf");
+        titleTV.setTypeface(font);
+         */
+        
+        getSupportActionBar().setCustomView(view);
+        
+        ImageView icon = (ImageView) findViewById(android.R.id.home);
+        FrameLayout.LayoutParams iconLp = (FrameLayout.LayoutParams) icon.getLayoutParams();
+        iconLp.topMargin = iconLp.bottomMargin = 0;
+        icon.setLayoutParams( iconLp );
 	}
 
 	@Override
@@ -137,6 +161,11 @@ public class MenuActivity extends SherlockActivity implements ISideNavigationCal
         } else {
             menu.findItem(R.id.mode_left).setChecked(true);
         }
+        
+        menu.add("Impostazioni")
+	        .setIcon(R.drawable.icona_impostazioni)
+	        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        
         return super.onCreateOptionsMenu(menu);
     }
 
