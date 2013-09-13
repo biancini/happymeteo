@@ -11,15 +11,15 @@
         android:title="@string/happy_meteo"/>
     <item
         android:id="@+id/side_navigation_menu_item3"
-        android:icon="@drawable/icona_contesto"
-        android:title="@string/happy_context"/>
-    <item
-        android:id="@+id/side_navigation_menu_item4"
         android:icon="@drawable/icona_mappa"
         android:title="@string/happy_map"/>
     <item
-        android:id="@+id/side_navigation_menu_item5"
+        android:id="@+id/side_navigation_menu_item4"
         android:icon="@drawable/ic_android5"
         android:title="@string/challenge"/>
+    <item
+        android:id="@+id/side_navigation_menu_item5"
+        android:icon="@drawable/icona_contesto"
+        android:title="@string/happy_context"/>
 
 </menu>

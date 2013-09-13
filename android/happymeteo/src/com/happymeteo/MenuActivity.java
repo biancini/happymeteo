@@ -3,6 +3,7 @@ package com.happymeteo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -131,13 +133,6 @@ public class MenuActivity extends SherlockActivity implements ISideNavigationCal
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflator.inflate(R.layout.action_bar_style, null);
         
-        /* 
-         *  TextView titleTV = (TextView) v.findViewById(R.id.title);
-        Typeface font = Typeface.createFromAsset(getAssets(),
-                "fonts/your_custom_font.ttf");
-        titleTV.setTypeface(font);
-         */
-        
         getSupportActionBar().setCustomView(view);
         
         ImageView icon = (ImageView) findViewById(android.R.id.home);
@@ -202,15 +197,15 @@ public class MenuActivity extends SherlockActivity implements ISideNavigationCal
                 break;
 
             case R.id.side_navigation_menu_item3:
-            	invokeActivity(HappyContextActivity.class);
-                break;
-
-            case R.id.side_navigation_menu_item4:
             	invokeActivity(HappyMapActivity.class);
                 break;
 
-            case R.id.side_navigation_menu_item5:
+            case R.id.side_navigation_menu_item4:
             	invokeActivity(ChallengeActivity.class);
+                break;
+
+            case R.id.side_navigation_menu_item5:
+            	invokeActivity(HappyContextActivity.class);
                 break;
 
             default:

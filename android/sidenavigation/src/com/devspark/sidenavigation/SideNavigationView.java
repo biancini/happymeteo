@@ -6,6 +6,7 @@ import org.xmlpull.v1.XmlPullParser;
 
 import android.content.Context;
 import android.content.res.XmlResourceParser;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -336,6 +337,8 @@ public class SideNavigationView extends LinearLayout {
 
             SideNavigationItem item = menuItems.get(position);
             holder.text.setText(menuItems.get(position).getText());
+            //Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/helveticaneueltstdbd.ttf");
+            //holder.text.setTypeface(font);
             if (item.getIcon() != SideNavigationItem.DEFAULT_ICON_VALUE) {
                 holder.icon.setVisibility(View.VISIBLE);
                 holder.icon.setImageResource(menuItems.get(position).getIcon());

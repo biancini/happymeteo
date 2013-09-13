@@ -24,10 +24,10 @@
     <string name="normal_login">Login tramite Happy Meteo</string>
     <string name="facebook_login">Login tramite Facebook</string>
     <string name="facebook_logout">Logout tramite Facebook</string>
-    <string name="information_page">Pagina Informativa</string>
-    <string name="happy_meteo">Meteo della felicità</string>
-    <string name="happy_context">Contesto della felicità</string>
-    <string name="happy_map">Mappa della Felicità</string>
+    <string name="information_page">Informazioni</string>
+    <string name="happy_meteo">My Meteo</string>
+    <string name="happy_context">Contesto</string>
+    <string name="happy_map">Mappa</string>
     <string name="logout">Logout</string>
     <string name="back">Indietro</string>
     <string name="begin_questions">Il momento delle domande!</string>
@@ -75,7 +75,7 @@ Buon divertimento! E happy meteo!</string>
 	<string name="insert_password">Inserisci la tua password</string>
 	<string name="insert_cap">Inserisci il tuo cap</string>
 	<string name="loading">Caricamento..</string>
-	<string name="challenge">Sfida un tuo amico!</string>
+	<string name="challenge">_appygame</string>
 	<string name="challenge_happymeteo">Sfida un tuo amico di happymeteo</string>
 	<string name="challenge_facebook">Sfida un tuo amico di facebook</string>
 	<string name="challenge_random">Sfida una persona a caso</string>
