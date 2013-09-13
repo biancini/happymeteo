@@ -3,15 +3,19 @@ package com.happymeteo.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -237,57 +241,24 @@ public final class ServerUtilities {
 
 	public static String postRequest(Context context, String serverUrl, Map<String, String> parameters) {
 		try {
-			URL url;
-			try {
-				url = new URL(serverUrl);
-			} catch (MalformedURLException e) {
-				throw new IllegalArgumentException("Wrong URL: " + serverUrl);
+			StringBuffer output = new StringBuffer();
+			DefaultHttpClient client = new DefaultHttpClient();
+			HttpPost request = new HttpPost(serverUrl);
+			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+			for(String key: parameters.keySet()) {
+				nvps.add(new BasicNameValuePair(key, parameters.get(key)));
 			}
-	
-			StringBuilder requestBody = new StringBuilder();
-			Iterator<Entry<String, String>> it = parameters.entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<String, String> entry = it.next();
-				requestBody.append(entry.toString());
-				if (it.hasNext()) {
-					requestBody.append('&');
-				}
-			}
-	
-			String output = "";
-			byte[] data = requestBody.toString().getBytes();
-			HttpURLConnection conn = null;
-			try {
-				conn = (HttpURLConnection) url.openConnection();
-				conn.setDoOutput(true);
-				conn.setUseCaches(false);
-				conn.setFixedLengthStreamingMode(data.length);
-				conn.setRequestMethod("POST");
-				conn.setRequestProperty("Content-Type",
-						"application/x-www-form-urlencoded;charset=UTF-8");
-				OutputStream out = conn.getOutputStream();
-				out.write(data);
-				out.close();
-				int status = conn.getResponseCode();
-				if (status != 200) {
-					throw new IOException("Request failed with status: " + status);
-				}
-	
-				BufferedReader br = new BufferedReader(new InputStreamReader(
-						(conn.getInputStream())));
-				String line;
-				while ((line = br.readLine()) != null) {
-					output += line;
-				}
-			} catch(Exception e) {
-				Log.e(Const.TAG, e.getMessage(), e);
-			} finally {
-				if (conn != null) {
-					conn.disconnect();
-				}
-			}
+			request.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
+			HttpResponse response = client.execute(request);
 			
-			JSONObject jsonObject = isError(output);
+			BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				output.append(inputLine);
+			}
+			in.close();
+
+			JSONObject jsonObject = isError(output.toString());
 			
 			if(jsonObject != null) {
 				AlertDialogManager alert = new AlertDialogManager();
@@ -298,7 +269,68 @@ public final class ServerUtilities {
 				return null;
 			}
 			
-			return output;
+			return output.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			AlertDialogManager alert = new AlertDialogManager();
+			alert.showAlertDialog(context, "Errore",
+					e.getLocalizedMessage(), false, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {}
+					}); 
+		}
+		
+		/*HttpURLConnection conn = null;
+		
+		try {
+			URL url = new URL(serverUrl);
+			StringBuilder requestBody = new StringBuilder();
+			Iterator<Entry<String, String>> it = parameters.entrySet().iterator();
+			while (it.hasNext()) {
+				Entry<String, String> entry = it.next();
+				requestBody.append(entry.toString());
+				if (it.hasNext()) {
+					requestBody.append('&');
+				}
+			}
+	
+			StringBuffer output = new StringBuffer();
+			byte[] data = requestBody.toString().getBytes();
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setUseCaches(false);
+			conn.setFixedLengthStreamingMode(data.length);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded;charset=UTF-8");
+			OutputStream out = conn.getOutputStream();
+			out.write(data);
+			out.close();
+			int status = conn.getResponseCode();
+			if (status != 200) {
+				throw new IOException("Request failed with status: " + status);
+			}
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				output.append(inputLine);
+			}
+			in.close();
+			
+			JSONObject jsonObject = isError(output.toString());
+			
+			if(jsonObject != null) {
+				AlertDialogManager alert = new AlertDialogManager();
+				alert.showAlertDialog(context, jsonObject.getString("error"),
+						jsonObject.getString("message"), false, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {}
+						});
+				return null;
+			}
+			
+			return output.toString();
+		} catch (MalformedURLException e) {
+			throw new IllegalArgumentException("Wrong URL: " + serverUrl);
 		} catch(Exception e) {
 			e.printStackTrace();
 			AlertDialogManager alert = new AlertDialogManager();
@@ -306,16 +338,21 @@ public final class ServerUtilities {
 					e.getStackTrace().toString(), false, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {}
 					}); 
-		}
+		} finally {
+			if (conn != null) {
+				conn.disconnect();
+			}
+		}*/
 
 		return null;
 	}
 	
 	public static String getRequest(String serverUrl) {
+		HttpURLConnection conn = null;
 		try {
 			StringBuffer output = new StringBuffer();
 			URL url = new URL(serverUrl);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			int status = conn.getResponseCode();
 			if (status != 200) {
@@ -331,6 +368,10 @@ public final class ServerUtilities {
 			return output.toString();
 		} catch (Exception e) {
 			Log.e(Const.TAG, e.getMessage(), e);
+		} finally {
+			if (conn != null) {
+				conn.disconnect();
+			}
 		}
 		return null;
 	}

@@ -1,14 +1,8 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:orientation="vertical"
-    tools:context=".MenuActivity" >
+    android:orientation="vertical" >
 
     <com.facebook.widget.ProfilePictureView
         android:id="@+id/userImage"
@@ -24,46 +18,11 @@
         android:text="@string/modify_account" />
 
     <Button
-        android:id="@+id/btnInformationPage"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/information_page" />
-
-    <Button
-        android:id="@+id/btnHappyMeteo"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/happy_meteo" />
-
-    <Button
-        android:id="@+id/btnHappyContext"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/happy_context" />
-
-    <Button
-        android:id="@+id/btnHappyMap"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/happy_map" />
-    
-    <Button
         android:id="@+id/btnQuestionBegin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="@string/begin_questions" />
-    
-    <Button
-        android:id="@+id/btnChallenge"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/challenge" />
     
     <Button
         android:id="@+id/btnChallengeTry"
@@ -85,6 +44,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="@string/logout" />
+    
+    <com.devspark.sidenavigation.SideNavigationView
+        android:id="@+id/side_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-</LinearLayout>
-</ScrollView>
+</RelativeLayout>

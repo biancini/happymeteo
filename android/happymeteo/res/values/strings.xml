@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Happy Meteo</string>
+	<string name="app_name">Appy Meteo</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">Push Notifications</string>
     <string name="error_config">Please set the %1$s constant and recompile the app.</string>
@@ -88,4 +88,9 @@ Buon divertimento! E happy meteo!</string>
 	<string name="modify_account">Modifica Profilo</string>
 	<string name="link_user_to_facebook">Collega Profilo a facebook</string>
 	<string name="unlink_user_to_facebook">Scollega Profilo a facebook</string>
+	
+	<string name="mode">Mode</string>
+    <string name="mode_left">Left</string>
+    <string name="mode_right">Right</string>
+    <string name="image_desc">Image</string>
 </resources>

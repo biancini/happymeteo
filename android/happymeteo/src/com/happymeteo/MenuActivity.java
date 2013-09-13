@@ -5,16 +5,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.devspark.sidenavigation.ISideNavigationCallback;
+import com.devspark.sidenavigation.SideNavigationView;
+import com.devspark.sidenavigation.SideNavigationView.Mode;
 import com.facebook.widget.ProfilePictureView;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
-public class MenuActivity extends Activity {
+public class MenuActivity extends SherlockActivity implements ISideNavigationCallback {
+	
+	private SideNavigationView sideNavigationView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,12 +55,7 @@ public class MenuActivity extends Activity {
 		}
 
 		Button btnModifyAccount = (Button) findViewById(R.id.btnModifyAccount);
-		Button btnInformationPage = (Button) findViewById(R.id.btnInformationPage);
-		Button btnHappyMeteo = (Button) findViewById(R.id.btnHappyMeteo);
-		Button btnHappyContext = (Button) findViewById(R.id.btnHappyContext);
-		Button btnHappyMap = (Button) findViewById(R.id.btnHappyMap);
 		Button btnBeginQuestions = (Button) findViewById(R.id.btnQuestionBegin);
-		Button btnChallenge = (Button) findViewById(R.id.btnChallenge);
 		Button btnChallengeTry = (Button) findViewById(R.id.btnChallengeTry);
 		Button btnLogout = (Button) findViewById(R.id.btnLogout);
 		Button btnLogout2 = (Button) findViewById(R.id.btnLogout2);
@@ -66,51 +68,10 @@ public class MenuActivity extends Activity {
 			}
 		});
 
-		btnInformationPage.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				Context context = view.getContext();
-				Intent intent = new Intent(context,
-						InformationPageActivity.class);
-				context.startActivity(intent);
-			}
-		});
-
-		btnHappyMeteo.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				Context context = view.getContext();
-				Intent intent = new Intent(context, HappyMeteoActivity.class);
-				context.startActivity(intent);
-			}
-		});
-
-		btnHappyContext.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				Context context = view.getContext();
-				Intent intent = new Intent(context, HappyContextActivity.class);
-				context.startActivity(intent);
-			}
-		});
-
-		btnHappyMap.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				Context context = view.getContext();
-				Intent intent = new Intent(context, HappyMapActivity.class);
-				context.startActivity(intent);
-			}
-		});
-
 		btnBeginQuestions.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
 				Intent intent = new Intent(context, QuestionActivity.class);
-				context.startActivity(intent);
-			}
-		});
-		
-		btnChallenge.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				Context context = view.getContext();
-				Intent intent = new Intent(context, ChallengeActivity.class);
 				context.startActivity(intent);
 			}
 		});
@@ -152,6 +113,13 @@ public class MenuActivity extends Activity {
 				context.startActivity(intent);
 			}
 		});
+		
+		sideNavigationView = (SideNavigationView) findViewById(R.id.side_navigation_view);
+        sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
+        sideNavigationView.setMenuClickCallback(this);
+        sideNavigationView.setMode(Mode.LEFT);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
@@ -160,12 +128,86 @@ public class MenuActivity extends Activity {
 
 		super.onDestroy();
 	}
-
+	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu, menu);
-		return true;
-	}
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.main_menu, menu);
+        if (sideNavigationView.getMode() == Mode.RIGHT) {
+            menu.findItem(R.id.mode_right).setChecked(true);
+        } else {
+            menu.findItem(R.id.mode_left).setChecked(true);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                sideNavigationView.toggleMenu();
+                break;
+            case R.id.mode_left:
+                item.setChecked(true);
+                sideNavigationView.setMode(Mode.LEFT);
+                break;
+            case R.id.mode_right:
+                item.setChecked(true);
+                sideNavigationView.setMode(Mode.RIGHT);
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    @Override
+    public void onSideNavigationItemClick(int itemId) {
+        switch (itemId) {
+            case R.id.side_navigation_menu_item1:
+            	invokeActivity(InformationPageActivity.class);
+                break;
+
+            case R.id.side_navigation_menu_item2:
+            	invokeActivity(HappyMeteoActivity.class);
+                break;
+
+            case R.id.side_navigation_menu_item3:
+            	invokeActivity(HappyContextActivity.class);
+                break;
+
+            case R.id.side_navigation_menu_item4:
+            	invokeActivity(HappyMapActivity.class);
+                break;
+
+            case R.id.side_navigation_menu_item5:
+            	invokeActivity(ChallengeActivity.class);
+                break;
+
+            default:
+                return;
+        }
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        // hide menu if it shown
+        if (sideNavigationView.isShown()) {
+            sideNavigationView.hideMenu();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    /**
+     * Start activity from SideNavigation.
+     * 
+     * @param title title of Activity
+     * @param resId resource if of background image
+     */
+    private void invokeActivity(Class<? extends Activity> clazz) {
+    	Intent intent = new Intent(this, clazz);
+		startActivity(intent);
+    }
 }

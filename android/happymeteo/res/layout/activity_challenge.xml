@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    android:orientation="vertical"
-    tools:context=".MenuActivity" >
+    android:orientation="vertical" >
 
     <Button
         android:id="@+id/btnChallengeFacebook"
