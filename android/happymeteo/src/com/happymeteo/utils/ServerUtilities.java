@@ -12,7 +12,7 @@ public class ServerUtilities {
 	public static void createAccount(onPostExecuteListener onPostExecuteListener, Activity activity,
 			String user_id, String facebook_id, String first_name,
 			String last_name, int gender, String email, int age, int education,
-			int work, String location, String cap, String password) {
+			int work, String cap, String password) {
 		Log.i(Const.TAG, "createAccount");
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("user_id", user_id);
@@ -24,7 +24,6 @@ public class ServerUtilities {
 		params.put("age", String.valueOf(age));
 		params.put("education", String.valueOf(education));
 		params.put("work", String.valueOf(work));
-		params.put("location", location);
 		params.put("cap", cap);
 		params.put("password", password);
 		

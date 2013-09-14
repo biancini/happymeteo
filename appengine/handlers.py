@@ -137,14 +137,10 @@ class FacebookLoginHandler(BaseRequestHandler):
             'email':  facebook_profile['email'],
             'age': self.get_age(facebook_profile['birthday']),
             'education': '0',
-            'location': '',
             'cap': '',
             'work': '0',
             'registered': '0'
         }
-        
-        try: data['location'] = facebook_profile['location']['name']
-        except KeyError: pass
         
         if facebook_profile['gender'] == "male":
           data['gender'] = 1
@@ -174,7 +170,6 @@ class CreateAccountHandler(BaseRequestHandler):
         age = self.request.get('age')
         education = self.request.get('education')
         work = self.request.get('work')
-        location = self.request.get('location')
         cap = self.request.get('cap')
         password = self.request.get('password')
         
@@ -190,7 +185,6 @@ class CreateAccountHandler(BaseRequestHandler):
                     age=age,
                     education=education,
                     work=work,
-                    location=location,
                     cap=cap,
                     status=0,
                     password=password)
@@ -234,7 +228,6 @@ class CreateAccountHandler(BaseRequestHandler):
             user.age=age
             user.education=education
             user.work=work
-            user.location=location
             user.cap=cap
             user.put()
             data = {

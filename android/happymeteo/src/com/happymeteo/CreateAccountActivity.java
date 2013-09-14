@@ -51,7 +51,6 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		final Spinner create_account_age = (Spinner) findViewById(R.id.create_account_age);
 		final Spinner create_account_education = (Spinner) findViewById(R.id.create_account_education);
 		final Spinner create_account_work = (Spinner) findViewById(R.id.create_account_work);
-		final EditText create_account_location = (EditText) findViewById(R.id.create_account_location);
 		final EditText create_account_cap = (EditText) findViewById(R.id.create_account_cap);
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
 		btnCreateUserFacebook = (Button) findViewById(R.id.btnCreateUserFacebook);
@@ -72,7 +71,6 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 			create_account_age.setSelection(user.getAge());
 			create_account_education.setSelection(user.getEducation());
 			create_account_work.setSelection(user.getWork());
-			create_account_location.setText(user.getLocation());
 			create_account_cap.setText(user.getCap());
 
 			if (!this.user_id.equals("")) {
@@ -122,8 +120,6 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 				Log.i(Const.TAG,
 						"create_account_work: "
 								+ create_account_work.getSelectedItemPosition());
-				Log.i(Const.TAG, "create_account_location: "
-						+ create_account_location.getText());
 				Log.i(Const.TAG,
 						"create_account_cap: " + create_account_cap.getText());
 
@@ -145,7 +141,6 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 						create_account_age.getSelectedItemPosition(),
 						create_account_education.getSelectedItemPosition(),
 						create_account_work.getSelectedItemPosition(),
-						create_account_location.getText().toString(),
 						create_account_cap.getText().toString(), password);
 
 				lastUser = new User("", facebook_id, create_account_fist_name
@@ -155,9 +150,8 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 						.getText().toString(), create_account_age
 						.getSelectedItemPosition(), create_account_education
 						.getSelectedItemPosition(), create_account_work
-						.getSelectedItemPosition(), create_account_location
-						.getText().toString(), create_account_cap.getText()
-						.toString(), User.USER_REGISTERED);
+						.getSelectedItemPosition(), create_account_cap
+						.getText().toString(), User.USER_REGISTERED);
 			}
 		});
 	}

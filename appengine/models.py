@@ -14,7 +14,6 @@ class User(db.Model):
     age = db.StringProperty()
     education = db.StringProperty()
     work = db.StringProperty()
-    location = db.StringProperty()
     cap = db.StringProperty()
     confirmation_code = db.StringProperty()
     password = db.StringProperty()
@@ -31,7 +30,6 @@ class User(db.Model):
             'age': self.age,
             'education': self.education,
             'work': self.work,
-            'location': self.location,
             'cap': self.cap,
             'registered': '1'
         }
