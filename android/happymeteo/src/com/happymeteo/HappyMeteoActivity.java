@@ -1,47 +1,39 @@
 package com.happymeteo;
 
-import org.json.JSONObject;
-
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Gravity;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
+import com.facebook.widget.ProfilePictureView;
 
-public class HappyMeteoActivity extends Activity {
+public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_happy_meteo);
+		super.onCreate(savedInstanceState);
 		
-		LinearLayout linearLayoutMeteo = (LinearLayout) findViewById(R.id.linearLayoutMeteo);
-        //RelativeLayout relativeLayout1 = (RelativeLayout) findViewById(R.id.relativeLayout1);
-		//RelativeLayout relativeLayout2 = (RelativeLayout) findViewById(R.id.relativeLayout2);
-        
-        Log.i(Const.TAG, "linearLayoutMeteo.getHeight(): "+linearLayoutMeteo.getHeight());
-        Log.i(Const.TAG, "linearLayoutMeteo.getLayoutParams().height: "+linearLayoutMeteo.getLayoutParams().height);
-        
-        /*RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, linearLayoutMeteo.getHeight()/2);
-        
-        relativeLayout1.setLayoutParams(layoutParams);
-        relativeLayout2.setLayoutParams(layoutParams);
+		//JSONObject json = ServerUtilities.happyMeteo(getApplicationContext());
+		//Log.i(Const.TAG, "json: " + json);
 		
-		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.userImage);
+		/*RelativeLayout relativeLayoutMeteoUp = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp);
+        
+		ProfilePictureView userImage = new ProfilePictureView(getApplicationContext());
 
 		if (HappyMeteoApplication.i().isFacebookSession()) {
-			
 			userImage.setProfileId(String.valueOf(HappyMeteoApplication
 					.i().getCurrentUser().getFacebook_id()));
 			userImage.setCropped(true);
 		} else {
 			userImage.setProfileId(null);
-		}*/
+		}
 		
-		JSONObject json = ServerUtilities.happyMeteo(getApplicationContext());
-		Log.i(Const.TAG, "json: " + json);
+		RelativeLayout.LayoutParams userImageLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		//userImageLayout.gravity = Gravity.BOTTOM;
+		
+		relativeLayoutMeteoUp.addView(userImage, userImageLayout);*/
+		
 	}
 
 }
