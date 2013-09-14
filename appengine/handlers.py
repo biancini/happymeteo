@@ -255,8 +255,6 @@ class NormalLoginHandler(BaseRequestHandler):
         if q.count() > 0:
           user = q.get()
           
-          print '%s %s'%(user.password, pwd_parameter) 
-
           if user.password == pwd_parameter:
             data = user.toJson()
           else:
@@ -370,17 +368,13 @@ class SubmitQuestionsHandler(BaseRequestHandler):
         longitude = self.request.get('longitude')
         latitude = self.request.get('latitude')
         
-        print questions
-        
         questions = json.loads(questions)
         
         access_token = getGoogleAccessToken()
         
         for q in questions:
-            print "%s %s"%(q, questions[q])
             response = sqlPostFusionTable(access_token, 'INSERT INTO %s (id_user, id_question, location, date, value) VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\')'%(
                          RISPOSTA, id_user, q, latitude+" "+longitude, datetime.now(), questions[q]))
-            print response
             
         data = { 'message': 'ok' }
     except:
@@ -472,7 +466,7 @@ class QuestionsChallengeHandler(BaseRequestHandler):
 
   def post(self):
     access_token = getGoogleAccessToken()
-    response = sqlGetFusionTable(access_token, 'SELECT * FROM %s'%SFIDA)
+    response = sqlGetFusionTable(access_token, 'SELECT * FROM %s LIMIT 5'%SFIDA)
 
     questions_list = json.loads(response)
     questions = []
@@ -501,10 +495,8 @@ class SubmitChallengeHandler(BaseRequestHandler):
         access_token = getGoogleAccessToken()
         
         for q in questions:
-            print "%s %s"%(q, questions[q])
             response = sqlPostFusionTable(access_token, 'INSERT INTO %s (id_user, id_question, location, date, value) VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\')'%(
                          RISPOSTA_SFIDA, id_user, q, latitude+" "+longitude, datetime.now(), questions[q]))
-            print response
             
         # TODO Calcolare lo score
         # TODO aggiornare il challenge
