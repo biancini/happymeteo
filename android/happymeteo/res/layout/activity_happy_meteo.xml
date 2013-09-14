@@ -1,21 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".HappyMeteoActivity" >
-     
-     <TextView android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="@string/happy_meteo"
-         android:layout_marginLeft="10dip"
-         android:layout_marginRight="10dip"
-         android:layout_marginTop="20dip"/>
-     
-     <Button android:id="@+id/btnBackHappyMeteo"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="@string/back"
-         android:layout_margin="10dip"/>
+    android:id="@+id/linearLayoutMeteo"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="50"
+        android:background="@drawable/tool_bar_gradient"
+        android:orientation="vertical" />
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="50"
+        android:background="#000000"
+        android:orientation="vertical" />
 </LinearLayout>

@@ -2,14 +2,14 @@ package com.happymeteo;
 
 import org.json.JSONObject;
 
-import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.happymeteo.utils.Const;
+import com.happymeteo.utils.ServerUtilities;
 
 public class HappyContextActivity extends Activity {
 	

@@ -2,20 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:id="@+id/menuLayout">
     
     <LinearLayout 
         android:orientation="vertical" 
         android:layout_width="match_parent"
     	android:layout_height="match_parent">
 
-	    <com.facebook.widget.ProfilePictureView
-	        android:id="@+id/userImage"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_vertical|center_horizontal" />
-	    
-	    <Button
+		<Button
 	        android:id="@+id/btnQuestionBegin"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
@@ -44,10 +39,4 @@
 	        android:text="@string/logout" />
     
     </LinearLayout>
-    
-    <com.devspark.sidenavigation.SideNavigationView
-        android:id="@+id/side_navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
 </RelativeLayout>

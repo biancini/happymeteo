@@ -20,6 +20,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -174,6 +175,8 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
     }
 
     private void initTitle() {
+    	Log.i("actionbarsherlock", "initTitle");
+    	
         if (mTitleLayout == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             inflater.inflate(R.layout.abs__action_bar_title_item, this);

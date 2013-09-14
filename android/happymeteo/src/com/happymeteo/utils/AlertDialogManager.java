@@ -1,10 +1,10 @@
 package com.happymeteo.utils;
 
-import com.happymeteo.R;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+
+import com.happymeteo.R;
 
 public class AlertDialogManager {
 	/**

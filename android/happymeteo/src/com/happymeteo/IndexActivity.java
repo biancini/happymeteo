@@ -1,21 +1,19 @@
 package com.happymeteo;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.ConnectionDetector;
-import com.happymeteo.utils.Const;
 
-public class IndexActivity extends Activity {
+public class IndexActivity extends SherlockActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -25,7 +23,6 @@ public class IndexActivity extends Activity {
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		
-		Log.i(Const.TAG, "Create IndexActivity");
 		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
 
 		/* Check internet */
@@ -46,7 +43,7 @@ public class IndexActivity extends Activity {
 			Intent intent = new Intent(this, MenuActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			this.startActivity(intent);
-		}
+		} 
 		
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		Button btnLoginHappyMeteo = (Button) findViewById(R.id.btnLoginHappyMeteo);
