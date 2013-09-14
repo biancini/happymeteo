@@ -302,8 +302,6 @@ public class SideNavigationView extends LinearLayout {
         public int getHeight() {
         	WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();
-            Log.i("SideNavigation", "height: "+display.getHeight());
-            Log.i("SideNavigation", "count: "+getCount());
         	return display.getHeight() / getCount() - 97;
         }
 
@@ -337,8 +335,12 @@ public class SideNavigationView extends LinearLayout {
 
             SideNavigationItem item = menuItems.get(position);
             holder.text.setText(menuItems.get(position).getText());
-            //Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/helveticaneueltstdbd.ttf");
-            //holder.text.setTypeface(font);
+            try {
+            	Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/helveticaneueltstdbd.ttf");
+            	holder.text.setTypeface(font);
+            } catch(Exception e) {
+            	
+            }
             if (item.getIcon() != SideNavigationItem.DEFAULT_ICON_VALUE) {
                 holder.icon.setVisibility(View.VISIBLE);
                 holder.icon.setImageResource(menuItems.get(position).getIcon());

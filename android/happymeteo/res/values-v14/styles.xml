@@ -14,8 +14,6 @@
     </style>
     
     <style name="AppyMeteoTheme.ActionButtonStyle" parent="Widget.Sherlock.ActionButton">
-	    <item name="android:minWidth">32dip</item>
-	    <item name="android:padding">0dip</item>
 	</style>
 
 </resources>

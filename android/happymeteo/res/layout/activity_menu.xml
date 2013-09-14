@@ -3,47 +3,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
-    <com.facebook.widget.ProfilePictureView
-        android:id="@+id/userImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal" />
     
-    <Button
-        android:id="@+id/btnModifyAccount"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/modify_account" />
+    <LinearLayout 
+        android:orientation="vertical" 
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnQuestionBegin"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/begin_questions" />
+	    <com.facebook.widget.ProfilePictureView
+	        android:id="@+id/userImage"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_vertical|center_horizontal" />
+	    
+	    <Button
+	        android:id="@+id/btnQuestionBegin"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dp"
+	        android:text="@string/begin_questions" />
+	    
+	    <Button
+	        android:id="@+id/btnChallengeTry"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dp"
+	        android:text="@string/challenge_facebook" />
+	
+	    <Button
+	        android:id="@+id/btnLogout"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dp"
+	        android:text="@string/logout" />
+	    
+	    <Button
+	        android:id="@+id/btnLogout2"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dp"
+	        android:text="@string/logout" />
     
-    <Button
-        android:id="@+id/btnChallengeTry"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/challenge_facebook" />
-
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/logout" />
-    
-    <Button
-        android:id="@+id/btnLogout2"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/logout" />
+    </LinearLayout>
     
     <com.devspark.sidenavigation.SideNavigationView
         android:id="@+id/side_navigation_view"
