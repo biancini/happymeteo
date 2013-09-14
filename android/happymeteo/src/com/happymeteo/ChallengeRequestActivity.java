@@ -14,12 +14,16 @@ import com.happymeteo.models.Challenge;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
-public class ChallengeRequestActivity extends Activity {
+public class ChallengeRequestActivity extends AppyMeteoNotLoggedActivity {
+	private Activity activity;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_challenge_request);
+		super.onCreate(savedInstanceState);
+		
+		this.activity = this;
+		
 		final String challengeJson = getIntent().getStringExtra("challenge");
 		
 		try {
@@ -30,7 +34,7 @@ public class ChallengeRequestActivity extends Activity {
 			
 			btnAcceptChallenge.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
-					ServerUtilities.acceptChallenge(view.getContext(), challenge.getChallenge_id(), true);
+					ServerUtilities.acceptChallenge(activity, challenge.getChallenge_id(), true);
 					
 					finish();
 				}
@@ -40,7 +44,7 @@ public class ChallengeRequestActivity extends Activity {
 			
 			btnRefuseChallenge.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
-					ServerUtilities.acceptChallenge(view.getContext(), challenge.getChallenge_id(), false);
+					ServerUtilities.acceptChallenge(activity, challenge.getChallenge_id(), false);
 					
 					finish();
 				}

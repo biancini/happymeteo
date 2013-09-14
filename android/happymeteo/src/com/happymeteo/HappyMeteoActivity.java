@@ -1,18 +1,23 @@
 package com.happymeteo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Bundle;
-import android.view.Gravity;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.util.Log;
 
-import com.facebook.widget.ProfilePictureView;
+import com.happymeteo.utils.Const;
+import com.happymeteo.utils.ServerUtilities;
+import com.happymeteo.utils.onPostExecuteListener;
 
-public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
+public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_happy_meteo);
 		super.onCreate(savedInstanceState);
+		
+		ServerUtilities.happyMeteo(this, this);
 		
 		//JSONObject json = ServerUtilities.happyMeteo(getApplicationContext());
 		//Log.i(Const.TAG, "json: " + json);
@@ -34,6 +39,16 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		
 		relativeLayoutMeteoUp.addView(userImage, userImageLayout);*/
 		
+	}
+
+	@Override
+	public void onPostExecute(int id, String result) {
+		try {
+			JSONObject jsonObject = new JSONObject(result);
+			Log.i(Const.TAG, "json: " + jsonObject);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

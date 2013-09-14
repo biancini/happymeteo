@@ -1,28 +1,21 @@
 package com.happymeteo;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.happymeteo.utils.Const;
-
-public class ChallengeActivity extends Activity {
+public class ChallengeActivity extends AppyMeteoLoggedActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_challenge);
-
-		Log.i(Const.TAG, "Create ChallengeActivity");
+		super.onCreate(savedInstanceState);
 
 		Button btnChallengeFacebook = (Button) findViewById(R.id.btnChallengeFacebook);
 		Button btnChallengeRandom = (Button) findViewById(R.id.btnChallengeRandom);
-		Button btnBackChallenge = (Button) findViewById(R.id.btnBackChallenge);
 		
 		if(!HappyMeteoApplication.i().isFacebookSession()) {
 			btnChallengeFacebook.setVisibility(View.GONE);
@@ -39,12 +32,6 @@ public class ChallengeActivity extends Activity {
 		
 		btnChallengeRandom.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-			}
-		});
-		
-		btnBackChallenge.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				finish();
 			}
 		});
 	}

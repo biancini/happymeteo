@@ -2,7 +2,6 @@ package com.happymeteo.facebook;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
+import com.happymeteo.AppyMeteoNotLoggedActivity;
 import com.happymeteo.HappyMeteoApplication;
 import com.happymeteo.R;
 import com.happymeteo.models.Friend;
@@ -20,9 +20,9 @@ import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
 public class FriendsAdapter extends ArrayAdapter<Friend> {
-	private Activity activity;
+	private AppyMeteoNotLoggedActivity activity;
 	
-	public FriendsAdapter(Activity activity, List<Friend> values) {
+	public FriendsAdapter(AppyMeteoNotLoggedActivity activity, List<Friend> values) {
 		super(activity.getApplicationContext(), R.layout.activity_friends_facebook_list_row, values);
 		
 		this.activity = activity;
@@ -54,7 +54,7 @@ public class FriendsAdapter extends ArrayAdapter<Friend> {
 				
 				public void onClick(View view) {
 					ServerUtilities.requestChallenge(
-						view.getContext(), 
+						activity, 
 						HappyMeteoApplication.i().getCurrentUser().getUser_id(),
 						friend.getId(),
 						HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId());

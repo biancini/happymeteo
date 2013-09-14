@@ -10,11 +10,14 @@ import android.widget.Button;
 import com.happymeteo.utils.ServerUtilities;
 
 public class MenuActivity extends AppyMeteoLoggedActivity {
+	private AppyMeteoNotLoggedActivity activity;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_menu);
 		super.onCreate(savedInstanceState);
+		
+		this.activity = this;
 		
 		/* Initialize PushNotificationsService */
 		HappyMeteoApplication.i().getPushNotificationsService().initialize(
@@ -45,7 +48,7 @@ public class MenuActivity extends AppyMeteoLoggedActivity {
 		btnChallengeTry.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				ServerUtilities.requestChallenge(
-					view.getContext(),
+					activity,
 					HappyMeteoApplication.i().getCurrentUser().getUser_id(),
 					HappyMeteoApplication.i().getCurrentUser().getFacebook_id(),
 					HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId());

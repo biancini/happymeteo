@@ -1,14 +1,17 @@
 package com.happymeteo.service;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
 import com.facebook.FacebookException;
+import com.happymeteo.AppyMeteoNotLoggedActivity;
 import com.happymeteo.CreateAccountActivity;
 import com.happymeteo.HappyMeteoApplication;
 import com.happymeteo.MenuActivity;
@@ -17,62 +20,33 @@ import com.happymeteo.facebook.WebDialog.OnCompleteListener;
 import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
+import com.happymeteo.utils.onPostExecuteListener;
 
-public class FacebookSessionService implements OnCompleteListener {
+public class FacebookSessionService implements OnCompleteListener, onPostExecuteListener {
+	private AppyMeteoNotLoggedActivity lastActivity;
 	
-	public void openConnession(Activity activity, OnCompleteListener onCompleteListener) {
+	public void openConnession(OnCompleteListener onCompleteListener) {
 		String url = "https://m.facebook.com/dialog/oauth?display=touch"
 				+ "&client_id="+Const.FACEBOOK_ID
 				+ "&scope="+Const.getFacebookReadPermission()
 				+ "&type=user_agent"
 				+ "&redirect_uri="+Const.BASE_URL;
 		
-		AuthDialog facebookAuthDialog = new AuthDialog(activity, url);
+		AuthDialog facebookAuthDialog = new AuthDialog(lastActivity, url);
 		facebookAuthDialog.setOnCompleteListener(onCompleteListener);
 		facebookAuthDialog.show();
 	}
 	
-	private boolean tryLoginUser(Activity activity) {
-		try {
-			String accessToken = HappyMeteoApplication.i().getAccessToken();
-			Log.i(Const.TAG, "accessToken: "+accessToken);
-			
-			if(accessToken != null) {
-				// Logged
-				Log.i(Const.TAG, "Logged");
-				User user = ServerUtilities.facebookLogin(activity, accessToken);
-				
-				if(user != null) {
-					HappyMeteoApplication.i().setFacebookSession(true);
-					HappyMeteoApplication.i().setCurrentUser(user);
-					
-					if(user.getRegistered() == User.USER_NOT_REGISTERED) {
-						// Switch to create account activity if not registered
-						Intent intent = new Intent(activity, CreateAccountActivity.class);
-						activity.startActivity(intent);
-					} else {
-						Intent intent = new Intent(activity, MenuActivity.class);
-						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						activity.startActivity(intent);
-					}
-					return true;
-				}
-			}
-		} catch(Exception e) {
-			Log.e(Const.TAG, "Error tryLoginUser", e);
-		}
+	private void tryLoginUser() {
+		String accessToken = HappyMeteoApplication.i().getAccessToken();
+		Log.i(Const.TAG, "accessToken: "+accessToken);
 		
-		return false;
+		ServerUtilities.facebookLogin(this, lastActivity, accessToken);
 	}
 	
-	public boolean initialize(Activity activity) {
-		return tryLoginUser(activity);
-	}
-	
-	public void onClickLogin(Activity activity) {
-		if(!tryLoginUser(activity)) {
-			openConnession(activity, this);
-		}
+	public void onClickLogin(AppyMeteoNotLoggedActivity activity) {
+		lastActivity = activity;
+		tryLoginUser();
 	}
 
 	public void onClickLogout(Context context) {
@@ -110,15 +84,40 @@ public class FacebookSessionService implements OnCompleteListener {
     }
 
 	@Override
-	public void onComplete(Bundle values, FacebookException error, Activity activity) {
+	public void onComplete(Bundle values, FacebookException error, AppyMeteoNotLoggedActivity caller) {
 		if(values != null) {
 			HappyMeteoApplication.i().setAccessToken(values.getString("access_token"));
 		}
 		
 		if(error == null) {
-			tryLoginUser(activity);
+			tryLoginUser();
 		} else {
-			activity.finish();
+			caller.finish();
 		}
+	}
+
+	@Override
+	public void onPostExecute(int id, String result) {
+		try {
+			JSONObject jsonObject = new JSONObject(result);
+			User user = new User(jsonObject);
+			
+			if(user != null) {
+				HappyMeteoApplication.i().setFacebookSession(true);
+				HappyMeteoApplication.i().setCurrentUser(user);
+				
+				if(user.getRegistered() == User.USER_NOT_REGISTERED) {
+					lastActivity.invokeActivity(CreateAccountActivity.class);
+				} else {
+					lastActivity.invokeActivity(MenuActivity.class);
+				}
+				return;
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		openConnession(this);
 	}
 }

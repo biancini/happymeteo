@@ -1,34 +1,33 @@
 package com.happymeteo;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
+import com.happymeteo.utils.onPostExecuteListener;
 
-public class HappyContextActivity extends Activity {
+public class HappyContextActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_happy_context);
+		super.onCreate(savedInstanceState);
 		
-		Button btnBack = (Button) findViewById(R.id.btnBackHappyContext);
-		btnBack.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				finish();
-			}
-		});
-		
-		JSONObject json = ServerUtilities.happyContext(getApplicationContext());
-		Log.i(Const.TAG, "json: " + json);
+		ServerUtilities.happyContext(this, this);
+	}
+	
+	@Override
+	public void onPostExecute(int id, String result) {
+		try {
+			JSONObject jsonObject = new JSONObject(result);
+			Log.i(Const.TAG, "json: " + jsonObject);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

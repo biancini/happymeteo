@@ -11,11 +11,5 @@
          android:layout_marginLeft="10dip"
          android:layout_marginRight="10dip"
          android:layout_marginTop="20dip"/>
-     
-     <Button android:id="@+id/btnBackHappyContext"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="@string/back"
-         android:layout_margin="10dip"/>
 
 </LinearLayout>

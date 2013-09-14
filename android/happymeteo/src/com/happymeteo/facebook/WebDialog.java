@@ -16,7 +16,6 @@
 
 package com.happymeteo.facebook;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -43,6 +42,7 @@ import com.facebook.FacebookRequestError;
 import com.facebook.FacebookServiceException;
 import com.facebook.android.Util;
 import com.facebook.internal.Utility;
+import com.happymeteo.AppyMeteoNotLoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.utils.Const;
 
@@ -61,7 +61,7 @@ public class WebDialog extends Dialog {
 	protected ProgressDialog spinner;
 	protected boolean isDetached = false;
 	protected String url;
-	protected Activity activity;
+	protected AppyMeteoNotLoggedActivity activity;
 	protected WebView webView;
 	protected ImageView crossImageView;
 	protected FrameLayout contentFrameLayout;
@@ -83,7 +83,7 @@ public class WebDialog extends Dialog {
 		 * @param caller
 		 *            activity that call the FacebookWebDialog
 		 */
-		void onComplete(Bundle values, FacebookException error, Activity caller);
+		void onComplete(Bundle values, FacebookException error, AppyMeteoNotLoggedActivity caller);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class WebDialog extends Dialog {
 	 *            this URL, but it should be a valid URL pointing to a Facebook
 	 *            Web Dialog
 	 */
-	public WebDialog(Activity activity, String url) {
+	public WebDialog(AppyMeteoNotLoggedActivity activity, String url) {
 		this(activity, url, DEFAULT_THEME);
 	}
 
@@ -114,7 +114,7 @@ public class WebDialog extends Dialog {
 	 * @param theme
 	 *            identifier of a theme to pass to the Dialog class
 	 */
-	public WebDialog(Activity activity, String url, int theme) {
+	public WebDialog(AppyMeteoNotLoggedActivity activity, String url, int theme) {
 		super(activity, theme);
 		this.url = url;
 		this.activity = activity;

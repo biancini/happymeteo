@@ -1,7 +1,8 @@
 package com.happymeteo;
 
-import android.app.Activity;
-import android.content.Intent;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,23 +13,28 @@ import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
+import com.happymeteo.utils.onPostExecuteListener;
 
-public class NormalLoginActivity extends Activity {
+public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements onPostExecuteListener {
+	private AppyMeteoNotLoggedActivity activity;
+	private onPostExecuteListener onPostExecuteListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_normal_login);
+		super.onCreate(savedInstanceState);
 
 		final EditText normal_login_email = (EditText) findViewById(R.id.normal_login_email);
 		final EditText normal_login_password = (EditText) findViewById(R.id.normal_login_password);
+		
+		this.activity = this;
+		this.onPostExecuteListener = this;
 
 		Button btnGoNormalLogin = (Button) findViewById(R.id.btnGoNormalLogin);
 		btnGoNormalLogin.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				/* GO */
 				String email = normal_login_email.getText().toString();
 				String password = "";
 				try {
@@ -40,30 +46,27 @@ public class NormalLoginActivity extends Activity {
 				Log.i(Const.TAG, "email: " + email);
 				Log.i(Const.TAG, "password: " + password);
 				
-				User user = ServerUtilities.normalLogin(view.getContext(), email, password);
+				ServerUtilities.normalLogin(onPostExecuteListener, activity, email, password);
+			}
+		});
+	}
+
+	@Override
+	public void onPostExecute(int id, String result) {
+		try {
+			JSONObject jsonObject = new JSONObject(result);
+			User user = new User(jsonObject);
+			
+			if(user != null) {
+				/* Set current user */
+				HappyMeteoApplication.i().setCurrentUser(user);
+				HappyMeteoApplication.i().setFacebookSession(false);
 				
-				if(user != null) {
-					/* Set current user */
-					HappyMeteoApplication.i().setCurrentUser(user);
-					HappyMeteoApplication.i().setFacebookSession(false);
-					
-					/* Switch to menu activity if registered */
-					Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-					startActivity(intent);
-				} else {
-					//TODO
-				}
+				invokeActivity(MenuActivity.class);
 			}
-		});
-
-		Button btnBack = (Button) findViewById(R.id.btnBackNormalLogin);
-		btnBack.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				finish();
-			}
-		});
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

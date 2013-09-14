@@ -1,21 +1,18 @@
 package com.happymeteo;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.devspark.sidenavigation.ISideNavigationCallback;
 import com.devspark.sidenavigation.SideNavigationView;
 import com.devspark.sidenavigation.SideNavigationView.Mode;
 
-public class AppyMeteoLoggedActivity extends SherlockActivity implements
+public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implements
 		ISideNavigationCallback {
 
 	private SideNavigationView sideNavigationView;
@@ -118,10 +115,5 @@ public class AppyMeteoLoggedActivity extends SherlockActivity implements
 			return true;
 		}
 		return super.onKeyUp(keyCode, event);
-	}
-
-	protected void invokeActivity(Class<? extends Activity> clazz) {
-		Intent intent = new Intent(this, clazz);
-		startActivity(intent);
 	}
 }

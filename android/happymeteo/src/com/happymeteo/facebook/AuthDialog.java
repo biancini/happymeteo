@@ -17,13 +17,13 @@
 package com.happymeteo.facebook;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.happymeteo.AppyMeteoNotLoggedActivity;
 import com.happymeteo.utils.Const;
 
 /**
@@ -33,7 +33,7 @@ import com.happymeteo.utils.Const;
  */
 public class AuthDialog extends WebDialog {
 	
-	public AuthDialog(Activity activity, String url) {
+	public AuthDialog(AppyMeteoNotLoggedActivity activity, String url) {
 		super(activity, url);
 	}
 

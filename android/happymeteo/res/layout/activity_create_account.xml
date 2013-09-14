@@ -117,12 +117,5 @@
         android:layout_margin="10dip"
         android:text="@string/create_profile_user" />
 
-    <Button
-        android:id="@+id/btnBackCreateAccount"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dip"
-        android:text="@string/back" />
-
 </LinearLayout>
 </ScrollView>

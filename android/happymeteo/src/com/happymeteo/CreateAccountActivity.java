@@ -1,10 +1,9 @@
 package com.happymeteo;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,30 +13,36 @@ import android.widget.Spinner;
 
 import com.facebook.FacebookException;
 import com.happymeteo.facebook.WebDialog.OnCompleteListener;
-import com.happymeteo.models.CreateAccountDTO;
 import com.happymeteo.models.User;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
+import com.happymeteo.utils.GetRequest;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
+import com.happymeteo.utils.onPostExecuteListener;
 
-public class CreateAccountActivity extends Activity implements OnCompleteListener {
+public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
+		OnCompleteListener, onPostExecuteListener {
 	private String user_id;
 	private String facebook_id;
-	private Activity activity;
+	private AppyMeteoNotLoggedActivity activity;
+	private onPostExecuteListener onPostExecuteListener;
 	private OnCompleteListener onCompleteListener;
 	private Button btnCreateUserFacebook;
-	
+	private User lastUser;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_account);
-		
+
 		this.activity = this;
+		this.onPostExecuteListener = this;
 		this.onCompleteListener = this;
-		
+
 		this.user_id = "";
-		
+		this.facebook_id = "";
+
 		final EditText create_account_fist_name = (EditText) findViewById(R.id.create_account_fist_name);
 		final EditText create_account_last_name = (EditText) findViewById(R.id.create_account_last_name);
 		final Spinner create_account_gender = (Spinner) findViewById(R.id.create_account_gender);
@@ -50,14 +55,14 @@ public class CreateAccountActivity extends Activity implements OnCompleteListene
 		final EditText create_account_cap = (EditText) findViewById(R.id.create_account_cap);
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
 		btnCreateUserFacebook = (Button) findViewById(R.id.btnCreateUserFacebook);
-		
-		if(HappyMeteoApplication.i().isFacebookSession()) {
+
+		if (HappyMeteoApplication.i().isFacebookSession()) {
 			create_account_password.setVisibility(View.GONE);
 		}
-		
+
 		User user = HappyMeteoApplication.i().getCurrentUser();
-		
-		if(user != null) {
+
+		if (user != null) {
 			this.user_id = user.getUser_id();
 			this.facebook_id = user.getFacebook_id();
 			create_account_fist_name.setText(user.getFirst_name());
@@ -69,136 +74,128 @@ public class CreateAccountActivity extends Activity implements OnCompleteListene
 			create_account_work.setSelection(user.getWork());
 			create_account_location.setText(user.getLocation());
 			create_account_cap.setText(user.getCap());
-			
-			if(!this.user_id.equals("")) {
+
+			if (!this.user_id.equals("")) {
 				btnCreateUser.setText(R.string.modify_account);
 			}
 		}
-		
-		if(!facebook_id.equals("")) {
+
+		if (!facebook_id.equals("")) {
 			btnCreateUserFacebook.setText(R.string.unlink_user_to_facebook);
 		} else {
 			btnCreateUserFacebook.setText(R.string.link_user_to_facebook);
 		}
-		
+
 		btnCreateUserFacebook.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(facebook_id.equals("")) {
-					HappyMeteoApplication.i().getFacebookSessionService().openConnession(activity, onCompleteListener);
-					
+				if (facebook_id.equals("")) {
+					HappyMeteoApplication.i().getFacebookSessionService()
+							.openConnession(onCompleteListener);
+
 				} else {
 					facebook_id = "";
-					btnCreateUserFacebook.setText(R.string.link_user_to_facebook);
+					btnCreateUserFacebook
+							.setText(R.string.link_user_to_facebook);
 				}
 			}
 		});
-		
-		
+
 		btnCreateUser.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View view) {
-				Log.i(Const.TAG, "this.facebook_id: "+facebook_id);
-				Log.i(Const.TAG, "create_account_fist_name: "+create_account_fist_name.getText());
-				Log.i(Const.TAG, "create_account_last_name: "+create_account_last_name.getText());
-				Log.i(Const.TAG, "create_account_gender: "+create_account_gender.getSelectedItemPosition());
-				Log.i(Const.TAG, "create_account_email: "+create_account_email.getText());
-				Log.i(Const.TAG, "create_account_age: "+create_account_age.getSelectedItemPosition());
-				Log.i(Const.TAG, "create_account_education: "+create_account_education.getSelectedItemPosition());
-				Log.i(Const.TAG, "create_account_work: "+create_account_work.getSelectedItemPosition());
-				Log.i(Const.TAG, "create_account_location: "+create_account_location.getText());
-				Log.i(Const.TAG, "create_account_cap: "+create_account_cap.getText());
-				
+				Log.i(Const.TAG, "this.facebook_id: " + facebook_id);
+				Log.i(Const.TAG, "create_account_fist_name: "
+						+ create_account_fist_name.getText());
+				Log.i(Const.TAG, "create_account_last_name: "
+						+ create_account_last_name.getText());
+				Log.i(Const.TAG, "create_account_gender: "
+						+ create_account_gender.getSelectedItemPosition());
+				Log.i(Const.TAG, "create_account_email: "
+						+ create_account_email.getText());
+				Log.i(Const.TAG,
+						"create_account_age: "
+								+ create_account_age.getSelectedItemPosition());
+				Log.i(Const.TAG, "create_account_education: "
+						+ create_account_education.getSelectedItemPosition());
+				Log.i(Const.TAG,
+						"create_account_work: "
+								+ create_account_work.getSelectedItemPosition());
+				Log.i(Const.TAG, "create_account_location: "
+						+ create_account_location.getText());
+				Log.i(Const.TAG,
+						"create_account_cap: " + create_account_cap.getText());
+
 				String password;
 				try {
-					password = SHA1.hexdigest(create_account_password.getText().toString());
+					password = SHA1.hexdigest(create_account_password.getText()
+							.toString());
 				} catch (Exception e) {
 					e.printStackTrace();
 					password = "";
 				}
-				
-				CreateAccountDTO cDto = ServerUtilities.createAccount(
-						view.getContext(),
-						user_id,
-						facebook_id, 
-						create_account_fist_name.getText().toString(), 
-						create_account_last_name.getText().toString(), 
-						create_account_gender.getSelectedItemPosition(), 
-						create_account_email.getText().toString(), 
-						create_account_age.getSelectedItemPosition(), 
-						create_account_education.getSelectedItemPosition(), 
-						create_account_work.getSelectedItemPosition(), 
+
+				ServerUtilities.createAccount(onPostExecuteListener, activity,
+						user_id, facebook_id, create_account_fist_name
+								.getText().toString(), create_account_last_name
+								.getText().toString(), create_account_gender
+								.getSelectedItemPosition(),
+						create_account_email.getText().toString(),
+						create_account_age.getSelectedItemPosition(),
+						create_account_education.getSelectedItemPosition(),
+						create_account_work.getSelectedItemPosition(),
 						create_account_location.getText().toString(),
-						create_account_cap.getText().toString(),
-						password);
-				
-				switch(cDto.status) {
-					
-					case CONFIRMED_OR_FACEBOOK:
-						User user = new User(
-							cDto.user_id,
-							facebook_id, 
-							create_account_fist_name.getText().toString(), 
-							create_account_last_name.getText().toString(), 
-							create_account_gender.getSelectedItemPosition(), 
-							create_account_email.getText().toString(), 
-							create_account_age.getSelectedItemPosition(), 
-							create_account_education.getSelectedItemPosition(), 
-							create_account_work.getSelectedItemPosition(), 
-							create_account_location.getText().toString(), 
-							create_account_cap.getText().toString(), 
-							User.USER_REGISTERED);
-						
-						/* Set current user */
-						HappyMeteoApplication.i().setCurrentUser(user);
-						
-						/* Switch to menu activity if registered */
-						Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-						startActivity(intent);
-						break;
-					
-					case NOT_CONFIRMED:
-						AlertDialogManager alert = new AlertDialogManager();
-						alert.showAlertDialog(view.getContext(), "Account non verificato",
-								"Presto verra  inviata una email di conferma all'email indicata", true, new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog, int which) {
-										finish();
-									}
-								});
-						break;
-						
-					case ERROR:
-						break;
-				}
-			}
-		});
-		
-		Button btnBack = (Button) findViewById(R.id.btnBackCreateAccount);
-		btnBack.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				finish();
+						create_account_cap.getText().toString(), password);
+
+				lastUser = new User("", facebook_id, create_account_fist_name
+						.getText().toString(), create_account_last_name
+						.getText().toString(), create_account_gender
+						.getSelectedItemPosition(), create_account_email
+						.getText().toString(), create_account_age
+						.getSelectedItemPosition(), create_account_education
+						.getSelectedItemPosition(), create_account_work
+						.getSelectedItemPosition(), create_account_location
+						.getText().toString(), create_account_cap.getText()
+						.toString(), User.USER_REGISTERED);
 			}
 		});
 	}
 
 	@Override
-	public void onComplete(Bundle values, FacebookException error, Activity caller) {
-		if(values != null) {
+	public void onComplete(Bundle values, FacebookException error,
+			AppyMeteoNotLoggedActivity caller) {
+		if (values != null) {
 			String accessToken = values.getString("access_token");
-			String serverUrl = "https://graph.facebook.com/me?access_token="+accessToken;		
-			String response = ServerUtilities.getRequest(serverUrl);
-			try {
-				JSONObject facebook_profile = new JSONObject(response);
-				this.facebook_id = facebook_profile.getString("id");
-				Log.i(Const.TAG, "new facebook_id: "+facebook_id);
-				btnCreateUserFacebook.setText(R.string.unlink_user_to_facebook);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
+			String serverUrl = "https://graph.facebook.com/me?access_token="
+					+ accessToken;
+			new GetRequest(this).execute(serverUrl);
 		}
 	}
 
+	@Override
+	public void onPostExecute(int id, String result) {
+		try {
+			JSONObject jsonObject = new JSONObject(result);
+			if (jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) { // CONFIRMED_OR_FACEBOOK
+				lastUser.setUser_id(jsonObject.getString("user_id"));
+				HappyMeteoApplication.i().setCurrentUser(lastUser);
+				invokeActivity(MenuActivity.class);
+			} else { // NOT_CONFIRMED
+				AlertDialogManager alert = new AlertDialogManager();
+				alert.showAlertDialog(
+						activity,
+						"Account non verificato",
+						"Presto verra  inviata una email di conferma all'email indicata",
+						true, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								finish();
+							}
+						});
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
 }
