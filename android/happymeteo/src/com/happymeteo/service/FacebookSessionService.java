@@ -3,10 +3,8 @@ package com.happymeteo.service;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
@@ -39,9 +37,11 @@ public class FacebookSessionService implements OnCompleteListener, onPostExecute
 	
 	private void tryLoginUser() {
 		String accessToken = HappyMeteoApplication.i().getAccessToken();
-		Log.i(Const.TAG, "accessToken: "+accessToken);
-		
-		ServerUtilities.facebookLogin(this, lastActivity, accessToken);
+		if(accessToken != null) {
+			ServerUtilities.facebookLogin(this, lastActivity, accessToken);
+		} else {
+			openConnession(this);
+		}
 	}
 	
 	public void onClickLogin(AppyMeteoNotLoggedActivity activity) {
@@ -114,7 +114,6 @@ public class FacebookSessionService implements OnCompleteListener, onPostExecute
 				return;
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

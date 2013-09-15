@@ -46,27 +46,6 @@ public class AuthDialog extends WebDialog {
 	@SuppressLint("SetJavaScriptEnabled")
 	protected void setUpWebView(int margin) {
 		super.setUpWebView(margin);
-		
-		webView.getSettings().setJavaScriptEnabled(true);
-		webView.addJavascriptInterface(new JavaScriptInterface() {
-			public void showHTML(String html) {
-				Log.i(Const.TAG, "showHTML.length(): " + html.length());
-				
-				if (!listenerCalled) {
-					if (html.contains("Torna alla pagina precedente")) {
-						webView.loadUrl(url);
-					} else {
-						activity.runOnUiThread(new Runnable() {
-							public void run() {
-								contentFrameLayout.setBackgroundColor(Color.TRANSPARENT);
-								webView.setVisibility(View.VISIBLE);
-								crossImageView.setVisibility(View.VISIBLE);
-							}
-						});
-					}
-				}
-			}
-		}, "MY_JS");
 	}
 
 	private class AuthDialogWebViewClient extends DialogWebViewClient {
@@ -78,11 +57,9 @@ public class AuthDialog extends WebDialog {
 			if (!isDetached) {
 				spinner.dismiss();
 			}
-			/*
-			 * Once web view is fully loaded, set the contentFrameLayout
-			 * background to be transparent and make visible the 'x' image.
-			 */
-			view.loadUrl("javascript:window.MY_JS.showHTML(document.getElementsByTagName('html')[0].innerHTML);");
+			contentFrameLayout.setBackgroundColor(Color.TRANSPARENT);
+			webView.setVisibility(View.VISIBLE);
+			crossImageView.setVisibility(View.VISIBLE);
 		}
 	}
 }

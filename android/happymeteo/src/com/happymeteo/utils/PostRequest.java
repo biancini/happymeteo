@@ -87,6 +87,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 				}
 				in.close();
 			} catch(Exception e) {
+				e.printStackTrace();
 				Log.e(Const.TAG, e.getMessage(), e);
 			}
 		}
