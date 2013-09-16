@@ -11,13 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.happymeteo.AppyMeteoNotLoggedActivity;
-import com.happymeteo.HappyMeteoApplication;
 import com.happymeteo.R;
 import com.happymeteo.models.Friend;
-import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
 
 public class FriendsAdapter extends ArrayAdapter<Friend> {
 	private AppyMeteoNotLoggedActivity activity;
@@ -53,11 +53,16 @@ public class FriendsAdapter extends ArrayAdapter<Friend> {
 			picker_button.setOnClickListener(new OnClickListener() {
 				
 				public void onClick(View view) {
-					ServerUtilities.requestChallenge(
+					/*ServerUtilities.requestChallenge(
 						activity, 
 						HappyMeteoApplication.i().getCurrentUser().getUser_id(),
 						friend.getId(),
-						HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId());
+						HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId());*/
+					
+					FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(activity, Session.getActiveSession());
+					feedDialogBuilder.setTo(friend.getId());
+					WebDialog webDialog = feedDialogBuilder.build();
+					webDialog.show();
 				}
 			});
 		} else {
@@ -66,12 +71,17 @@ public class FriendsAdapter extends ArrayAdapter<Friend> {
 			picker_button.setOnClickListener(new OnClickListener() {
 				
 				public void onClick(View view) {
-					String url = "https://www.facebook.com/dialog/feed?"
+					/*String url = "https://www.facebook.com/dialog/feed?"
 							+ "&client_id="+Const.FACEBOOK_ID
 							+ "&redirect_uri="+Const.BASE_URL
 							+ "&to="+friend.getId();
 							
 					WebDialog webDialog = new WebDialog(activity, url);
+					webDialog.show();*/
+					
+					FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(activity, Session.getActiveSession());
+					feedDialogBuilder.setTo(friend.getId());
+					WebDialog webDialog = feedDialogBuilder.build();
 					webDialog.show();
 				}
 			});

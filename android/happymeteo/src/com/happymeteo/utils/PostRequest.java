@@ -15,16 +15,19 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Window;
 
 public class PostRequest extends AsyncTask<String, Void, String> {
 	private int id;
 	private Context context;
 	private Map<String, String> parameters;
 	private onPostExecuteListener onPostExecuteListener;
+	private ProgressDialog spinner;
 	
 	public PostRequest(int id, onPostExecuteListener onPostExecuteListener, Context context, Map<String, String> parameters) {
 		this(onPostExecuteListener, context, parameters);
@@ -41,6 +44,9 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		this.onPostExecuteListener = null;
 		this.context = context;
 		this.parameters = parameters;
+		spinner = new ProgressDialog(context);
+		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		spinner.setMessage(context.getString(com.happymeteo.R.string.loading));
 	}
 	
 	private boolean showError(String json) {
@@ -63,6 +69,12 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 			}
 		} catch (JSONException e) {}
 		return false;
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+		spinner.show();
 	}
 
 	@Override
@@ -97,6 +109,8 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	
 	@Override
     protected void onPostExecute(String result) {
+		super.onPostExecute(result);
+		
 		if(!showError(result)) {
 			Log.i(Const.TAG, result);
 			
@@ -104,5 +118,6 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 				onPostExecuteListener.onPostExecute(id, result);
 			}
 		}
+		spinner.dismiss();
     }
 }

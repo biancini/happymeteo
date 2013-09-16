@@ -13,7 +13,7 @@ import com.happymeteo.AppyMeteoNotLoggedActivity;
 import com.happymeteo.CreateAccountActivity;
 import com.happymeteo.HappyMeteoApplication;
 import com.happymeteo.MenuActivity;
-import com.happymeteo.facebook.AuthDialog;
+import com.happymeteo.facebook.WebDialog;
 import com.happymeteo.facebook.WebDialog.OnCompleteListener;
 import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
@@ -30,7 +30,7 @@ public class FacebookSessionService implements OnCompleteListener, onPostExecute
 				+ "&type=user_agent"
 				+ "&redirect_uri="+Const.BASE_URL;
 		
-		AuthDialog facebookAuthDialog = new AuthDialog(lastActivity, url);
+		WebDialog facebookAuthDialog = new WebDialog(lastActivity, url);
 		facebookAuthDialog.setOnCompleteListener(onCompleteListener);
 		facebookAuthDialog.show();
 	}

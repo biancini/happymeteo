@@ -38,7 +38,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 		String accessToken = HappyMeteoApplication.i().getAccessToken();
 		
 		String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token="+accessToken;
-		new GetRequest(this).execute(serverUrl);
+		new GetRequest(this, this).execute(serverUrl);
 	}
 
 	@Override

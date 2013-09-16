@@ -7,26 +7,41 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Window;
 
 public class GetRequest extends AsyncTask<String, Void, String> {
+	private Context context;
 	private onPostExecuteListener onPostExecuteListener;
 	private int id;
+	private ProgressDialog spinner;
 	
-	public GetRequest() {
+	public GetRequest(Context context) {
 		this.onPostExecuteListener = null;
 		this.id = 0;
+		this.context = context;
+		spinner = new ProgressDialog(context);
+		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		spinner.setMessage(context.getString(com.happymeteo.R.string.loading));
 	}
 	
-	public GetRequest(onPostExecuteListener onPostExecuteListener) {
-		this();
+	public GetRequest(Context context, onPostExecuteListener onPostExecuteListener) {
+		this(context);
 		this.onPostExecuteListener = onPostExecuteListener;
 	}
 	
-	public GetRequest(int id, onPostExecuteListener onPostExecuteListener) {
-		this(onPostExecuteListener);
+	public GetRequest(Context context, int id, onPostExecuteListener onPostExecuteListener) {
+		this(context, onPostExecuteListener);
 		this.id = id;
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+		spinner.show();
 	}
 	
 	@Override
@@ -60,5 +75,6 @@ public class GetRequest extends AsyncTask<String, Void, String> {
 		if(onPostExecuteListener != null && result != null) {
 			onPostExecuteListener.onPostExecute(id, result);
 		}
+		spinner.dismiss();
     }
 }

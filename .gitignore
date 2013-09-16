@@ -1,3 +1,7 @@
-android/happymeteo/bin
-android/facebook-sdk/bin
 *.pyc
+android/happymeteo/bin
+android/facebook/bin
+android/happymeteo/gen
+android/facebook/gen
+android/*/gen
+android/*/bin
