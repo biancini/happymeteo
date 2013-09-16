@@ -1,17 +1,26 @@
 package com.happymeteo;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 
 import com.facebook.LoggingBehavior;
@@ -23,7 +32,6 @@ import com.happymeteo.models.User;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.ConnectionDetector;
 import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 
 public class IndexActivity extends AppyMeteoNotLoggedActivity implements
@@ -31,9 +39,27 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private boolean grantedPublishPermission = false;
+	private ProgressDialog spinner;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
+		// Add code to print out the key hash
+	    try {
+	        PackageInfo info = getPackageManager().getPackageInfo(
+	                "com.happymeteo", 
+	                PackageManager.GET_SIGNATURES);
+	        for (Signature signature : info.signatures) {
+	            MessageDigest md = MessageDigest.getInstance("SHA");
+	            md.update(signature.toByteArray());
+	            Log.d(Const.TAG, "KeyHash:"+Base64.encodeToString(md.digest(), Base64.DEFAULT));
+	        }
+	    } catch (NameNotFoundException e) {
+
+	    } catch (NoSuchAlgorithmException e) {
+
+	    }
+		
 		setContentView(R.layout.activity_index);
 		super.onCreate(savedInstanceState);
 
@@ -51,6 +77,10 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 					});
 			return;
 		}
+		
+		spinner = new ProgressDialog(this);
+		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		spinner.setMessage(this.getString(com.happymeteo.R.string.loading));
 
 		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 
@@ -66,7 +96,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 			Session.setActiveSession(session);
 			if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
 				grantedPublishPermission = true;
-				Session.openActiveSession(this, false, statusCallback);
+				Session.openActiveSession(this, true, statusCallback);
 			}
 		}
 
@@ -128,23 +158,29 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	}
 
 	private void updateView(Session session) {
+		spinner.setMessage("state: "+session.getState());
 		if (session.isOpened()) {
 			if (!grantedPublishPermission) {
+				spinner.setMessage("granted");
 				session.requestNewPublishPermissions(new NewPermissionsRequest(
 						this,
 						Arrays.asList(Const.FACEBOOK_PERMISSION_PUBLISH_ARRAY))
 						.setCallback(statusCallback));
 				grantedPublishPermission = true;
 			} else {
-				String accessToken = Session.getActiveSession()
+				spinner.setMessage("login");
+				/*String accessToken = Session.getActiveSession()
 						.getAccessToken();
 				HappyMeteoApplication.i().setAccessToken(accessToken);
-				ServerUtilities.facebookLogin(this, this, accessToken);
+				ServerUtilities.facebookLogin(this, this, accessToken);*/
 			}
+		} else {
+			spinner.setMessage("not opened: "+session.getState());
 		}
 	}
 
 	private void onClickLogin() {
+		spinner.show();
 		Session session = Session.getActiveSession();
 		if (!session.isOpened() && !session.isClosed()) {
 			session.openForRead(new Session.OpenRequest(this).setPermissions(
@@ -170,7 +206,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 			// If there is an exception...
 			if (exception != null) {
-				// Handle fail case here.
+				spinner.setMessage(exception.getMessage());
 				return;
 			}
 
