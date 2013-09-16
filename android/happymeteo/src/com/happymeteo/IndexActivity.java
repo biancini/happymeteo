@@ -36,6 +36,8 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
+		
 		setContentView(R.layout.activity_index);
 		super.onCreate(savedInstanceState);
 
