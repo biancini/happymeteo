@@ -1,7 +1,5 @@
 package com.happymeteo;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import org.json.JSONException;
@@ -11,12 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,23 +36,6 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
-		// Add code to print out the key hash
-	    try {
-	        PackageInfo info = getPackageManager().getPackageInfo(
-	                "com.happymeteo", 
-	                PackageManager.GET_SIGNATURES);
-	        for (Signature signature : info.signatures) {
-	            MessageDigest md = MessageDigest.getInstance("SHA");
-	            md.update(signature.toByteArray());
-	            Log.d(Const.TAG, "KeyHash:"+Base64.encodeToString(md.digest(), Base64.DEFAULT));
-	        }
-	    } catch (NameNotFoundException e) {
-
-	    } catch (NoSuchAlgorithmException e) {
-
-	    }
-		
 		setContentView(R.layout.activity_index);
 		super.onCreate(savedInstanceState);
 
