@@ -27,6 +27,7 @@
                     android:layout_alignParentBottom="true" />
 
                 <TextView
+                    android:id="@+id/today_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -86,6 +87,7 @@
                     android:layout_weight="1" >
 
                     <TextView
+                        android:id="@+id/yesterday_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="30sp"
@@ -116,6 +118,7 @@
                     android:layout_weight="1" >
 
                     <TextView
+                        android:id="@+id/tomorrow_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="30sp"

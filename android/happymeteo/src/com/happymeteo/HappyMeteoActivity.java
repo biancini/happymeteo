@@ -3,11 +3,12 @@ package com.happymeteo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 
 public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {
@@ -17,7 +18,22 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		setContentView(R.layout.activity_happy_meteo);
 		super.onCreate(savedInstanceState);
 		
-		ServerUtilities.happyMeteo(this, this);
+		//ServerUtilities.happyMeteo(this, this);
+		
+		Log.i(Const.TAG, "suca font");
+		
+		Typeface helveticaneueltstd = Typeface.createFromAsset(getAssets(), "helveticaneueltstd.ttf");
+		
+		TextView today_text = (TextView) findViewById(R.id.today_text);
+		today_text.setTypeface(helveticaneueltstd);
+		
+		TextView yesterday_text = (TextView) findViewById(R.id.yesterday_text);
+		yesterday_text.setTypeface(helveticaneueltstd);
+		
+		TextView tomorrow_text = (TextView) findViewById(R.id.tomorrow_text);
+		tomorrow_text.setTypeface(helveticaneueltstd);
+		
+		Log.i(Const.TAG, "suca font 2");
 		
 		//JSONObject json = ServerUtilities.happyMeteo(getApplicationContext());
 		//Log.i(Const.TAG, "json: " + json);
