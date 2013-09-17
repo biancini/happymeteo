@@ -22,10 +22,10 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
 		Thread.setDefaultUncaughtExceptionHandler(
                 new DefaultExceptionHandler());
+		
+		super.onCreate(savedInstanceState);
 	}
 
 	public void invokeActivity(Class<? extends Activity> clazz) {

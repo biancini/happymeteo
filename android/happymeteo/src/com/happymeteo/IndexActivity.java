@@ -34,10 +34,21 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private boolean grantedPublishPermission = false;
 	private ProgressDialog spinner;
+	
+	class DefaultExceptionHandler implements Thread.UncaughtExceptionHandler {
+		public DefaultExceptionHandler() {
+		}
+
+		@Override
+		public void uncaughtException(Thread thread, Throwable ex) {
+			Log.e(Const.TAG, ex.getMessage(), ex);
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
+		Thread.setDefaultUncaughtExceptionHandler(
+                new DefaultExceptionHandler());
 		
 		setContentView(R.layout.activity_index);
 		super.onCreate(savedInstanceState);
