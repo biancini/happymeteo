@@ -25,6 +25,7 @@ import com.happymeteo.models.User;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.ConnectionDetector;
 import com.happymeteo.utils.Const;
+import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 
 public class IndexActivity extends AppyMeteoNotLoggedActivity implements
@@ -146,11 +147,11 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 						.setCallback(statusCallback));
 				grantedPublishPermission = true;
 			} else {
-				spinner.setMessage("login");
-				/*String accessToken = Session.getActiveSession()
+				spinner.dismiss();
+				String accessToken = Session.getActiveSession()
 						.getAccessToken();
 				HappyMeteoApplication.i().setAccessToken(accessToken);
-				ServerUtilities.facebookLogin(this, this, accessToken);*/
+				ServerUtilities.facebookLogin(this, this, accessToken);
 			}
 		} else {
 			spinner.setMessage("not opened: "+session.getState());
