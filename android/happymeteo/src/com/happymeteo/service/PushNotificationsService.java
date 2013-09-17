@@ -18,7 +18,7 @@ public class PushNotificationsService {
 		this.registrationId = registrationId;
 	}
 
-	public void initialize(Context context) {
+	public boolean initialize(Context context) {
 		/* Make sure the device has the proper dependencies. */
 		GCMRegistrar.checkDevice(context);
 		
@@ -28,30 +28,21 @@ public class PushNotificationsService {
 		/* Get Registration Id */
 		registrationId = GCMRegistrar.getRegistrationId(context);
 		
-		Log.i("HappyMeteo", "registrationId: "+registrationId);
+		Log.i(Const.TAG, "registrationId: "+registrationId);
 		if (registrationId.equals("")) {
-			Log.i("HappyMeteo", "Register now: "+GCMRegistrar.isRegisteredOnServer(context));
+			Log.i(Const.TAG, "Register now: "+GCMRegistrar.isRegisteredOnServer(context));
 			
 			/* Registration is not present, register now with GCM */			
 			GCMRegistrar.register(context, Const.GOOGLE_ID);
+			return false;
 		}
+		
+		return true;
 	}
-	
-	/*public void onReceive(Context context, Intent intent) {
-		String newMessage = intent.getExtras().getString(Const.EXTRA_MESSAGE);
-		// Waking up mobile if it is sleeping
-		WakeLocker.acquire(context);
-		
-		// Showing received message
-		Log.i(Const.TAG, "New Message: " + newMessage);
-		
-		// Releasing wake lock
-		WakeLocker.release();
-	}*/
 
 	public void terminate(Context context) {
-		Log.i("HappyMeteo", "unregister");
-		GCMRegistrar.unregister(context);
-		GCMRegistrar.onDestroy(context);
+		if(GCMRegistrar.isRegistered(context)) {
+			GCMRegistrar.unregister(context);
+		}
 	}
 }

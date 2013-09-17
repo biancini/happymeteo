@@ -1,11 +1,14 @@
 package com.happymeteo;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.happymeteo.utils.AlertDialogManager;
+import com.happymeteo.utils.ConnectionDetector;
 import com.happymeteo.utils.Const;
 
 public class AppyMeteoNotLoggedActivity extends SherlockActivity {
@@ -24,6 +27,21 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		Thread.setDefaultUncaughtExceptionHandler(
                 new DefaultExceptionHandler());
+		
+		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
+
+		/* Check internet */
+		if (!cd.isConnectingToInternet()) {
+			AlertDialogManager alert = new AlertDialogManager();
+			alert.showAlertDialog(this, "Errore di connessione Internet",
+					"Connettere Internet per utilizzare Appy Meteo", false,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							finish();
+						}
+					});
+			return;
+		}
 		
 		super.onCreate(savedInstanceState);
 	}

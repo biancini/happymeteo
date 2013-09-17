@@ -29,18 +29,13 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	private onPostExecuteListener onPostExecuteListener;
 	private ProgressDialog spinner;
 	
-	public PostRequest(int id, onPostExecuteListener onPostExecuteListener, Context context, Map<String, String> parameters) {
-		this(onPostExecuteListener, context, parameters);
-		this.id = id;
-	}
-
-	public PostRequest(onPostExecuteListener onPostExecuteListener, Context context, Map<String, String> parameters) {
-		this(context, parameters);
+	public PostRequest(int id, Context context, Map<String, String> parameters, onPostExecuteListener onPostExecuteListener) {
+		this(id, context, parameters);
 		this.onPostExecuteListener = onPostExecuteListener;
 	}
 	
-	public PostRequest(Context context, Map<String, String> parameters) {
-		this.id = 0;
+	public PostRequest(int id, Context context, Map<String, String> parameters) {
+		this.id = id;
 		this.onPostExecuteListener = null;
 		this.context = context;
 		this.parameters = parameters;

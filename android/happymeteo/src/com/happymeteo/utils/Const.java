@@ -21,6 +21,26 @@ public final class Const {
 	
 	public static final String HAPPY_METEO_URL = BASE_URL + "/happy_meteo";
 	public static final String HAPPY_CONTEXT_URL = BASE_URL + "/happy_context";
+	
+	/* Id Post */
+	public static final int CREATE_ACCOUNT_ID = 1;
+	public static final int FACEBOOK_LOGIN_URL_ID = 2;
+	public static final int NORMAL_LOGIN_URL_ID = 3;
+	
+	public static final int REGISTER_URL_ID = 4;
+	public static final int UNREGISTER_URL_ID = 5;
+	
+	public static final int GET_QUESTIONS_URL_ID = 6;
+	public static final int SUBMIT_QUESTIONS_URL_ID = 7;
+	
+	public static final int REQUEST_CHALLENGE_URL_ID = 8; 
+	public static final int ACCEPT_CHALLENGE_URL_ID = 9;
+	public static final int QUESTIONS_CHALLENGE_URL_ID = 10;
+	public static final int SUBMIT_CHALLENGE_URL_ID = 11;
+	
+	public static final int HAPPY_METEO_URL_ID = 12;
+	public static final int HAPPY_CONTEXT_URL_ID = 13;
+	
 
     /* Google */
 	public static final String GOOGLE_ID = "347057775979";

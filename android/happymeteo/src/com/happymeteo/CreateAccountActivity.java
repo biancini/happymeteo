@@ -174,7 +174,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 			if (jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) { // CONFIRMED_OR_FACEBOOK
 				lastUser.setUser_id(jsonObject.getString("user_id"));
 				HappyMeteoApplication.i().setCurrentUser(lastUser);
-				invokeActivity(MenuActivity.class);
+				invokeActivity(HappyMeteoActivity.class);
 			} else { // NOT_CONFIRMED
 				AlertDialogManager alert = new AlertDialogManager();
 				alert.showAlertDialog(

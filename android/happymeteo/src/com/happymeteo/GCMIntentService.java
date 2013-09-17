@@ -12,9 +12,10 @@ import android.util.Log;
 import com.google.android.gcm.GCMBaseIntentService;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
+import com.happymeteo.utils.onPostExecuteListener;
 
 public class GCMIntentService extends GCMBaseIntentService {
-
+	
 	public GCMIntentService() {
 		super(Const.GOOGLE_ID);
 	}
@@ -29,7 +30,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 			HappyMeteoApplication.i().getPushNotificationsService().setRegistrationId(registrationId);
 			
 			/* Register device on happymeteo backend */
-			ServerUtilities.registerDevice(getApplicationContext(), registrationId, HappyMeteoApplication.i().getCurrentUser().getUser_id());
+			ServerUtilities.registerDevice(
+					(Activity) context,
+					registrationId,
+					HappyMeteoApplication.i().getCurrentUser().getUser_id());
 		}
 	}
 

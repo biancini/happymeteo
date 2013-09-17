@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,8 +21,6 @@ import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.happymeteo.models.User;
-import com.happymeteo.utils.AlertDialogManager;
-import com.happymeteo.utils.ConnectionDetector;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
@@ -34,40 +31,14 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private boolean grantedPublishPermission = false;
 	private ProgressDialog spinner;
-	
-	class DefaultExceptionHandler implements Thread.UncaughtExceptionHandler {
-		public DefaultExceptionHandler() {
-		}
-
-		@Override
-		public void uncaughtException(Thread thread, Throwable ex) {
-			Log.e(Const.TAG, ex.getMessage(), ex);
-		}
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Thread.setDefaultUncaughtExceptionHandler(
-                new DefaultExceptionHandler());
-		
 		setContentView(R.layout.activity_index);
 		super.onCreate(savedInstanceState);
-
-		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
-
-		/* Check internet */
-		if (!cd.isConnectingToInternet()) {
-			AlertDialogManager alert = new AlertDialogManager();
-			alert.showAlertDialog(this, "Errore di connessione Internet",
-					"Connettere Internet per utilizzare Appy Meteo", false,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							finish();
-						}
-					});
-			return;
-		}
 		
+		HappyMeteoApplication.initialize(this);
+
 		spinner = new ProgressDialog(this);
 		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		spinner.setMessage(this.getString(com.happymeteo.R.string.loading));
@@ -112,10 +83,6 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 		btnLoginFacebook.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				// HappyMeteoApplication.i().getFacebookSessionService().onClickLogin(activity);
-				// String accessToken =
-				// Session.getActiveSession().getAccessToken();
-				//onClickLogout();
 				onClickLogin();
 			}
 		});
@@ -181,12 +148,12 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		}
 	}
 
-	private void onClickLogout() {
-		Session session = Session.getActiveSession();
-		if (!session.isClosed()) {
-			session.closeAndClearTokenInformation();
-		}
-	}
+//	private void onClickLogout() {
+//		Session session = Session.getActiveSession();
+//		if (!session.isClosed()) {
+//			session.closeAndClearTokenInformation();
+//		}
+//	}
 
 	private class SessionStatusCallback implements Session.StatusCallback {
 		@Override

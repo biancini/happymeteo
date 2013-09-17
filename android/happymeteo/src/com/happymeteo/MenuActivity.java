@@ -19,19 +19,6 @@ public class MenuActivity extends AppyMeteoLoggedActivity {
 		
 		this.activity = this;
 		
-		/* Initialize PushNotificationsService */
-		HappyMeteoApplication.i().getPushNotificationsService().initialize(
-				getApplicationContext());
-
-		if (!HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId().equals("") 
-				&& HappyMeteoApplication.i().getCurrentUser() != null) {
-			/* Register device on happymeteo backend */
-			ServerUtilities.registerDevice(
-					getApplicationContext(), 
-					HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId(),
-					HappyMeteoApplication.i().getCurrentUser().getUser_id());
-		}
-		
 		Button btnBeginQuestions = (Button) findViewById(R.id.btnQuestionBegin);
 		Button btnChallengeTry = (Button) findViewById(R.id.btnChallengeTry);
 		Button btnLogout = (Button) findViewById(R.id.btnLogout);

@@ -58,11 +58,9 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements o
 			User user = new User(jsonObject);
 			
 			if(user != null) {
-				/* Set current user */
-				HappyMeteoApplication.i().setCurrentUser(user);
 				HappyMeteoApplication.i().setFacebookSession(false);
-				
-				invokeActivity(MenuActivity.class);
+				HappyMeteoApplication.i().setCurrentUser(user);
+				invokeActivity(HappyMeteoActivity.class);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

@@ -77,7 +77,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 			@Override
 			public void onClick(View view) {
 				if (!questionsStarted) {
-					ServerUtilities.getChallengeQuestions(0, onPostExecuteListener,
+					ServerUtilities.getChallengeQuestions(onPostExecuteListener,
 							activity);
 					btnBeginQuestions.setText(R.string.answer_questions_btn);
 					questionsStarted = true;
@@ -98,7 +98,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 							.getCurrentUser().getUser_id());
 					params.put("questions", questions.toString());
 
-					ServerUtilities.submitChallenge(1, onPostExecuteListener,
+					ServerUtilities.submitChallenge(onPostExecuteListener,
 							activity, params);
 				}
 			}
@@ -108,7 +108,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 	@Override
 	public void onPostExecute(int id, String result) {
 		switch (id) {
-		case 0:
+		case Const.QUESTIONS_CHALLENGE_URL_ID:
 			try {
 				JSONArray jsonArray = new JSONArray(result);
 				for (int i = 0; i < jsonArray.length(); i++) {
@@ -221,7 +221,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 				e.printStackTrace();
 			}
 			break;
-		case 1:
+		case Const.SUBMIT_CHALLENGE_URL_ID:
 			finish();
 		}
 	}

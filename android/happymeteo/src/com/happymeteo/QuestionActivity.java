@@ -77,7 +77,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 			@Override
 			public void onClick(View view) {
 				if (!questionsStarted) {
-					ServerUtilities.getQuestions(0, onPostExecuteListener,
+					ServerUtilities.getQuestions(onPostExecuteListener,
 							activity);
 					btnBeginQuestions.setText(R.string.answer_questions_btn);
 					questionsStarted = true;
@@ -98,7 +98,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 							.getCurrentUser().getUser_id());
 					params.put("questions", questions.toString());
 
-					ServerUtilities.submitQuestions(1, onPostExecuteListener,
+					ServerUtilities.submitQuestions(onPostExecuteListener,
 							activity, params);
 				}
 			}
@@ -108,7 +108,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 	@Override
 	public void onPostExecute(int id, String result) {
 		switch (id) {
-		case 0:
+		case Const.GET_QUESTIONS_URL_ID:
 			try {
 				JSONArray jsonArray = new JSONArray(result);
 				for (int i = 0; i < jsonArray.length(); i++) {
@@ -221,7 +221,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 				e.printStackTrace();
 			}
 			break;
-		case 1:
+		case Const.SUBMIT_QUESTIONS_URL_ID:
 			finish();
 		}
 	}
