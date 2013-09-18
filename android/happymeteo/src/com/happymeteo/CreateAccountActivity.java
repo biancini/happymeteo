@@ -11,23 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.facebook.FacebookException;
-import com.happymeteo.facebook.WebDialog.OnCompleteListener;
 import com.happymeteo.models.User;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
-import com.happymeteo.utils.GetRequest;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 
-public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
-		OnCompleteListener, onPostExecuteListener {
+public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements onPostExecuteListener {
 	private String user_id;
 	private String facebook_id;
 	private AppyMeteoNotLoggedActivity activity;
 	private onPostExecuteListener onPostExecuteListener;
-	private OnCompleteListener onCompleteListener;
 	private Button btnCreateUserFacebook;
 	private User lastUser;
 
@@ -38,7 +33,6 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 
 		this.activity = this;
 		this.onPostExecuteListener = this;
-		this.onCompleteListener = this;
 
 		this.user_id = "";
 		this.facebook_id = "";
@@ -87,7 +81,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		btnCreateUserFacebook.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (facebook_id.equals("")) {
+				/*if (facebook_id.equals("")) {
 					HappyMeteoApplication.i().getFacebookSessionService()
 							.openConnession(onCompleteListener);
 
@@ -95,7 +89,9 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 					facebook_id = "";
 					btnCreateUserFacebook
 							.setText(R.string.link_user_to_facebook);
-				}
+				}*/
+				
+				// TODO
 			}
 		});
 
@@ -156,7 +152,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		});
 	}
 
-	@Override
+	/*@Override
 	public void onComplete(Bundle values, FacebookException error,
 			AppyMeteoNotLoggedActivity caller) {
 		if (values != null) {
@@ -165,7 +161,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 					+ accessToken;
 			new GetRequest(this).execute(serverUrl);
 		}
-	}
+	}*/
 
 	@Override
 	public void onPostExecute(int id, String result) {

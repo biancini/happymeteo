@@ -80,8 +80,8 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 	
 	@Override
 	protected void onDestroy() {
-		/* Terminate PushNotificationsService */
-		HappyMeteoApplication.i().getPushNotificationsService().terminate(getApplicationContext());
+		/* Terminate PushNotificationsService
+		HappyMeteoApplication.i().getPushNotificationsService().terminate(getApplicationContext()); */
 
 		super.onDestroy();
 	}

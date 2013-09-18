@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
+import com.facebook.Session;
 import com.happymeteo.facebook.FriendsAdapter;
 import com.happymeteo.models.Friend;
 import com.happymeteo.utils.Const;
@@ -33,10 +34,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_friends_facebook);
 		super.onCreate(savedInstanceState);
-		
-		Log.i(Const.TAG, "Create FriendsFacebookActivity");
-		String accessToken = HappyMeteoApplication.i().getAccessToken();
-		
+		String accessToken = Session.getActiveSession().getAccessToken();
 		String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token="+accessToken;
 		new GetRequest(this, this).execute(serverUrl);
 	}

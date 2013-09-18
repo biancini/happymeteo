@@ -22,7 +22,6 @@ public class MenuActivity extends AppyMeteoLoggedActivity {
 		Button btnBeginQuestions = (Button) findViewById(R.id.btnQuestionBegin);
 		Button btnChallengeTry = (Button) findViewById(R.id.btnChallengeTry);
 		Button btnLogout = (Button) findViewById(R.id.btnLogout);
-		Button btnLogout2 = (Button) findViewById(R.id.btnLogout2);
 		
 		btnBeginQuestions.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
@@ -44,29 +43,8 @@ public class MenuActivity extends AppyMeteoLoggedActivity {
 
 		btnLogout.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				Context context = view.getContext();
-				
-				HappyMeteoApplication.i().logout(context);
-
-				/* Return to index activity */
-				Intent intent = new Intent(context, IndexActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				context.startActivity(intent);
-			}
-		});
-		
-		btnLogout2.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				Context context = view.getContext();
-				
-				HappyMeteoApplication.i().setAccessToken("");
-				
-				HappyMeteoApplication.i().logout(context);
-
-				/* Return to index activity */
-				Intent intent = new Intent(context, IndexActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				context.startActivity(intent);
+				HappyMeteoApplication.i().logout(view.getContext());
+				invokeActivity(IndexActivity.class);
 			}
 		});
 	}

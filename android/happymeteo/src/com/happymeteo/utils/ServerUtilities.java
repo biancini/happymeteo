@@ -46,12 +46,12 @@ public class ServerUtilities {
 		new PostRequest(Const.NORMAL_LOGIN_URL_ID, activity, parameters, onPostExecuteListener).execute(Const.NORMAL_LOGIN_URL);
 	}
 
-	public static void registerDevice(Activity activity, String registrationId, String userId) {
+	public static void registerDevice(Context context, String registrationId, String userId) {
 		Log.i(Const.TAG, "registering device (regId = " + registrationId + ", userId = " + userId + ")");
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("registrationId", registrationId);
 		parameters.put("userId", userId);
-		new PostRequest(Const.REGISTER_URL_ID, activity, parameters).execute(Const.REGISTER_URL);
+		new PostRequest(Const.REGISTER_URL_ID, context, parameters).execute(Const.REGISTER_URL);
 	}
 
 	public static void unregisterDevice(Context context, String registrationId) {

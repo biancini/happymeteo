@@ -6,7 +6,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +16,7 @@ import android.widget.Button;
 
 import com.facebook.LoggingBehavior;
 import com.facebook.Session;
+import com.facebook.Session.Builder;
 import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.SessionState;
 import com.facebook.Settings;
@@ -27,9 +27,10 @@ import com.happymeteo.utils.onPostExecuteListener;
 
 public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		onPostExecuteListener {
-
+	
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private boolean grantedPublishPermission = false;
+	private boolean openActiveSession = false;
 	private ProgressDialog spinner;
 
 	@Override
@@ -38,46 +39,20 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		super.onCreate(savedInstanceState);
 		
 		HappyMeteoApplication.initialize(this);
-
-		spinner = new ProgressDialog(this);
-		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		spinner.setMessage(this.getString(com.happymeteo.R.string.loading));
-
-		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-
-		Session session = Session.getActiveSession();
-		if (session == null) {
-			if (savedInstanceState != null) {
-				session = Session.restoreSession(this, null, statusCallback,
-						savedInstanceState);
-			}
-			if (session == null) {
-				session = new Session(this);
-			}
-			Session.setActiveSession(session);
-			if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-				grantedPublishPermission = true;
-				Session.openActiveSession(this, true, statusCallback);
-			}
-		}
-
+		
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		Button btnLoginHappyMeteo = (Button) findViewById(R.id.btnLoginHappyMeteo);
 		Button btnLoginFacebook = (Button) findViewById(R.id.btnLoginFacebook);
 
 		btnCreateAccount.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				Context context = view.getContext();
-				Intent intent = new Intent(context, CreateAccountActivity.class);
-				context.startActivity(intent);
+				invokeActivity(CreateAccountActivity.class);
 			}
 		});
 
 		btnLoginHappyMeteo.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				Context context = view.getContext();
-				Intent intent = new Intent(context, NormalLoginActivity.class);
-				context.startActivity(intent);
+				invokeActivity(NormalLoginActivity.class);
 			}
 		});
 
@@ -86,6 +61,36 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 				onClickLogin();
 			}
 		});
+
+		spinner = new ProgressDialog(this);
+		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		spinner.setMessage(this.getString(com.happymeteo.R.string.loading));
+		spinner.show();
+
+		Settings.addLoggingBehavior(LoggingBehavior.CACHE);
+		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+		Settings.addLoggingBehavior(LoggingBehavior.DEVELOPER_ERRORS);
+		
+		Session session = Session.getActiveSession();
+		if (session == null) {
+			if (savedInstanceState != null) {
+				Log.i(Const.TAG, "Session.restoreSession savedInstanceState");
+				session = Session.restoreSession(this, null, statusCallback,
+						savedInstanceState);
+			}
+			if (session == null) {
+				Log.i(Const.TAG, "session null");
+				session = new Session(this);
+			}
+			Session.setActiveSession(session);
+			if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
+				Log.i(Const.TAG, "CREATED_TOKEN_LOADED");
+				openActiveSession = true;
+				Session.openActiveSession(this, true, statusCallback);
+			} else {
+				spinner.dismiss();
+			}
+		}
 	}
 
 	@Override
@@ -118,42 +123,64 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		spinner.setMessage("state: "+session.getState());
 		if (session.isOpened()) {
 			if (!grantedPublishPermission) {
+				Log.i(Const.TAG, "granted");
 				spinner.setMessage("granted");
-				session.requestNewPublishPermissions(new NewPermissionsRequest(
-						this,
-						Arrays.asList(Const.FACEBOOK_PERMISSION_PUBLISH_ARRAY))
-						.setCallback(statusCallback));
+				Log.i(Const.TAG, "granted permissions: "+session.getPermissions());
+				Log.i(Const.TAG, "granted accessToken: "+session.getAccessToken());
+				
+				if(openActiveSession) {
+					Log.i(Const.TAG, "granted openForPublish");
+					Session session2 = new Builder(this).build();
+					session2.openForPublish(new Session.OpenRequest(this).setPermissions(
+							Arrays.asList(Const.FACEBOOK_PERMISSION_PUBLISH_ARRAY))
+							.setCallback(statusCallback));
+				} else {
+					Log.i(Const.TAG, "granted requestNewPublishPermissions");
+					session.requestNewPublishPermissions(new NewPermissionsRequest(
+							this,
+							Arrays.asList(Const.FACEBOOK_PERMISSION_PUBLISH_ARRAY))
+							.setCallback(statusCallback));
+				}
+				
 				grantedPublishPermission = true;
 			} else {
 				spinner.dismiss();
-				String accessToken = Session.getActiveSession()
-						.getAccessToken();
-				HappyMeteoApplication.i().setAccessToken(accessToken);
-				ServerUtilities.facebookLogin(this, this, accessToken);
+				ServerUtilities.facebookLogin(this, this, Session.getActiveSession().getAccessToken());
 			}
 		} else {
 			spinner.setMessage("not opened: "+session.getState());
+			Log.i(Const.TAG, "not opened");
 		}
 	}
 
 	private void onClickLogin() {
-		spinner.show();
 		Session session = Session.getActiveSession();
+		
+		Log.i(Const.TAG, "onClickLogin session.isOpened(): "+session.isOpened());
+		Log.i(Const.TAG, "onClickLogin session.isClosed(): "+session.isClosed());
+		Log.i(Const.TAG, "onClickLogin state: "+session.getState());
+		Log.i(Const.TAG, "onClickLogin accessToken: "+session.getAccessToken());
+		Log.i(Const.TAG, "onClickLogin permissions: "+session.getPermissions());
+		
 		if (!session.isOpened() && !session.isClosed()) {
+			Log.i(Const.TAG, "onClickLogin openForRead");
+			openActiveSession = !session.getPermissions().isEmpty();
 			session.openForRead(new Session.OpenRequest(this).setPermissions(
 					Arrays.asList(Const.FACEBOOK_PERMISSION_READ_ARRAY))
 					.setCallback(statusCallback));
 		} else {
+			Log.i(Const.TAG, "onClickLogin openActiveSession");
+			openActiveSession = true;
 			Session.openActiveSession(this, true, statusCallback);
 		}
 	}
 
-//	private void onClickLogout() {
-//		Session session = Session.getActiveSession();
-//		if (!session.isClosed()) {
-//			session.closeAndClearTokenInformation();
-//		}
-//	}
+	private void onClickLogout() {
+		Session session = Session.getActiveSession();
+		if (!session.isClosed()) {
+			session.closeAndClearTokenInformation();
+		}
+	}
 
 	private class SessionStatusCallback implements Session.StatusCallback {
 		@Override
@@ -176,20 +203,9 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 
-			// Get Long Lived Token
-			/*
-			 * String access_token = jsonObject.getString("access_token");
-			 * Session session = Session.getActiveSession(); AccessToken
-			 * accessToken = AccessToken
-			 * .createFromExistingAccessToken(access_token, null, null, null,
-			 * Arrays.asList(Const.FACEBOOK_PERMISSION_ARRAY));
-			 * session.open(accessToken, statusCallback);
-			 */
-
 			User user = new User(jsonObject);
 
 			if (user != null) {
-				HappyMeteoApplication.i().setFacebookSession(true);
 				HappyMeteoApplication.i().setCurrentUser(user);
 
 				if (user.getRegistered() == User.USER_NOT_REGISTERED) {
