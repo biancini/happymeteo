@@ -38,16 +38,16 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		
 		ServerUtilities.happyMeteo(this, this);
 		
-		Typeface helveticaneueltstd = Typeface.createFromAsset(getAssets(), "helveticaneueltstd.ttf");
+		Typeface helveticaneueltstd_ultlt_webfont = Typeface.createFromAsset(getAssets(), "helveticaneueltstd-ultlt-webfont.ttf");
 		
 		today_text = (TextView) findViewById(R.id.today_text);
-		today_text.setTypeface(helveticaneueltstd);
+		today_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 		
 		yesterday_text = (TextView) findViewById(R.id.yesterday_text);
-		yesterday_text.setTypeface(helveticaneueltstd);
+		yesterday_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 		
 		tomorrow_text = (TextView) findViewById(R.id.tomorrow_text);
-		tomorrow_text.setTypeface(helveticaneueltstd);
+		tomorrow_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 		
 		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.profile_picture);
 
@@ -68,7 +68,6 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		//userImageLayout.gravity = Gravity.BOTTOM;
 		
 		relativeLayoutMeteoUp.addView(userImage, userImageLayout);*/
-		
 	}
 	
 	@Override

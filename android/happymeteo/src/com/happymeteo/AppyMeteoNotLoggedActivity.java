@@ -62,17 +62,31 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		super.onSaveInstanceState(outState);
-		
 		Log.i(Const.TAG, this.getClass()+" onSaveInstanceState");
+		super.onSaveInstanceState(outState);
 	}
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
-		// TODO Auto-generated method stub
-		super.onNewIntent(intent);
-		
 		Log.i(Const.TAG, this.getClass()+" onNewIntent");
+		super.onNewIntent(intent);
+	}
+	
+	@Override
+	public void onStart() {
+		Log.i(Const.TAG, this.getClass()+" onStart");
+		super.onStart();
+	}
+
+	@Override
+	public void onStop() {
+		Log.i(Const.TAG, this.getClass()+" onStop");
+		super.onStop();
+	}
+	
+	@Override
+	protected void onResume() {
+		Log.i(Const.TAG, this.getClass()+" onResume");
+		super.onResume();
 	}
 }

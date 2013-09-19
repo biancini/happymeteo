@@ -23,8 +23,8 @@
 
                 <com.facebook.widget.ProfilePictureView
                     android:id="@+id/profile_picture"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_alignParentBottom="true" />
 
                 <TextView
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="30sp"
                         android:text="3"
-                        android:textColor="#000000"
+                        android:textColor="#C0C0C0"
                         android:textSize="90sp" />
 
                     <ImageView
@@ -124,7 +124,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="30sp"
                         android:text="7"
-                        android:textColor="#000000"
+                        android:textColor="#C0C0C0"
                         android:textSize="90sp" />
 
                     <ImageView
@@ -155,9 +155,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:text="Ieri"
+                    android:text="@string/yesterday"
                     android:textColor="#ffffff"
-                    android:textSize="30sp" />
+                    android:textSize="20sp" />
             </RelativeLayout>
 
             <View
@@ -177,9 +177,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:text="Domani"
+                    android:text="@string/tomorrow"
                     android:textColor="#ffffff"
-                    android:textSize="30sp" />
+                    android:textSize="20sp" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

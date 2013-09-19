@@ -216,7 +216,7 @@ public class Session implements Serializable {
         this(context, applicationId, tokenCachingStrategy, true);
     }
 
-    Session(Context context, String applicationId, TokenCachingStrategy tokenCachingStrategy,
+    public Session(Context context, String applicationId, TokenCachingStrategy tokenCachingStrategy,
             boolean loadTokenFromCache) {
         // if the application ID passed in is null, try to get it from the
         // meta-data in the manifest.
@@ -950,6 +950,53 @@ public class Session implements Serializable {
 
     private void open(OpenRequest openRequest, SessionAuthorizationType authType) {
         validatePermissions(openRequest, authType);
+        validateLoginBehavior(openRequest);
+
+        SessionState newState;
+        synchronized (this.lock) {
+            if (pendingAuthorizationRequest != null) {
+                postStateChange(state, state, new UnsupportedOperationException(
+                        "Session: an attempt was made to open a session that has a pending request."));
+                return;
+            }
+            final SessionState oldState = this.state;
+
+            switch (this.state) {
+                case CREATED:
+                    this.state = newState = SessionState.OPENING;
+                    if (openRequest == null) {
+                        throw new IllegalArgumentException("openRequest cannot be null when opening a new Session");
+                    }
+                    pendingAuthorizationRequest = openRequest;
+                    break;
+                case CREATED_TOKEN_LOADED:
+                    if (openRequest != null && !Utility.isNullOrEmpty(openRequest.getPermissions())) {
+                        if (!Utility.isSubset(openRequest.getPermissions(), getPermissions())) {
+                            pendingAuthorizationRequest = openRequest;
+                        }
+                    }
+                    if (pendingAuthorizationRequest == null) {
+                        this.state = newState = SessionState.OPENED;
+                    } else {
+                        this.state = newState = SessionState.OPENING;
+                    }
+                    break;
+                default:
+                    throw new UnsupportedOperationException(
+                            "Session: an attempt was made to open an already opened session.");
+            }
+            if (openRequest != null) {
+                addCallback(openRequest.getCallback());
+            }
+            this.postStateChange(oldState, newState, null);
+        }
+
+        if (newState == SessionState.OPENING) {
+            authorize(openRequest);
+        }
+    }
+    
+    public void openForSimon(OpenRequest openRequest) {
         validateLoginBehavior(openRequest);
 
         SessionState newState;

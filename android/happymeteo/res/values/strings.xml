@@ -90,8 +90,7 @@ Buon divertimento! E happy meteo!</string>
 	<string name="link_user_to_facebook">Collega Profilo a facebook</string>
 	<string name="unlink_user_to_facebook">Scollega Profilo a facebook</string>
 	
-	<string name="mode">Mode</string>
-    <string name="mode_left">Left</string>
-    <string name="mode_right">Right</string>
-    <string name="image_desc">Image</string>
+	<string name="yesterday">Ieri</string>
+	<string name="tomorrow">Domani</string>
+    
 </resources>

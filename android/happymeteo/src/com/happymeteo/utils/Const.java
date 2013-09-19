@@ -41,22 +41,15 @@ public final class Const {
 	public static final int HAPPY_METEO_URL_ID = 12;
 	public static final int HAPPY_CONTEXT_URL_ID = 13;
 	
-
-    /* Google */
+	/* Google */
 	public static final String GOOGLE_ID = "347057775979";
 	
 	/* Facebook */
 	public static final String FACEBOOK_ID = "405414319576008";
-	public static final String[] FACEBOOK_PERMISSION_READ_ARRAY = {"email","user_birthday"};
-	public static final String[] FACEBOOK_PERMISSION_PUBLISH_ARRAY = {"publish_actions"};
-	public static final String[] FACEBOOK_PERMISSION_ARRAY = {"email","user_birthday", "publish_actions"};
+	public static final String[] FACEBOOK_PERMISSIONS = {"email", "user_birthday", "publish_actions"};
 	
 	/* Password secret key */
 	public static final String PASSWORD_SECRET_KEY = "f01a1a0bd409957b9305d2dc21c6b066859f51447c04adfb0b21c9fb5cff9eb0a6573c69e62fcb97321d878bfecb7d2cc8e6650ac6db1a1ef3125373d3e81b85";
 
     public static final String TAG = "AppyMeteo";
-	
-	public enum CREATE_ACCOUNT_STATUS {
-		CONFIRMED_OR_FACEBOOK, NOT_CONFIRMED, ERROR
-	}
 }

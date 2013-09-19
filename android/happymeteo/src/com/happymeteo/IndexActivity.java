@@ -16,8 +16,6 @@ import android.widget.Button;
 
 import com.facebook.LoggingBehavior;
 import com.facebook.Session;
-import com.facebook.Session.Builder;
-import com.facebook.Session.NewPermissionsRequest;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.happymeteo.models.User;
@@ -29,10 +27,21 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		onPostExecuteListener {
 	
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
-	private boolean grantedPublishPermission = false;
-	private boolean openActiveSession = false;
-	private boolean closeAndClear = false;
 	private ProgressDialog spinner;
+	
+	public void openActiveSession(Session session, boolean allowLoginUI) {
+		if (session == null) {
+			Log.i(Const.TAG, "session null");
+			session = new Session(this);
+		}
+		Session.setActiveSession(session);
+		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED) || allowLoginUI) {
+			Log.i(Const.TAG, "CREATED_TOKEN_LOADED");
+			session.openForSimon(new Session.OpenRequest(this).setPermissions(
+					Arrays.asList(Const.FACEBOOK_PERMISSIONS))
+					.setCallback(statusCallback));
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,18 +88,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 				session = Session.restoreSession(this, null, statusCallback,
 						savedInstanceState);
 			}
-			if (session == null) {
-				Log.i(Const.TAG, "session null");
-				session = new Session(this);
-			}
-			Session.setActiveSession(session);
-			if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-				Log.i(Const.TAG, "CREATED_TOKEN_LOADED");
-				openActiveSession = true;
-				Session.openActiveSession(this, true, statusCallback);
-			} else {
-				spinner.dismiss();
-			}
+			openActiveSession(session, false);
 		}
 	}
 
@@ -104,6 +102,11 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	public void onStop() {
 		super.onStop();
 		Session.getActiveSession().removeCallback(statusCallback);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 	}
 
 	@Override
@@ -123,47 +126,12 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	private void updateView(Session session) {
 		spinner.setMessage("state: "+session.getState());
 		
-		if(closeAndClear && session.isClosed()) {
-			Session newSession = new Session(this);
-			Session.setActiveSession(newSession);
-			openActiveSession = !newSession.getPermissions().isEmpty();
-			newSession.openForRead(new Session.OpenRequest(this).setPermissions(
-					Arrays.asList(Const.FACEBOOK_PERMISSION_READ_ARRAY))
-					.setCallback(statusCallback));
-			
-			Log.i(Const.TAG, "closeAndClear error state: "+newSession.getState());
-			Log.i(Const.TAG, "closeAndClear error accessToken: "+newSession.getAccessToken());
-			Log.i(Const.TAG, "closeAndClear error permissions: "+newSession.getPermissions());
-			return;
-		}
-		
 		if (session.isOpened()) {
-			if (!grantedPublishPermission) {
-				Log.i(Const.TAG, "granted");
-				spinner.setMessage("granted");
-				Log.i(Const.TAG, "granted permissions: "+session.getPermissions());
-				Log.i(Const.TAG, "granted accessToken: "+session.getAccessToken());
-				
-				if(openActiveSession) {
-					Log.i(Const.TAG, "granted openForPublish");
-					Session session2 = new Builder(this).build();
-					session2.openForPublish(new Session.OpenRequest(this).setPermissions(
-							Arrays.asList(Const.FACEBOOK_PERMISSION_PUBLISH_ARRAY))
-							.setCallback(statusCallback));
-				} else {
-					Log.i(Const.TAG, "granted requestNewPublishPermissions");
-					session.requestNewPublishPermissions(new NewPermissionsRequest(
-							this,
-							Arrays.asList(Const.FACEBOOK_PERMISSION_PUBLISH_ARRAY))
-							.setCallback(statusCallback));
-				}
-				
-				grantedPublishPermission = true;
-			} else {
-				spinner.dismiss();
-				ServerUtilities.facebookLogin(this, this, Session.getActiveSession().getAccessToken());
-			}
+			spinner.dismiss();
+			ServerUtilities.facebookLogin(this, this, Session.getActiveSession().getAccessToken());
 		} else {
+			Log.i(Const.TAG, "not opened session permissions: "+session.getPermissions());
+			Log.i(Const.TAG, "not opened session accessToken: "+session.getAccessToken());
 			spinner.setMessage("not opened: "+session.getState());
 			Log.i(Const.TAG, "not opened");
 		}
@@ -179,22 +147,12 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		Log.i(Const.TAG, "onClickLogin permissions: "+session.getPermissions());
 		
 		if (!session.isOpened() && !session.isClosed()) {
-			Log.i(Const.TAG, "onClickLogin openForRead");
-			openActiveSession = !session.getPermissions().isEmpty();
-			session.openForRead(new Session.OpenRequest(this).setPermissions(
-					Arrays.asList(Const.FACEBOOK_PERMISSION_READ_ARRAY))
+			session.openForSimon(new Session.OpenRequest(this).setPermissions(
+					Arrays.asList(Const.FACEBOOK_PERMISSIONS))
 					.setCallback(statusCallback));
 		} else {
 			Log.i(Const.TAG, "onClickLogin openActiveSession");
-			openActiveSession = true;
-			Session.openActiveSession(this, true, statusCallback);
-		}
-	}
-
-	private void onClickLogout() {
-		Session session = Session.getActiveSession();
-		if (!session.isClosed()) {
-			session.closeAndClearTokenInformation();
+			openActiveSession(session, false);
 		}
 	}
 
@@ -202,7 +160,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		@Override
 		public void call(Session session, SessionState state,
 				Exception exception) {
-			Log.i(Const.TAG, "state: " + state);
+			Log.i(Const.TAG, "SessionStatusCallback state: " + state);
 
 			// If there is an exception...
 			if (exception != null) {
@@ -216,13 +174,12 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		
-		Log.e(Const.TAG, "exception: "+exception);
-		
 		if(exception != null) {
-			Session session = Session.getActiveSession();
-			session.closeAndClearTokenInformation();
-			closeAndClear = true;
+			Session session = new Session(this, null, null, false);
+			Session.setActiveSession(session);
+			session.openForSimon(new Session.OpenRequest(this).setPermissions(
+					Arrays.asList(Const.FACEBOOK_PERMISSIONS))
+					.setCallback(statusCallback));
 		} else {
 			try {
 				JSONObject jsonObject = new JSONObject(result);
