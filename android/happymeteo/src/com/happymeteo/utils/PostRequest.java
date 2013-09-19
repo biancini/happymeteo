@@ -47,7 +47,9 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		}
 	}
 	
-	private boolean showError(String json) {
+	private Exception showError(String json) {
+		Exception exception = null;
+		
 		try {
 			JSONObject jsonObject = new JSONObject(json);
 			String error = jsonObject.getString("error");
@@ -62,11 +64,13 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 										int which) {
 								}
 							});
-				return true;
+				exception = new Exception(jsonObject.getString("message"));
 				
 			}
-		} catch (JSONException e) {}
-		return false;
+		} catch (JSONException e) {
+			exception = null;
+		}
+		return exception;
 	}
 	
 	@Override
@@ -111,12 +115,13 @@ public class PostRequest extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
 		super.onPostExecute(result);
 		
-		if(!showError(result)) {
-			Log.i(Const.TAG, result);
-			
-			if(onPostExecuteListener != null && result != null) {
-				onPostExecuteListener.onPostExecute(id, result);
-			}
+		Exception exception = showError(result);
+		
+		Log.i(Const.TAG, id+" PostRequest result: "+result);
+		Log.i(Const.TAG, id+" PostRequest exception: "+exception);
+		
+		if(onPostExecuteListener != null) {
+			onPostExecuteListener.onPostExecute(id, result, exception);
 		}
 		if(spinner != null) {
 			spinner.dismiss();

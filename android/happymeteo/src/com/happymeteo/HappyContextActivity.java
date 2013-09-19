@@ -21,7 +21,7 @@ public class HappyContextActivity extends AppyMeteoLoggedActivity implements onP
 	}
 	
 	@Override
-	public void onPostExecute(int id, String result) {
+	public void onPostExecute(int id, String result, Exception exception) {
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			Log.i(Const.TAG, "json: " + jsonObject);

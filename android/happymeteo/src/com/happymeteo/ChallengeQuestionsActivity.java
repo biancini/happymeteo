@@ -106,7 +106,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 	}
 
 	@Override
-	public void onPostExecute(int id, String result) {
+	public void onPostExecute(int id, String result, Exception exception) {
 		switch (id) {
 		case Const.QUESTIONS_CHALLENGE_URL_ID:
 			try {

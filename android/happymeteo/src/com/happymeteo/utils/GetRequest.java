@@ -73,7 +73,7 @@ public class GetRequest extends AsyncTask<String, Void, String> {
 		Log.i(Const.TAG, result);
 		
 		if(onPostExecuteListener != null && result != null) {
-			onPostExecuteListener.onPostExecute(id, result);
+			onPostExecuteListener.onPostExecute(id, result, null);
 		}
 		spinner.dismiss();
     }

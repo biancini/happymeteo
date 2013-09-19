@@ -106,7 +106,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 	}
 
 	@Override
-	public void onPostExecute(int id, String result) {
+	public void onPostExecute(int id, String result, Exception exception) {
 		switch (id) {
 		case Const.GET_QUESTIONS_URL_ID:
 			try {

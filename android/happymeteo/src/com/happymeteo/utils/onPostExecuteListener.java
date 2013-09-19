@@ -1,5 +1,5 @@
 package com.happymeteo.utils;
 
 public interface onPostExecuteListener {
-	public void onPostExecute(int id, String result);
+	public void onPostExecute(int id, String result, Exception exception);
 }

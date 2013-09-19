@@ -50,4 +50,29 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 		Intent intent = new Intent(this, clazz);
 		startActivity(intent);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		/* Terminate PushNotificationsService
+		HappyMeteoApplication.i().getPushNotificationsService().terminate(getApplicationContext()); */
+
+		Log.i(Const.TAG, this.getClass()+" onDestroy");
+		super.onDestroy();
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		
+		Log.i(Const.TAG, this.getClass()+" onSaveInstanceState");
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		super.onNewIntent(intent);
+		
+		Log.i(Const.TAG, this.getClass()+" onNewIntent");
+	}
 }

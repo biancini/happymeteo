@@ -5,20 +5,10 @@ import android.util.Log;
 
 import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.utils.Const;
+import com.happymeteo.utils.ServerUtilities;
 
 public class PushNotificationsService {
-	
-	private String registrationId;
-	
-	public String getRegistrationId() {
-		return registrationId;
-	}
-
-	public void setRegistrationId(String registrationId) {
-		this.registrationId = registrationId;
-	}
-
-	public boolean initialize(Context context) {
+	public static void register(Context context, String userId) {
 		/* Make sure the device has the proper dependencies. */
 		GCMRegistrar.checkDevice(context);
 		
@@ -26,7 +16,7 @@ public class PushNotificationsService {
 		GCMRegistrar.checkManifest(context);
 		
 		/* Get Registration Id */
-		registrationId = GCMRegistrar.getRegistrationId(context);
+		String registrationId = GCMRegistrar.getRegistrationId(context);
 		
 		Log.i(Const.TAG, "registrationId: "+registrationId);
 		if (registrationId.equals("")) {
@@ -34,13 +24,12 @@ public class PushNotificationsService {
 			
 			/* Registration is not present, register now with GCM */			
 			GCMRegistrar.register(context, Const.GOOGLE_ID);
-			return false;
+		} else {
+			ServerUtilities.registerDevice(context, registrationId, userId);
 		}
-		
-		return true;
 	}
 
-	public void terminate(Context context) {
+	public static void terminate(Context context) {
 		if(GCMRegistrar.isRegistered(context)) {
 			GCMRegistrar.unregister(context);
 		}

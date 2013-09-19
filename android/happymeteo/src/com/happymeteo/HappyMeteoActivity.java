@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
+import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
@@ -23,13 +24,17 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		setContentView(R.layout.activity_happy_meteo);
 		super.onCreate(savedInstanceState);
 		
+		/*SharedPreferences properties = getApplicationContext().getSharedPreferences(Const.TAG, MODE_PRIVATE);
+		
+		Log.i(Const.TAG, "startAppyMeteo: "+properties.getString("startAppyMeteo", null));
+		
+		Editor edit = properties.edit();
+		edit.clear();
+		edit.putString("startAppyMeteo", (new Date()).toString());
+		edit.commit();*/
+		
 		/* Initialize PushNotificationsService */
-		if(!HappyMeteoApplication.i().getPushNotificationsService().initialize(this)) {
-			ServerUtilities.registerDevice(
-					this,
-					HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId(), 
-					HappyMeteoApplication.i().getCurrentUser().getUser_id());
-		}
+		PushNotificationsService.register(getApplicationContext(), HappyMeteoApplication.i().getCurrentUser().getUser_id());
 		
 		ServerUtilities.happyMeteo(this, this);
 		
@@ -58,8 +63,6 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		//Log.i(Const.TAG, "json: " + json);
 		
 		/*RelativeLayout relativeLayoutMeteoUp = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp);
-        
-		
 		
 		RelativeLayout.LayoutParams userImageLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		//userImageLayout.gravity = Gravity.BOTTOM;
@@ -67,9 +70,9 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		relativeLayoutMeteoUp.addView(userImage, userImageLayout);*/
 		
 	}
-
+	
 	@Override
-	public void onPostExecute(int id, String result) {
+	public void onPostExecute(int id, String result, Exception exception) {
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			Log.i(Const.TAG, "json: " + jsonObject);
@@ -79,11 +82,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 	}
 	
 	@Override
-	protected void onDestroy() {
-		/* Terminate PushNotificationsService
-		HappyMeteoApplication.i().getPushNotificationsService().terminate(getApplicationContext()); */
-
-		super.onDestroy();
+	public void onBackPressed() {
+		// super.onBackPressed();
 	}
-
 }

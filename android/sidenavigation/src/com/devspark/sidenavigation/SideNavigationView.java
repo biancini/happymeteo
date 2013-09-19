@@ -299,12 +299,6 @@ public class SideNavigationView extends LinearLayout {
             inflater = LayoutInflater.from(getContext());
         }
         
-        public int getHeight() {
-        	WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-        	return display.getHeight() / getCount() - 97;
-        }
-
         @Override
         public int getCount() {
             return menuItems.size();
@@ -344,7 +338,7 @@ public class SideNavigationView extends LinearLayout {
             if (item.getIcon() != SideNavigationItem.DEFAULT_ICON_VALUE) {
                 holder.icon.setVisibility(View.VISIBLE);
                 holder.icon.setImageResource(menuItems.get(position).getIcon());
-                LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, getHeight());
+                LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, 75);
                 layoutParams.gravity = Gravity.CENTER_VERTICAL;
                 holder.icon.setLayoutParams(layoutParams);
             } else {

@@ -31,6 +31,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private boolean grantedPublishPermission = false;
 	private boolean openActiveSession = false;
+	private boolean closeAndClear = false;
 	private ProgressDialog spinner;
 
 	@Override
@@ -121,6 +122,21 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 	private void updateView(Session session) {
 		spinner.setMessage("state: "+session.getState());
+		
+		if(closeAndClear && session.isClosed()) {
+			Session newSession = new Session(this);
+			Session.setActiveSession(newSession);
+			openActiveSession = !newSession.getPermissions().isEmpty();
+			newSession.openForRead(new Session.OpenRequest(this).setPermissions(
+					Arrays.asList(Const.FACEBOOK_PERMISSION_READ_ARRAY))
+					.setCallback(statusCallback));
+			
+			Log.i(Const.TAG, "closeAndClear error state: "+newSession.getState());
+			Log.i(Const.TAG, "closeAndClear error accessToken: "+newSession.getAccessToken());
+			Log.i(Const.TAG, "closeAndClear error permissions: "+newSession.getPermissions());
+			return;
+		}
+		
 		if (session.isOpened()) {
 			if (!grantedPublishPermission) {
 				Log.i(Const.TAG, "granted");
@@ -199,24 +215,33 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	}
 
 	@Override
-	public void onPostExecute(int id, String result) {
-		try {
-			JSONObject jsonObject = new JSONObject(result);
-
-			User user = new User(jsonObject);
-
-			if (user != null) {
-				HappyMeteoApplication.i().setCurrentUser(user);
-
-				if (user.getRegistered() == User.USER_NOT_REGISTERED) {
-					invokeActivity(CreateAccountActivity.class);
-				} else {
-					invokeActivity(HappyMeteoActivity.class);
+	public void onPostExecute(int id, String result, Exception exception) {
+		
+		Log.e(Const.TAG, "exception: "+exception);
+		
+		if(exception != null) {
+			Session session = Session.getActiveSession();
+			session.closeAndClearTokenInformation();
+			closeAndClear = true;
+		} else {
+			try {
+				JSONObject jsonObject = new JSONObject(result);
+	
+				User user = new User(jsonObject);
+	
+				if (user != null) {
+					HappyMeteoApplication.i().setCurrentUser(user);
+	
+					if (user.getRegistered() == User.USER_NOT_REGISTERED) {
+						invokeActivity(CreateAccountActivity.class);
+					} else {
+						invokeActivity(HappyMeteoActivity.class);
+					}
+					return;
 				}
-				return;
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
-		} catch (JSONException e) {
-			e.printStackTrace();
 		}
 	}
 }

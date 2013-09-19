@@ -40,7 +40,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 	}
 
 	@Override
-	public void onPostExecute(int id, String result) {
+	public void onPostExecute(int id, String result, Exception exception) {
 		List<Friend> friendsWithApp = new ArrayList<Friend>();
 		List<Friend> friendsNoApp = new ArrayList<Friend>();
 		try {

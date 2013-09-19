@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.utils.ServerUtilities;
 
 public class MenuActivity extends AppyMeteoLoggedActivity {
@@ -37,22 +38,18 @@ public class MenuActivity extends AppyMeteoLoggedActivity {
 					activity,
 					HappyMeteoApplication.i().getCurrentUser().getUser_id(),
 					HappyMeteoApplication.i().getCurrentUser().getFacebook_id(),
-					HappyMeteoApplication.i().getPushNotificationsService().getRegistrationId());
+					GCMRegistrar.getRegistrationId(getApplicationContext()));
 			}
 		});
 
 		btnLogout.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				HappyMeteoApplication.i().logout(view.getContext());
-				invokeActivity(IndexActivity.class);
+				/*HappyMeteoApplication.i().logout(view.getContext());
+				invokeActivity(IndexActivity.class);*/
+				finish();
 			}
 		});
 	}
 
-	@Override
-	protected void onDestroy() {
-		HappyMeteoApplication.i().logout(getApplicationContext());
-
-		super.onDestroy();
-	}
+	
 }

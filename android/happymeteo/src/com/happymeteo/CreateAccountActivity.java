@@ -164,7 +164,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 	}*/
 
 	@Override
-	public void onPostExecute(int id, String result) {
+	public void onPostExecute(int id, String result, Exception exception) {
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			if (jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) { // CONFIRMED_OR_FACEBOOK
