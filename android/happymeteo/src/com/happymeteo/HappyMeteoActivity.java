@@ -3,9 +3,15 @@ package com.happymeteo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
@@ -18,20 +24,60 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 	private TextView today_text;
 	private TextView yesterday_text;
 	private TextView tomorrow_text;
+	private LinearLayout linearLayoutMeteoUp;
+	
+	private int[] getColorByToday(int today) {
+		int colors[] = {0, 0};
+		switch(today) {
+			case 1:
+				colors[0] = 0xff7bccff;
+				colors[1] = 0xff2ea6ff;
+				break;
+			case 2:
+				colors[0] = 0xff2ea6ff;
+				colors[1] = 0xff0071bc;
+				break;
+			case 3:
+				colors[0] = 0xff0071bc;
+				colors[1] = 0xff4a4998;
+				break;
+			case 4:
+				colors[0] = 0xff93278f;
+				colors[1] = 0xff4a4998;
+				break;
+			case 5:
+				colors[0] = 0xffed1e79;
+				colors[1] = 0xffae3771;
+				break;
+			case 6:
+				colors[0] = 0xffff0000;
+				colors[1] = 0xfffd3771;
+				break;
+			case 7:
+				colors[0] = 0xff01700d;
+				colors[1] = 0xfffd3700;
+				break;
+			case 8:
+				colors[0] = 0xfff7931e;
+				colors[1] = 0xfffd6c00;
+				break;
+			case 9:
+				colors[0] = 0xfff9c33d;
+				colors[1] = 0xfffd9200;
+				break;
+			case 10:
+				colors[0] = 0xffffe400;
+				colors[1] = 0xfffdc800;
+				break;
+		}
+		
+		return colors;
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_happy_meteo);
 		super.onCreate(savedInstanceState);
-		
-		/*SharedPreferences properties = getApplicationContext().getSharedPreferences(Const.TAG, MODE_PRIVATE);
-		
-		Log.i(Const.TAG, "startAppyMeteo: "+properties.getString("startAppyMeteo", null));
-		
-		Editor edit = properties.edit();
-		edit.clear();
-		edit.putString("startAppyMeteo", (new Date()).toString());
-		edit.commit();*/
 		
 		/* Initialize PushNotificationsService */
 		PushNotificationsService.register(getApplicationContext(), HappyMeteoApplication.i().getCurrentUser().getUser_id());
@@ -49,8 +95,12 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		tomorrow_text = (TextView) findViewById(R.id.tomorrow_text);
 		tomorrow_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 		
+		linearLayoutMeteoUp = (LinearLayout) findViewById(R.id.linearLayoutMeteoUp);
+		
+		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
+		welcomeToday.setText(HappyMeteoApplication.i().getCurrentUser().getFirst_name().toUpperCase()+"_OGGI");
+		
 		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.profile_picture);
-
 		if (HappyMeteoApplication.i().isFacebookSession()) {
 			userImage.setProfileId(String.valueOf(HappyMeteoApplication
 					.i().getCurrentUser().getFacebook_id()));
@@ -58,16 +108,6 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		} else {
 			userImage.setProfileId(null);
 		}
-		
-		//JSONObject json = ServerUtilities.happyMeteo(getApplicationContext());
-		//Log.i(Const.TAG, "json: " + json);
-		
-		/*RelativeLayout relativeLayoutMeteoUp = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp);
-		
-		RelativeLayout.LayoutParams userImageLayout = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		//userImageLayout.gravity = Gravity.BOTTOM;
-		
-		relativeLayoutMeteoUp.addView(userImage, userImageLayout);*/
 	}
 	
 	@Override
@@ -75,13 +115,20 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			Log.i(Const.TAG, "json: " + jsonObject);
+			
+			String today = "10";
+			String yesterday = "3";
+			String tomorrow = "7";
+			
+			today_text.setText(today);
+			yesterday_text.setText(yesterday);
+			tomorrow_text.setText(tomorrow);
+			
+			int today_int = Integer.valueOf(today);
+			GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, getColorByToday(today_int));
+			linearLayoutMeteoUp.setBackgroundDrawable(gradientDrawable);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	@Override
-	public void onBackPressed() {
-		// super.onBackPressed();
 	}
 }

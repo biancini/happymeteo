@@ -1,6 +1,7 @@
 package com.happymeteo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.devspark.sidenavigation.ISideNavigationCallback;
 import com.devspark.sidenavigation.SideNavigationView;
 import com.devspark.sidenavigation.SideNavigationView.Mode;
+import com.happymeteo.utils.Const;
 
 public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implements
 		ISideNavigationCallback {
@@ -77,30 +79,29 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 	@Override
 	public void onSideNavigationItemClick(int itemId) {
 		switch (itemId) {
-		case R.id.side_navigation_menu_item1:
-			invokeActivity(InformationPageActivity.class);
-			break;
-
-		case R.id.side_navigation_menu_item2:
-			invokeActivity(HappyMeteoActivity.class);
-			break;
-
-		case R.id.side_navigation_menu_item3:
-			invokeActivity(HappyMapActivity.class);
-			break;
-
-		case R.id.side_navigation_menu_item4:
-			invokeActivity(ChallengeActivity.class);
-			break;
-
-		case R.id.side_navigation_menu_item5:
-			invokeActivity(HappyContextActivity.class);
-			break;
-
-		default:
-			return;
+			case R.id.side_navigation_menu_item1:
+				invokeActivity(InformationPageActivity.class);
+				break;
+	
+			case R.id.side_navigation_menu_item2:
+				invokeActivity(HappyMeteoActivity.class);
+				break;
+	
+			case R.id.side_navigation_menu_item3:
+				invokeActivity(HappyMapActivity.class);
+				break;
+	
+			case R.id.side_navigation_menu_item4:
+				invokeActivity(ChallengeActivity.class);
+				break;
+	
+			case R.id.side_navigation_menu_item5:
+				invokeActivity(HappyContextActivity.class);
+				break;
+	
+			default:
+				return;
 		}
-		finish();
 	}
 
 	@Override
@@ -109,7 +110,12 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 		if (sideNavigationView.isShown()) {
 			sideNavigationView.hideMenu();
 		} else {
-			super.onBackPressed();
+			Log.i(Const.TAG, "invokeActivity: "+this.getClass()+" "+HappyMeteoActivity.class);
+			if(!this.getClass().equals(HappyMeteoActivity.class))
+				super.onBackPressed();
+			
+			//invokeActivity(HappyMeteoActivity.class);
+			//
 		}
 	}
 

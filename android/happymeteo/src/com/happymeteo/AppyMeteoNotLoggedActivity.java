@@ -47,8 +47,13 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 	}
 
 	public void invokeActivity(Class<? extends Activity> clazz) {
-		Intent intent = new Intent(this, clazz);
-		startActivity(intent);
+		Log.i(Const.TAG, "invokeActivity: "+this.getClass()+" "+clazz);
+		
+		if(!this.getClass().equals(clazz)) {
+			Intent intent = new Intent(this, clazz);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+		}
 	}
 	
 	@Override

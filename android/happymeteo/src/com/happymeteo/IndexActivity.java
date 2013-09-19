@@ -30,6 +30,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	private ProgressDialog spinner;
 	
 	public void openActiveSession(Session session, boolean allowLoginUI) {
+		spinner.show();
 		if (session == null) {
 			Log.i(Const.TAG, "session null");
 			session = new Session(this);
@@ -74,8 +75,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 		spinner = new ProgressDialog(this);
 		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		spinner.setMessage(this.getString(com.happymeteo.R.string.loading));
-		spinner.show();
+		spinner.setMessage("Connession facebook..");
 
 		Settings.addLoggingBehavior(LoggingBehavior.CACHE);
 		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
@@ -147,6 +147,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		Log.i(Const.TAG, "onClickLogin permissions: "+session.getPermissions());
 		
 		if (!session.isOpened() && !session.isClosed()) {
+			spinner.show();
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(
 					Arrays.asList(Const.FACEBOOK_PERMISSIONS))
 					.setCallback(statusCallback));
@@ -175,6 +176,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
 		if(exception != null) {
+			spinner.show();
 			Session session = new Session(this, null, null, false);
 			Session.setActiveSession(session);
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(
