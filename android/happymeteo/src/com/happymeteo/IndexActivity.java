@@ -52,21 +52,20 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		HappyMeteoApplication.initialize(this);
 		
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
-		Button btnLoginHappyMeteo = (Button) findViewById(R.id.btnLoginHappyMeteo);
-		Button btnLoginFacebook = (Button) findViewById(R.id.btnLoginFacebook);
-
 		btnCreateAccount.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				invokeActivity(CreateAccountActivity.class);
 			}
 		});
-
+		
+		Button btnLoginHappyMeteo = (Button) findViewById(R.id.btnLoginHappyMeteo);
 		btnLoginHappyMeteo.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				invokeActivity(NormalLoginActivity.class);
 			}
 		});
-
+		
+		Button btnLoginFacebook = (Button) findViewById(R.id.btnLoginFacebook);
 		btnLoginFacebook.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				onClickLogin();

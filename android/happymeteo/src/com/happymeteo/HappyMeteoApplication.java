@@ -35,6 +35,6 @@ public class HappyMeteoApplication {
 	}
 	
 	public boolean isFacebookSession() {
-		return this.currentUser.getFacebook_id() != null && !this.currentUser.getFacebook_id().equals("");
+		return this.currentUser != null && this.currentUser.getFacebook_id() != null && !this.currentUser.getFacebook_id().equals("");
 	}
 }
