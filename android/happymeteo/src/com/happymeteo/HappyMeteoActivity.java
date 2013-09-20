@@ -3,12 +3,8 @@ package com.happymeteo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;

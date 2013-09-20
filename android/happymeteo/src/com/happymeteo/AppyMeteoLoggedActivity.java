@@ -53,8 +53,8 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 		getSupportMenuInflater().inflate(R.menu.main_menu, menu);
 		menu.findItem(R.id.settings).setShowAsAction(
 				MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		menu.findItem(R.id.menuActivity).setShowAsAction(
-				MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		/*menu.findItem(R.id.menuActivity).setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_IF_ROOM);*/
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -113,9 +113,6 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 			Log.i(Const.TAG, "invokeActivity: "+this.getClass()+" "+HappyMeteoActivity.class);
 			if(!this.getClass().equals(HappyMeteoActivity.class))
 				super.onBackPressed();
-			
-			//invokeActivity(HappyMeteoActivity.class);
-			//
 		}
 	}
 
