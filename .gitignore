@@ -1,7 +1,12 @@
 *.pyc
 android/happymeteo/bin
 android/facebook/bin
+android/actionbarsherlock/bin
+android/sidenavigation/bin
+android/facebook/bin
 android/happymeteo/gen
 android/facebook/gen
+android/actionbarsherlock/gen
+android/sidenavigation/gen
 android/*/gen
 android/*/bin
