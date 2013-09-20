@@ -32,22 +32,31 @@
             android:id="@+id/btnLoginFacebook"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dip"
+            android:layout_margin="5dip"
             android:background="@drawable/facebookconnect" />
 
         <Button
             android:id="@+id/btnLoginHappyMeteo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dip"
+            android:layout_margin="5dip"
             android:background="@drawable/login" />
 
         <Button
             android:id="@+id/btnCreateAccount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dip"
+            android:layout_margin="5dip"
+            android:layout_marginBottom="10dip"
             android:background="@drawable/creaaccount" />
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:text="@string/version" 
+            android:textSize="12sp" />
     </LinearLayout>
 
 </LinearLayout>
