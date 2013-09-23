@@ -41,6 +41,9 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(
 					Arrays.asList(Const.FACEBOOK_PERMISSIONS))
 					.setCallback(statusCallback));
+		} else {
+			spinner.dismiss();
+			updateView(session);
 		}
 	}
 
@@ -48,8 +51,6 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_index);
 		super.onCreate(savedInstanceState);
-		
-		HappyMeteoApplication.initialize(this);
 		
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		btnCreateAccount.setOnClickListener(new OnClickListener() {
@@ -74,7 +75,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 		spinner = new ProgressDialog(this);
 		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		spinner.setMessage("Connession facebook..");
+		spinner.setMessage("Connessione facebook..");
 
 		Settings.addLoggingBehavior(LoggingBehavior.CACHE);
 		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
@@ -151,8 +152,16 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 					Arrays.asList(Const.FACEBOOK_PERMISSIONS))
 					.setCallback(statusCallback));
 		} else {
-			Log.i(Const.TAG, "onClickLogin openActiveSession");
-			openActiveSession(session, false);
+			if(session.isClosed()) {
+				session = new Session(this, null, null, false);
+				Session.setActiveSession(session);
+				session.openForSimon(new Session.OpenRequest(this).setPermissions(
+						Arrays.asList(Const.FACEBOOK_PERMISSIONS))
+						.setCallback(statusCallback));
+			} else {
+				Log.i(Const.TAG, "onClickLogin openActiveSession");
+				openActiveSession(session, false);
+			}
 		}
 	}
 
@@ -188,7 +197,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 				User user = new User(jsonObject);
 	
 				if (user != null) {
-					HappyMeteoApplication.i().setCurrentUser(user);
+					HappyMeteoApplication.setCurrentUser(user);
 	
 					if (user.getRegistered() == User.USER_NOT_REGISTERED) {
 						invokeActivity(CreateAccountActivity.class);

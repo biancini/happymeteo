@@ -36,6 +36,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 		super.onCreate(savedInstanceState);
 		String accessToken = Session.getActiveSession().getAccessToken();
 		String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token="+accessToken;
+		Log.i(Const.TAG, "serverUrl: "+serverUrl);
 		new GetRequest(this, this).execute(serverUrl);
 	}
 

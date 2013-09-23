@@ -94,7 +94,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 								String.valueOf(location.getLongitude()));
 					}
 
-					params.put("id_user", HappyMeteoApplication.i()
+					params.put("user_id", HappyMeteoApplication
 							.getCurrentUser().getUser_id());
 					params.put("questions", questions.toString());
 
@@ -222,7 +222,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 			}
 			break;
 		case Const.SUBMIT_QUESTIONS_URL_ID:
-			finish();
+			//finish();
 		}
 	}
 }

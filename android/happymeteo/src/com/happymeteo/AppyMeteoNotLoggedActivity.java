@@ -45,13 +45,20 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 		
 		super.onCreate(savedInstanceState);
 	}
-
+	
 	public void invokeActivity(Class<? extends Activity> clazz) {
+		invokeActivity(clazz, null);
+	}
+
+	public void invokeActivity(Class<? extends Activity> clazz, Bundle extras) {
 		Log.i(Const.TAG, "invokeActivity: "+this.getClass()+" "+clazz);
 		
 		if(!this.getClass().equals(clazz)) {
 			Intent intent = new Intent(this, clazz);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			if(extras != null) {
+				intent.putExtras(extras);
+			}
 			startActivity(intent);
 		}
 	}
@@ -59,7 +66,7 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 	@Override
 	protected void onDestroy() {
 		/* Terminate PushNotificationsService
-		HappyMeteoApplication.i().getPushNotificationsService().terminate(getApplicationContext()); */
+		HappyMeteoApplication.getPushNotificationsService().terminate(getApplicationContext()); */
 
 		Log.i(Const.TAG, this.getClass()+" onDestroy");
 		super.onDestroy();

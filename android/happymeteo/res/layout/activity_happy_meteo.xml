@@ -63,7 +63,7 @@
                     android:layout_height="10dp"
                     android:layout_marginLeft="30sp"
                     android:layout_marginRight="130sp"
-                    android:background="@android:color/black" />
+                    android:background="#ffe400" />
 
                 <TextView
                     android:id="@+id/welcomeToday"

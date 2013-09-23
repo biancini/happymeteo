@@ -25,12 +25,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onRegistered(Context context, String registrationId) {
 		Log.i(Const.TAG, "Device registered: regId = " + registrationId);
-		if(HappyMeteoApplication.i().getCurrentUser() != null) {
+		if(HappyMeteoApplication.getCurrentUser() != null) {
 			/* Register device on happymeteo backend */
 			ServerUtilities.registerDevice(
 					context,
 					registrationId,
-					HappyMeteoApplication.i().getCurrentUser().getUser_id());
+					HappyMeteoApplication.getCurrentUser().getUser_id());
 		}
 	}
 
@@ -50,7 +50,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * */
 	@Override
 	protected void onMessage(Context context, Intent intent) {
-		Log.i(Const.TAG, "Received message");
+		Log.i(Const.TAG, "Received message: "+intent.getExtras());
 
 		/* Notifies user */
 		generateNotification(context, intent.getExtras());
@@ -84,6 +84,18 @@ public class GCMIntentService extends GCMBaseIntentService {
 	}
 	
 	private static String getMessageFromCollapseKey(String collapse_key) {
+		if(collapse_key.equals("questions"))
+			return "Il momento delle domande!";
+		if(collapse_key.equals("request_challenge"))
+			return "Ti sfido!";
+		if(collapse_key.equals("accepted_challenge_turn1_true"))
+			return "L'utente ha accettato la tua sfida";
+		if(collapse_key.equals("accepted_challenge_turn1_false"))
+			return "L'utente non ha accettato la tua sfida";
+		if(collapse_key.equals("accepted_challenge_turn2"))
+			return "E' il tuo turno!";
+		if(collapse_key.equals("accepted_challenge_turn3"))
+			return "La sfida è finita!";
 		return collapse_key;
 	}
 	
@@ -92,38 +104,60 @@ public class GCMIntentService extends GCMBaseIntentService {
 			return QuestionActivity.class;
 		if(collapse_key.equals("request_challenge"))
 			return ChallengeRequestActivity.class;
-		if(collapse_key.equals("accepted_challenge"))
+		if(collapse_key.equals("accepted_challenge_turn1_true"))
 			return ChallengeQuestionsActivity.class;
+		if(collapse_key.equals("accepted_challenge_turn1_false"))
+			return null;
+		if(collapse_key.equals("accepted_challenge_turn2"))
+			return ChallengeQuestionsActivity.class;
+		if(collapse_key.equals("accepted_challenge_turn3"))
+			return ChallengeScoreActivity.class;
 		return null;
 	}
 
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
-	private static void generateNotification(Context context, Bundle extras) {
+	public static void generateNotification(Context context, Bundle extras) {
 		int icon = R.drawable.ic_launcher;
 		long when = System.currentTimeMillis();
 		NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		String collapse_key = extras.getString("collapse_key");
+		if(collapse_key == null || collapse_key.equals("do_not_collapse"))
+			collapse_key = extras.getString("appy_key");
+		
 		String message = getMessageFromCollapseKey(collapse_key);
 		Class<? extends Activity> clazz = getActivityFromCollapseKey(collapse_key);
 		
 		Notification notification = new Notification(icon, message, when);
 		String title = context.getString(R.string.app_name);
 
-		Intent notificationIntent = new Intent(context, clazz);
-		notificationIntent.putExtras(extras);
-		
-		Log.i(Const.TAG, "extras: "+extras.toString());
-		
-		// set intent so it does not start a new activity
-		// notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-		// 		| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		PendingIntent intent = PendingIntent.getActivity(context, 0,
-				notificationIntent, 0);
-		notification.setLatestEventInfo(context, title, message, intent);
+		if(clazz != null) {
+			Intent notificationIntent = new Intent(context, clazz);
+			notificationIntent.putExtras(extras);
+			
+			Log.i(Const.TAG, "extras: "+extras.toString());
+			
+			// set intent so it does not start a new activity
+			// notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+			// 		| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+					notificationIntent, 0);
+			notification.setLatestEventInfo(context, title, message, pendingIntent);
+		} else {
+			Intent notificationIntent = new Intent(context, HappyMeteoActivity.class);
+			notificationIntent.putExtras(extras);
+			
+			Log.i(Const.TAG, "extras: "+extras.toString());
+			
+			// set intent so it does not start a new activity
+			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+					notificationIntent, 0);
+			notification.setLatestEventInfo(context, title, message, pendingIntent);
+		}
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
 		// Play default notification sound

@@ -17,7 +17,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 		Button btnChallengeFacebook = (Button) findViewById(R.id.btnChallengeFacebook);
 		Button btnChallengeRandom = (Button) findViewById(R.id.btnChallengeRandom);
 		
-		if(!HappyMeteoApplication.i().isFacebookSession()) {
+		if(!HappyMeteoApplication.isFacebookSession()) {
 			btnChallengeFacebook.setVisibility(View.GONE);
 		}
 

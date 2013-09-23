@@ -49,11 +49,11 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
 		btnCreateUserFacebook = (Button) findViewById(R.id.btnCreateUserFacebook);
 
-		if (HappyMeteoApplication.i().isFacebookSession()) {
+		if (HappyMeteoApplication.isFacebookSession()) {
 			create_account_password.setVisibility(View.GONE);
 		}
 
-		User user = HappyMeteoApplication.i().getCurrentUser();
+		User user = HappyMeteoApplication.getCurrentUser();
 
 		if (user != null) {
 			this.user_id = user.getUser_id();
@@ -82,7 +82,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 			@Override
 			public void onClick(View view) {
 				/*if (facebook_id.equals("")) {
-					HappyMeteoApplication.i().getFacebookSessionService()
+					HappyMeteoApplication.getFacebookSessionService()
 							.openConnession(onCompleteListener);
 
 				} else {
@@ -169,7 +169,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 			JSONObject jsonObject = new JSONObject(result);
 			if (jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) { // CONFIRMED_OR_FACEBOOK
 				lastUser.setUser_id(jsonObject.getString("user_id"));
-				HappyMeteoApplication.i().setCurrentUser(lastUser);
+				HappyMeteoApplication.setCurrentUser(lastUser);
 				invokeActivity(HappyMeteoActivity.class);
 			} else { // NOT_CONFIRMED
 				AlertDialogManager alert = new AlertDialogManager();

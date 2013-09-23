@@ -457,7 +457,7 @@ class AcceptChallengeHandler(BaseRequestHandler):
     challenge = Challenge.get_by_id(int(challengeId))
     
     if challenge:
-        sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn1_%s'%accepted})
+        sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn1_%s'%accepted, 'challenge': challenge.toJson(), 'turn': '1'})
         challenge.accepted = (accepted == "true")
         challenge.put()
         data = {
@@ -485,52 +485,52 @@ class SubmitChallengeHandler(BaseRequestHandler):
 
   def post(self):
     data = {}
-    try:
-        challenge_id = self.request.get('challenge_id')
-        turn = self.request.get('turn')
-        questions = self.request.get('questions')
-        user_id = self.request.get('user_id')
-        longitude = self.request.get('longitude')
-        latitude = self.request.get('latitude')
-        
-        challenge = Challenge.get_by_id(int(challenge_id))
+    #try:
+    challenge_id = self.request.get('challenge_id')
+    turn = self.request.get('turn')
+    questions = self.request.get('questions')
+    user_id = self.request.get('user_id')
+    longitude = self.request.get('longitude')
+    latitude = self.request.get('latitude')
     
-        if challenge and challenge.accepted:
-            questions = json.loads(questions)
-            for q in questions:
-                challengeAnswer = ChallengeAnswer(
-                    user_id=user_id,
-                    question_id=q,
-                    location=latitude+","+longitude,
-                    date=datetime.now(),
-                    value=questions[q],
-                    challenge_id=challenge_id,
-                    turn=turn)
-                challengeAnswer.put()
-                
-            # TODO Calcolare lo score
-            score = 10
-            data = {'score': score}
+    challenge = Challenge.get_by_id(int(challenge_id))
+
+    if challenge and challenge.accepted:
+        questions = json.loads(questions)
+        for q in questions:
+            challengeAnswer = ChallengeAnswer(
+                user_id=user_id,
+                question_id=q,
+                location=latitude+","+longitude,
+                date=datetime.now(),
+                value=questions[q],
+                challenge_id=challenge_id,
+                turn=turn)
+            challengeAnswer.put()
             
-            # TODO aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
-            if(turn == "1"):
-                challenge.score_a = score
-                sendMessage(challenge.registration_id_b, 'accepted_challenge', {'appy_key': 'accepted_challenge_turn2', 'score': score})
-            else:
-                challenge.score_b = score
-                sendMessage(challenge.registration_id_a, 'accepted_challenge', {'appy_key': 'accepted_challenge_turn3', 'score': score})
-                
-            challenge.put()
+        # TODO Calcolare lo score
+        score = 10
+        data = {'score': score}
+        
+        # TODO aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
+        if(turn == "1"):
+            challenge.score_a = score
+            sendMessage(challenge.registration_id_b, {'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge': challenge.toJson(), 'turn': '2'})
         else:
-            data = {
-              'error': 'Accept Challenge error',
-              'message': 'No challenge found'
-            }
-    except:
+            challenge.score_b = score
+            sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn3', 'score': score, 'challenge': challenge.toJson(), 'turn': '2'})
+            
+        challenge.put()
+    else:
         data = {
-          'error': 'Submit Challenge error',
-          'message': '%s' % sys.exc_info()[0],
+          'error': 'Accept Challenge error',
+          'message': 'No challenge found'
         }
+    #except:
+    #    data = {
+    #      'error': 'Submit Challenge error',
+    #      'message': '%s' % sys.exc_info()[0],
+    #    }
     
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))

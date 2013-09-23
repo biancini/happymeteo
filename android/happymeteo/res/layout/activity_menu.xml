@@ -22,6 +22,41 @@
 	        android:layout_height="wrap_content"
 	        android:layout_margin="10dp"
 	        android:text="@string/challenge_facebook" />
+	    
+	    <Button
+	        android:id="@+id/btnChallengeTry_request"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dp"
+	        android:text="request" />
+	    
+	    <Button
+	        android:id="@+id/btnChallengeTry_turn1_true"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dp"
+	        android:text="turn1_true" />
+	    
+	    <Button
+	        android:id="@+id/btnChallengeTry_turn1_false"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dp"
+	        android:text="turn1_false" />
+	    
+	    <Button
+	        android:id="@+id/btnChallengeTry_turn2"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dp"
+	        android:text="turn2" />
+	    
+	    <Button
+	        android:id="@+id/btnChallengeTry_turn3"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dp"
+	        android:text="turn3" />
     
     </LinearLayout>
 </RelativeLayout>

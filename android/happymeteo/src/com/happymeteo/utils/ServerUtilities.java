@@ -83,14 +83,14 @@ public class ServerUtilities {
 		new PostRequest(Const.REQUEST_CHALLENGE_URL_ID, activity, parameters).execute(Const.REQUEST_CHALLENGE_URL);
 	}
 
-	public static void acceptChallenge(Activity activity, String challengeId,
+	public static void acceptChallenge(onPostExecuteListener onPostExecuteListener, Activity activity, String challengeId,
 			Boolean accepted) {
 		Log.i(Const.TAG, "accept challenge (challengeId = " + challengeId
 				+ ", accepted = " + accepted.toString() + ")");
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put("challengeId", challengeId);
 		parameters.put("accepted", accepted.toString());
-		new PostRequest(Const.ACCEPT_CHALLENGE_URL_ID, activity, parameters).execute(Const.ACCEPT_CHALLENGE_URL);
+		new PostRequest(Const.ACCEPT_CHALLENGE_URL_ID, activity, parameters, onPostExecuteListener).execute(Const.ACCEPT_CHALLENGE_URL);
 	}
 
 	public static void getChallengeQuestions(onPostExecuteListener onPostExecuteListener, Activity activity) {
