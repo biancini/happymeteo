@@ -48,7 +48,41 @@ class Challenge(db.Model):
         return {
             'challenge_id': self.key().id(),
             'user_id_a': self.user_id_a,
-            'user_id_b': self.user_id_b,
-            'registration_id_a': self.registration_id_a,
-            'registration_id_b':  self.registration_id_b
+            'user_id_b': self.user_id_b
         }
+        
+class Question(db.Model):
+    question = db.StringProperty()
+    type = db.IntegerProperty()
+    
+    def toJson(self):
+        return {
+            'id': self.key().id(),
+            'question': self.question,
+            'type': self.type
+        }
+        
+class ChallengeQuestion(db.Model):
+    question = db.StringProperty()
+    
+    def toJson(self):
+        return {
+            'id': self.key().id(),
+            'question': self.question
+        }
+        
+class Answer(db.Model):
+    user_id = db.StringProperty()
+    question_id = db.StringProperty()
+    location = db.GeoPtProperty()
+    date = db.DateTimeProperty()
+    value = db.StringProperty()
+    
+class ChallengeAnswer(db.Model):
+    user_id = db.StringProperty()
+    question_id = db.StringProperty()
+    location = db.GeoPtProperty()
+    date = db.DateTimeProperty()
+    value = db.StringProperty()
+    challenge_id =  db.StringProperty()
+    turn = db.StringProperty()

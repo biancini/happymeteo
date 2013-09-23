@@ -1,0 +1,4 @@
+cron:
+- description: questions
+  url: /send_message
+  schedule: every 6 hours

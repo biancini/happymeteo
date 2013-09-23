@@ -10,11 +10,12 @@ from jinja2.runtime import TemplateNotFound
 
 from google.appengine.ext import db
 
-from models import User, Device, Challenge
+from models import User, Device, Challenge, Question, ChallengeQuestion, Answer,\
+    ChallengeAnswer
 
 from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA, CREATE_ACCOUNT_EMAIL
 
-from utils import sendToSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable
+from utils import sendMessage, sendSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable
 
 import traceback
 
@@ -174,7 +175,7 @@ class CreateAccountHandler(BaseRequestHandler):
         password = self.request.get('password')
         
         if user_id == "":
-            query = User.gql('WHERE email = \'%s\''%email)
+            query = User.gql('WHERE email = \'%s\'' % email)
             
             if query.count() == 0:
                 user = User(facebook_id=facebook_id,
@@ -220,15 +221,15 @@ class CreateAccountHandler(BaseRequestHandler):
                 }
         else:
             user = User.get_by_id(int(user_id))
-            user.facebook_id=facebook_id
-            user.first_name=first_name
-            user.last_name=last_name
-            user.gender=gender
-            user.email=email
-            user.age=age
-            user.education=education
-            user.work=work
-            user.cap=cap
+            user.facebook_id = facebook_id
+            user.first_name = first_name
+            user.last_name = last_name
+            user.gender = gender
+            user.email = email
+            user.age = age
+            user.education = education
+            user.work = work
+            user.cap = cap
             user.put()
             data = {
                 'message': 'CONFIRMED_OR_FACEBOOK',
@@ -335,28 +336,33 @@ class UnregisterHandler(BaseRequestHandler):
 class SendMessageHandler(BaseRequestHandler):
 
   def get(self):
-    registrationId = self.request.get('registrationId')
-    sendToSyncMessage(registrationId, 'questions')
+    devices = Device.all()
+    
+    for d in devices:
+        sendSyncMessage(d.registration_id, 'questions')
 
 """ Questions Management """
 class GetQuestionsHandler(BaseRequestHandler):
 
   def post(self):
-    access_token = getGoogleAccessToken()
-    response = sqlGetFusionTable(access_token, 'SELECT * FROM %s'%DOMANDA)
+    questions = Question.all()
     
-    questions_list = json.loads(response)
-    questions = []
+    if questions.count() > 0:
+       self.response.headers['Content-Type'] = 'application/json'
+       self.response.out.write(json.dumps([q.toJson() for q in questions]))
     
-    for question in questions_list['rows']:
-      questions.append({
-          'id': question[0],
-          'question': question[1],
-          'type': question[2]
-      })
+    # access_token = getGoogleAccessToken()
+    # response = sqlGetFusionTable(access_token, 'SELECT * FROM %s' % DOMANDA)
     
-    self.response.headers['Content-Type'] = 'application/json'
-    self.response.out.write(json.dumps(questions))
+    # questions_list = json.loads(response)
+    # questions = []
+    
+    # for question in questions_list['rows']:
+    #   questions.append({
+    #       'id': question[0],
+    #       'question': question[1],
+    #       'type': question[2]
+    #   })
 
 class SubmitQuestionsHandler(BaseRequestHandler):
 
@@ -364,18 +370,22 @@ class SubmitQuestionsHandler(BaseRequestHandler):
     data = {}
     try:
         questions = self.request.get('questions')
-        id_user = self.request.get('id_user')
-        longitude = self.request.get('longitude')
+        user_id = self.request.get('user_id')
         latitude = self.request.get('latitude')
+        longitude = self.request.get('longitude')
         
         questions = json.loads(questions)
-        
-        access_token = getGoogleAccessToken()
-        
         for q in questions:
-            response = sqlPostFusionTable(access_token, 'INSERT INTO %s (id_user, id_question, location, date, value) VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\')'%(
-                         RISPOSTA, id_user, q, latitude+" "+longitude, datetime.now(), questions[q]))
-            
+            print questions
+            print q
+            answer = Answer(
+                user_id=user_id,
+                question_id=q,
+                location=latitude+","+longitude,
+                date=datetime.now(),
+                value=questions[q])
+            answer.put()
+        
         data = { 'message': 'ok' }
     except:
         data = {
@@ -406,7 +416,7 @@ class RequestChallengeHandler(BaseRequestHandler):
             device = query2.get()
             
             # Save challenge
-            query = Challenge.gql("WHERE user_id_a = :1 and user_id_b = :2 and accepted = false", userId, '%s'%user.key().id())
+            query = Challenge.gql("WHERE user_id_a = :1 and user_id_b = :2 and accepted = false", userId, '%s' % user.key().id())
             if query.count() > 0:
               challenge = query.get()
               challenge.registration_id_a = registrationId
@@ -414,11 +424,11 @@ class RequestChallengeHandler(BaseRequestHandler):
               challenge.created = datetime.now()
               challenge.put()
             else:
-              challenge = Challenge(user_id_a = userId, user_id_b = '%s'%user.key().id(), registration_id_a = registrationId, registration_id_b = device.registration_id, accepted = False)
+              challenge = Challenge(user_id_a=userId, user_id_b='%s' % user.key().id(), registration_id_a=registrationId, registration_id_b=device.registration_id, accepted=False)
               challenge.put()
             
             # Send message to the device
-            sendToSyncMessage(device.registration_id, 'request_challenge', {'challenge': challenge.toJson()})
+            sendSyncMessage(device.registration_id, 'request_challenge', {'challenge': challenge.toJson()})
             data = {
               'message': 'ok',
               'challenge': challenge.toJson()
@@ -447,7 +457,7 @@ class AcceptChallengeHandler(BaseRequestHandler):
     challenge = Challenge.get_by_id(int(challengeId))
     
     if challenge:
-        sendToSyncMessage(challenge.registration_id_a, 'accepted_challenge', {'accept': accepted})
+        sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn1_%s'%accepted})
         challenge.accepted = (accepted == "true")
         challenge.put()
         data = {
@@ -465,44 +475,57 @@ class AcceptChallengeHandler(BaseRequestHandler):
 class QuestionsChallengeHandler(BaseRequestHandler):
 
   def post(self):
-    access_token = getGoogleAccessToken()
-    response = sqlGetFusionTable(access_token, 'SELECT * FROM %s LIMIT 5'%SFIDA)
-
-    questions_list = json.loads(response)
-    questions = []
+    questions = ChallengeQuestion.all()
     
-    for question in questions_list['rows']:
-      questions.append({
-          'id': question[0],
-          'question': question[1],
-          'type': question[2]
-      })
-    
-    self.response.headers['Content-Type'] = 'application/json'
-    self.response.out.write(json.dumps(questions))
+    if questions.count() > 0:
+       self.response.headers['Content-Type'] = 'application/json'
+       self.response.out.write(json.dumps([q.toJson() for q in questions]))
 
 class SubmitChallengeHandler(BaseRequestHandler):
 
   def post(self):
     data = {}
     try:
+        challenge_id = self.request.get('challenge_id')
+        turn = self.request.get('turn')
         questions = self.request.get('questions')
-        id_user = self.request.get('id_user')
+        user_id = self.request.get('user_id')
         longitude = self.request.get('longitude')
         latitude = self.request.get('latitude')
         
-        questions = json.loads(questions)
-        access_token = getGoogleAccessToken()
-        
-        for q in questions:
-            response = sqlPostFusionTable(access_token, 'INSERT INTO %s (id_user, id_question, location, date, value) VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\')'%(
-                         RISPOSTA_SFIDA, id_user, q, latitude+" "+longitude, datetime.now(), questions[q]))
+        challenge = Challenge.get_by_id(int(challenge_id))
+    
+        if challenge and challenge.accepted:
+            questions = json.loads(questions)
+            for q in questions:
+                challengeAnswer = ChallengeAnswer(
+                    user_id=user_id,
+                    question_id=q,
+                    location=latitude+","+longitude,
+                    date=datetime.now(),
+                    value=questions[q],
+                    challenge_id=challenge_id,
+                    turn=turn)
+                challengeAnswer.put()
+                
+            # TODO Calcolare lo score
+            score = 10
+            data = {'score': score}
             
-        # TODO Calcolare lo score
-        # TODO aggiornare il challenge
-        # TODO Se primo turno manda la notifica a utente b
-            
-        data = { 'message': 'ok', 'score': '10'}
+            # TODO aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
+            if(turn == "1"):
+                challenge.score_a = score
+                sendMessage(challenge.registration_id_b, 'accepted_challenge', {'appy_key': 'accepted_challenge_turn2', 'score': score})
+            else:
+                challenge.score_b = score
+                sendMessage(challenge.registration_id_a, 'accepted_challenge', {'appy_key': 'accepted_challenge_turn3', 'score': score})
+                
+            challenge.put()
+        else:
+            data = {
+              'error': 'Accept Challenge error',
+              'message': 'No challenge found'
+            }
     except:
         data = {
           'error': 'Submit Challenge error',
@@ -524,9 +547,9 @@ class HappyMeteoHandler(BaseRequestHandler):
     yesterday = today - timedelta(1)
     beforeyesterday = yesterday - timedelta(1)
     
-    response_today = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1'%(RISPOSTA, today, tomorrow))
-    response_yesterday = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1'%(RISPOSTA, yesterday, today))
-    response_beforeyesterday = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1'%(RISPOSTA, beforeyesterday, yesterday))
+    response_today = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1' % (RISPOSTA, today, tomorrow))
+    response_yesterday = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1' % (RISPOSTA, yesterday, today))
+    response_beforeyesterday = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1' % (RISPOSTA, beforeyesterday, yesterday))
     
     response_today_json = json.loads(response_today)
     if "rows" in response_today_json:
@@ -546,7 +569,7 @@ class HappyMeteoHandler(BaseRequestHandler):
     else:
         value_beforeyesterday = 0.0
         
-    value_tomorrow = (value_today + value_yesterday + value_beforeyesterday)/3
+    value_tomorrow = (value_today + value_yesterday + value_beforeyesterday) / 3
     
     response = {'yesterday': value_yesterday, 'today': value_today, 'tomorrow': value_tomorrow}
     self.response.headers['Content-Type'] = 'application/json'
@@ -560,7 +583,7 @@ class HappyContextHandler(BaseRequestHandler):
 
     today = date.today()
     tomorrow = today + timedelta(1)
-    response_today = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1'%(RISPOSTA, today, tomorrow))
+    response_today = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1' % (RISPOSTA, today, tomorrow))
     response_today_json = json.loads(response_today)
     if "rows" in response_today_json:
         value_today = float(response_today_json["rows"][0][0])

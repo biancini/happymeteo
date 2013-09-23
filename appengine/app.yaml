@@ -5,10 +5,10 @@
 # Get it here if you don't have one: https://appengine.google.com/
 application: happymeteo
 
-# App version
+#App version
 version: webapp2
 
-# Use Python 2.7 runtime here.
+#Use Python 2.7 runtime here.
 # See this for more info: 
 # http://code.google.com/appengine/docs/python/python27/using27.html
 runtime: python27
@@ -65,7 +65,7 @@ builtins:
 #   /form
 handlers:
 
-# static content handlers  
+#static content handlers  
 - url: /(favicon\.ico)
   mime_type: image/png
   static_files: static/\1
