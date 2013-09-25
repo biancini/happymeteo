@@ -3,95 +3,125 @@ package com.happymeteo.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.happymeteo.utils.Const;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+
 public class User {
 	public static int USER_NOT_REGISTERED = 0;
 	public static int USER_REGISTERED = 1;
 	
-	private String user_id;
-	private String facebook_id;
-	private String first_name;
-	private String last_name;
-	private int gender;
-	private String email;
-	private int age;
-	private int education;
-	private int work;
-	private String cap;
-	private int registered;
-	
-	public User(JSONObject jsonObject) throws JSONException {
-		this.user_id = jsonObject.getString("user_id");
-		this.facebook_id = jsonObject.getString("facebook_id");
-		this.first_name = jsonObject.getString("first_name");
-		this.last_name = jsonObject.getString("last_name");
-		this.gender = jsonObject.getInt("gender");
-		this.email = jsonObject.getString("email");
-		this.age = jsonObject.getInt("age");
-		this.education = jsonObject.getInt("education");
-		this.work = jsonObject.getInt("work");
-		this.cap = jsonObject.getString("cap");
-		this.registered = jsonObject.getInt("registered");
+	public static void initialize(Context context, JSONObject jsonObject) throws JSONException {
+		String user_id = jsonObject.getString("user_id");
+		String facebook_id = jsonObject.getString("facebook_id");
+		String first_name = jsonObject.getString("first_name");
+		String last_name = jsonObject.getString("last_name");
+		int gender = jsonObject.getInt("gender");
+		String email = jsonObject.getString("email");
+		int age = jsonObject.getInt("age");
+		int education = jsonObject.getInt("education");
+		int work = jsonObject.getInt("work");
+		String cap = jsonObject.getString("cap");
+		int registered = jsonObject.getInt("registered");
+		
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		editor.putString("user_id", user_id);
+		editor.putString("facebook_id", facebook_id);
+		editor.putString("first_name", first_name);
+		editor.putString("last_name", last_name);
+		editor.putInt("gender", gender);
+		editor.putString("email", email);
+		editor.putInt("age", age);
+		editor.putInt("education", education);
+		editor.putInt("work", work);
+		editor.putString("cap", cap);
+		editor.putInt("registered", registered);
+		editor.commit();
 	}
 	
-	public User(String user_id, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String cap, int registered) {
-		this.user_id = user_id;
-		this.facebook_id = facebook_id;
-		this.first_name = first_name;
-		this.last_name = last_name;
-		this.gender = gender;
-		this.email = email;
-		this.age = age;
-		this.education = education;
-		this.work = work;
-		this.cap = cap;
-		this.registered = registered;
+	public static void initialize(Context context, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String cap, int registered) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		editor.putString("facebook_id", facebook_id);
+		editor.putString("first_name", first_name);
+		editor.putString("last_name", last_name);
+		editor.putInt("gender", gender);
+		editor.putString("email", email);
+		editor.putInt("age", age);
+		editor.putInt("education", education);
+		editor.putInt("work", work);
+		editor.putString("cap", cap);
+		editor.putInt("registered", registered);
+		editor.commit();
 	}
 	
-	public void setUser_id(String user_id) {
-		this.user_id = user_id;
+	public static boolean isFacebookSession(Context context) {
+		String facebook_id = getFacebook_id(context);
+		return facebook_id != null && !facebook_id.equals("");
 	}
 	
-	public String getUser_id() {
-		return user_id;
+	public static String getFacebook_id(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getString("facebook_id", null);
+	}
+	
+	public static void setUser_id(Context context, String user_id) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		editor.putString("user_id", user_id);
+		editor.commit();
+	}
+	
+	public static String getUser_id(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getString("user_id", null);
 	}
 
-	public String getFacebook_id() {
-		return facebook_id;
+	public static String getFirst_name(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getString("first_name", null);
 	}
 
-	public String getFirst_name() {
-		return first_name;
+	public static String getLast_name(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getString("last_name", null);
 	}
 
-	public String getLast_name() {
-		return last_name;
+	public static int getGender(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getInt("gender", 0);
 	}
 
-	public int getGender() {
-		return gender;
+	public static String getEmail(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getString("email", null);
 	}
 
-	public String getEmail() {
-		return email;
+	public static int getAge(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getInt("age", 0);
 	}
 
-	public int getAge() {
-		return age;
+	public static int getEducation(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getInt("education", 0);
 	}
 
-	public int getEducation() {
-		return education;
+	public static int getWork(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getInt("work", 0);
 	}
 
-	public int getWork() {
-		return work;
+	public static int getRegistered(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getInt("registered", User.USER_NOT_REGISTERED);
 	}
 
-	public int getRegistered() {
-		return registered;
-	}
-
-	public String getCap() {
-		return cap;
+	public static String getCap(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getString("cap", null);
 	}
 }

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
+import com.happymeteo.models.User;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
@@ -72,18 +73,11 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i(Const.TAG, "HappyMeteoApplication.getCurrentUser(): "+HappyMeteoApplication.getCurrentUser());
-		
 		setContentView(R.layout.activity_happy_meteo);
 		super.onCreate(savedInstanceState);
 		
-		if(HappyMeteoApplication.getCurrentUser() == null) {
-			Log.i(Const.TAG, "HappyMeteoApplication.getCurrentUser() finish: "+HappyMeteoApplication.getCurrentUser());
-			return;
-		}
-		
 		/* Initialize PushNotificationsService */
-		PushNotificationsService.register(getApplicationContext(), HappyMeteoApplication.getCurrentUser().getUser_id());
+		PushNotificationsService.register(getApplicationContext(), User.getUser_id(this));
 		
 		ServerUtilities.happyMeteo(this, this);
 		
@@ -101,11 +95,11 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		linearLayoutMeteoUp = (LinearLayout) findViewById(R.id.linearLayoutMeteoUp);
 		
 		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
-		welcomeToday.setText(HappyMeteoApplication.getCurrentUser().getFirst_name().toLowerCase()+"_OGGI");
+		welcomeToday.setText(User.getFirst_name(this).toLowerCase()+"_OGGI");
 		
 		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.profile_picture);
-		if (HappyMeteoApplication.isFacebookSession()) {
-			userImage.setProfileId(HappyMeteoApplication.getCurrentUser().getFacebook_id());
+		if (User.isFacebookSession(this)) {
+			userImage.setProfileId(User.getFacebook_id(this));
 			userImage.setCropped(true);
 		} else {
 			userImage.setProfileId(null);

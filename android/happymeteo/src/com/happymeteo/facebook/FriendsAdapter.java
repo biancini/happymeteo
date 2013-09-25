@@ -17,9 +17,9 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.AppyMeteoNotLoggedActivity;
-import com.happymeteo.HappyMeteoApplication;
 import com.happymeteo.R;
 import com.happymeteo.models.Friend;
+import com.happymeteo.models.User;
 import com.happymeteo.utils.ServerUtilities;
 
 public class FriendsAdapter extends ArrayAdapter<Friend> {
@@ -58,7 +58,7 @@ public class FriendsAdapter extends ArrayAdapter<Friend> {
 				public void onClick(View view) {
 					ServerUtilities.requestChallenge(
 						activity, 
-						HappyMeteoApplication.getCurrentUser().getUser_id(),
+						User.getUser_id(view.getContext()),
 						friend.getId(),
 						GCMRegistrar.getRegistrationId(getContext()));
 				}

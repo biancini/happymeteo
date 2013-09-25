@@ -1,5 +1,7 @@
 package com.happymeteo;
 
+import com.happymeteo.models.User;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +19,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 		Button btnChallengeFacebook = (Button) findViewById(R.id.btnChallengeFacebook);
 		Button btnChallengeRandom = (Button) findViewById(R.id.btnChallengeRandom);
 		
-		if(!HappyMeteoApplication.isFacebookSession()) {
+		if(!User.isFacebookSession(this)) {
 			btnChallengeFacebook.setVisibility(View.GONE);
 		}
 

@@ -10,7 +10,7 @@ from jinja2.runtime import TemplateNotFound
 
 from google.appengine.ext import db
 
-from models import User, Device, Challenge, Question, ChallengeQuestion, Answer,\
+from models import User, Device, Challenge, Question, ChallengeQuestion, Answer, \
     ChallengeAnswer
 
 from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA, CREATE_ACCOUNT_EMAIL
@@ -18,6 +18,7 @@ from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA, CREATE_ACCO
 from utils import sendMessage, sendSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable
 
 import traceback
+import logging
 
 class BaseRequestHandler(webapp2.RequestHandler):
   def dispatch(self):
@@ -129,6 +130,18 @@ class FacebookLoginHandler(BaseRequestHandler):
       if query.count() > 0:
         user = query.get()
         data = user.toJson()
+        
+        from datetime import date, timedelta
+
+        today = date.today()
+        tomorrow = today + timedelta(1)
+        yesterday = today - timedelta(1)
+        beforeyesterday = yesterday - timedelta(1)
+        query_today = db.GqlQuery('SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (today, tomorrow, data['user_id']))
+        query_yesterday = db.GqlQuery('SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (yesterday, today, data['user_id']))
+        query_beforeyesterday = db.GqlQuery('SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (beforeyesterday, yesterday, data['user_id']))
+        
+        
       else:
         data = {
             'user_id': '',
@@ -235,6 +248,8 @@ class CreateAccountHandler(BaseRequestHandler):
                 'message': 'CONFIRMED_OR_FACEBOOK',
                 'user_id': user.key().id()
             }
+    
+        
       except:
         data = {
           'error': 'Create Account error',
@@ -376,18 +391,20 @@ class SubmitQuestionsHandler(BaseRequestHandler):
         
         questions = json.loads(questions)
         for q in questions:
-            print questions
-            print q
             answer = Answer(
                 user_id=user_id,
                 question_id=q,
-                location=latitude+","+longitude,
                 date=datetime.now(),
                 value=questions[q])
+            
+            if latitude and longitude:
+               answer.location = latitude + "," + longitude
+            
             answer.put()
         
         data = { 'message': 'ok' }
-    except:
+    except Exception as e:
+        logging.exception(e)
         data = {
           'error': 'Submit Question error',
           'message': '%s' % sys.exc_info()[0],
@@ -457,7 +474,7 @@ class AcceptChallengeHandler(BaseRequestHandler):
     challenge = Challenge.get_by_id(int(challengeId))
     
     if challenge:
-        sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn1_%s'%accepted, 'challenge': challenge.toJson(), 'turn': '1'})
+        sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge': challenge.toJson(), 'turn': '1'})
         challenge.accepted = (accepted == "true")
         challenge.put()
         data = {
@@ -485,7 +502,7 @@ class SubmitChallengeHandler(BaseRequestHandler):
 
   def post(self):
     data = {}
-    #try:
+    # try:
     challenge_id = self.request.get('challenge_id')
     turn = self.request.get('turn')
     questions = self.request.get('questions')
@@ -501,24 +518,27 @@ class SubmitChallengeHandler(BaseRequestHandler):
             challengeAnswer = ChallengeAnswer(
                 user_id=user_id,
                 question_id=q,
-                location=latitude+","+longitude,
                 date=datetime.now(),
                 value=questions[q],
                 challenge_id=challenge_id,
                 turn=turn)
+            
+            if latitude and longitude:
+               challengeAnswer.location = latitude + "," + longitude
+            
             challengeAnswer.put()
             
         # TODO Calcolare lo score
         score = 10
         data = {'score': score}
         
-        # TODO aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
+        # aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
         if(turn == "1"):
             challenge.score_a = score
             sendMessage(challenge.registration_id_b, {'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge': challenge.toJson(), 'turn': '2'})
         else:
             challenge.score_b = score
-            sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn3', 'score': score, 'challenge': challenge.toJson(), 'turn': '2'})
+            sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn3', 'ioChallenge': challenge.score_a, 'tuChallenge': score, 'challenge': challenge.toJson(), 'turn': '2'})
             
         challenge.put()
     else:
@@ -526,7 +546,7 @@ class SubmitChallengeHandler(BaseRequestHandler):
           'error': 'Accept Challenge error',
           'message': 'No challenge found'
         }
-    #except:
+    # except:
     #    data = {
     #      'error': 'Submit Challenge error',
     #      'message': '%s' % sys.exc_info()[0],
@@ -553,23 +573,23 @@ class HappyMeteoHandler(BaseRequestHandler):
     
     response_today_json = json.loads(response_today)
     if "rows" in response_today_json:
-        value_today = float(response_today_json["rows"][0][0])
+        value_today = int(float(response_today_json["rows"][0][0]))
     else:
-        value_today = 0.0
+        value_today = 1.0
         
     response_yesterday_json = json.loads(response_yesterday)
     if "rows" in response_yesterday_json:
-        value_yesterday = float(response_yesterday_json["rows"][0][0])
+        value_yesterday = int(float(response_yesterday_json["rows"][0][0]))
     else:
-        value_yesterday = 0.0
+        value_yesterday = 1.0
         
     response_beforeyesterday_json = json.loads(response_beforeyesterday)
     if "rows" in response_beforeyesterday_json:
-        value_beforeyesterday = float(response_beforeyesterday_json["rows"][0][0])
+        value_beforeyesterday = int(float(response_beforeyesterday_json["rows"][0][0]))
     else:
-        value_beforeyesterday = 0.0
+        value_beforeyesterday = 1.0
         
-    value_tomorrow = (value_today + value_yesterday + value_beforeyesterday) / 3
+    value_tomorrow = int((value_today + value_yesterday + value_beforeyesterday) / 3)
     
     response = {'yesterday': value_yesterday, 'today': value_today, 'tomorrow': value_tomorrow}
     self.response.headers['Content-Type'] = 'application/json'

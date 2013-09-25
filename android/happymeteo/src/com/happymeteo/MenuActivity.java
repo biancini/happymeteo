@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.google.android.gcm.GCMRegistrar;
+import com.happymeteo.models.User;
 import com.happymeteo.utils.ServerUtilities;
 
 public class MenuActivity extends AppyMeteoLoggedActivity {
@@ -34,8 +35,8 @@ public class MenuActivity extends AppyMeteoLoggedActivity {
 			public void onClick(View view) {
 				ServerUtilities.requestChallenge(
 					activity,
-					HappyMeteoApplication.getCurrentUser().getUser_id(),
-					HappyMeteoApplication.getCurrentUser().getFacebook_id(),
+					User.getUser_id(view.getContext()),
+					User.getFacebook_id(view.getContext()),
 					GCMRegistrar.getRegistrationId(getApplicationContext()));
 			}
 		});

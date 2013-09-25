@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
+import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
@@ -25,13 +26,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onRegistered(Context context, String registrationId) {
 		Log.i(Const.TAG, "Device registered: regId = " + registrationId);
-		if(HappyMeteoApplication.getCurrentUser() != null) {
-			/* Register device on happymeteo backend */
-			ServerUtilities.registerDevice(
-					context,
-					registrationId,
-					HappyMeteoApplication.getCurrentUser().getUser_id());
-		}
+		/* Register device on happymeteo backend */
+		ServerUtilities.registerDevice(
+				context,
+				registrationId,
+				User.getUser_id(this));
 	}
 
 	/**
@@ -107,12 +106,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if(collapse_key.equals("accepted_challenge_turn1_true"))
 			return ChallengeQuestionsActivity.class;
 		if(collapse_key.equals("accepted_challenge_turn1_false"))
-			return null;
+			return HappyMeteoActivity.class;
 		if(collapse_key.equals("accepted_challenge_turn2"))
 			return ChallengeQuestionsActivity.class;
 		if(collapse_key.equals("accepted_challenge_turn3"))
 			return ChallengeScoreActivity.class;
-		return null;
+		return HappyMeteoActivity.class;
 	}
 
 	/**
@@ -134,30 +133,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 		Notification notification = new Notification(icon, message, when);
 		String title = context.getString(R.string.app_name);
 
-		if(clazz != null) {
-			Intent notificationIntent = new Intent(context, clazz);
-			notificationIntent.putExtras(extras);
-			
-			Log.i(Const.TAG, "extras: "+extras.toString());
-			
-			// set intent so it does not start a new activity
-			// notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-			// 		| Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-					notificationIntent, 0);
-			notification.setLatestEventInfo(context, title, message, pendingIntent);
-		} else {
-			Intent notificationIntent = new Intent(context, HappyMeteoActivity.class);
-			notificationIntent.putExtras(extras);
-			
-			Log.i(Const.TAG, "extras: "+extras.toString());
-			
-			// set intent so it does not start a new activity
-			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-					notificationIntent, 0);
-			notification.setLatestEventInfo(context, title, message, pendingIntent);
-		}
+		Intent notificationIntent = new Intent(context, clazz);
+		notificationIntent.putExtras(extras);
+		
+		Log.i(Const.TAG, "extras: "+extras.toString());
+		
+		// set intent so it does not start a new activity
+		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+				notificationIntent, 0);
+		notification.setLatestEventInfo(context, title, message, pendingIntent);
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
 		// Play default notification sound

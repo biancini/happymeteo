@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.happymeteo.models.Challenge;
+import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.LocationManagerHelper;
 import com.happymeteo.utils.ServerUtilities;
@@ -102,8 +103,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 									String.valueOf(location.getLongitude()));
 						}
 
-						params.put("user_id", HappyMeteoApplication
-								.getCurrentUser().getUser_id());
+						params.put("user_id", User.getUser_id(view.getContext()));
 						params.put("questions", questions.toString());
 						params.put("challenge_id", challenge.getChallenge_id());
 						params.put("turn", turn);

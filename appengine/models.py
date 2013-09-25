@@ -76,13 +76,13 @@ class Answer(db.Model):
     question_id = db.StringProperty()
     location = db.GeoPtProperty()
     date = db.DateTimeProperty()
-    value = db.StringProperty()
+    value = db.IntegerProperty()
     
 class ChallengeAnswer(db.Model):
     user_id = db.StringProperty()
     question_id = db.StringProperty()
     location = db.GeoPtProperty()
     date = db.DateTimeProperty()
-    value = db.StringProperty()
+    value = db.IntegerProperty()
     challenge_id =  db.StringProperty()
     turn = db.StringProperty()

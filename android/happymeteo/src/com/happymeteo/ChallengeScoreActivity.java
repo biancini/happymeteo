@@ -1,25 +1,57 @@
 package com.happymeteo;
 
+import com.happymeteo.utils.Const;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 public class ChallengeScoreActivity extends AppyMeteoNotLoggedActivity {
+	
+	private void setValues(Intent intent) {
+		Log.i(Const.TAG, "ChallengeScoreActivity.setValues extras: "+intent.getExtras());
+		
+		Integer ioScore = null;
+		Integer tuScore = null;
+
+		TextView ioChallengeTextView = (TextView) findViewById(R.id.ioChallenge);
+		String ioChallenge = intent.getExtras().getString("ioChallenge");
+		if(ioChallenge != null) {
+			ioScore = Integer.valueOf(ioChallenge);
+			ioChallengeTextView.setText(ioChallenge);
+		}
+		
+		TextView tuChallengeTextView = (TextView) findViewById(R.id.tuChallenge);
+		String tuChallenge = intent.getExtras().getString("tuChallenge");
+		if(tuChallenge != null) {
+			tuScore = Integer.valueOf(ioChallenge);
+			tuChallengeTextView.setText(tuChallenge);
+		}
+		
+		TextView resultChallengeTextView = (TextView) findViewById(R.id.resultChallenge);
+		if(ioScore != null && tuScore != null) {
+			if(ioScore > tuScore)
+				resultChallengeTextView.setText("Hai vinto!");
+			if(ioScore < tuScore)
+				resultChallengeTextView.setText("Hai perso!");
+			if(ioScore == tuScore)
+				resultChallengeTextView.setText("Hai pareggiato!");
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_challenge_score);
 		super.onCreate(savedInstanceState);
-
-		TextView ioChallengeTextView = (TextView) findViewById(R.id.ioChallenge);
-		String ioChallenge = getIntent().getExtras().getString("ioChallenge");
-		if(ioChallenge != null) ioChallengeTextView.setText(ioChallenge);
 		
-		TextView tuChallengeTextView = (TextView) findViewById(R.id.tuChallenge);
-		String tuChallenge = getIntent().getExtras().getString("tuChallenge");
-		if(tuChallenge != null) tuChallengeTextView.setText(tuChallenge);
+		setValues(getIntent());
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
 		
-		TextView resultChallengeTextView = (TextView) findViewById(R.id.resultChallenge);
-		String resultChallenge = getIntent().getExtras().getString("resultChallenge");
-		if(resultChallenge != null) resultChallengeTextView.setText(resultChallenge);
+		setValues(intent);
 	}
 }

@@ -55,13 +55,8 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements o
 	public void onPostExecute(int id, String result, Exception exception) {
 		try {
 			JSONObject jsonObject = new JSONObject(result);
-			User user = new User(jsonObject);
-			Log.i(Const.TAG, "user: "+user);
-			
-			if(user != null) {
-				HappyMeteoApplication.setCurrentUser(user);
-				invokeActivity(HappyMeteoActivity.class);
-			}
+			User.initialize(this, jsonObject);
+			invokeActivity(HappyMeteoActivity.class);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

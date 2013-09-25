@@ -24,7 +24,6 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 	private AppyMeteoNotLoggedActivity activity;
 	private onPostExecuteListener onPostExecuteListener;
 	private Button btnCreateUserFacebook;
-	private User lastUser;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,27 +48,23 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
 		btnCreateUserFacebook = (Button) findViewById(R.id.btnCreateUserFacebook);
 
-		if (HappyMeteoApplication.isFacebookSession()) {
+		if (User.isFacebookSession(this)) {
 			create_account_password.setVisibility(View.GONE);
 		}
 
-		User user = HappyMeteoApplication.getCurrentUser();
+		this.user_id = User.getUser_id(this);
+		this.facebook_id = User.getFacebook_id(this);
+		create_account_fist_name.setText(User.getFirst_name(this));
+		create_account_last_name.setText(User.getLast_name(this));
+		create_account_gender.setSelection(User.getGender(this));
+		create_account_email.setText(User.getEmail(this));
+		create_account_age.setSelection(User.getAge(this));
+		create_account_education.setSelection(User.getEducation(this));
+		create_account_work.setSelection(User.getWork(this));
+		create_account_cap.setText(User.getCap(this));
 
-		if (user != null) {
-			this.user_id = user.getUser_id();
-			this.facebook_id = user.getFacebook_id();
-			create_account_fist_name.setText(user.getFirst_name());
-			create_account_last_name.setText(user.getLast_name());
-			create_account_gender.setSelection(user.getGender());
-			create_account_email.setText(user.getEmail());
-			create_account_age.setSelection(user.getAge());
-			create_account_education.setSelection(user.getEducation());
-			create_account_work.setSelection(user.getWork());
-			create_account_cap.setText(user.getCap());
-
-			if (!this.user_id.equals("")) {
-				btnCreateUser.setText(R.string.modify_account);
-			}
+		if (!this.user_id.equals("")) {
+			btnCreateUser.setText(R.string.modify_account);
 		}
 
 		if (!facebook_id.equals("")) {
@@ -139,7 +134,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 						create_account_work.getSelectedItemPosition(),
 						create_account_cap.getText().toString(), password);
 
-				lastUser = new User("", facebook_id, create_account_fist_name
+				User.initialize(view.getContext(), facebook_id, create_account_fist_name
 						.getText().toString(), create_account_last_name
 						.getText().toString(), create_account_gender
 						.getSelectedItemPosition(), create_account_email
@@ -168,8 +163,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			if (jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) { // CONFIRMED_OR_FACEBOOK
-				lastUser.setUser_id(jsonObject.getString("user_id"));
-				HappyMeteoApplication.setCurrentUser(lastUser);
+				User.setUser_id(this, jsonObject.getString("user_id"));
 				invokeActivity(HappyMeteoActivity.class);
 			} else { // NOT_CONFIRMED
 				AlertDialogManager alert = new AlertDialogManager();

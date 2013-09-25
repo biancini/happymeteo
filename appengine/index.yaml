@@ -5,25 +5,8 @@
 # http://code.google.com/appengine/docs/python/datastore/queries.html
 
 indexes:
-
-# - kind: Cat
-#   ancestor: no
-#   properties:
-#   - name: name
-#   - name: age
-#     direction: desc
-
-# - kind: Cat
-#   properties:
-#   - name: name
-#     direction: asc
-#   - name: whiskers
-#     direction: desc
-
-# - kind: Store
-#   ancestor: yes
-#   properties:
-#   - name: business
-#     direction: asc
-#   - name: owner
-#     direction: asc
+- kind: Answer
+  properties:
+  - name: question_id
+  - name: user_id
+  - name: date

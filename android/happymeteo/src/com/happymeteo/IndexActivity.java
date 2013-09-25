@@ -194,18 +194,13 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 			try {
 				JSONObject jsonObject = new JSONObject(result);
 	
-				User user = new User(jsonObject);
-	
-				if (user != null) {
-					HappyMeteoApplication.setCurrentUser(user);
-	
-					if (user.getRegistered() == User.USER_NOT_REGISTERED) {
-						invokeActivity(CreateAccountActivity.class);
-					} else {
-						invokeActivity(HappyMeteoActivity.class);
-					}
-					return;
+				User.initialize(this, jsonObject);
+				if (User.getRegistered(this) == User.USER_NOT_REGISTERED) {
+					invokeActivity(CreateAccountActivity.class);
+				} else {
+					invokeActivity(HappyMeteoActivity.class);
 				}
+				return;
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

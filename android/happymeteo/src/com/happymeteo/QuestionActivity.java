@@ -23,6 +23,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.LocationManagerHelper;
 import com.happymeteo.utils.ServerUtilities;
@@ -94,8 +95,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 								String.valueOf(location.getLongitude()));
 					}
 
-					params.put("user_id", HappyMeteoApplication
-							.getCurrentUser().getUser_id());
+					params.put("user_id", User.getUser_id(view.getContext()));
 					params.put("questions", questions.toString());
 
 					ServerUtilities.submitQuestions(onPostExecuteListener,
@@ -108,121 +108,121 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
 		switch (id) {
-		case Const.GET_QUESTIONS_URL_ID:
-			try {
-				JSONArray jsonArray = new JSONArray(result);
-				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject jsonObject;
-					try {
-						jsonObject = jsonArray.getJSONObject(i);
-						final String id_question = jsonObject.getString("id");
-						final String question = jsonObject
-								.getString("question");
-						final int type = jsonObject.getInt("type");
-						Log.i(Const.TAG, jsonObject.toString());
-
-						LinearLayout linearLayout1 = new LinearLayout(
-								getApplicationContext());
-						linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
-
-						LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-								LayoutParams.WRAP_CONTENT,
-								LayoutParams.WRAP_CONTENT);
-						llp.setMargins(10, 10, 10, 10);
-
-						TextView tv = new TextView(getApplicationContext());
-						tv.setText(question);
-						tv.setLayoutParams(llp);
-						linearLayout1.addView(tv);
-
-						if (type == 1) {
-							final TextView tvText = new TextView(
+			case Const.GET_QUESTIONS_URL_ID:
+				try {
+					JSONArray jsonArray = new JSONArray(result);
+					for (int i = 0; i < jsonArray.length(); i++) {
+						JSONObject jsonObject;
+						try {
+							jsonObject = jsonArray.getJSONObject(i);
+							final String id_question = jsonObject.getString("id");
+							final String question = jsonObject
+									.getString("question");
+							final int type = jsonObject.getInt("type");
+							Log.i(Const.TAG, jsonObject.toString());
+	
+							LinearLayout linearLayout1 = new LinearLayout(
 									getApplicationContext());
-							tvText.setText("1");
-							tvText.setLayoutParams(llp);
-							linearLayout1.addView(tvText);
-
-							linearLayout.addView(linearLayout1);
-
-							LinearLayout.LayoutParams llp_seekBar = new LinearLayout.LayoutParams(
-									LayoutParams.MATCH_PARENT,
+							linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
+	
+							LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
+									LayoutParams.WRAP_CONTENT,
 									LayoutParams.WRAP_CONTENT);
-							llp_seekBar.setMargins(10, 10, 10, 10);
-
-							SeekBar seekBar = new SeekBar(
-									getApplicationContext());
-							seekBar.setThumb(getResources()
-									.getDrawable(
-											R.drawable.scrubber_control_selector_holo_light));
-							seekBar.setProgressDrawable(getResources()
-									.getDrawable(
-											R.drawable.progress_horizontal_holo_light));
-							seekBar.setMax(90);
-							seekBar.setProgress(0);
-							seekBar.setLayoutParams(llp_seekBar);
-							seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-								@Override
-								public void onStopTrackingTouch(SeekBar seekBar) {
-								}
-
-								@Override
-								public void onStartTrackingTouch(SeekBar seekBar) {
-								}
-
-								@Override
-								public void onProgressChanged(SeekBar seekBar,
-										int progress, boolean fromUser) {
-									String value = String
-											.valueOf((progress / 10) + 1);
-									try {
-										questions.put(id_question, value);
-									} catch (JSONException e) {
-										e.printStackTrace();
+							llp.setMargins(10, 10, 10, 10);
+	
+							TextView tv = new TextView(getApplicationContext());
+							tv.setText(question);
+							tv.setLayoutParams(llp);
+							linearLayout1.addView(tv);
+	
+							if (type == 1) {
+								final TextView tvText = new TextView(
+										getApplicationContext());
+								tvText.setText("1");
+								tvText.setLayoutParams(llp);
+								linearLayout1.addView(tvText);
+	
+								linearLayout.addView(linearLayout1);
+	
+								LinearLayout.LayoutParams llp_seekBar = new LinearLayout.LayoutParams(
+										LayoutParams.MATCH_PARENT,
+										LayoutParams.WRAP_CONTENT);
+								llp_seekBar.setMargins(10, 10, 10, 10);
+	
+								SeekBar seekBar = new SeekBar(
+										getApplicationContext());
+								seekBar.setThumb(getResources()
+										.getDrawable(
+												R.drawable.scrubber_control_selector_holo_light));
+								seekBar.setProgressDrawable(getResources()
+										.getDrawable(
+												R.drawable.progress_horizontal_holo_light));
+								seekBar.setMax(90);
+								seekBar.setProgress(0);
+								seekBar.setLayoutParams(llp_seekBar);
+								seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+	
+									@Override
+									public void onStopTrackingTouch(SeekBar seekBar) {
 									}
-									tvText.setText(value);
-								}
-							});
-
-							linearLayout.addView(seekBar);
-							questions.put(id_question, "1");
-						} else {
-							final ToggleButton toggleButton = new ToggleButton(
-									getApplicationContext());
-							toggleButton.setLayoutParams(llp);
-							toggleButton.setTextOn("Si");
-							toggleButton.setTextOff("No");
-							toggleButton.setChecked(false);
-							toggleButton
-									.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-										@Override
-										public void onCheckedChanged(
-												CompoundButton buttonView,
-												boolean isChecked) {
-											try {
-												questions.put(id_question,
-														isChecked ? "1" : "0");
-											} catch (JSONException e) {
-												e.printStackTrace();
-											}
+	
+									@Override
+									public void onStartTrackingTouch(SeekBar seekBar) {
+									}
+	
+									@Override
+									public void onProgressChanged(SeekBar seekBar,
+											int progress, boolean fromUser) {
+										String value = String
+												.valueOf((progress / 10) + 1);
+										try {
+											questions.put(id_question, value);
+										} catch (JSONException e) {
+											e.printStackTrace();
 										}
-									});
-
-							linearLayout1.addView(toggleButton);
-							linearLayout.addView(linearLayout1);
-							questions.put(id_question, "0");
+										tvText.setText(value);
+									}
+								});
+	
+								linearLayout.addView(seekBar);
+								questions.put(id_question, "1");
+							} else {
+								final ToggleButton toggleButton = new ToggleButton(
+										getApplicationContext());
+								toggleButton.setLayoutParams(llp);
+								toggleButton.setTextOn("Si");
+								toggleButton.setTextOff("No");
+								toggleButton.setChecked(false);
+								toggleButton
+										.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+	
+											@Override
+											public void onCheckedChanged(
+													CompoundButton buttonView,
+													boolean isChecked) {
+												try {
+													questions.put(id_question,
+															isChecked ? "1" : "0");
+												} catch (JSONException e) {
+													e.printStackTrace();
+												}
+											}
+										});
+	
+								linearLayout1.addView(toggleButton);
+								linearLayout.addView(linearLayout1);
+								questions.put(id_question, "0");
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
 						}
-					} catch (JSONException e) {
-						e.printStackTrace();
 					}
+				} catch (JSONException e) {
+					e.printStackTrace();
 				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			break;
-		case Const.SUBMIT_QUESTIONS_URL_ID:
-			//finish();
+				break;
+			case Const.SUBMIT_QUESTIONS_URL_ID:
+				finish();
 		}
 	}
 }
