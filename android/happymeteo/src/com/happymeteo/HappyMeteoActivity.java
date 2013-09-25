@@ -1,27 +1,17 @@
 package com.happymeteo;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
 import com.happymeteo.models.User;
 import com.happymeteo.service.PushNotificationsService;
-import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.onPostExecuteListener;
 
-public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {
-	private TextView today_text;
-	private TextView yesterday_text;
-	private TextView tomorrow_text;
-	private LinearLayout linearLayoutMeteoUp;
+public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 	
 	private int[] getColorByToday(int today) {
 		int colors[] = {0, 0};
@@ -71,6 +61,60 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		return colors;
 	}
 	
+	private int getWhiteIcon(int day) {
+		switch(day) {
+			case 1:
+				return R.drawable.white_1happy;
+			case 2:
+				return R.drawable.white_2happy;
+			case 3:
+				return R.drawable.white_3happy;
+			case 4:
+				return R.drawable.white_4happy;
+			case 5:
+				return R.drawable.white_5happy;
+			case 6:
+				return R.drawable.white_6happy;
+			case 7:
+				return R.drawable.white_7happy;
+			case 8:
+				return R.drawable.white_8happy;
+			case 9:
+				return R.drawable.white_9happy;
+			case 10:
+				return R.drawable.white_10happy;
+		}
+		
+		return R.drawable.white_1happy;
+	}
+	
+	private int getGrayIcon(int day) {
+		switch(day) {
+			case 1:
+				return R.drawable.gray_1happy;
+			case 2:
+				return R.drawable.gray_2happy;
+			case 3:
+				return R.drawable.gray_3happy;
+			case 4:
+				return R.drawable.gray_4happy;
+			case 5:
+				return R.drawable.gray_5happy;
+			case 6:
+				return R.drawable.gray_6happy;
+			case 7:
+				return R.drawable.gray_7happy;
+			case 8:
+				return R.drawable.gray_8happy;
+			case 9:
+				return R.drawable.gray_9happy;
+			case 10:
+				return R.drawable.gray_10happy;
+		}
+		
+		return R.drawable.white_1happy;
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_happy_meteo);
@@ -79,20 +123,36 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		/* Initialize PushNotificationsService */
 		PushNotificationsService.register(getApplicationContext(), User.getUser_id(this));
 		
-		ServerUtilities.happyMeteo(this, this);
+		//ServerUtilities.happyMeteo(this, this);
 		
 		Typeface helveticaneueltstd_ultlt_webfont = Typeface.createFromAsset(getAssets(), "helveticaneueltstd-ultlt-webfont.ttf");
 		
-		today_text = (TextView) findViewById(R.id.today_text);
+		int today_int = User.getToday(this);
+		int yesterday_int = User.getYesterday(this);
+		int tomorrow_int = User.getTomorrow(this);
+		
+		TextView today_text = (TextView) findViewById(R.id.today_text);
 		today_text.setTypeface(helveticaneueltstd_ultlt_webfont);
+		today_text.setText(String.valueOf(today_int));
 		
-		yesterday_text = (TextView) findViewById(R.id.yesterday_text);
+		TextView yesterday_text = (TextView) findViewById(R.id.yesterday_text);
 		yesterday_text.setTypeface(helveticaneueltstd_ultlt_webfont);
+		yesterday_text.setText(String.valueOf(yesterday_int));
 		
-		tomorrow_text = (TextView) findViewById(R.id.tomorrow_text);
+		TextView tomorrow_text = (TextView) findViewById(R.id.tomorrow_text);
 		tomorrow_text.setTypeface(helveticaneueltstd_ultlt_webfont);
+		tomorrow_text.setText(String.valueOf(tomorrow_int));
 		
-		linearLayoutMeteoUp = (LinearLayout) findViewById(R.id.linearLayoutMeteoUp);
+		ImageView today_pic = (ImageView) findViewById(R.id.today_pic);
+		today_pic.setImageResource(getWhiteIcon(today_int));
+		ImageView yesterday_pic = (ImageView) findViewById(R.id.yesterday_pic);
+		yesterday_pic.setImageResource(getGrayIcon(yesterday_int));
+		ImageView tomorrow_pic = (ImageView) findViewById(R.id.tomorrow_pic);
+		tomorrow_pic.setImageResource(getGrayIcon(tomorrow_int));
+		
+		LinearLayout linearLayoutMeteoUp = (LinearLayout) findViewById(R.id.linearLayoutMeteoUp);
+		GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, getColorByToday(today_int));
+		linearLayoutMeteoUp.setBackgroundDrawable(gradientDrawable);
 		
 		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
 		welcomeToday.setText(User.getFirst_name(this).toLowerCase()+"_OGGI");
@@ -103,28 +163,6 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 			userImage.setCropped(true);
 		} else {
 			userImage.setProfileId(null);
-		}
-	}
-	
-	@Override
-	public void onPostExecute(int id, String result, Exception exception) {
-		try {
-			JSONObject jsonObject = new JSONObject(result);
-			Log.i(Const.TAG, "json: " + jsonObject);
-			
-			String today = "10";
-			String yesterday = "3";
-			String tomorrow = "7";
-			
-			today_text.setText(today);
-			yesterday_text.setText(yesterday);
-			tomorrow_text.setText(tomorrow);
-			
-			int today_int = Integer.valueOf(today);
-			GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, getColorByToday(today_int));
-			linearLayoutMeteoUp.setBackgroundDrawable(gradientDrawable);
-		} catch (JSONException e) {
-			e.printStackTrace();
 		}
 	}
 }

@@ -2,7 +2,7 @@
 import sys
 import json
 import urllib2
-from datetime import datetime
+from datetime import datetime, date, timedelta
 
 import webapp2
 from webapp2_extras import auth, sessions, jinja2
@@ -131,17 +131,49 @@ class FacebookLoginHandler(BaseRequestHandler):
         user = query.get()
         data = user.toJson()
         
-        from datetime import date, timedelta
-
         today = date.today()
         tomorrow = today + timedelta(1)
         yesterday = today - timedelta(1)
         beforeyesterday = yesterday - timedelta(1)
-        query_today = db.GqlQuery('SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (today, tomorrow, data['user_id']))
-        query_yesterday = db.GqlQuery('SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (yesterday, today, data['user_id']))
-        query_beforeyesterday = db.GqlQuery('SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (beforeyesterday, yesterday, data['user_id']))
+        query_today = db.GqlQuery('SELECT * FROM Answer WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (today, tomorrow, data['user_id']))
+        query_yesterday = db.GqlQuery('SELECT * FROM Answer WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (yesterday, today, data['user_id']))
+        query_beforeyesterday = db.GqlQuery('SELECT * FROM Answer WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (beforeyesterday, yesterday, data['user_id']))
         
+        today_value = 1.0
+        today_sum = 0.0
+        if query_today.count() > 0:
+            answers = query_today.all()
+            
+            for answer in answers:
+                today_sum = today_sum + answer.value
+            
+            today_value = today_sum / len(answers)
+            
+        yesterday_value = 1.0
+        yesterday_sum = 0.0
+        if query_yesterday.count() > 0:
+            answers = query_yesterday.all()
+            
+            for answer in answers:
+                yesterday_sum = yesterday_sum + answer.value
+            
+            yesterday_value = yesterday_sum / len(answers)
+            
+        beforeyesterday_value = 1.0
+        beforeyesterday_sum = 0.0
+        if query_beforeyesterday.count() > 0:
+            answers = query_beforeyesterday.all()
+            
+            for answer in answers:
+                beforeyesterday_sum = beforeyesterday_sum + answer.value
+            
+            beforeyesterday_value = beforeyesterday_sum / len(answers)
+            
+        tomorrow_value = int((today_value + yesterday_value + beforeyesterday_value) / 3)
         
+        data['today'] = int(today_value)
+        data['yesterday'] = int(yesterday_value)
+        data['tomorrow'] = int(tomorrow_value)
       else:
         data = {
             'user_id': '',
@@ -273,6 +305,50 @@ class NormalLoginHandler(BaseRequestHandler):
           
           if user.password == pwd_parameter:
             data = user.toJson()
+            
+            today = date.today()
+            tomorrow = today + timedelta(1)
+            yesterday = today - timedelta(1)
+            beforeyesterday = yesterday - timedelta(1)
+            query_today = db.GqlQuery('SELECT * FROM Answer WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (today, tomorrow, data['user_id']))
+            query_yesterday = db.GqlQuery('SELECT * FROM Answer WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (yesterday, today, data['user_id']))
+            query_beforeyesterday = db.GqlQuery('SELECT * FROM Answer WHERE date >= \'%s\' AND date < \'%s\' AND question_id = 6434359225614336 AND user_id = %s' % (beforeyesterday, yesterday, data['user_id']))
+            
+            today_value = 1.0
+            today_sum = 0.0
+            if query_today.count() > 0:
+                answers = query_today.all()
+                
+                for answer in answers:
+                    today_sum = today_sum + answer.value
+                
+                today_value = today_sum / len(answers)
+                
+            yesterday_value = 1.0
+            yesterday_sum = 0.0
+            if query_yesterday.count() > 0:
+                answers = query_yesterday.all()
+                
+                for answer in answers:
+                    yesterday_sum = yesterday_sum + answer.value
+                
+                yesterday_value = yesterday_sum / len(answers)
+                
+            beforeyesterday_value = 1.0
+            beforeyesterday_sum = 0.0
+            if query_beforeyesterday.count() > 0:
+                answers = query_beforeyesterday.all()
+                
+                for answer in answers:
+                    beforeyesterday_sum = beforeyesterday_sum + answer.value
+                
+                beforeyesterday_value = beforeyesterday_sum / len(answers)
+                
+            tomorrow_value = int((today_value + yesterday_value + beforeyesterday_value) / 3)
+            
+            data['today'] = int(today_value)
+            data['yesterday'] = int(yesterday_value)
+            data['tomorrow'] = int(tomorrow_value)
           else:
             data = {
               'error': 'Normal Login error',

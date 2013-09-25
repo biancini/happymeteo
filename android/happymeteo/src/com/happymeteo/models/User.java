@@ -25,6 +25,9 @@ public class User {
 		int work = jsonObject.getInt("work");
 		String cap = jsonObject.getString("cap");
 		int registered = jsonObject.getInt("registered");
+		int today = jsonObject.getInt("today");
+		int yesterday = jsonObject.getInt("yesterday");
+		int tomorrow = jsonObject.getInt("tomorrow");
 		
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
 		Editor editor = preferences.edit();
@@ -39,10 +42,13 @@ public class User {
 		editor.putInt("work", work);
 		editor.putString("cap", cap);
 		editor.putInt("registered", registered);
+		editor.putInt("today", today);
+		editor.putInt("yesterday", yesterday);
+		editor.putInt("tomorrow", tomorrow);
 		editor.commit();
 	}
 	
-	public static void initialize(Context context, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String cap, int registered) {
+	public static void initialize(Context context, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String cap, int registered, int today, int yesterday, int tomorrow) {
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
 		Editor editor = preferences.edit();
 		editor.putString("facebook_id", facebook_id);
@@ -55,6 +61,9 @@ public class User {
 		editor.putInt("work", work);
 		editor.putString("cap", cap);
 		editor.putInt("registered", registered);
+		editor.putInt("today", today);
+		editor.putInt("yesterday", yesterday);
+		editor.putInt("tomorrow", tomorrow);
 		editor.commit();
 	}
 	
@@ -123,5 +132,20 @@ public class User {
 	public static String getCap(Context context) {
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
 		return preferences.getString("cap", null);
+	}
+	
+	public static int getToday(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getInt("today", 1);
+	}
+	
+	public static int getYesterday(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getInt("yesterday", 1);
+	}
+	
+	public static int getTomorrow(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getInt("tomorrow", 1);
 	}
 }

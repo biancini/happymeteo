@@ -17,7 +17,7 @@ public class HappyContextActivity extends AppyMeteoLoggedActivity implements onP
 		setContentView(R.layout.activity_happy_context);
 		super.onCreate(savedInstanceState);
 		
-		ServerUtilities.happyContext(this, this);
+		//ServerUtilities.happyContext(this, this);
 	}
 	
 	@Override

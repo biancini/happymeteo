@@ -142,7 +142,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 						.getSelectedItemPosition(), create_account_education
 						.getSelectedItemPosition(), create_account_work
 						.getSelectedItemPosition(), create_account_cap
-						.getText().toString(), User.USER_REGISTERED);
+						.getText().toString(), User.USER_REGISTERED, 1, 1, 1);
 			}
 		});
 	}
