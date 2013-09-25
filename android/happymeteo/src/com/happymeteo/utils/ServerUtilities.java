@@ -104,16 +104,4 @@ public class ServerUtilities {
 		Log.i(Const.TAG, "submit questions (params = " + parameters + ")");
 		new PostRequest(Const.SUBMIT_CHALLENGE_URL_ID, activity, parameters, onPostExecuteListener).execute(Const.SUBMIT_CHALLENGE_URL);
 	}
-
-	/*public static void happyMeteo(onPostExecuteListener onPostExecuteListener, Activity activity) {
-		Log.i(Const.TAG, "happyMeteo");
-		Map<String, String> parameters = new HashMap<String, String>();
-		new PostRequest(Const.HAPPY_METEO_URL_ID, activity, parameters, onPostExecuteListener).execute(Const.HAPPY_METEO_URL);
-	}
-
-	public static void happyContext(onPostExecuteListener onPostExecuteListener, Activity activity) {
-		Log.i(Const.TAG, "happyContext");
-		Map<String, String> parameters = new HashMap<String, String>();
-		new PostRequest(Const.HAPPY_CONTEXT_URL_ID, activity, parameters, onPostExecuteListener).execute(Const.HAPPY_CONTEXT_URL);
-	}*/
 }

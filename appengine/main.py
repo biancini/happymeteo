@@ -38,12 +38,7 @@ routes = [
   Route('/request_challenge', handler='handlers.RequestChallengeHandler'),
   Route('/accept_challenge', handler='handlers.AcceptChallengeHandler'),
   Route('/questions_challenge', handler='handlers.QuestionsChallengeHandler'),
-  Route('/submit_challenge', handler='handlers.SubmitChallengeHandler'),
-  #Route('/send_score_challenge', handler='handlers.SendScoreChallengeHandler')
-  
-  # happy management
-  # Route('/happy_meteo', handler='handlers.HappyMeteoHandler'),
-  # Route('/happy_context', handler='handlers.HappyContextHandler'),
+  Route('/submit_challenge', handler='handlers.SubmitChallengeHandler')
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

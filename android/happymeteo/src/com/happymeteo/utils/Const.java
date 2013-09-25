@@ -19,9 +19,6 @@ public final class Const {
 	public static final String QUESTIONS_CHALLENGE_URL = BASE_URL + "/questions_challenge";
 	public static final String SUBMIT_CHALLENGE_URL = BASE_URL + "/submit_challenge";
 	
-	public static final String HAPPY_METEO_URL = BASE_URL + "/happy_meteo";
-	public static final String HAPPY_CONTEXT_URL = BASE_URL + "/happy_context";
-	
 	/* Id Post */
 	public static final int CREATE_ACCOUNT_ID = 1;
 	public static final int FACEBOOK_LOGIN_URL_ID = 2;

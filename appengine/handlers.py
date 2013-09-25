@@ -193,7 +193,8 @@ class FacebookLoginHandler(BaseRequestHandler):
         else:
           data['gender'] = 0
 
-    except:
+    except Exception as e:
+      logging.exception(e)
       data = {
         'error': 'Facebook Login error',
         'message': '%s' % sys.exc_info()[0],
@@ -282,7 +283,8 @@ class CreateAccountHandler(BaseRequestHandler):
             }
     
         
-      except:
+      except Exception as e:
+        logging.exception(e)
         data = {
           'error': 'Create Account error',
           'message': '%s' % traceback.format_exc(),
@@ -359,7 +361,8 @@ class NormalLoginHandler(BaseRequestHandler):
             'error': 'Normal Login error',
             'message': 'User not found or not confirmed',
           }
-      except:
+      except Exception as e:
+        logging.exception(e)
         data = {
           'error': 'Normal Login error',
           'message': '%s' % sys.exc_info()[0],
@@ -441,19 +444,6 @@ class GetQuestionsHandler(BaseRequestHandler):
     if questions.count() > 0:
        self.response.headers['Content-Type'] = 'application/json'
        self.response.out.write(json.dumps([q.toJson() for q in questions]))
-    
-    # access_token = getGoogleAccessToken()
-    # response = sqlGetFusionTable(access_token, 'SELECT * FROM %s' % DOMANDA)
-    
-    # questions_list = json.loads(response)
-    # questions = []
-    
-    # for question in questions_list['rows']:
-    #   questions.append({
-    #       'id': question[0],
-    #       'question': question[1],
-    #       'type': question[2]
-    #   })
 
 class SubmitQuestionsHandler(BaseRequestHandler):
 
@@ -578,114 +568,56 @@ class SubmitChallengeHandler(BaseRequestHandler):
 
   def post(self):
     data = {}
-    # try:
-    challenge_id = self.request.get('challenge_id')
-    turn = self.request.get('turn')
-    questions = self.request.get('questions')
-    user_id = self.request.get('user_id')
-    longitude = self.request.get('longitude')
-    latitude = self.request.get('latitude')
-    
-    challenge = Challenge.get_by_id(int(challenge_id))
-
-    if challenge and challenge.accepted:
-        questions = json.loads(questions)
-        for q in questions:
-            challengeAnswer = ChallengeAnswer(
-                user_id=user_id,
-                question_id=q,
-                date=datetime.now(),
-                value=questions[q],
-                challenge_id=challenge_id,
-                turn=turn)
-            
-            if latitude and longitude:
-               challengeAnswer.location = latitude + "," + longitude
-            
-            challengeAnswer.put()
-            
-        # TODO Calcolare lo score
-        score = 10
-        data = {'score': score}
+    try:
+        challenge_id = self.request.get('challenge_id')
+        turn = self.request.get('turn')
+        questions = self.request.get('questions')
+        user_id = self.request.get('user_id')
+        longitude = self.request.get('longitude')
+        latitude = self.request.get('latitude')
         
-        # aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
-        if(turn == "1"):
-            challenge.score_a = score
-            sendMessage(challenge.registration_id_b, {'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge': challenge.toJson(), 'turn': '2'})
-        else:
-            challenge.score_b = score
-            sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn3', 'ioChallenge': challenge.score_a, 'tuChallenge': score, 'challenge': challenge.toJson(), 'turn': '2'})
+        challenge = Challenge.get_by_id(int(challenge_id))
+    
+        if challenge and challenge.accepted:
+            questions = json.loads(questions)
+            for q in questions:
+                challengeAnswer = ChallengeAnswer(
+                    user_id=user_id,
+                    question_id=q,
+                    date=datetime.now(),
+                    value=questions[q],
+                    challenge_id=challenge_id,
+                    turn=turn)
+                
+                if latitude and longitude:
+                   challengeAnswer.location = latitude + "," + longitude
+                
+                challengeAnswer.put()
+                
+            # TODO Calcolare lo score
+            score = 10
+            data = {'score': score}
             
-        challenge.put()
-    else:
-        data = {
-          'error': 'Accept Challenge error',
-          'message': 'No challenge found'
-        }
-    # except:
-    #    data = {
-    #      'error': 'Submit Challenge error',
-    #      'message': '%s' % sys.exc_info()[0],
-    #    }
+            # aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
+            if(turn == "1"):
+                challenge.score_a = score
+                sendMessage(challenge.registration_id_b, {'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge': challenge.toJson(), 'turn': '2'})
+            else:
+                challenge.score_b = score
+                sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn3', 'ioChallenge': challenge.score_a, 'tuChallenge': score, 'challenge': challenge.toJson(), 'turn': '2'})
+                
+            challenge.put()
+        else:
+            data = {
+              'error': 'Accept Challenge error',
+              'message': 'No challenge found'
+            }
+    except Exception as e:
+       logging.exception(e)
+       data = {
+         'error': 'Submit Challenge error',
+          'message': '%s' % sys.exc_info()[0],
+       }
     
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))
-
-# happy management
-class HappyMeteoHandler(BaseRequestHandler):
-
-  def post(self):
-    access_token = getGoogleAccessToken()
-    from datetime import date, timedelta
-
-    today = date.today()
-    tomorrow = today + timedelta(1)
-    yesterday = today - timedelta(1)
-    beforeyesterday = yesterday - timedelta(1)
-    
-    response_today = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1' % (RISPOSTA, today, tomorrow))
-    response_yesterday = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1' % (RISPOSTA, yesterday, today))
-    response_beforeyesterday = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1' % (RISPOSTA, beforeyesterday, yesterday))
-    
-    response_today_json = json.loads(response_today)
-    if "rows" in response_today_json:
-        value_today = int(float(response_today_json["rows"][0][0]))
-    else:
-        value_today = 1.0
-        
-    response_yesterday_json = json.loads(response_yesterday)
-    if "rows" in response_yesterday_json:
-        value_yesterday = int(float(response_yesterday_json["rows"][0][0]))
-    else:
-        value_yesterday = 1.0
-        
-    response_beforeyesterday_json = json.loads(response_beforeyesterday)
-    if "rows" in response_beforeyesterday_json:
-        value_beforeyesterday = int(float(response_beforeyesterday_json["rows"][0][0]))
-    else:
-        value_beforeyesterday = 1.0
-        
-    value_tomorrow = int((value_today + value_yesterday + value_beforeyesterday) / 3)
-    
-    response = {'yesterday': value_yesterday, 'today': value_today, 'tomorrow': value_tomorrow}
-    self.response.headers['Content-Type'] = 'application/json'
-    self.response.out.write(json.dumps(response))
-
-class HappyContextHandler(BaseRequestHandler):
-
-  def post(self):
-    access_token = getGoogleAccessToken()
-    from datetime import date, timedelta
-
-    today = date.today()
-    tomorrow = today + timedelta(1)
-    response_today = sqlGetFusionTable(access_token, 'SELECT average(value) FROM %s WHERE date >= \'%s\' AND date < \'%s\' AND id_question = 1' % (RISPOSTA, today, tomorrow))
-    response_today_json = json.loads(response_today)
-    if "rows" in response_today_json:
-        value_today = float(response_today_json["rows"][0][0])
-    else:
-        value_today = 0.0
-        
-    response = {'you': value_today, 'around': '6'}
-    self.response.headers['Content-Type'] = 'application/json'
-    self.response.out.write(json.dumps(response))
