@@ -12,6 +12,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.devspark.sidenavigation.ISideNavigationCallback;
 import com.devspark.sidenavigation.SideNavigationView;
 import com.devspark.sidenavigation.SideNavigationView.Mode;
+import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 
 public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implements
@@ -53,8 +54,8 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 		getSupportMenuInflater().inflate(R.menu.main_menu, menu);
 		menu.findItem(R.id.settings).setShowAsAction(
 				MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		menu.findItem(R.id.menuActivity).setShowAsAction(
-				MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		/*menu.findItem(R.id.menuActivity).setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_IF_ROOM);*/
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -92,12 +93,14 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 				break;
 	
 			case R.id.side_navigation_menu_item4:
-				invokeActivity(ChallengeActivity.class);
+				if(User.isFacebookSession(this)) {
+					invokeActivity(FriendsFacebookActivity.class);
+				}
 				break;
 	
-			case R.id.side_navigation_menu_item5:
+			/*case R.id.side_navigation_menu_item5:
 				invokeActivity(HappyContextActivity.class);
-				break;
+				break;*/
 	
 			default:
 				return;

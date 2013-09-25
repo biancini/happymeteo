@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 
 public class HappyContextActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {

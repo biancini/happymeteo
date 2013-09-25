@@ -23,7 +23,6 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 	private String facebook_id;
 	private AppyMeteoNotLoggedActivity activity;
 	private onPostExecuteListener onPostExecuteListener;
-	private Button btnCreateUserFacebook;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		final Spinner create_account_work = (Spinner) findViewById(R.id.create_account_work);
 		final EditText create_account_cap = (EditText) findViewById(R.id.create_account_cap);
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
-		btnCreateUserFacebook = (Button) findViewById(R.id.btnCreateUserFacebook);
+		//Button btnCreateUserFacebook = (Button) findViewById(R.id.btnCreateUserFacebook);
 
 		if (User.isFacebookSession(this)) {
 			create_account_password.setVisibility(View.GONE);
@@ -67,7 +66,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 			btnCreateUser.setText(R.string.modify_account);
 		}
 
-		if (!facebook_id.equals("")) {
+		/*if (!facebook_id.equals("")) {
 			btnCreateUserFacebook.setText(R.string.unlink_user_to_facebook);
 		} else {
 			btnCreateUserFacebook.setText(R.string.link_user_to_facebook);
@@ -76,7 +75,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		btnCreateUserFacebook.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				/*if (facebook_id.equals("")) {
+				if (facebook_id.equals("")) {
 					HappyMeteoApplication.getFacebookSessionService()
 							.openConnession(onCompleteListener);
 
@@ -84,11 +83,9 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 					facebook_id = "";
 					btnCreateUserFacebook
 							.setText(R.string.link_user_to_facebook);
-				}*/
-				
-				// TODO
+				}
 			}
-		});
+		});*/
 
 		btnCreateUser.setOnClickListener(new View.OnClickListener() {
 

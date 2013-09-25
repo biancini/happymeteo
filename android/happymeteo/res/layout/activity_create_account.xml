@@ -92,12 +92,12 @@
         android:hint="@string/insert_cap"
         android:inputType="textPersonName" />
     
-    <Button
+    <!-- Button
         android:id="@+id/btnCreateUserFacebook"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
-        android:text="@string/link_user_to_facebook" />
+        android:text="@string/link_user_to_facebook" /  -->
 
     <Button
         android:id="@+id/btnCreateUser"
