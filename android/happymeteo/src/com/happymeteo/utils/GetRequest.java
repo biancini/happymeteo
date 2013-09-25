@@ -1,6 +1,7 @@
 package com.happymeteo.utils;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.http.HttpResponse;
@@ -56,13 +57,14 @@ public class GetRequest extends AsyncTask<String, Void, String> {
 				HttpGet request = new HttpGet(url);
 				HttpResponse response = client.execute(request);
 	
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						response.getEntity().getContent()));
+				InputStream inputStream = response.getEntity().getContent();
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 				String inputLine;
-				while ((inputLine = in.readLine()) != null) {
+				while ((inputLine = bufferedReader.readLine()) != null) {
 					output.append(inputLine);
 				}
-				in.close();
+				bufferedReader.close();
+				inputStream.close();
 			} catch(Exception e) {
 				Log.e(Const.TAG, e.getMessage(), e);
 			}

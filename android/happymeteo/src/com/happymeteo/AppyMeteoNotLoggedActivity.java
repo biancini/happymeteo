@@ -25,6 +25,7 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.i(Const.TAG, this.getClass()+" onCreate");
 		Thread.setDefaultUncaughtExceptionHandler(
                 new DefaultExceptionHandler());
 		

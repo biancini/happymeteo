@@ -195,7 +195,6 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			//finish();
 		}
 	}
 }

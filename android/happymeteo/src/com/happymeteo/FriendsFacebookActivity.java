@@ -34,10 +34,15 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_friends_facebook);
 		super.onCreate(savedInstanceState);
-		String accessToken = Session.getActiveSession().getAccessToken();
-		String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token="+accessToken;
-		Log.i(Const.TAG, "serverUrl: "+serverUrl);
-		new GetRequest(this, this).execute(serverUrl);
+		
+		if(Session.getActiveSession() == null)
+			invokeActivity(IndexActivity.class, null);
+		else {
+			String accessToken = Session.getActiveSession().getAccessToken();
+			String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token="+accessToken;
+			Log.i(Const.TAG, "serverUrl: "+serverUrl);
+			new GetRequest(this, this).execute(serverUrl);
+		}
 	}
 
 	@Override
