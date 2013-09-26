@@ -14,6 +14,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.happymeteo.models.User;
+import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.ConnectionDetector;
 import com.happymeteo.utils.Const;
@@ -73,6 +74,7 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 		User.initialize(getApplicationContext(), "", "", "", "", 0, "", 0, 0, 0, "", 0, 0, 0, 0);
 		Session session = new Session(this, null, null, false);
 		Session.setActiveSession(session);
+		PushNotificationsService.terminate(getApplicationContext());
 		invokeActivity(IndexActivity.class);
 	}
 

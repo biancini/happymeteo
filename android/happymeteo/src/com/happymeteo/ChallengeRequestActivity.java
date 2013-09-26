@@ -54,9 +54,7 @@ public class ChallengeRequestActivity extends AppyMeteoNotLoggedActivity impleme
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if(exception != null) {
-			// TODO
-		} else {
+		if(exception == null) {
 			finish();
 		}
 	}
