@@ -7,7 +7,7 @@
         android:title="@string/information_page"/>
     <item
         android:id="@+id/side_navigation_menu_item2"
-        android:icon="@drawable/ic_android2"
+        android:icon="@drawable/icona_mymeteo"
         android:title="@string/happy_meteo"/>
     <item
         android:id="@+id/side_navigation_menu_item3"
@@ -15,7 +15,7 @@
         android:title="@string/happy_map"/>
     <item
         android:id="@+id/side_navigation_menu_item4"
-        android:icon="@drawable/ic_android5"
+        android:icon="@drawable/icona_sfida"
         android:title="@string/challenge"/>
     <!-- item
         android:id="@+id/side_navigation_menu_item5"

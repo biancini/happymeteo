@@ -9,17 +9,16 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/linearLayoutMeteoUp"
+        <ViewFlipper
+            android:id="@+id/viewFlipperUp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical" >
-
+            android:layout_weight="1">
+            
             <RelativeLayout
-                android:id="@+id/relativeLayoutMeteoUp"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
+                android:id="@+id/relativeLayoutMeteoUp1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <com.facebook.widget.ProfilePictureView
                     android:id="@+id/profile_picture"
@@ -43,7 +42,24 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true" />
             </RelativeLayout>
-        </LinearLayout>
+            
+            <RelativeLayout
+                android:id="@+id/relativeLayoutMeteoUp2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FF0000">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="#ffffff"
+                    android:textSize="100sp" 
+                    android:text="PR"/>
+                
+            </RelativeLayout>
+        </ViewFlipper>
 
         <LinearLayout
             android:layout_width="match_parent"
