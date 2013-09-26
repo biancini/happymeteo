@@ -66,7 +66,9 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 			sideNavigationView.toggleMenu();
 			break;
 		case R.id.settings:
-			invokeActivity(CreateAccountActivity.class);
+			Bundle extras = new Bundle();
+			extras.putBoolean("create", false);
+			invokeActivity(CreateAccountActivity.class, extras);
 			break;
 		case R.id.menuActivity:
 			invokeActivity(MenuActivity.class);
@@ -101,6 +103,10 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 			/*case R.id.side_navigation_menu_item5:
 				invokeActivity(HappyContextActivity.class);
 				break;*/
+				
+			case R.id.side_navigation_menu_item6:
+				onClickLogout();
+				break;
 	
 			default:
 				return;

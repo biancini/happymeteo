@@ -16,28 +16,16 @@ import android.util.Log;
 import android.view.Window;
 
 public class GetRequest extends AsyncTask<String, Void, String> {
-	private onPostExecuteListener onPostExecuteListener;
-	private int id;
+	private onGetExecuteListener onGetExecuteListener;
 	private ProgressDialog spinner;
 	
-	public GetRequest(Context context) {
-		this.onPostExecuteListener = null;
-		this.id = 0;
+	public GetRequest(Context context, onGetExecuteListener onGetExecuteListener) {
+		this.onGetExecuteListener = onGetExecuteListener;
 		if(context instanceof Activity) {
 			spinner = new ProgressDialog(context);
 			spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			spinner.setMessage(context.getString(com.happymeteo.R.string.loading));
 		}
-	}
-	
-	public GetRequest(Context context, onPostExecuteListener onPostExecuteListener) {
-		this(context);
-		this.onPostExecuteListener = onPostExecuteListener;
-	}
-	
-	public GetRequest(Context context, int id, onPostExecuteListener onPostExecuteListener) {
-		this(context, onPostExecuteListener);
-		this.id = id;
 	}
 	
 	@Override
@@ -53,6 +41,7 @@ public class GetRequest extends AsyncTask<String, Void, String> {
 		StringBuffer output = new StringBuffer();
 		for (String url : urls) {
 			try {
+				Log.i(Const.TAG, "GetRequest url: "+url);
 				DefaultHttpClient client = new DefaultHttpClient();
 				HttpGet request = new HttpGet(url);
 				HttpResponse response = client.execute(request);
@@ -77,8 +66,8 @@ public class GetRequest extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
 		Log.i(Const.TAG, result);
 		
-		if(onPostExecuteListener != null && result != null) {
-			onPostExecuteListener.onPostExecute(id, result, null);
+		if(onGetExecuteListener != null && result != null) {
+			onGetExecuteListener.onGetExecute(result, null);
 		}
 		if(spinner != null) {
 			spinner.dismiss();

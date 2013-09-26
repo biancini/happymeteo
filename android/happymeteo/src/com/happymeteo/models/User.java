@@ -48,9 +48,10 @@ public class User {
 		editor.commit();
 	}
 	
-	public static void initialize(Context context, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String cap, int registered, int today, int yesterday, int tomorrow) {
+	public static void initialize(Context context, String user_id, String facebook_id, String first_name, String last_name, int gender, String email, int age, int education, int work, String cap, int registered, int today, int yesterday, int tomorrow) {
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
 		Editor editor = preferences.edit();
+		editor.putString("user_id", user_id);
 		editor.putString("facebook_id", facebook_id);
 		editor.putString("first_name", first_name);
 		editor.putString("last_name", last_name);
@@ -75,13 +76,6 @@ public class User {
 	public static String getFacebook_id(Context context) {
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
 		return preferences.getString("facebook_id", null);
-	}
-	
-	public static void setUser_id(Context context, String user_id) {
-		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
-		Editor editor = preferences.edit();
-		editor.putString("user_id", user_id);
-		editor.commit();
 	}
 	
 	public static String getUser_id(Context context) {

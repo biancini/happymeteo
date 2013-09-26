@@ -18,9 +18,9 @@ import com.happymeteo.facebook.FriendsAdapter;
 import com.happymeteo.models.Friend;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.GetRequest;
-import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.utils.onGetExecuteListener;
 
-public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {
+public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements onGetExecuteListener {
 	
 	public class MyFriendComparable implements Comparator<Friend>{
 	 
@@ -46,7 +46,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 	}
 
 	@Override
-	public void onPostExecute(int id, String result, Exception exception) {
+	public void onGetExecute(String result, Exception exception) {
 		List<Friend> friendsWithApp = new ArrayList<Friend>();
 		List<Friend> friendsNoApp = new ArrayList<Friend>();
 		try {

@@ -217,7 +217,7 @@ class CreateAccountHandler(BaseRequestHandler):
         password = self.request.get('password')
         
         if user_id == "":
-            query = User.gql('WHERE email = \'%s\'' % email)
+            query = User.gql('WHERE email = :1', email)
             
             if query.count() == 0:
                 user = User(facebook_id=facebook_id,
@@ -262,23 +262,37 @@ class CreateAccountHandler(BaseRequestHandler):
                   'message': 'user with same email already exists',
                 }
         else:
+            query = User.gql('WHERE facebook_id = :1', facebook_id)
             user = User.get_by_id(int(user_id))
-            user.facebook_id = facebook_id
-            user.first_name = first_name
-            user.last_name = last_name
-            user.gender = gender
-            user.email = email
-            user.age = age
-            user.education = education
-            user.work = work
-            user.cap = cap
-            user.put()
-            data = {
-                'message': 'CONFIRMED_OR_FACEBOOK',
-                'user_id': user.key().id()
-            }
-    
-        
+            ok = False
+            
+            if query.count() == 0:
+                ok = True
+            else:
+                user2 = query.get()
+                if user.key().id() != user2.key().id():
+                    data = {
+                      'error': 'Create Account error',
+                      'message': 'user with same facebook account already exists',
+                    }
+                else:
+                    ok = True
+                
+            if ok:
+                user.facebook_id = facebook_id
+                user.first_name = first_name
+                user.last_name = last_name
+                user.gender = gender
+                user.email = email
+                user.age = age
+                user.education = education
+                user.work = work
+                user.cap = cap
+                user.put()
+                data = {
+                    'message': 'CONFIRMED_OR_FACEBOOK',
+                    'user_id': user.key().id()
+                }
       except Exception as e:
         logging.exception(e)
         data = {

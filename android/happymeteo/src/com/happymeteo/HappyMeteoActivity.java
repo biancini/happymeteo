@@ -156,6 +156,11 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		
 		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
 		welcomeToday.setText(User.getFirst_name(this).toLowerCase()+"_OGGI");
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
 		
 		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.profile_picture);
 		if (User.isFacebookSession(this)) {

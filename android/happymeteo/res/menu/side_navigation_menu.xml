@@ -21,5 +21,8 @@
         android:id="@+id/side_navigation_menu_item5"
         android:icon="@drawable/icona_contesto"
         android:title="@string/happy_context"/  -->
-
+	<item
+        android:id="@+id/side_navigation_menu_item6"
+        android:icon="@drawable/fail"
+        android:title="@string/logout"/>
 </menu>

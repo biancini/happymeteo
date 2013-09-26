@@ -44,7 +44,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		if(context instanceof Activity) {
 			spinner = new ProgressDialog(context);
 			spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			spinner.setMessage(context.getString(com.happymeteo.R.string.loading));
+			spinner.setMessage(context.getString(com.happymeteo.R.string.loading)+" "+this.id);
 		}
 	}
 	
@@ -53,8 +53,6 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		
 		try {
 			JSONObject jsonObject = new JSONObject(json);
-			String error = jsonObject.getString("error");
-			Log.e(Const.TAG, error + ":" + jsonObject.getString("message"));
 			
 			if (jsonObject != null && jsonObject.getString("error") != null && jsonObject.getString("message") != null) {
 				AlertDialogManager alert = new AlertDialogManager();
@@ -66,7 +64,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 								}
 							});
 				exception = new Exception(jsonObject.getString("message"));
-				
+				Log.i(Const.TAG, "showError exception: "+exception);
 			}
 		} catch (JSONException e) {
 			exception = null;
@@ -87,6 +85,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		StringBuffer output = new StringBuffer();
 		for (String url : urls) {
 			try {
+				Log.i(Const.TAG, "PostRequest url: "+url);
 				DefaultHttpClient client = new DefaultHttpClient();
 				HttpPost request = new HttpPost(url);
 				List<NameValuePair> nvps = new ArrayList<NameValuePair>();

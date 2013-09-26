@@ -1,26 +1,79 @@
 package com.happymeteo;
 
+import java.util.Arrays;
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.happymeteo.models.User;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.ConnectionDetector;
 import com.happymeteo.utils.Const;
 
 public class AppyMeteoNotLoggedActivity extends SherlockActivity {
+	protected ProgressDialog spinner;
 	
-	class DefaultExceptionHandler implements Thread.UncaughtExceptionHandler {
-		public DefaultExceptionHandler() {
-		}
-
+	
+	private class DefaultExceptionHandler implements Thread.UncaughtExceptionHandler {
 		@Override
 		public void uncaughtException(Thread thread, Throwable ex) {
 			Log.e(Const.TAG, ex.getMessage(), ex);
 		}
+	}
+	
+	public void openActiveSession(Session.StatusCallback statusCallback, Session session, boolean allowLoginUI) {
+		spinner.show();
+		if (session == null) {
+			Log.i(Const.TAG, "session null");
+			session = new Session(this);
+		}
+		Session.setActiveSession(session);
+		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED) || allowLoginUI) {
+			Log.i(Const.TAG, "CREATED_TOKEN_LOADED");
+			session.openForSimon(new Session.OpenRequest(this).setPermissions(
+					Arrays.asList(Const.FACEBOOK_PERMISSIONS))
+					.setCallback(statusCallback));
+		} else {
+			spinner.dismiss();
+			statusCallback.call(session, session.getState(), null);
+		}
+	}
+	
+	public void onFacebookConnect(Session.StatusCallback statusCallback) {
+		Session session = Session.getActiveSession();
+		
+		if (!session.isOpened() && !session.isClosed()) {
+			spinner.show();
+			session.openForSimon(new Session.OpenRequest(this).setPermissions(
+					Arrays.asList(Const.FACEBOOK_PERMISSIONS))
+					.setCallback(statusCallback));
+		} else {
+			if(session.isClosed()) {
+				session = new Session(this, null, null, false);
+				Session.setActiveSession(session);
+				session.openForSimon(new Session.OpenRequest(this).setPermissions(
+						Arrays.asList(Const.FACEBOOK_PERMISSIONS))
+						.setCallback(statusCallback));
+			} else {
+				Log.i(Const.TAG, "onClickLogin openActiveSession");
+				openActiveSession(statusCallback, session, false);
+			}
+		}
+	}
+	
+	public void onClickLogout() {
+		User.initialize(getApplicationContext(), "", "", "", "", 0, "", 0, 0, 0, "", 0, 0, 0, 0);
+		Session session = new Session(this, null, null, false);
+		Session.setActiveSession(session);
+		invokeActivity(IndexActivity.class);
 	}
 
 	@Override
@@ -45,6 +98,10 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 		}
 		
 		super.onCreate(savedInstanceState);
+		
+		spinner = new ProgressDialog(this);
+		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		spinner.setMessage("Connessione a facebook..");
 	}
 	
 	public void invokeActivity(Class<? extends Activity> clazz) {
@@ -102,4 +159,6 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 		Log.i(Const.TAG, this.getClass()+" onResume");
 		super.onResume();
 	}
+	
+	
 }
