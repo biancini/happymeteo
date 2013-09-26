@@ -130,6 +130,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 		if (session.isOpened()) {
 			spinner.dismiss();
+			Log.i(Const.TAG, "permissions: "+Session.getActiveSession().getPermissions());
 			ServerUtilities.facebookLogin(this, this, Session
 					.getActiveSession().getAccessToken());
 		} else {

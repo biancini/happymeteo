@@ -27,7 +27,6 @@ public class FriendsAdapter extends ArrayAdapter<Friend> {
 	
 	public FriendsAdapter(AppyMeteoNotLoggedActivity activity, List<Friend> values) {
 		super(activity.getApplicationContext(), R.layout.activity_friends_facebook_list_row, values);
-		
 		this.activity = activity;
 	}
 
