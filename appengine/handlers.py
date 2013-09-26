@@ -131,8 +131,6 @@ class FacebookLoginHandler(BaseRequestHandler):
         user = query.get()
         data = user.toJson()
         
-        print "user_id: %s"%data['user_id']
-        
         today = date.today()
         tomorrow = today + timedelta(1)
         yesterday = today - timedelta(1)

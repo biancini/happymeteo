@@ -3,15 +3,24 @@ package com.happymeteo;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.widget.ProfilePictureView;
 import com.happymeteo.models.User;
 import com.happymeteo.service.PushNotificationsService;
 
-public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
+public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements OnTouchListener, AnimationListener {
+	private Animation animSlideUp;
+	private LinearLayout linearLayoutMeteoUp;
 	
 	private int[] getColorByToday(int today) {
 		int colors[] = {0, 0};
@@ -150,9 +159,17 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		ImageView tomorrow_pic = (ImageView) findViewById(R.id.tomorrow_pic);
 		tomorrow_pic.setImageResource(getGrayIcon(tomorrow_int));
 		
-		LinearLayout linearLayoutMeteoUp = (LinearLayout) findViewById(R.id.linearLayoutMeteoUp);
+		linearLayoutMeteoUp = (LinearLayout) findViewById(R.id.linearLayoutMeteoUp);
 		GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, getColorByToday(today_int));
 		linearLayoutMeteoUp.setBackgroundDrawable(gradientDrawable);
+		linearLayoutMeteoUp.setOnTouchListener(this);
+		
+		// load the animation
+		animSlideUp = AnimationUtils.loadAnimation(getApplicationContext(),
+				R.anim.slide_left);
+
+		// set animation listener
+		animSlideUp.setAnimationListener(this);
 		
 		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
 		welcomeToday.setText(User.getFirst_name(this).toLowerCase()+"_OGGI");
@@ -169,5 +186,51 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		} else {
 			userImage.setProfileId(null);
 		}
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent mev) {
+	    int width = v.getWidth();
+	    int height = v.getHeight();
+	    float x = mev.getX();
+	    float y = mev.getY();
+	    String msg;
+	    if (x < width / 2) {
+	        if (y < height / 2)
+	            msg = "Top left quarter";
+	        else
+	            msg = "Bottom left quarter";
+
+	    } else {
+	        if (y < height / 2)
+	            msg = "Top right quarter";
+	        else
+	            msg = "Bottom right quarter";
+	    }
+	    Toast.makeText(this, msg + " " + mev.getAction(), Toast.LENGTH_SHORT).show();
+	    linearLayoutMeteoUp.startAnimation(animSlideUp);
+	    return false;
+	}
+	
+	@Override
+	public void onAnimationEnd(Animation animation) {
+		// Take any action after completing the animation
+
+		// check for zoom in animation
+		if (animation == animSlideUp) {
+		}
+
+	}
+
+	@Override
+	public void onAnimationRepeat(Animation animation) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onAnimationStart(Animation animation) {
+		// TODO Auto-generated method stub
+
 	}
 }
