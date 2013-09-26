@@ -73,6 +73,8 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 			session = new Session(this);
 		}
 		Session.setActiveSession(session);
+		
+		User.initialize(getApplicationContext(), "", "", "", "", 0, "", 0, 0, 0, "", 0, 0, 0, 0);
 	}
 
 	@Override

@@ -3,6 +3,11 @@ package com.happymeteo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ua.org.zasadnyy.zvalidations.Field;
+import ua.org.zasadnyy.zvalidations.Form;
+import ua.org.zasadnyy.zvalidations.validations.IsEmail;
+import ua.org.zasadnyy.zvalidations.validations.IsPassword;
+import ua.org.zasadnyy.zvalidations.validations.NotEmpty;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +32,10 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements o
 		final EditText normal_login_email = (EditText) findViewById(R.id.normal_login_email);
 		final EditText normal_login_password = (EditText) findViewById(R.id.normal_login_password);
 		
+		final Form mForm = new Form();
+	    mForm.addField(Field.using(normal_login_email).validate(NotEmpty.build(this)).validate(IsEmail.build(this)));
+	    mForm.addField(Field.using(normal_login_password).validate(NotEmpty.build(this)).validate(IsPassword.build(this)));
+		
 		this.activity = this;
 		this.onPostExecuteListener = this;
 
@@ -35,18 +44,20 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements o
 
 			@Override
 			public void onClick(View view) {
-				String email = normal_login_email.getText().toString();
-				String password = "";
-				try {
-					password = SHA1.hexdigest(normal_login_password.getText().toString());
-				} catch (Exception e) {
-					e.printStackTrace();
+				if(mForm.isValid()) {
+					String email = normal_login_email.getText().toString();
+					String password = "";
+					try {
+						password = SHA1.hexdigest(normal_login_password.getText().toString());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					Log.i(Const.TAG, "email: " + email);
+					Log.i(Const.TAG, "password: " + password);
+					
+					ServerUtilities.normalLogin(onPostExecuteListener, activity, email, password);
 				}
-				
-				Log.i(Const.TAG, "email: " + email);
-				Log.i(Const.TAG, "password: " + password);
-				
-				ServerUtilities.normalLogin(onPostExecuteListener, activity, email, password);
 			}
 		});
 	}

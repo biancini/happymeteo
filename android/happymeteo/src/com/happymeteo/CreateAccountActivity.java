@@ -3,6 +3,12 @@ package com.happymeteo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ua.org.zasadnyy.zvalidations.Field;
+import ua.org.zasadnyy.zvalidations.Form;
+import ua.org.zasadnyy.zvalidations.validations.IsEmail;
+import ua.org.zasadnyy.zvalidations.validations.IsPassword;
+import ua.org.zasadnyy.zvalidations.validations.IsPositiveInteger;
+import ua.org.zasadnyy.zvalidations.validations.NotEmpty;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -64,9 +70,17 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		create_account_cap = (EditText) findViewById(R.id.create_account_cap);
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
 		btnCreateUserFacebook  = (Button) findViewById(R.id.btnCreateUserFacebook);
+		
+		final Form mForm = new Form();
+	    mForm.addField(Field.using(create_account_fist_name).validate(NotEmpty.build(this)));
+	    mForm.addField(Field.using(create_account_last_name).validate(NotEmpty.build(this)));
+	    mForm.addField(Field.using(create_account_email).validate(NotEmpty.build(this)).validate(IsEmail.build(this)));
+	    mForm.addField(Field.using(create_account_cap).validate(NotEmpty.build(this)).validate(IsPositiveInteger.build(this)));
 
 		if (User.isFacebookSession(this) || !create) {
 			create_account_password.setVisibility(View.GONE);
+		} else {
+			mForm.addField(Field.using(create_account_password).validate(NotEmpty.build(this)).validate(IsPassword.build(this)));
 		}
 
 		this.user_id = User.getUser_id(this);
@@ -108,26 +122,28 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 
 			@Override
 			public void onClick(View view) {
-				String password;
-				try {
-					password = SHA1.hexdigest(create_account_password.getText().toString());
-				} catch (Exception e) {
-					e.printStackTrace();
-					password = "";
+				if(mForm.isValid()) {
+					String password;
+					try {
+						password = SHA1.hexdigest(create_account_password.getText().toString());
+					} catch (Exception e) {
+						e.printStackTrace();
+						password = "";
+					}
+	
+					ServerUtilities.createAccount(
+							onPostExecuteListener, activity, user_id, facebook_id, 
+							create_account_fist_name.getText().toString(), 
+							create_account_last_name.getText().toString(), 
+							create_account_gender.getSelectedItemPosition(),
+							create_account_email.getText().toString(),
+							create_account_age.getSelectedItemPosition(),
+							create_account_education.getSelectedItemPosition(),
+							create_account_work.getSelectedItemPosition(),
+							create_account_cap.getText().toString(), password);
+	
+					Log.i(Const.TAG, "facebook_id: "+User.getFacebook_id(view.getContext()));
 				}
-
-				ServerUtilities.createAccount(
-						onPostExecuteListener, activity, user_id, facebook_id, 
-						create_account_fist_name.getText().toString(), 
-						create_account_last_name.getText().toString(), 
-						create_account_gender.getSelectedItemPosition(),
-						create_account_email.getText().toString(),
-						create_account_age.getSelectedItemPosition(),
-						create_account_education.getSelectedItemPosition(),
-						create_account_work.getSelectedItemPosition(),
-						create_account_cap.getText().toString(), password);
-
-				Log.i(Const.TAG, "facebook_id: "+User.getFacebook_id(view.getContext()));
 			}
 		});
 	}
