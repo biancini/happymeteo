@@ -15,7 +15,7 @@ from models import User, Device, Challenge, Question, ChallengeQuestion, Answer,
 from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA, CREATE_ACCOUNT_EMAIL
 
 from utils import sendMessage, sendSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable,\
-    happymeteo
+    happymeteo, sample
 
 import traceback
 import logging
@@ -495,11 +495,25 @@ class AcceptChallengeHandler(BaseRequestHandler):
 class QuestionsChallengeHandler(BaseRequestHandler):
 
   def post(self):
-    questions = ChallengeQuestion.all()
+    challengeId = self.request.get('challengeId')
+    turn = self.request.get('turn')
     
-    if questions.count() > 0:
-       self.response.headers['Content-Type'] = 'application/json'
-       self.response.out.write(json.dumps([q.toJson() for q in questions]))
+    print "challengeId: %s"%challengeId
+    print "turn: %s"%turn
+    
+    if turn == "1":
+        questions = ChallengeQuestion.all()
+       
+        if questions.count() > 0:
+           import random
+           questions = sample(random.random, questions, 5)
+           self.response.headers['Content-Type'] = 'application/json'
+           self.response.out.write(json.dumps([q.toJson() for q in questions]))
+    else:
+        answers = ChallengeAnswer.gql("WHERE challenge_id = :1", challengeId)
+        questions = [ChallengeQuestion.get_by_id(int(answer.question_id)) for answer in answers]
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps([q.toJson() for q in questions]))
 
 class SubmitChallengeHandler(BaseRequestHandler):
 

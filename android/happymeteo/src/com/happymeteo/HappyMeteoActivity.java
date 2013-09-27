@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.View;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -20,6 +21,7 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.happymeteo.models.User;
 import com.happymeteo.service.PushNotificationsService;
+import com.happymeteo.utils.Const;
 
 public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 
@@ -38,7 +40,6 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
-			System.out.println(" in onFling() :: ");
 			if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
 				return false;
 			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
@@ -46,7 +47,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 					&& flipper.getDisplayedChild() == 0) {
 				flipper.setInAnimation(context, R.anim.in_from_right);
 				flipper.setOutAnimation(context, R.anim.out_to_left);
-				System.out.println(" in onFling() :: showNext"
+				Log.i(Const.TAG, " in onFling() :: showNext"
 						+ flipper.getDisplayedChild());
 				flipper.showNext();
 			} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
@@ -54,7 +55,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 					&& flipper.getDisplayedChild() == 1) {
 				flipper.setInAnimation(context, R.anim.in_from_left);
 				flipper.setOutAnimation(context, R.anim.out_to_right);
-				System.out.println(" in onFling() :: showPrevious"
+				Log.i(Const.TAG, " in onFling() :: showPrevious"
 						+ flipper.getDisplayedChild());
 				flipper.showPrevious();
 			}

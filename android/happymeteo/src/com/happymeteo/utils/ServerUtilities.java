@@ -93,9 +93,11 @@ public class ServerUtilities {
 		new PostRequest(Const.ACCEPT_CHALLENGE_URL_ID, activity, parameters, onPostExecuteListener).execute(Const.ACCEPT_CHALLENGE_URL);
 	}
 
-	public static void getChallengeQuestions(onPostExecuteListener onPostExecuteListener, Activity activity) {
+	public static void getChallengeQuestions(onPostExecuteListener onPostExecuteListener, Activity activity, String challengeId, String turn) {
 		Log.i(Const.TAG, "getChallengeQuestions");
 		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("challengeId", challengeId);
+		parameters.put("turn", turn);
 		new PostRequest(Const.QUESTIONS_CHALLENGE_URL_ID, activity, parameters, onPostExecuteListener).execute(Const.QUESTIONS_CHALLENGE_URL);
 	}
 

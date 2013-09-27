@@ -86,8 +86,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 				@Override
 				public void onClick(View view) {
 					if (!questionsStarted) {
-						ServerUtilities.getChallengeQuestions(onPostExecuteListener,
-								activity);
+						ServerUtilities.getChallengeQuestions(onPostExecuteListener, activity, challenge.getChallenge_id(), turn);
 						btnBeginChallengeQuestions.setText(R.string.answer_questions_btn);
 						questionsStarted = true;
 					} else {
