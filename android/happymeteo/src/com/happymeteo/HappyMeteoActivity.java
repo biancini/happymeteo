@@ -5,14 +5,19 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.GestureDetector;
+import android.view.View;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.happymeteo.models.User;
 import com.happymeteo.service.PushNotificationsService;
 
@@ -87,7 +92,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 			colors[1] = 0xfffd3771;
 			break;
 		case 7:
-			colors[0] = 0xff01700d;
+			colors[0] = 0xfff1700d;
 			colors[1] = 0xfffd3700;
 			break;
 		case 8:
@@ -200,8 +205,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		welcomeToday.setText(User.getFirst_name(this).toLowerCase() + "_OGGI");
 
 		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
-		gestureDetector = new GestureDetector(new MyGestureDetector(this,
-				viewFlipper));
+		gestureDetector = new GestureDetector(new MyGestureDetector(this, viewFlipper));
 
 		RelativeLayout relativeLayoutMeteoUp1 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp1);
 		GradientDrawable gradientDrawable = new GradientDrawable(
@@ -210,6 +214,18 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		relativeLayoutMeteoUp1.setBackgroundDrawable(gradientDrawable);
 
 		RelativeLayout relativeLayoutMeteoUp2 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp2);
+		
+		ImageView facebook = (ImageView) findViewById(R.id.facebook);
+		facebook.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View view, MotionEvent event) {
+				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(view.getContext(), Session.getActiveSession());
+				WebDialog webDialog = feedDialogBuilder.build();
+				webDialog.show();
+				return false;
+			}
+		});
 	}
 
 	@Override
@@ -217,11 +233,14 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		super.onStart();
 
 		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.profile_picture);
+		ImageView facebook = (ImageView) findViewById(R.id.facebook);
+		
 		if (User.isFacebookSession(this)) {
 			userImage.setProfileId(User.getFacebook_id(this));
 			userImage.setCropped(true);
 		} else {
 			userImage.setProfileId(null);
+			facebook.setVisibility(View.GONE);
 		}
 	}
 
