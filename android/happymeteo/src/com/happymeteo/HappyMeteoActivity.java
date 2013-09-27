@@ -1,12 +1,12 @@
 package com.happymeteo;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,11 +15,49 @@ import android.widget.ViewFlipper;
 import com.facebook.widget.ProfilePictureView;
 import com.happymeteo.models.User;
 import com.happymeteo.service.PushNotificationsService;
-import com.happymeteo.utils.Const;
 
 public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
-	private ViewFlipper viewFlipper;
-	private float lastX;
+
+	class MyGestureDetector extends SimpleOnGestureListener {
+		private ViewFlipper flipper;
+		private Context context;
+
+		private static final int SWIPE_MIN_DISTANCE = 120;
+		private static final int SWIPE_MAX_OFF_PATH = 250;
+		private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+		public MyGestureDetector(Context context, ViewFlipper flipper) {
+			this.flipper = flipper;
+			this.context = context;
+		}
+
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+			System.out.println(" in onFling() :: ");
+			if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+				return false;
+			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
+					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
+					&& flipper.getDisplayedChild() == 0) {
+				flipper.setInAnimation(context, R.anim.in_from_right);
+				flipper.setOutAnimation(context, R.anim.out_to_left);
+				System.out.println(" in onFling() :: showNext"
+						+ flipper.getDisplayedChild());
+				flipper.showNext();
+			} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
+					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
+					&& flipper.getDisplayedChild() == 1) {
+				flipper.setInAnimation(context, R.anim.in_from_left);
+				flipper.setOutAnimation(context, R.anim.out_to_right);
+				System.out.println(" in onFling() :: showPrevious"
+						+ flipper.getDisplayedChild());
+				flipper.showPrevious();
+			}
+			return super.onFling(e1, e2, velocityX, velocityY);
+		}
+	}
+
+	private GestureDetector gestureDetector;
 
 	private int[] getColorByToday(int today) {
 		int colors[] = { 0, 0 };
@@ -132,8 +170,6 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		PushNotificationsService.register(getApplicationContext(),
 				User.getUser_id(this));
 
-		// ServerUtilities.happyMeteo(this, this);
-
 		Typeface helveticaneueltstd_ultlt_webfont = Typeface.createFromAsset(
 				getAssets(), "helveticaneueltstd-ultlt-webfont.ttf");
 
@@ -163,8 +199,10 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
 		welcomeToday.setText(User.getFirst_name(this).toLowerCase() + "_OGGI");
 
-		viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
-		
+		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
+		gestureDetector = new GestureDetector(new MyGestureDetector(this,
+				viewFlipper));
+
 		RelativeLayout relativeLayoutMeteoUp1 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp1);
 		GradientDrawable gradientDrawable = new GradientDrawable(
 				GradientDrawable.Orientation.TOP_BOTTOM,
@@ -186,52 +224,13 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 			userImage.setProfileId(null);
 		}
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent touchevent) {
-		if(touchevent.getY() > viewFlipper.getHeight()) {
-			return super.onTouchEvent(touchevent);
+		if (gestureDetector.onTouchEvent(touchevent)) {
+			return false;
+		} else {
+			return true;
 		}
-		
-		switch (touchevent.getAction()) {
-		// when user first touches the screen to swap
-		case MotionEvent.ACTION_DOWN:
-			Log.i(Const.TAG, "ACTION_DOWN");
-			lastX = touchevent.getX();
-			break;
-		case MotionEvent.ACTION_UP:
-			Log.i(Const.TAG, "ACTION_UP");
-			float currentX = touchevent.getX();
-
-			// if left to right swipe on screen
-			if (lastX < currentX) {
-				// If no more View/Child to flip
-				if (viewFlipper.getDisplayedChild() == 0)
-					break;
-
-				// set the required Animation type to ViewFlipper
-				// The Next screen will come in form Left and current Screen
-				// will go OUT from Right
-				viewFlipper.setInAnimation(this, R.anim.in_from_left);
-				viewFlipper.setOutAnimation(this, R.anim.out_to_right);
-				// Show the next Screen
-				viewFlipper.showNext();
-			}
-
-			// if right to left swipe on screen
-			if (lastX > currentX) {
-				if (viewFlipper.getDisplayedChild() == 1)
-					break;
-				// set the required Animation type to ViewFlipper
-				// The Next screen will come in form Right and current Screen
-				// will go OUT from Left
-				viewFlipper.setInAnimation(this, R.anim.in_from_right);
-				viewFlipper.setOutAnimation(this, R.anim.out_to_left);
-				// Show The Previous Screen
-				viewFlipper.showPrevious();
-			}
-			break;
-		}
-		return super.onTouchEvent(touchevent);
 	}
 }

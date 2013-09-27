@@ -53,9 +53,6 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements o
 						e.printStackTrace();
 					}
 					
-					Log.i(Const.TAG, "email: " + email);
-					Log.i(Const.TAG, "password: " + password);
-					
 					ServerUtilities.normalLogin(onPostExecuteListener, activity, email, password);
 				}
 			}
