@@ -14,7 +14,7 @@ from models import User, Device, Challenge, Question, ChallengeQuestion, Answer,
 
 from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA, CREATE_ACCOUNT_EMAIL
 
-from utils import sendMessage, sendSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable,\
+from utils import sendMessage, sendSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable, \
     happymeteo, sample
 
 import traceback
@@ -228,21 +228,25 @@ class CreateAccountHandler(BaseRequestHandler):
                   'message': 'user with same email already exists',
                 }
         else:
-            query = User.gql('WHERE facebook_id = :1', facebook_id)
-            user = User.get_by_id(int(user_id))
             ok = False
+            user = User.get_by_id(int(user_id))
             
-            if query.count() == 0:
-                ok = True
-            else:
-                user2 = query.get()
-                if user.key().id() != user2.key().id():
-                    data = {
-                      'error': 'Create Account error',
-                      'message': 'user with same facebook account already exists',
-                    }
-                else:
+            if facebook_id != "":
+                query = User.gql('WHERE facebook_id = :1', facebook_id)
+                
+                if query.count() == 0:
                     ok = True
+                else:
+                    user2 = query.get()
+                    if user.key().id() != user2.key().id():
+                        data = {
+                          'error': 'Create Account error',
+                          'message': 'user with same facebook account already exists',
+                        }
+                    else:
+                        ok = True
+            else:
+                ok = True
                 
             if ok:
                 user.facebook_id = facebook_id
@@ -498,8 +502,8 @@ class QuestionsChallengeHandler(BaseRequestHandler):
     challengeId = self.request.get('challengeId')
     turn = self.request.get('turn')
     
-    print "challengeId: %s"%challengeId
-    print "turn: %s"%turn
+    print "challengeId: %s" % challengeId
+    print "turn: %s" % turn
     
     if turn == "1":
         questions = ChallengeQuestion.all()
