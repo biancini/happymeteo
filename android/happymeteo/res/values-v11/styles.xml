@@ -11,6 +11,7 @@
         <item name="android:actionBarStyle">@style/AppyMeteoTheme.ActionBarStyle</item>
         <item name="actionButtonStyle">@style/AppyMeteoTheme.ActionButtonStyle</item>
     	<item name="android:actionButtonStyle">@style/AppyMeteoTheme.ActionButtonStyle</item>
+    	<item name="android:textColorPrimaryInverse">@android:color/primary_text_light</item>
     </style>
 
     <style name="AppyMeteoTheme.ActionBarStyle" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">

@@ -239,6 +239,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		if (User.isFacebookSession(this)) {
 			userImage.setProfileId(User.getFacebook_id(this));
 			userImage.setCropped(true);
+			facebook.setVisibility(View.VISIBLE);
 		} else {
 			userImage.setProfileId(null);
 			facebook.setVisibility(View.GONE);

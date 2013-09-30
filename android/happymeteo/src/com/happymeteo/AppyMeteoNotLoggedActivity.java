@@ -48,10 +48,15 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 		}
 	}
 	
-	public void onFacebookConnect(Session.StatusCallback statusCallback) {
+	public void onFacebookConnect(Session.StatusCallback statusCallback, boolean renew) {
+		if(renew) {
+			Session session = new Session(this, null, null, false);
+			Session.setActiveSession(session);
+		}
+		
 		Session session = Session.getActiveSession();
 		
-		if (!session.isOpened() && !session.isClosed()) {
+		if (!session.isOpened() && !session.isClosed() && session.getState() != SessionState.OPENING) {
 			spinner.show();
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(
 					Arrays.asList(Const.FACEBOOK_PERMISSIONS))
@@ -84,8 +89,9 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 		Thread.setDefaultUncaughtExceptionHandler(
                 new DefaultExceptionHandler());
 		
+		super.onCreate(savedInstanceState);
+		
 		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
-
 		/* Check internet */
 		if (!cd.isConnectingToInternet()) {
 			AlertDialogManager alert = new AlertDialogManager();
@@ -98,8 +104,6 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 					});
 			return;
 		}
-		
-		super.onCreate(savedInstanceState);
 		
 		spinner = new ProgressDialog(this);
 		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);

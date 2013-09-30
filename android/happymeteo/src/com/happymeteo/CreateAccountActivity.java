@@ -10,6 +10,7 @@ import ua.org.zasadnyy.zvalidations.validations.IsPassword;
 import ua.org.zasadnyy.zvalidations.validations.IsPositiveInteger;
 import ua.org.zasadnyy.zvalidations.validations.NotEmpty;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -71,18 +72,6 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
 		btnCreateUserFacebook  = (Button) findViewById(R.id.btnCreateUserFacebook);
 		
-		final Form mForm = new Form();
-	    mForm.addField(Field.using(create_account_fist_name).validate(NotEmpty.build(this)));
-	    mForm.addField(Field.using(create_account_last_name).validate(NotEmpty.build(this)));
-	    mForm.addField(Field.using(create_account_email).validate(NotEmpty.build(this)).validate(IsEmail.build(this)));
-	    mForm.addField(Field.using(create_account_cap).validate(NotEmpty.build(this)).validate(IsPositiveInteger.build(this)));
-
-		if (User.isFacebookSession(this) || !create) {
-			create_account_password.setVisibility(View.GONE);
-		} else {
-			mForm.addField(Field.using(create_account_password).validate(NotEmpty.build(this)).validate(IsPassword.build(this)));
-		}
-
 		this.user_id = User.getUser_id(this);
 		this.facebook_id = User.getFacebook_id(this);
 		create_account_fist_name.setText(User.getFirst_name(this));
@@ -93,6 +82,18 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		create_account_education.setSelection(User.getEducation(this));
 		create_account_work.setSelection(User.getWork(this));
 		create_account_cap.setText(User.getCap(this));
+		
+		final Form mForm = new Form();
+	    mForm.addField(Field.using(create_account_fist_name).validate(NotEmpty.build(this)));
+	    mForm.addField(Field.using(create_account_last_name).validate(NotEmpty.build(this)));
+	    mForm.addField(Field.using(create_account_email).validate(NotEmpty.build(this)).validate(IsEmail.build(this)));
+	    mForm.addField(Field.using(create_account_cap).validate(NotEmpty.build(this)).validate(IsPositiveInteger.build(this)));
+		
+		if (User.isFacebookSession(this) || !create) {
+			create_account_password.setVisibility(View.GONE);
+		} else {
+			mForm.addField(Field.using(create_account_password).validate(NotEmpty.build(this)).validate(IsPassword.build(this)));
+		}
 
 		if (create) {
 			btnCreateUserFacebook.setVisibility(View.GONE);
@@ -110,7 +111,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 			@Override
 			public void onClick(View view) {
 				if (facebook_id.equals("")) {
-					onFacebookConnect(statusCallback);
+					onFacebookConnect(statusCallback, true);
 				} else {
 					facebook_id = "";
 					btnCreateUserFacebook.setText(R.string.link_user_to_facebook);
@@ -146,6 +147,35 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 				}
 			}
 		});
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		Session session = Session.getActiveSession();
+		session.addCallback(statusCallback);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		Session session = Session.getActiveSession();
+		session.removeCallback(statusCallback);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		Session session = Session.getActiveSession();
+		session.onActivityResult(this, requestCode,
+					resultCode, data);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		Session session = Session.getActiveSession();
+		Session.saveSession(session, outState);
 	}
 
 	private class SessionStatusCallback implements Session.StatusCallback {

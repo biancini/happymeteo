@@ -5,17 +5,13 @@ import org.json.JSONObject;
 
 import ua.org.zasadnyy.zvalidations.Field;
 import ua.org.zasadnyy.zvalidations.Form;
-import ua.org.zasadnyy.zvalidations.validations.IsEmail;
-import ua.org.zasadnyy.zvalidations.validations.IsPassword;
 import ua.org.zasadnyy.zvalidations.validations.NotEmpty;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.happymeteo.models.User;
-import com.happymeteo.utils.Const;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
@@ -33,8 +29,8 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements o
 		final EditText normal_login_password = (EditText) findViewById(R.id.normal_login_password);
 		
 		final Form mForm = new Form();
-	    mForm.addField(Field.using(normal_login_email).validate(NotEmpty.build(this)).validate(IsEmail.build(this)));
-	    mForm.addField(Field.using(normal_login_password).validate(NotEmpty.build(this)).validate(IsPassword.build(this)));
+	    mForm.addField(Field.using(normal_login_email).validate(NotEmpty.build(this)));
+	    mForm.addField(Field.using(normal_login_password).validate(NotEmpty.build(this)));
 		
 		this.activity = this;
 		this.onPostExecuteListener = this;

@@ -49,23 +49,13 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		Button btnLoginFacebook = (Button) findViewById(R.id.btnLoginFacebook);
 		btnLoginFacebook.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				onFacebookConnect(statusCallback);
+				onFacebookConnect(statusCallback, false);
 			}
 		});
 
 		Settings.addLoggingBehavior(LoggingBehavior.CACHE);
 		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 		Settings.addLoggingBehavior(LoggingBehavior.DEVELOPER_ERRORS);
-
-		/*Session session = Session.getActiveSession();
-		if (session == null) {
-			if (savedInstanceState != null) {
-				Log.i(Const.TAG, "Session.restoreSession savedInstanceState");
-				session = Session.restoreSession(this, null, statusCallback,
-						savedInstanceState);
-			}
-			openActiveSession(statusCallback, session, false);
-		}*/
 		
 		Session session = Session.getActiveSession();
 		if (session == null) {
@@ -89,11 +79,6 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		super.onStop();
 		Session session = Session.getActiveSession();
 		session.removeCallback(statusCallback);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
 	}
 
 	@Override
@@ -158,7 +143,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 				if (User.getRegistered(this) == User.USER_NOT_REGISTERED) {
 					Bundle extras = new Bundle();
 					extras.putBoolean("create", true);
-					invokeActivity(CreateAccountActivity.class);
+					invokeActivity(CreateAccountActivity.class, extras);
 				} else {
 					invokeActivity(HappyMeteoActivity.class);
 				}

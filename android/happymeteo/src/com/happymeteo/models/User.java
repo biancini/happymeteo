@@ -25,9 +25,6 @@ public class User {
 		int work = jsonObject.getInt("work");
 		String cap = jsonObject.getString("cap");
 		int registered = jsonObject.getInt("registered");
-		int today = jsonObject.getInt("today");
-		int yesterday = jsonObject.getInt("yesterday");
-		int tomorrow = jsonObject.getInt("tomorrow");
 		
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
 		Editor editor = preferences.edit();
@@ -42,9 +39,21 @@ public class User {
 		editor.putInt("work", work);
 		editor.putString("cap", cap);
 		editor.putInt("registered", registered);
+		
+		int today = 1;
+		int yesterday = 1;
+		int tomorrow = 1;
+		
+		if(registered == USER_REGISTERED) {
+			today = jsonObject.getInt("today");
+			yesterday = jsonObject.getInt("yesterday");
+			tomorrow = jsonObject.getInt("tomorrow");
+		}
+
 		editor.putInt("today", today);
 		editor.putInt("yesterday", yesterday);
 		editor.putInt("tomorrow", tomorrow);
+		
 		editor.commit();
 	}
 	
