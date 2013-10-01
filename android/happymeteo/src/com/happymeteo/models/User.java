@@ -151,4 +151,15 @@ public class User {
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
 		return preferences.getInt("tomorrow", 1);
 	}
+	
+	public static void setMeteo(Context context, int today, int yesterday, int tomorrow) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		
+		editor.putInt("today", today);
+		editor.putInt("yesterday", yesterday);
+		editor.putInt("tomorrow", tomorrow);
+		
+		editor.commit();
+	}
 }

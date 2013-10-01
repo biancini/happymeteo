@@ -403,6 +403,10 @@ class SubmitQuestionsHandler(BaseRequestHandler):
         latitude = self.request.get('latitude')
         longitude = self.request.get('longitude')
         
+        user = User.get_by_id(int(user_id))
+        user.contatore_impulsi = user.contatore_impulsi + 1
+        user.put()
+        
         questions = json.loads(questions)
         for q in questions:
             answer = Answer(
@@ -417,6 +421,10 @@ class SubmitQuestionsHandler(BaseRequestHandler):
             answer.put()
         
         data = { 'message': 'ok' }
+        (today_value, yesterday_value, tomorrow_value) = happymeteo(int(user_id))
+        data['today'] = today_value
+        data['yesterday'] = yesterday_value
+        data['tomorrow'] = tomorrow_value
     except Exception as e:
         logging.exception(e)
         data = {

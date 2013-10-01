@@ -176,6 +176,29 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		PushNotificationsService.register(getApplicationContext(),
 				User.getUser_id(this));
 
+		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
+		welcomeToday.setText(User.getFirst_name(this).toLowerCase() + "_OGGI");
+
+		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
+		gestureDetector = new GestureDetector(new MyGestureDetector(this, viewFlipper));
+
+		ImageView facebook = (ImageView) findViewById(R.id.facebook);
+		facebook.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View view, MotionEvent event) {
+				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(view.getContext(), Session.getActiveSession());
+				WebDialog webDialog = feedDialogBuilder.build();
+				webDialog.show();
+				return false;
+			}
+		});
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		
 		int today_int = User.getToday(this);
 		int yesterday_int = User.getYesterday(this);
 		int tomorrow_int = User.getTomorrow(this);
@@ -196,6 +219,12 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		ImageView tomorrow_pic = (ImageView) findViewById(R.id.tomorrow_pic);
 		tomorrow_pic.setImageResource(getGrayIcon(tomorrow_int));
 		
+		RelativeLayout relativeLayoutMeteoUp1 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp1);
+		GradientDrawable gradientDrawable = new GradientDrawable(
+				GradientDrawable.Orientation.TOP_BOTTOM,
+				getColorByToday(today_int));
+		relativeLayoutMeteoUp1.setBackgroundDrawable(gradientDrawable);
+		
 		try {
 			Typeface helveticaneueltstd_ultlt_webfont = Typeface.createFromAsset(
 					getAssets(), "helveticaneueltstd-ultlt-webfont.ttf");
@@ -203,36 +232,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 			yesterday_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 			tomorrow_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 		} catch(Exception e) {}
-
-		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
-		welcomeToday.setText(User.getFirst_name(this).toLowerCase() + "_OGGI");
-
-		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
-		gestureDetector = new GestureDetector(new MyGestureDetector(this, viewFlipper));
-
-		RelativeLayout relativeLayoutMeteoUp1 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp1);
-		GradientDrawable gradientDrawable = new GradientDrawable(
-				GradientDrawable.Orientation.TOP_BOTTOM,
-				getColorByToday(today_int));
-		relativeLayoutMeteoUp1.setBackgroundDrawable(gradientDrawable);
-
-		ImageView facebook = (ImageView) findViewById(R.id.facebook);
-		facebook.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View view, MotionEvent event) {
-				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(view.getContext(), Session.getActiveSession());
-				WebDialog webDialog = feedDialogBuilder.build();
-				webDialog.show();
-				return false;
-			}
-		});
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-
+		
 		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.profile_picture);
 		ImageView facebook = (ImageView) findViewById(R.id.facebook);
 		

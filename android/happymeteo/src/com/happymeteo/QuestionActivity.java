@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
@@ -19,11 +18,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -43,27 +41,6 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 	private JSONObject questions;
 	private LinearLayout linearLayout;
 	private int windowWidth;
-
-//	public static RelativeLayout.LayoutParams getRlp(SeekBar seekBar) {
-//
-//		int max = seekBar.getMax();
-//		float scale = max > 0 ? (float) seekBar.getProgress() / (float) max : 0;
-//		// Drawable thumb = seekBar.getThumb();
-//		int thumbWidth = 48; // thumb.getIntrinsicWidth();
-//		int available = seekBar.getWidth() - thumbWidth + seekBar.getThumbOffset() * 2;
-//		int thumbPos = (int) (scale * available);
-//		
-//		Log.i(Const.TAG, "seekBar.getProgress(): " + seekBar.getProgress());
-//		Log.i(Const.TAG, "seekBar.getMax(): " + seekBar.getMax());
-//		Log.i(Const.TAG, "available: " + available);
-//		Log.i(Const.TAG, "thumbPos: " + thumbPos);
-//		
-//		RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(
-//				RelativeLayout.LayoutParams.WRAP_CONTENT,
-//				RelativeLayout.LayoutParams.WRAP_CONTENT);
-//		rlp.setMargins(thumbPos, 0, 0, 0);
-//		return rlp;
-//	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -124,17 +101,14 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 						activity, params);
 			}
 		});
-		
-		// You will use this to get the width of the screen
-		// p = new Point();
-
-		//getWindowManager().getDefaultDisplay().getSize(p);
-		
-		windowWidth = getWindowManager().getDefaultDisplay().getWidth();
 	}
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
+		if (exception != null) {
+			return;
+		}
+
 		switch (id) {
 		case Const.GET_QUESTIONS_URL_ID:
 			try {
@@ -183,24 +157,25 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 							LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
 									LayoutParams.WRAP_CONTENT,
 									LayoutParams.WRAP_CONTENT);
-							llpBaloon.leftMargin = (int)((((float)0 * windowWidth) / 90) - (0 * 0.5));
+							llpBaloon.leftMargin = (int) ((((float) 0 * windowWidth) / 90) - (0 * 0.5));
 							tvText.setLayoutParams(llpBaloon);
 							linearLayout.addView(tvText);
-							
+
 							LinearLayout.LayoutParams llpImg = new LinearLayout.LayoutParams(
 									LinearLayout.LayoutParams.WRAP_CONTENT,
 									LinearLayout.LayoutParams.WRAP_CONTENT);
 							llpImg.weight = 10;
 							llpImg.gravity = Gravity.CENTER_VERTICAL;
-							
+
 							LinearLayout linearLayout1 = new LinearLayout(this);
-							linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
-							
+							linearLayout1
+									.setOrientation(LinearLayout.HORIZONTAL);
+
 							ImageView imageView1 = new ImageView(this);
 							imageView1.setImageResource(R.drawable.triste);
 							imageView1.setLayoutParams(llpImg);
 							linearLayout1.addView(imageView1);
-							
+
 							LinearLayout.LayoutParams llp_seekBar = new LinearLayout.LayoutParams(
 									LayoutParams.MATCH_PARENT,
 									LayoutParams.WRAP_CONTENT);
@@ -231,35 +206,45 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 										e.printStackTrace();
 									}
 									tvText.setText(value + "°");
-									
-									/*int measure = (int)((((float)progress * seekBar.getWidth()) / 100) - (progress * 0.5))*/;
-									
-									Log.i(Const.TAG, "seekBar.getWidth(): "+seekBar.getWidth());
-									
-									int measure = (int) ((float)progress/seekBar.getMax() * seekBar.getWidth());
 
-							        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-							                LinearLayout.LayoutParams.WRAP_CONTENT);
-							        
-							        if (windowWidth - measure < tvText.getWidth()) {
-							            params.leftMargin = windowWidth - tvText.getWidth();
-							        } else {
-							            params.leftMargin = measure;
-							        }
-									
+									/*
+									 * int measure = (int)((((float)progress *
+									 * seekBar.getWidth()) / 100) - (progress *
+									 * 0.5))
+									 */;
+
+									Log.i(Const.TAG, "seekBar.getWidth(): "
+											+ seekBar.getWidth());
+
+									int measure = (int) ((float) progress
+											/ seekBar.getMax() * seekBar
+											.getWidth());
+
+									LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+											LinearLayout.LayoutParams.WRAP_CONTENT,
+											LinearLayout.LayoutParams.WRAP_CONTENT);
+
+									if (windowWidth - measure < tvText
+											.getWidth()) {
+										params.leftMargin = windowWidth
+												- tvText.getWidth();
+									} else {
+										params.leftMargin = measure;
+									}
+
 									tvText.setLayoutParams(params);
 								}
 							});
 
 							linearLayout1.addView(seekBar);
-							
+
 							ImageView imageView2 = new ImageView(this);
 							imageView2.setImageResource(R.drawable.felice);
 							imageView2.setLayoutParams(llpImg);
 							linearLayout1.addView(imageView2);
-							
+
 							linearLayout.addView(linearLayout1);
-							
+
 							questions.put(id_question, "1");
 						} else {
 							LinearLayout linearLayout1 = new LinearLayout(
@@ -311,6 +296,18 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 			}
 			break;
 		case Const.SUBMIT_QUESTIONS_URL_ID:
+			try {
+				JSONObject jsonObject = new JSONObject(result);
+				int today = jsonObject.getInt("today");
+				int yesterday = jsonObject.getInt("yesterday");
+				int tomorrow = jsonObject.getInt("tomorrow");
+				
+				User.setMeteo(this, today, yesterday, tomorrow);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			finish();
 		}
 	}
