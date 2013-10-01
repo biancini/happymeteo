@@ -56,6 +56,12 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 		addContentView(sideNavigationView, layoutParams);
 		
 		/* Check facebook connection */
+		Session session = Session.getActiveSession();
+		if(session == null) {
+			session = new Session(this);
+			Session.setActiveSession(session);
+		}
+		
 		if(User.isFacebookSession(this) && !Session.getActiveSession().isOpened()) {
 			onFacebookConnect(statusCallback, false);
 		}
@@ -66,8 +72,8 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 		getSupportMenuInflater().inflate(R.menu.main_menu, menu);
 		menu.findItem(R.id.settings).setShowAsAction(
 				MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		/*menu.findItem(R.id.menuActivity).setShowAsAction(
-				MenuItem.SHOW_AS_ACTION_IF_ROOM);*/
+		menu.findItem(R.id.menuActivity).setShowAsAction(
+				MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		return super.onCreateOptionsMenu(menu);
 	}
 

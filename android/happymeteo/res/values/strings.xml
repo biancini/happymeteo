@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Appy Meteo</string>
-	<string name="version">Versione 0.1.7</string>
+	<string name="version">Versione 0.1.7b</string>
 	<string name="app_id">405414319576008</string>
     <string name="create_account">Crea Account</string>
     <string name="normal_login">Login tramite Happy Meteo</string>
@@ -56,5 +56,7 @@
 	<string name="unlink_user_to_facebook">Scollega Profilo a facebook</string>
 	<string name="yesterday">Ieri</string>
 	<string name="tomorrow">Domani</string>
-    
+	<string name="off">No</string>
+	<string name="on">Si</string>
+	<string name="empty"></string>
 </resources>

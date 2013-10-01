@@ -4,7 +4,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
 
-    <title>Appymeteo - Il meteo di ieri - Mappa markers</title>
+    <title>Appymeteo - Il meteo di ieri - happy markers</title>
 
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.exp&sensor=false"></script>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -25,100 +25,153 @@
 	</style>
 
     <script type="text/javascript">
-      google.load('visualization', '1');
-      var map;
-      var infoWindow;
-      var markersArray = [];
-      var curview = '';
-      var province = [];
-      var regioni = [];
+	google.load('visualization', '1');
+	var map;
+	var infoWindow;
+	var markersArray = [];
+	var curview = '';
+	var province = [];
+	var regioni = [];
 
-      function initialize() {
-        infoWindow = new google.maps.InfoWindow();
-        map = new google.maps.Map(document.getElementById('map-canvas'), {
-          center: new google.maps.LatLng(42.1, 12.5),
-          zoom: 5,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        });
+	var marker_pre = 'https://happymeteo.appspot.com/img/';
+	var markers = ['1happy.png', '2happy.png', '3happy.png', '4happy.png', '5happy.png',
+	               '6happy.png', '7happy.png', '8happy.png', '9happy.png', '10happy.png'];
 
-	    google.maps.event.addListener(map,'zoom_changed', function () {
-	      var zoomlevel = map.getZoom();
-	      if (zoomlevel < 8) showData('regioni');
-	      else showData('province');
+	function initialize() {
+	    var featureOpts = [
+    	        {
+	              stylers: [
+	                { visibility: 'simplified' },
+	                { gamma: 0.9 },
+	                { weight: 0.1 }
+	              ]
+	        },
+	        {
+	            elementType: 'labels',
+  	            stylers: [
+ 	                { visibility: 'simplified' }
+	            ]
+	        },
+	        {
+	            featureType: 'administrative.locality',
+	            elementType: 'all',
+ 	            stylers: [
+ 	                { visibility: 'on' }
+	            ]
+	        },
+	        {
+	            featureType: 'road',
+	            elementType: 'all',
+ 	            stylers: [
+ 	                { visibility: 'off' }
+	            ]
+	        },
+	        {
+	            featureType: 'landscape',
+	            elementType: 'all',
+ 	            stylers: [
+ 	                { visibility: 'simplified' }
+	            ]
+	        }
+  	    ];
+
+	    infoWindow = new google.maps.InfoWindow();
+	    map = new google.maps.Map(document.getElementById('map-canvas'), {
+	        center: new google.maps.LatLng(42.1, 12.5),
+	        zoom: 5,
+	        mapTypeControlOptions: {
+      	            mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'custom_style']
+                },
+	        mapTypeId: 'custom_style'
 	    });
 
-        initializeData();
-      }
+	    var styledMapOptions = {
+	        name: 'appymeteo'
+	    };
+	    var customMapType = new google.maps.StyledMapType(featureOpts, styledMapOptions);
+	    map.mapTypes.set('custom_style', customMapType);
 
-      function initializeData() {
-        var query = "SELECT * FROM 1vMejPOyqzvc80l_7Q21TEgYKWjzNdg07WASl3N8";
-        query = encodeURIComponent(query);
-        var gvizQuery = new google.visualization.Query('http://www.google.com/fusiontables/gvizdata?tq=' + query);
+	    google.maps.event.addListener(map,'zoom_changed', function () {
+	        var zoomlevel = map.getZoom();
+	        if (zoomlevel < 8) showData('regioni');
+	        else showData('province');
+	    });
+
+	    initializeData();
+	}
+
+	function initializeData() {
+	    var query = "SELECT * FROM 1vMejPOyqzvc80l_7Q21TEgYKWjzNdg07WASl3N8";
+	    query = encodeURIComponent(query);
+	    var gvizQuery = new google.visualization.Query('http://www.google.com/fusiontables/gvizdata?tq=' + query);
  
-        gvizQuery.send(function(response) {
-          var numRows = response.getDataTable().getNumberOfRows();
+	    gvizQuery.send(function(response) {
+	        var numRows = response.getDataTable().getNumberOfRows();
 
-          // For each row in the table, create a marker
-          for (var i = 0; i < numRows; i++) {
-	      if (response.getDataTable().getValue(i, 0) == 'P') {
-              var provincia = response.getDataTable().getValue(i, 1);
-              var arrCoords = response.getDataTable().getValue(i, 2).split(',');
-              var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
-              var appyness = response.getDataTable().getValue(i, 4);
-              province.push({'territorio': provincia, 'coordinate': coordinate, 'appyness': appyness});
-            } else if (response.getDataTable().getValue(i, 0) == 'R') {
-              var regione = response.getDataTable().getValue(i, 1);
-              var arrCoords = response.getDataTable().getValue(i, 2).split(',');
-              var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
-              var appyness = response.getDataTable().getValue(i, 4);
-              regioni.push({'territorio': regione, 'coordinate': coordinate, 'appyness': appyness});
-            }
-          }
+	        // For each row in the table, create a marker
+                for (var i = 0; i < numRows; i++) {
+	            if (response.getDataTable().getValue(i, 0) == 'P') {
+	                var provincia = response.getDataTable().getValue(i, 1);
+	                var arrCoords = response.getDataTable().getValue(i, 2).split(',');
+	                var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
+	                var appyness = response.getDataTable().getValue(i, 4);
+	                province.push({'territorio': provincia, 'coordinate': coordinate, 'appyness': appyness});
+	            } else if (response.getDataTable().getValue(i, 0) == 'R') {
+	                var regione = response.getDataTable().getValue(i, 1);
+	                var arrCoords = response.getDataTable().getValue(i, 2).split(',');
+	                var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
+	                var appyness = response.getDataTable().getValue(i, 4);
+	                regioni.push({'territorio': regione, 'coordinate': coordinate, 'appyness': appyness});
+	            }
+	        }
 
-	      showData('regioni');
-        });
-      }
+	        showData('regioni');
+	    });
+	}
 
-      function clearOverlays() {
-        if (markersArray) {
-          for (i in markersArray) {
-            markersArray[i].setMap(null);
-          }
-        }
-      }
+	function clearOverlays() {
+	    if (markersArray) {
+	        for (i in markersArray) {
+	            markersArray[i].setMap(null);
+	        }
+	    }
+	}
 
-      function showData(dataType) {
-        if (curview == dataType) return;
+	function showData(dataType) {
+	    if (curview == dataType) return;
+	    var size = 30;
+	    var ratio = 108/164;
 
 	    clearOverlays();
-        var arrayData;
+	    var arrayData;
 	    arrayData = (dataType == 'province') ? province : regioni;
 
-        var createMarker = function(coordinate, territorio, appyness, mark) {
-          var marker = new google.maps.Marker({
-            map: map,
-            position: coordinate,
-            icon: new google.maps.MarkerImage(mark)
-          });
+	    var createMarker = function(coordinate, territorio, appyness, mark) {
+	        var marker = new google.maps.Marker({
+	            map: map,
+	            position: coordinate,
+	            icon: new google.maps.MarkerImage(mark, null, null, null, new google.maps.Size(size*ratio, size)),
+	        });
 
-          google.maps.event.addListener(marker, 'click', function(event) {
-            infoWindow.setPosition(coordinate);
-            infoWindow.setContent("Area: " + territorio + '<br>Appyess: ' + appyness);
-            infoWindow.open(map);
-          });
+	        google.maps.event.addListener(marker, 'click', function(event) {
+	            infoWindow.setPosition(coordinate);
+	            infoWindow.setContent("Area: " + territorio + '<br>Appyess: ' + appyness);
+	            infoWindow.open(map);
+	        });
 
-	      markersArray.push(marker);
-        };
+	        markersArray.push(marker);
+	    };
 
 	    for (var i = 0; i < arrayData.length; i++) {
-          var mark = 'http://www.pattayaglobus.com/marker-green.png';
-          createMarker(arrayData[i]['coordinate'], arrayData[i]['territorio'], arrayData[i]['appyness'], mark);
-        }
+	        var marknum = parseInt(arrayData[i]['appyness']) - 1;
+	        var mark = marker_pre + markers[marknum];
+	        createMarker(arrayData[i]['coordinate'], arrayData[i]['territorio'], arrayData[i]['appyness'], mark);
+	    }
 
-        curview = dataType;
-      }
+	    curview = dataType;
+	}
 
-      google.maps.event.addDomListener(window, 'load', initialize);
+	google.maps.event.addDomListener(window, 'load', initialize);
     </script>
   </head>
   <body>

@@ -176,23 +176,17 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		PushNotificationsService.register(getApplicationContext(),
 				User.getUser_id(this));
 
-		Typeface helveticaneueltstd_ultlt_webfont = Typeface.createFromAsset(
-				getAssets(), "helveticaneueltstd-ultlt-webfont.ttf");
-
 		int today_int = User.getToday(this);
 		int yesterday_int = User.getYesterday(this);
 		int tomorrow_int = User.getTomorrow(this);
 
 		TextView today_text = (TextView) findViewById(R.id.today_text);
-		today_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 		today_text.setText(String.valueOf(today_int));
 
 		TextView yesterday_text = (TextView) findViewById(R.id.yesterday_text);
-		yesterday_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 		yesterday_text.setText(String.valueOf(yesterday_int));
 
 		TextView tomorrow_text = (TextView) findViewById(R.id.tomorrow_text);
-		tomorrow_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 		tomorrow_text.setText(String.valueOf(tomorrow_int));
 
 		ImageView today_pic = (ImageView) findViewById(R.id.today_pic);
@@ -201,6 +195,14 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		yesterday_pic.setImageResource(getGrayIcon(yesterday_int));
 		ImageView tomorrow_pic = (ImageView) findViewById(R.id.tomorrow_pic);
 		tomorrow_pic.setImageResource(getGrayIcon(tomorrow_int));
+		
+		try {
+			Typeface helveticaneueltstd_ultlt_webfont = Typeface.createFromAsset(
+					getAssets(), "helveticaneueltstd-ultlt-webfont.ttf");
+			today_text.setTypeface(helveticaneueltstd_ultlt_webfont);
+			yesterday_text.setTypeface(helveticaneueltstd_ultlt_webfont);
+			tomorrow_text.setTypeface(helveticaneueltstd_ultlt_webfont);
+		} catch(Exception e) {}
 
 		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
 		welcomeToday.setText(User.getFirst_name(this).toLowerCase() + "_OGGI");
@@ -214,8 +216,6 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 				getColorByToday(today_int));
 		relativeLayoutMeteoUp1.setBackgroundDrawable(gradientDrawable);
 
-		RelativeLayout relativeLayoutMeteoUp2 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp2);
-		
 		ImageView facebook = (ImageView) findViewById(R.id.facebook);
 		facebook.setOnTouchListener(new OnTouchListener() {
 			

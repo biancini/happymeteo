@@ -3,25 +3,29 @@ package com.happymeteo;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jraf.android.backport.switchwidget.Switch;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
@@ -33,11 +37,31 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 		onPostExecuteListener {
 	private AppyMeteoNotLoggedActivity activity;
 	private onPostExecuteListener onPostExecuteListener;
-	private boolean questionsStarted;
 	private Map<String, String> params;
 	private LocationManagerHelper locationListener;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
+
+	public static RelativeLayout.LayoutParams getRlp(SeekBar seekBar) {
+
+		int max = seekBar.getMax();
+		float scale = max > 0 ? (float) seekBar.getProgress() / (float) max : 0;
+		// Drawable thumb = seekBar.getThumb();
+		int thumbWidth = 48; // thumb.getIntrinsicWidth();
+		int available = seekBar.getWidth() - thumbWidth + seekBar.getThumbOffset() * 2;
+		int thumbPos = (int) (scale * available);
+		
+		Log.i(Const.TAG, "seekBar.getProgress(): " + seekBar.getProgress());
+		Log.i(Const.TAG, "seekBar.getMax(): " + seekBar.getMax());
+		Log.i(Const.TAG, "available: " + available);
+		Log.i(Const.TAG, "thumbPos: " + thumbPos);
+		
+		RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		rlp.setMargins(thumbPos, 0, 0, 0);
+		return rlp;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,40 +91,35 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 			}
 		}
 
-		questionsStarted = false;
 		params = new HashMap<String, String>();
 		questions = new JSONObject();
 
 		linearLayout = (LinearLayout) findViewById(R.id.layoutQuestions);
-		final Button btnBeginQuestions = (Button) findViewById(R.id.btnBeginQuestions);
-		btnBeginQuestions.setOnClickListener(new View.OnClickListener() {
+
+		ServerUtilities.getQuestions(onPostExecuteListener, activity);
+
+		final Button btnAnswerQuestions = (Button) findViewById(R.id.btnAnswerQuestions);
+		btnAnswerQuestions.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				if (!questionsStarted) {
-					ServerUtilities.getQuestions(onPostExecuteListener,
-							activity);
-					btnBeginQuestions.setText(R.string.answer_questions_btn);
-					questionsStarted = true;
-				} else {
-					Location location = locationListener.getLocation();
-					Log.d(Const.TAG, "location: " + location);
+				Location location = locationListener.getLocation();
+				Log.d(Const.TAG, "location: " + location);
 
-					if (location != null) {
-						Log.i(Const.TAG, "Latitude: " + location.getLatitude()
-								+ ", Longitude: " + location.getLongitude());
-						params.put("latitude",
-								String.valueOf(location.getLatitude()));
-						params.put("longitude",
-								String.valueOf(location.getLongitude()));
-					}
-
-					params.put("user_id", User.getUser_id(view.getContext()));
-					params.put("questions", questions.toString());
-
-					ServerUtilities.submitQuestions(onPostExecuteListener,
-							activity, params);
+				if (location != null) {
+					Log.i(Const.TAG, "Latitude: " + location.getLatitude()
+							+ ", Longitude: " + location.getLongitude());
+					params.put("latitude",
+							String.valueOf(location.getLatitude()));
+					params.put("longitude",
+							String.valueOf(location.getLongitude()));
 				}
+
+				params.put("user_id", User.getUser_id(view.getContext()));
+				params.put("questions", questions.toString());
+
+				ServerUtilities.submitQuestions(onPostExecuteListener,
+						activity, params);
 			}
 		});
 	}
@@ -108,121 +127,148 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
 		switch (id) {
-			case Const.GET_QUESTIONS_URL_ID:
-				try {
-					JSONArray jsonArray = new JSONArray(result);
-					for (int i = 0; i < jsonArray.length(); i++) {
-						JSONObject jsonObject;
+		case Const.GET_QUESTIONS_URL_ID:
+			try {
+				JSONArray jsonArray = new JSONArray(result);
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject jsonObject;
+					try {
+						jsonObject = jsonArray.getJSONObject(i);
+						final String id_question = jsonObject.getString("id");
+						final String question = jsonObject
+								.getString("question");
+						final int type = jsonObject.getInt("type");
+						Log.i(Const.TAG, jsonObject.toString());
+
+						LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
+								LayoutParams.WRAP_CONTENT,
+								LayoutParams.WRAP_CONTENT);
+						llp.setMargins(10, 10, 10, 10);
+
+						TextView textView = new TextView(
+								getApplicationContext());
+						textView.setText(question);
+						textView.setLayoutParams(llp);
+						textView.setTextColor(getResources().getColor(
+								R.color.black));
+						textView.setBackgroundResource(R.drawable.fascia);
+						textView.setGravity(Gravity.CENTER);
+						textView.setTextSize(25.0f);
 						try {
-							jsonObject = jsonArray.getJSONObject(i);
-							final String id_question = jsonObject.getString("id");
-							final String question = jsonObject
-									.getString("question");
-							final int type = jsonObject.getInt("type");
-							Log.i(Const.TAG, jsonObject.toString());
-	
+							Typeface billabong = Typeface.createFromAsset(
+									getAssets(), "billabong.ttf");
+							textView.setTypeface(billabong);
+						} catch (Exception e) {
+						}
+
+						linearLayout.addView(textView);
+
+						if (type == 1) {
+							RelativeLayout.LayoutParams rlp1 = new RelativeLayout.LayoutParams(
+									RelativeLayout.LayoutParams.MATCH_PARENT,
+									RelativeLayout.LayoutParams.WRAP_CONTENT);
+							RelativeLayout relativeLayout = new RelativeLayout(
+									this);
+							relativeLayout.setLayoutParams(rlp1);
+							final TextView tvText = new TextView(
+									getApplicationContext());
+							tvText.setText("1°");
+							tvText.setBackgroundResource(R.drawable.baloon);
+							tvText.setGravity(Gravity.CENTER);
+							tvText.setTextColor(getResources().getColor(
+									R.color.white));
+							tvText.setTextSize(15.0f);
+
+							LinearLayout.LayoutParams llp_seekBar = new LinearLayout.LayoutParams(
+									LayoutParams.MATCH_PARENT,
+									LayoutParams.WRAP_CONTENT);
+
+							SeekBar seekBar = new SeekBar(this);
+							seekBar.setMax(90);
+							seekBar.setProgress(0);
+							seekBar.setLayoutParams(llp_seekBar);
+							seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+								@Override
+								public void onStopTrackingTouch(SeekBar seekBar) {
+								}
+
+								@Override
+								public void onStartTrackingTouch(SeekBar seekBar) {
+								}
+
+								@Override
+								public void onProgressChanged(SeekBar seekBar,
+										int progress, boolean fromUser) {
+									String value = String
+											.valueOf((progress / 10) + 1);
+									try {
+										questions.put(id_question, value);
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+									tvText.setText(value + "°");
+									tvText.setLayoutParams(getRlp(seekBar));
+								}
+							});
+
+							tvText.setLayoutParams(getRlp(seekBar));
+							relativeLayout.addView(tvText);
+							linearLayout.addView(relativeLayout);
+
+							linearLayout.addView(seekBar);
+							questions.put(id_question, "1");
+						} else {
 							LinearLayout linearLayout1 = new LinearLayout(
 									getApplicationContext());
-							linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
-	
-							LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-									LayoutParams.WRAP_CONTENT,
-									LayoutParams.WRAP_CONTENT);
-							llp.setMargins(10, 10, 10, 10);
-	
-							TextView tv = new TextView(getApplicationContext());
-							tv.setText(question);
-							tv.setLayoutParams(llp);
-							linearLayout1.addView(tv);
-	
-							if (type == 1) {
-								final TextView tvText = new TextView(
-										getApplicationContext());
-								tvText.setText("1");
-								tvText.setLayoutParams(llp);
-								linearLayout1.addView(tvText);
-	
-								linearLayout.addView(linearLayout1);
-	
-								LinearLayout.LayoutParams llp_seekBar = new LinearLayout.LayoutParams(
-										LayoutParams.MATCH_PARENT,
-										LayoutParams.WRAP_CONTENT);
-								llp_seekBar.setMargins(10, 10, 10, 10);
-	
-								SeekBar seekBar = new SeekBar(
-										getApplicationContext());
-								seekBar.setThumb(getResources()
-										.getDrawable(
-												R.drawable.scrubber_control_selector_holo_light));
-								seekBar.setProgressDrawable(getResources()
-										.getDrawable(
-												R.drawable.progress_horizontal_holo_light));
-								seekBar.setMax(90);
-								seekBar.setProgress(0);
-								seekBar.setLayoutParams(llp_seekBar);
-								seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-	
-									@Override
-									public void onStopTrackingTouch(SeekBar seekBar) {
-									}
-	
-									@Override
-									public void onStartTrackingTouch(SeekBar seekBar) {
-									}
-	
-									@Override
-									public void onProgressChanged(SeekBar seekBar,
-											int progress, boolean fromUser) {
-										String value = String
-												.valueOf((progress / 10) + 1);
-										try {
-											questions.put(id_question, value);
-										} catch (JSONException e) {
-											e.printStackTrace();
-										}
-										tvText.setText(value);
-									}
-								});
-	
-								linearLayout.addView(seekBar);
-								questions.put(id_question, "1");
-							} else {
-								final ToggleButton toggleButton = new ToggleButton(
-										getApplicationContext());
-								toggleButton.setLayoutParams(llp);
-								toggleButton.setTextOn("Si");
-								toggleButton.setTextOff("No");
-								toggleButton.setChecked(false);
-								toggleButton
-										.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-	
-											@Override
-											public void onCheckedChanged(
-													CompoundButton buttonView,
-													boolean isChecked) {
-												try {
-													questions.put(id_question,
-															isChecked ? "1" : "0");
-												} catch (JSONException e) {
-													e.printStackTrace();
-												}
+							linearLayout1
+									.setOrientation(LinearLayout.HORIZONTAL);
+							linearLayout1.setGravity(Gravity.CENTER);
+
+							TextView textSi = new TextView(this);
+							textSi.setText(R.string.on);
+							textSi.setLayoutParams(llp);
+							linearLayout1.addView(textSi);
+
+							final Switch switchButton = new Switch(this);
+							switchButton.setLayoutParams(llp);
+							switchButton.setChecked(false);
+							switchButton
+									.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+										@Override
+										public void onCheckedChanged(
+												CompoundButton buttonView,
+												boolean isChecked) {
+											try {
+												questions.put(id_question,
+														isChecked ? "1" : "0");
+											} catch (JSONException e) {
+												e.printStackTrace();
 											}
-										});
-	
-								linearLayout1.addView(toggleButton);
-								linearLayout.addView(linearLayout1);
-								questions.put(id_question, "0");
-							}
-						} catch (JSONException e) {
-							e.printStackTrace();
+										}
+									});
+
+							linearLayout1.addView(switchButton);
+
+							TextView textNo = new TextView(this);
+							textNo.setText(R.string.off);
+							textNo.setLayoutParams(llp);
+							linearLayout1.addView(textNo);
+
+							linearLayout.addView(linearLayout1);
+							questions.put(id_question, "0");
 						}
+					} catch (JSONException e) {
+						e.printStackTrace();
 					}
-				} catch (JSONException e) {
-					e.printStackTrace();
 				}
-				break;
-			case Const.SUBMIT_QUESTIONS_URL_ID:
-				finish();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			break;
+		case Const.SUBMIT_QUESTIONS_URL_ID:
+			finish();
 		}
 	}
 }

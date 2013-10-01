@@ -21,52 +21,57 @@ import com.happymeteo.utils.Const;
 
 public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 	protected ProgressDialog spinner;
-	
-	
-	private class DefaultExceptionHandler implements Thread.UncaughtExceptionHandler {
+
+	private class DefaultExceptionHandler implements
+			Thread.UncaughtExceptionHandler {
 		@Override
 		public void uncaughtException(Thread thread, Throwable ex) {
 			Log.e(Const.TAG, ex.getMessage(), ex);
 		}
 	}
-	
-	public void openActiveSession(Session.StatusCallback statusCallback, Session session, boolean allowLoginUI) {
+
+	public void openActiveSession(Session.StatusCallback statusCallback,
+			Session session, boolean allowLoginUI) {
 		spinner.show();
 		if (session == null) {
 			Log.i(Const.TAG, "session null");
 			session = new Session(this);
 		}
 		Session.setActiveSession(session);
-		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED) || allowLoginUI) {
+		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)
+				|| allowLoginUI) {
 			Log.i(Const.TAG, "CREATED_TOKEN_LOADED");
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(
-					Arrays.asList(Const.FACEBOOK_PERMISSIONS))
-					.setCallback(statusCallback));
+					Arrays.asList(Const.FACEBOOK_PERMISSIONS)).setCallback(
+					statusCallback));
 		} else {
 			spinner.dismiss();
 			statusCallback.call(session, session.getState(), null);
 		}
 	}
-	
-	public void onFacebookConnect(Session.StatusCallback statusCallback, boolean renew) {
-		if(renew) {
+
+	public void onFacebookConnect(Session.StatusCallback statusCallback,
+			boolean renew) {
+		if (renew) {
 			Session session = new Session(this, null, null, false);
 			Session.setActiveSession(session);
 		}
-		
+
 		Session session = Session.getActiveSession();
-		
-		if (!session.isOpened() && !session.isClosed() && session.getState() != SessionState.OPENING) {
+
+		if (!session.isOpened() && !session.isClosed()
+				&& session.getState() != SessionState.OPENING) {
 			spinner.show();
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(
-					Arrays.asList(Const.FACEBOOK_PERMISSIONS))
-					.setCallback(statusCallback));
+					Arrays.asList(Const.FACEBOOK_PERMISSIONS)).setCallback(
+					statusCallback));
 		} else {
-			if(session.isClosed()) {
+			if (session.isClosed()) {
 				session = new Session(this, null, null, false);
 				Session.setActiveSession(session);
-				session.openForSimon(new Session.OpenRequest(this).setPermissions(
-						Arrays.asList(Const.FACEBOOK_PERMISSIONS))
+				session.openForSimon(new Session.OpenRequest(this)
+						.setPermissions(
+								Arrays.asList(Const.FACEBOOK_PERMISSIONS))
 						.setCallback(statusCallback));
 			} else {
 				Log.i(Const.TAG, "onClickLogin openActiveSession");
@@ -74,9 +79,10 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 			}
 		}
 	}
-	
+
 	public void onClickLogout() {
-		User.initialize(getApplicationContext(), "", "", "", "", 0, "", 0, 0, 0, "", 0, 0, 0, 0);
+		User.initialize(getApplicationContext(), "", "", "", "", 0, "", 0, 0,
+				0, "", 0, 0, 0, 0);
 		Session session = new Session(this, null, null, false);
 		Session.setActiveSession(session);
 		PushNotificationsService.terminate(getApplicationContext());
@@ -85,12 +91,11 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i(Const.TAG, this.getClass()+" onCreate");
-		Thread.setDefaultUncaughtExceptionHandler(
-                new DefaultExceptionHandler());
-		
+		Log.i(Const.TAG, this.getClass() + " onCreate");
+		Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler());
+
 		super.onCreate(savedInstanceState);
-		
+
 		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
 		/* Check internet */
 		if (!cd.isConnectingToInternet()) {
@@ -104,67 +109,69 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 					});
 			return;
 		}
-		
+
 		spinner = new ProgressDialog(this);
 		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		spinner.setMessage("Connessione a facebook..");
 	}
-	
+
 	public void invokeActivity(Class<? extends Activity> clazz) {
 		invokeActivity(clazz, null);
 	}
 
 	public void invokeActivity(Class<? extends Activity> clazz, Bundle extras) {
-		Log.i(Const.TAG, "invokeActivity: "+this.getClass()+" "+clazz);
-		
-		if(!this.getClass().equals(clazz)) {
+		Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " " + clazz);
+
+		if (!this.getClass().equals(clazz)) {
 			Intent intent = new Intent(this, clazz);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			if(extras != null) {
+			if (extras != null) {
 				intent.putExtras(extras);
 			}
 			startActivity(intent);
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
-		/* Terminate PushNotificationsService
-		HappyMeteoApplication.getPushNotificationsService().terminate(getApplicationContext()); */
+		/*
+		 * Terminate PushNotificationsService
+		 * HappyMeteoApplication.getPushNotificationsService
+		 * ().terminate(getApplicationContext());
+		 */
 
-		Log.i(Const.TAG, this.getClass()+" onDestroy");
+		Log.i(Const.TAG, this.getClass() + " onDestroy");
 		super.onDestroy();
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		Log.i(Const.TAG, this.getClass()+" onSaveInstanceState");
+		Log.i(Const.TAG, this.getClass() + " onSaveInstanceState");
 		super.onSaveInstanceState(outState);
 	}
-	
+
 	@Override
 	protected void onNewIntent(Intent intent) {
-		Log.i(Const.TAG, this.getClass()+" onNewIntent");
+		Log.i(Const.TAG, this.getClass() + " onNewIntent");
 		super.onNewIntent(intent);
 	}
-	
+
 	@Override
 	public void onStart() {
-		Log.i(Const.TAG, this.getClass()+" onStart");
+		Log.i(Const.TAG, this.getClass() + " onStart");
 		super.onStart();
 	}
 
 	@Override
 	public void onStop() {
-		Log.i(Const.TAG, this.getClass()+" onStop");
+		Log.i(Const.TAG, this.getClass() + " onStop");
 		super.onStop();
 	}
-	
+
 	@Override
 	protected void onResume() {
-		Log.i(Const.TAG, this.getClass()+" onResume");
+		Log.i(Const.TAG, this.getClass() + " onResume");
 		super.onResume();
 	}
-	
-	
+
 }

@@ -1,20 +1,39 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Light" />
-
     <style name="AppyMeteoTheme" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="homeAsUpIndicator">@null</item>
         <item name="actionBarStyle">@style/AppyMeteoTheme.ActionBarStyle</item>
         <item name="actionButtonStyle">@style/AppyMeteoTheme.ActionButtonStyle</item>
-        <item name="android:textColorPrimaryInverse">@android:color/primary_text_light</item>
+        <item name="switchStyle">@style/AppyMeteoTheme.switchStyle</item>
+        <item name="android:seekBarStyle">@style/AppyMeteoTheme.seekBarStyle</item>
     </style>
 
     <style name="AppyMeteoTheme.ActionBarStyle" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="displayOptions">showCustom</item>
         <item name="customNavigationLayout">@drawable/action_bar_style</item>
     </style>
+
+    <style name="AppyMeteoTheme.ActionButtonStyle" parent="Widget.Sherlock.ActionButton"></style>
+
+	<style name="AppyMeteoTheme.switchStyle" parent="Widget.Holo.CompoundButton.Switch">
+        <item name="textOn">@string/empty</item>
+        <item name="textOff">@string/empty</item>
+        <item name="track">@drawable/selettore_bg</item>
+        <item name="thumb">@drawable/selettore</item>
+        <item name="thumbTextPadding">8dip</item>
+        <item name="switchMinWidth">40dip</item>
+        <item name="switchPadding">0dip</item>
+    </style>
     
-    <style name="AppyMeteoTheme.ActionButtonStyle" parent="Widget.Sherlock.ActionButton">
-	</style>
+    <style name="AppyMeteoTheme.seekBarStyle" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
+        <item name="android:minHeight">1dip</item>
+        <item name="android:maxHeight">1dip</item>
+        <item name="android:thumb">@drawable/scrubber_control_selector_holo_light</item>
+        <item name="android:thumbOffset">16dip</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+    </style>
 
 </resources>
