@@ -330,9 +330,8 @@ public class SideNavigationView extends LinearLayout {
             try {
             	Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/helveticaneueltstdbd.ttf");
             	holder.text.setTypeface(font);
-            } catch(Exception e) {
-            	
-            }
+            } catch(Exception e) {}
+            
             if (item.getIcon() != SideNavigationItem.DEFAULT_ICON_VALUE) {
                 holder.icon.setVisibility(View.VISIBLE);
                 holder.icon.setImageResource(menuItems.get(position).getIcon());
