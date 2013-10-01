@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Appy Meteo</string>
-	<string name="version">Versione 0.1.8</string>
+	<string name="version">Versione 0.1.9</string>
 	<string name="app_id">405414319576008</string>
     <string name="create_account">Crea Account</string>
     <string name="normal_login">Login tramite Happy Meteo</string>

@@ -24,12 +24,12 @@ public class InformationPageActivity extends AppyMeteoLoggedActivity {
 				"&#8226; Registrati / crea un account<br/>" +
 				"&#8226; Aspetta gli impulsi del tuo smartphone e rispondi alle domande che ti verranno poste<br/>" +
 				"&#8226; Ricevi di sera le previsioni meteo della tua felicità e divertiti a guardare cosa ti succede intorno<br/>" +
-				"&#8226; Se vuoi, sfida in un duello di felicità i tuoi amici<br/>" +
+				"&#8226; Vuoi vedere quanto sono felici i tuoi amici di Facebook? Invitali nella sezione 'Game'<br/>" +
 				"<br/>" +
 				"Perchè mai dovrei fare questa scocciatura?<br/><br/>" +
 				"&#8226; Innanzitutto, perché è divertente<br/>" +
-				"&#8226; E poi perché ogni risposta ti fa guadagnare punti che, nel tempo, danno diritto a buoni sconto su Amazon.it o Groupon!<br/><br/>" +
-				"Buon divertimento! E happy meteo</body></html>!";
+				"&#8226; E poi perché ogni risposta ti fa guadagnare punti, così come invitare i tuoi amici a scaricare l'app e giocare. E una classifica aggiornata ti dirà dove ti posizioni. <br/><br/>" +
+				"Buon divertimento! E appy meteo</body></html>!";
 		
 		TextView information_page = (TextView) findViewById(R.id.information_page);
 		information_page.setText(Html.fromHtml(help));
