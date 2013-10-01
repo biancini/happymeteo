@@ -380,11 +380,18 @@ class SendMessageHandler(BaseRequestHandler):
 class GetQuestionsHandler(BaseRequestHandler):
 
   def post(self):
-    questions = Question.all()
+    questions = Question.gql("Order BY order")
     
     if questions.count() > 0:
        self.response.headers['Content-Type'] = 'application/json'
        self.response.out.write(json.dumps([q.toJson() for q in questions]))
+       
+  def get(self):
+    questions = Question.gql("Order BY order")
+     
+    if questions.count() > 0:
+       self.response.headers['Content-Type'] = 'application/json'
+       self.response.out.write(json.dumps([q.toJson() for q in questions])) 
 
 class SubmitQuestionsHandler(BaseRequestHandler):
 

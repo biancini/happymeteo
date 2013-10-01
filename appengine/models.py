@@ -54,6 +54,7 @@ class Challenge(db.Model):
 class Question(db.Model):
     question = db.StringProperty()
     type = db.IntegerProperty()
+    order = db.IntegerProperty()
     
     def toJson(self):
         return {
