@@ -126,7 +126,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 				if(mForm.isValid()) {
 					String password;
 					try {
-						password = SHA1.hexdigest(create_account_password.getText().toString());
+						password = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, create_account_password.getText().toString());
 					} catch (Exception e) {
 						e.printStackTrace();
 						password = "";

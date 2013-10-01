@@ -11,8 +11,8 @@ public class SHA1 {
      * String cs = SHA1.hexdigest(myString);
      */
 
-    public static String hexdigest(String text) throws Exception {
-        text = Const.PASSWORD_SECRET_KEY + text;
+    public static String hexdigest(String constant, String text) throws Exception {
+        text = constant + text;
         MessageDigest md;
         md = MessageDigest.getInstance("SHA-1");
         byte[] sha1hash = new byte[40];

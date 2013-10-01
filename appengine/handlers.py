@@ -15,7 +15,7 @@ from models import User, Device, Challenge, Question, ChallengeQuestion, Answer,
 from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA, CREATE_ACCOUNT_EMAIL
 
 from utils import sendMessage, sendSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable, \
-    happymeteo, sample
+    happymeteo, sample, check_call
 
 import traceback
 import logging
@@ -79,10 +79,19 @@ class BaseRequestHandler(webapp2.RequestHandler):
   def head(self, *args):
     pass
 
-class RootHandler(BaseRequestHandler):
-  def get(self):
-    """Handles default langing page"""
-    self.render('home.html')
+def check_hash(handler_method):
+    def check_hash(self, *args, **kwargs):
+        if not check_call(self.request):
+            data = {
+              'error': 'access-denied',
+              'message': 'Accesso Negato'
+            }
+            
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.out.write(json.dumps(data))
+        else:
+            handler_method(self, *args, **kwargs)
+    return check_hash
 
 """ Profile user """
 class FacebookLoginHandler(BaseRequestHandler):
@@ -119,6 +128,7 @@ class FacebookLoginHandler(BaseRequestHandler):
     except:
       return 0
 
+  @check_hash
   def post(self):
     data = {}
     
@@ -166,7 +176,8 @@ class FacebookLoginHandler(BaseRequestHandler):
     self.response.out.write(json.dumps(data))
 
 class CreateAccountHandler(BaseRequestHandler):
-    def post(self):
+  @check_hash
+  def post(self):
       data = {}
       
       try:
@@ -274,7 +285,8 @@ class CreateAccountHandler(BaseRequestHandler):
       self.response.out.write(json.dumps(data))
 
 class NormalLoginHandler(BaseRequestHandler):
-    def post(self):
+  @check_hash
+  def post(self):
       data = {}
       
       try:
@@ -327,16 +339,8 @@ class ConfirmUserHandler(BaseRequestHandler):
         self.response.out.write("User confirmed")
         
 """ Device Management """
-class IndexDeviceHandler(BaseRequestHandler):
-  def get(self):
-    devices = Device.all()
-    self.render('index_device.html',
-      {
-        'devices': devices,
-        'lendevices': db.Query(Device).count()
-      })
-
 class RegisterHandler(BaseRequestHandler):
+  @check_hash
   def post(self):
     registrationId = self.request.get('registrationId')
     userId = self.request.get('userId')
@@ -357,6 +361,7 @@ class RegisterHandler(BaseRequestHandler):
 
 class UnregisterHandler(BaseRequestHandler):
 
+  @check_hash
   def post(self):
     registrationId = self.request.get('registrationId')
     query = db.GqlQuery("SELECT * FROM Device WHERE registration_id = :1", registrationId)
@@ -379,22 +384,18 @@ class SendMessageHandler(BaseRequestHandler):
 """ Questions Management """
 class GetQuestionsHandler(BaseRequestHandler):
 
+  @check_hash
   def post(self):
     questions = Question.gql("Order BY order")
     
     if questions.count() > 0:
        self.response.headers['Content-Type'] = 'application/json'
        self.response.out.write(json.dumps([q.toJson() for q in questions]))
-       
-  def get(self):
-    questions = Question.gql("Order BY order")
-     
-    if questions.count() > 0:
-       self.response.headers['Content-Type'] = 'application/json'
-       self.response.out.write(json.dumps([q.toJson() for q in questions])) 
 
 class SubmitQuestionsHandler(BaseRequestHandler):
 
+  @check_hash
+  @check_hash
   def post(self):
     data = {}
     try:
@@ -431,13 +432,14 @@ class SubmitQuestionsHandler(BaseRequestHandler):
           'error': 'Submit Question error',
           'message': '%s' % sys.exc_info()[0],
         }
-    
+        
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))
     
 """ Challenge Management """
 class RequestChallengeHandler(BaseRequestHandler):
     
+  @check_hash
   def post(self):
     userId = self.request.get('userId')
     registrationId = self.request.get('registrationId')
@@ -488,6 +490,7 @@ class RequestChallengeHandler(BaseRequestHandler):
     
 class AcceptChallengeHandler(BaseRequestHandler):
     
+  @check_hash
   def post(self):
     challengeId = self.request.get('challengeId')
     accepted = self.request.get('accepted')
@@ -499,6 +502,15 @@ class AcceptChallengeHandler(BaseRequestHandler):
         sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge': challenge.toJson(), 'turn': '1'})
         challenge.accepted = (accepted == "true")
         challenge.put()
+        
+        user_a = User(int(challenge.user_id_a))
+        user_a.contatore_sfidante = user_a.contatore_sfidante + 1
+        user_a.put()
+        
+        user_b = User(int(challenge.user_id_b))
+        user_b.contatore_sfidato = user_b.contatore_sfidato + 1
+        user_b.put()
+        
         data = {
           'message': 'ok'
         }
@@ -513,6 +525,7 @@ class AcceptChallengeHandler(BaseRequestHandler):
     
 class QuestionsChallengeHandler(BaseRequestHandler):
 
+  @check_hash
   def post(self):
     challengeId = self.request.get('challengeId')
     turn = self.request.get('turn')
@@ -536,6 +549,7 @@ class QuestionsChallengeHandler(BaseRequestHandler):
 
 class SubmitChallengeHandler(BaseRequestHandler):
 
+  @check_hash
   def post(self):
     data = {}
     try:

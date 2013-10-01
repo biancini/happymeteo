@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.happymeteo.models.User;
+import com.happymeteo.utils.Const;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
@@ -44,7 +45,7 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements o
 					String email = normal_login_email.getText().toString();
 					String password = "";
 					try {
-						password = SHA1.hexdigest(normal_login_password.getText().toString());
+						password = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, normal_login_password.getText().toString());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

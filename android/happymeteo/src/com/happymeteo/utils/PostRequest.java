@@ -3,9 +3,9 @@ package com.happymeteo.utils;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -27,20 +27,20 @@ import android.view.Window;
 public class PostRequest extends AsyncTask<String, Void, String> {
 	private int id;
 	private Context context;
-	private Map<String, String> parameters;
+	private List<NameValuePair> nvps;
 	private onPostExecuteListener onPostExecuteListener;
 	private ProgressDialog spinner;
 	
-	public PostRequest(int id, Context context, Map<String, String> parameters, onPostExecuteListener onPostExecuteListener) {
-		this(id, context, parameters);
+	public PostRequest(int id, Context context, List<NameValuePair> nvps, onPostExecuteListener onPostExecuteListener) {
+		this(id, context, nvps);
 		this.onPostExecuteListener = onPostExecuteListener;
 	}
 	
-	public PostRequest(int id, Context context, Map<String, String> parameters) {
+	public PostRequest(int id, Context context, List<NameValuePair> nvps) {
 		this.id = id;
 		this.onPostExecuteListener = null;
 		this.context = context;
-		this.parameters = parameters;
+		this.nvps = nvps;
 		if(context instanceof Activity) {
 			spinner = new ProgressDialog(context);
 			spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -88,10 +88,27 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 				Log.i(Const.TAG, "PostRequest url: "+url);
 				DefaultHttpClient client = new DefaultHttpClient();
 				HttpPost request = new HttpPost(url);
-				List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-				for (String key : parameters.keySet()) {
-					nvps.add(new BasicNameValuePair(key, parameters.get(key)));
+				String query_string = "";
+				boolean first = true;
+				
+				Collections.sort(nvps, new Comparator<NameValuePair>() {
+
+					@Override
+					public int compare(NameValuePair lhs, NameValuePair rhs) {
+						return lhs.getName().compareTo(rhs.getName());
+					}
+				});
+				
+				for (NameValuePair pair : nvps) {
+					if(!first)
+						query_string += "&";
+					
+					query_string += pair.getName() + "=" + pair.getValue();
+					first = false;
 				}
+				Log.i(Const.TAG, "query_string: "+query_string);
+				nvps.add(new BasicNameValuePair("hashing", SHA1.hexdigest(Const.CALL_SECRET_KEY, query_string)));
+				
 				request.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
 				HttpResponse response = client.execute(request);
 	

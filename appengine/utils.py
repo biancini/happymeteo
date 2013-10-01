@@ -2,7 +2,9 @@ import urllib
 import urllib2
 import json
 
-from secrets import GOOGLE_API_KEY, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN
+from secrets import GOOGLE_API_KEY, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN,\
+    CALL_SECRET_KEY
+import hashlib
 
 def sendMessage(registrationId, payload):
     print "send message to %s"%registrationId
@@ -168,3 +170,31 @@ def sample(random, population, k):
         except (TypeError, KeyError):   # handle (at least) sets
             raise ValueError("TypeError")
     return result
+
+def check_call(request):
+    arguments = request.arguments()
+    arguments.sort()
+    query_string = ""
+    first = True
+    hashing = ""
+    
+    for a in arguments:
+        if a == "hashing":
+            hashing = request.get(a)
+            continue
+        
+        if not first:
+            query_string = query_string + "&"
+        
+        query_string = query_string + a + "=" + request.get(a)
+        first = False
+        
+    hash = hashlib.sha1(CALL_SECRET_KEY + query_string).hexdigest()
+    
+    print "query_string: %s"%query_string
+    print "hashing: %s"%hashing
+    print "hash: %s"%hash
+    
+    return (hashing == hash)
+         
+    

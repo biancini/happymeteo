@@ -47,6 +47,7 @@ public final class Const {
 	
 	/* Password secret key */
 	public static final String PASSWORD_SECRET_KEY = "f01a1a0bd409957b9305d2dc21c6b066859f51447c04adfb0b21c9fb5cff9eb0a6573c69e62fcb97321d878bfecb7d2cc8e6650ac6db1a1ef3125373d3e81b85";
+	public static final String CALL_SECRET_KEY = "be07735dae6fdd28cd11b8a1840db9ecf7db2f1e9001747cac85c8fd86a14732e56ba23588d234c5794805f13fc4776cd2238f375f136fdf8bd9d86c5b0f5938";
 
     public static final String TAG = "AppyMeteo";
 }

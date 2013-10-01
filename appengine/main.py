@@ -16,8 +16,6 @@ app_config = {
     
 # Map URLs to handlers
 routes = [
-  Route('/', handler='handlers.RootHandler'),
-
   # profile user
   Route('/create_account', handler='handlers.CreateAccountHandler'),
   Route('/facebook_login', handler='handlers.FacebookLoginHandler'),
@@ -25,7 +23,6 @@ routes = [
   Route('/confirm_user', handler='handlers.ConfirmUserHandler'),
 
   # device management
-  Route('/index_device', handler='handlers.IndexDeviceHandler'),
   Route('/register', handler='handlers.RegisterHandler'),
   Route('/unregister', handler='handlers.UnregisterHandler'),
   Route('/send_message', handler='handlers.SendMessageHandler'),
