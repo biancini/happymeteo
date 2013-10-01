@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:background="#ffe400">
+    android:background="@drawable/background_gradient">
 
     <LinearLayout
         android:id="@+id/layoutQuestions"

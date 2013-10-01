@@ -23,6 +23,6 @@
         android:title="@string/happy_context"/  -->
 	<item
         android:id="@+id/side_navigation_menu_item6"
-        android:icon="@drawable/fail"
+        android:icon="@drawable/logout"
         android:title="@string/logout"/>
 </menu>

@@ -11,7 +11,7 @@ public class InformationPageActivity extends AppyMeteoLoggedActivity {
 		setContentView(R.layout.activity_information_page);
 		super.onCreate(savedInstanceState);
 		
-		String help = "<html><body>Innanzitutto benvenuta/o! Lo scopo di Happy Meteo è quello di raccogliere una mole di dati " +
+		String help = "<html><body>Lo scopo di Happy Meteo è quello di raccogliere una mole di dati " +
 				"che coprano l\'intero territorio italiano per produrre delle previsioni meteo di felicità su tutto " +
 				"il Paese. Le previsioni riguarderanno sia tu che leggi, sia l\'area geografica che ti sta intorno. " +
 				"Vuoi vedere quanto è felice il tuo quartiere? Vuoi vedere se c\'è una zona di bassa pressione della " +

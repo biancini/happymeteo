@@ -9,8 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -41,27 +42,28 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 	private LocationManagerHelper locationListener;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
+	private int windowWidth;
 
-	public static RelativeLayout.LayoutParams getRlp(SeekBar seekBar) {
-
-		int max = seekBar.getMax();
-		float scale = max > 0 ? (float) seekBar.getProgress() / (float) max : 0;
-		// Drawable thumb = seekBar.getThumb();
-		int thumbWidth = 48; // thumb.getIntrinsicWidth();
-		int available = seekBar.getWidth() - thumbWidth + seekBar.getThumbOffset() * 2;
-		int thumbPos = (int) (scale * available);
-		
-		Log.i(Const.TAG, "seekBar.getProgress(): " + seekBar.getProgress());
-		Log.i(Const.TAG, "seekBar.getMax(): " + seekBar.getMax());
-		Log.i(Const.TAG, "available: " + available);
-		Log.i(Const.TAG, "thumbPos: " + thumbPos);
-		
-		RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.WRAP_CONTENT,
-				RelativeLayout.LayoutParams.WRAP_CONTENT);
-		rlp.setMargins(thumbPos, 0, 0, 0);
-		return rlp;
-	}
+//	public static RelativeLayout.LayoutParams getRlp(SeekBar seekBar) {
+//
+//		int max = seekBar.getMax();
+//		float scale = max > 0 ? (float) seekBar.getProgress() / (float) max : 0;
+//		// Drawable thumb = seekBar.getThumb();
+//		int thumbWidth = 48; // thumb.getIntrinsicWidth();
+//		int available = seekBar.getWidth() - thumbWidth + seekBar.getThumbOffset() * 2;
+//		int thumbPos = (int) (scale * available);
+//		
+//		Log.i(Const.TAG, "seekBar.getProgress(): " + seekBar.getProgress());
+//		Log.i(Const.TAG, "seekBar.getMax(): " + seekBar.getMax());
+//		Log.i(Const.TAG, "available: " + available);
+//		Log.i(Const.TAG, "thumbPos: " + thumbPos);
+//		
+//		RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(
+//				RelativeLayout.LayoutParams.WRAP_CONTENT,
+//				RelativeLayout.LayoutParams.WRAP_CONTENT);
+//		rlp.setMargins(thumbPos, 0, 0, 0);
+//		return rlp;
+//	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -122,6 +124,13 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 						activity, params);
 			}
 		});
+		
+		// You will use this to get the width of the screen
+		// p = new Point();
+
+		//getWindowManager().getDefaultDisplay().getSize(p);
+		
+		windowWidth = getWindowManager().getDefaultDisplay().getWidth();
 	}
 
 	@Override
@@ -164,24 +173,38 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 						linearLayout.addView(textView);
 
 						if (type == 1) {
-							RelativeLayout.LayoutParams rlp1 = new RelativeLayout.LayoutParams(
-									RelativeLayout.LayoutParams.MATCH_PARENT,
-									RelativeLayout.LayoutParams.WRAP_CONTENT);
-							RelativeLayout relativeLayout = new RelativeLayout(
-									this);
-							relativeLayout.setLayoutParams(rlp1);
-							final TextView tvText = new TextView(
-									getApplicationContext());
+							final TextView tvText = new TextView(this);
 							tvText.setText("1°");
 							tvText.setBackgroundResource(R.drawable.baloon);
 							tvText.setGravity(Gravity.CENTER);
 							tvText.setTextColor(getResources().getColor(
 									R.color.white));
 							tvText.setTextSize(15.0f);
-
+							LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
+									LayoutParams.WRAP_CONTENT,
+									LayoutParams.WRAP_CONTENT);
+							llpBaloon.leftMargin = (int)((((float)0 * windowWidth) / 90) - (0 * 0.5));
+							tvText.setLayoutParams(llpBaloon);
+							linearLayout.addView(tvText);
+							
+							LinearLayout.LayoutParams llpImg = new LinearLayout.LayoutParams(
+									LinearLayout.LayoutParams.WRAP_CONTENT,
+									LinearLayout.LayoutParams.WRAP_CONTENT);
+							llpImg.weight = 10;
+							llpImg.gravity = Gravity.CENTER_VERTICAL;
+							
+							LinearLayout linearLayout1 = new LinearLayout(this);
+							linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
+							
+							ImageView imageView1 = new ImageView(this);
+							imageView1.setImageResource(R.drawable.triste);
+							imageView1.setLayoutParams(llpImg);
+							linearLayout1.addView(imageView1);
+							
 							LinearLayout.LayoutParams llp_seekBar = new LinearLayout.LayoutParams(
 									LayoutParams.MATCH_PARENT,
 									LayoutParams.WRAP_CONTENT);
+							llp_seekBar.weight = 80;
 
 							SeekBar seekBar = new SeekBar(this);
 							seekBar.setMax(90);
@@ -208,15 +231,35 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 										e.printStackTrace();
 									}
 									tvText.setText(value + "°");
-									tvText.setLayoutParams(getRlp(seekBar));
+									
+									/*int measure = (int)((((float)progress * seekBar.getWidth()) / 100) - (progress * 0.5))*/;
+									
+									Log.i(Const.TAG, "seekBar.getWidth(): "+seekBar.getWidth());
+									
+									int measure = (int) ((float)progress/seekBar.getMax() * seekBar.getWidth());
+
+							        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+							                LinearLayout.LayoutParams.WRAP_CONTENT);
+							        
+							        if (windowWidth - measure < tvText.getWidth()) {
+							            params.leftMargin = windowWidth - tvText.getWidth();
+							        } else {
+							            params.leftMargin = measure;
+							        }
+									
+									tvText.setLayoutParams(params);
 								}
 							});
 
-							tvText.setLayoutParams(getRlp(seekBar));
-							relativeLayout.addView(tvText);
-							linearLayout.addView(relativeLayout);
-
-							linearLayout.addView(seekBar);
+							linearLayout1.addView(seekBar);
+							
+							ImageView imageView2 = new ImageView(this);
+							imageView2.setImageResource(R.drawable.felice);
+							imageView2.setLayoutParams(llpImg);
+							linearLayout1.addView(imageView2);
+							
+							linearLayout.addView(linearLayout1);
+							
 							questions.put(id_question, "1");
 						} else {
 							LinearLayout linearLayout1 = new LinearLayout(
@@ -232,7 +275,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 
 							final Switch switchButton = new Switch(this);
 							switchButton.setLayoutParams(llp);
-							switchButton.setChecked(false);
+							switchButton.setChecked(true);
 							switchButton
 									.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -242,7 +285,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 												boolean isChecked) {
 											try {
 												questions.put(id_question,
-														isChecked ? "1" : "0");
+														isChecked ? "0" : "1");
 											} catch (JSONException e) {
 												e.printStackTrace();
 											}
