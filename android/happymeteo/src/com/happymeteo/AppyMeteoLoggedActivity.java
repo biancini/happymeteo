@@ -166,7 +166,7 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 
 			if (session.isOpened()) {
 				spinner.setMessage("Connessione a facebook completata");
-				//spinner.dismiss();
+				spinner.dismiss();
 			} else {
 				spinner.setMessage("not opened: " + session.getState());
 			}

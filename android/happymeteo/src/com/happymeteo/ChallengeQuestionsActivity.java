@@ -3,23 +3,26 @@ package com.happymeteo;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jraf.android.backport.switchwidget.Switch;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.happymeteo.models.Challenge;
 import com.happymeteo.models.User;
@@ -27,12 +30,13 @@ import com.happymeteo.utils.Const;
 import com.happymeteo.utils.LocationManagerHelper;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.widget.AppyMeteoSeekBar;
+import com.happymeteo.widget.AppyMeteoSeekBar.OnAppyMeteoSeekBarChangeListener;
 
 public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implements
 		onPostExecuteListener {
 	private AppyMeteoNotLoggedActivity activity;
 	private onPostExecuteListener onPostExecuteListener;
-	private boolean questionsStarted;
 	private Map<String, String> params;
 	private LocationManagerHelper locationListener;
 	private JSONObject questions;
@@ -44,11 +48,11 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 		setContentView(R.layout.activity_challenge_questions);
 		super.onCreate(savedInstanceState);
 		
-		final String challengeJson = getIntent().getStringExtra("challenge");
-		final String turn = getIntent().getStringExtra("turn");
-		enemyScore = getIntent().getStringExtra("score");
-		
 		try {
+			final String challengeJson = getIntent().getStringExtra("challenge");
+			final String turn = getIntent().getStringExtra("turn");
+			enemyScore = getIntent().getStringExtra("score");
+			
 			JSONObject object = new JSONObject(challengeJson);
 			final Challenge challenge = new Challenge(object);
 			
@@ -75,41 +79,37 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 				}
 			}
 
-			questionsStarted = false;
 			params = new HashMap<String, String>();
 			questions = new JSONObject();
 
 			linearLayout = (LinearLayout) findViewById(R.id.layoutChallengeQuestions);
+			
+			ServerUtilities.getChallengeQuestions(onPostExecuteListener, activity, challenge.getChallenge_id(), turn);
+			
 			final Button btnBeginChallengeQuestions = (Button) findViewById(R.id.btnBeginChallengeQuestions);
 			btnBeginChallengeQuestions.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View view) {
-					if (!questionsStarted) {
-						ServerUtilities.getChallengeQuestions(onPostExecuteListener, activity, challenge.getChallenge_id(), turn);
-						btnBeginChallengeQuestions.setText(R.string.answer_questions_btn);
-						questionsStarted = true;
-					} else {
-						Location location = locationListener.getLocation();
-						Log.d(Const.TAG, "location: " + location);
+					Location location = locationListener.getLocation();
+					Log.d(Const.TAG, "location: " + location);
 
-						if (location != null) {
-							Log.i(Const.TAG, "Latitude: " + location.getLatitude()
-									+ ", Longitude: " + location.getLongitude());
-							params.put("latitude",
-									String.valueOf(location.getLatitude()));
-							params.put("longitude",
-									String.valueOf(location.getLongitude()));
-						}
-
-						params.put("user_id", User.getUser_id(view.getContext()));
-						params.put("questions", questions.toString());
-						params.put("challenge_id", challenge.getChallenge_id());
-						params.put("turn", turn);
-
-						ServerUtilities.submitChallenge(onPostExecuteListener,
-								activity, params);
+					if (location != null) {
+						Log.i(Const.TAG, "Latitude: " + location.getLatitude()
+								+ ", Longitude: " + location.getLongitude());
+						params.put("latitude",
+								String.valueOf(location.getLatitude()));
+						params.put("longitude",
+								String.valueOf(location.getLongitude()));
 					}
+
+					params.put("user_id", User.getUser_id(view.getContext()));
+					params.put("questions", questions.toString());
+					params.put("challenge_id", challenge.getChallenge_id());
+					params.put("turn", turn);
+
+					ServerUtilities.submitChallenge(onPostExecuteListener,
+							activity, params);
 				}
 			});
 		} catch (JSONException e) {
@@ -131,46 +131,147 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 						final String id_question = jsonObject.getString("id");
 						final String question = jsonObject
 								.getString("question");
+						final int type = 2; //jsonObject.getInt("type");
 						Log.i(Const.TAG, jsonObject.toString());
-
-						LinearLayout linearLayout1 = new LinearLayout(
-								getApplicationContext());
-						linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
 
 						LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
 								LayoutParams.WRAP_CONTENT,
 								LayoutParams.WRAP_CONTENT);
 						llp.setMargins(10, 10, 10, 10);
 
-						TextView tv = new TextView(getApplicationContext());
-						tv.setText(question);
-						tv.setLayoutParams(llp);
-						linearLayout1.addView(tv);
+						TextView textView = new TextView(
+								getApplicationContext());
+						textView.setText(question);
+						textView.setLayoutParams(llp);
+						textView.setTextColor(getResources().getColor(
+								R.color.black));
+						textView.setBackgroundResource(R.drawable.fascia);
+						textView.setGravity(Gravity.CENTER);
+						textView.setTextSize(25.0f);
+						try {
+							Typeface billabong = Typeface.createFromAsset(
+									getAssets(), "billabong.ttf");
+							textView.setTypeface(billabong);
+						} catch (Exception e) {
+						}
 
-						final ToggleButton toggleButton = new ToggleButton(getApplicationContext());
-						toggleButton.setLayoutParams(llp);
-						toggleButton.setTextOn("Si");
-						toggleButton.setTextOff("No");
-						toggleButton.setChecked(false);
-						toggleButton
-								.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+						linearLayout.addView(textView);
 
-									@Override
-									public void onCheckedChanged(
-											CompoundButton buttonView,
-											boolean isChecked) {
-										try {
-											questions.put(id_question,
-													isChecked ? "1" : "0");
-										} catch (JSONException e) {
-											e.printStackTrace();
-										}
+						if (type == 1) {
+							LinearLayout.LayoutParams llpImg = new LinearLayout.LayoutParams(
+									LinearLayout.LayoutParams.WRAP_CONTENT,
+									LinearLayout.LayoutParams.WRAP_CONTENT);
+							llpImg.weight = 10;
+							llpImg.gravity = Gravity.CENTER_VERTICAL;
+
+							LinearLayout linearLayout1 = new LinearLayout(this);
+							linearLayout1
+									.setOrientation(LinearLayout.HORIZONTAL);
+
+							ImageView imageView1 = new ImageView(this);
+							imageView1.setImageResource(R.drawable.triste);
+							imageView1.setLayoutParams(llpImg);
+							linearLayout1.addView(imageView1);
+
+							LinearLayout.LayoutParams llp_seekBar = new LinearLayout.LayoutParams(
+									LayoutParams.MATCH_PARENT,
+									LayoutParams.WRAP_CONTENT);
+							llp_seekBar.weight = 80;
+
+							final AppyMeteoSeekBar appyMeteoSeekBar = new AppyMeteoSeekBar(this);
+							appyMeteoSeekBar.setMax(90);
+							appyMeteoSeekBar.setProgress(0);
+							appyMeteoSeekBar.setLayoutParams(llp_seekBar);
+							
+							final TextView tvText = new TextView(this);
+							tvText.setText("1°");
+							tvText.setBackgroundResource(R.drawable.baloon);
+							tvText.setGravity(Gravity.CENTER);
+							tvText.setTextColor(getResources().getColor(
+									R.color.white));
+							tvText.setTextSize(15.0f);
+							LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
+									LayoutParams.WRAP_CONTENT,
+									LayoutParams.WRAP_CONTENT);
+							llpBaloon.leftMargin = appyMeteoSeekBar.getProgressPosX();
+							tvText.setLayoutParams(llpBaloon);
+							linearLayout.addView(tvText);
+							
+							appyMeteoSeekBar.setOnAppyMeteoSeekBarChangeListener(new OnAppyMeteoSeekBarChangeListener() {
+								
+								@Override
+								public void onProgressPosXChanged(AppyMeteoSeekBar seekBar, int progress,
+										int progressPosX) {
+									String value = String
+											.valueOf((progress / 10) + 1);
+									try {
+										questions.put(id_question, value);
+									} catch (JSONException e) {
+										e.printStackTrace();
 									}
-								});
+									tvText.setText(value + "°");
+									
+									LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
+											LinearLayout.LayoutParams.WRAP_CONTENT,
+											LinearLayout.LayoutParams.WRAP_CONTENT);
 
-						linearLayout1.addView(toggleButton);
-						linearLayout.addView(linearLayout1);
-						questions.put(id_question, "0");
+									llpBaloon.leftMargin = progressPosX;
+									
+									tvText.setLayoutParams(llpBaloon);
+								}
+							});
+
+							linearLayout1.addView(appyMeteoSeekBar);
+
+							ImageView imageView2 = new ImageView(this);
+							imageView2.setImageResource(R.drawable.felice);
+							imageView2.setLayoutParams(llpImg);
+							linearLayout1.addView(imageView2);
+
+							linearLayout.addView(linearLayout1);
+
+							questions.put(id_question, "1");
+						} else {
+							LinearLayout linearLayout1 = new LinearLayout(
+									getApplicationContext());
+							linearLayout1
+									.setOrientation(LinearLayout.HORIZONTAL);
+							linearLayout1.setGravity(Gravity.CENTER);
+
+							TextView textSi = new TextView(this);
+							textSi.setText(R.string.on);
+							textSi.setLayoutParams(llp);
+							linearLayout1.addView(textSi);
+
+							final Switch switchButton = new Switch(this);
+							switchButton.setLayoutParams(llp);
+							switchButton.setChecked(true);
+							switchButton
+									.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+										@Override
+										public void onCheckedChanged(
+												CompoundButton buttonView,
+												boolean isChecked) {
+											try {
+												questions.put(id_question,
+														isChecked ? "0" : "1");
+											} catch (JSONException e) {
+												e.printStackTrace();
+											}
+										}
+									});
+
+							linearLayout1.addView(switchButton);
+
+							TextView textNo = new TextView(this);
+							textNo.setText(R.string.off);
+							textNo.setLayoutParams(llp);
+							linearLayout1.addView(textNo);
+
+							linearLayout.addView(linearLayout1);
+							questions.put(id_question, "0");
+						}
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}

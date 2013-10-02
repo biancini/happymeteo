@@ -7,19 +7,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.google.android.gcm.GCMRegistrar;
-import com.happymeteo.models.User;
-import com.happymeteo.utils.ServerUtilities;
-
 public class MenuActivity extends AppyMeteoLoggedActivity {
-	private AppyMeteoNotLoggedActivity activity;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_menu);
 		super.onCreate(savedInstanceState);
-		
-		this.activity = this;
 		
 		Button btnBeginQuestions = (Button) findViewById(R.id.btnQuestionBegin);
 		btnBeginQuestions.setOnClickListener(new OnClickListener() {
@@ -27,17 +20,6 @@ public class MenuActivity extends AppyMeteoLoggedActivity {
 				Context context = view.getContext();
 				Intent intent = new Intent(context, QuestionActivity.class);
 				context.startActivity(intent);
-			}
-		});
-		
-		Button btnChallengeTry = (Button) findViewById(R.id.btnChallengeTry);
-		btnChallengeTry.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				ServerUtilities.requestChallenge(
-					activity,
-					User.getUser_id(view.getContext()),
-					User.getFacebook_id(view.getContext()),
-					GCMRegistrar.getRegistrationId(getApplicationContext()));
 			}
 		});
 		
@@ -73,16 +55,16 @@ public class MenuActivity extends AppyMeteoLoggedActivity {
 			}
 		});
 		
-		Button btnChallengeTry_turn2 = (Button) findViewById(R.id.btnChallengeTry_turn2);
-		btnChallengeTry_turn2.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				Bundle extras = new Bundle();
-				extras.putString("collapse_key", "do_not_collapse");
-				extras.putString("appy_key", "accepted_challenge_turn2");
-				extras.putString("score", "10");
-				GCMIntentService.generateNotification(view.getContext(), extras);
-			}
-		});
+//		Button btnChallengeTry_turn2 = (Button) findViewById(R.id.btnChallengeTry_turn2);
+//		btnChallengeTry_turn2.setOnClickListener(new OnClickListener() {
+//			public void onClick(View view) {
+//				Bundle extras = new Bundle();
+//				extras.putString("collapse_key", "do_not_collapse");
+//				extras.putString("appy_key", "accepted_challenge_turn2");
+//				extras.putString("score", "10");
+//				GCMIntentService.generateNotification(view.getContext(), extras);
+//			}
+//		});
 		
 		Button btnChallengeTry_turn3 = (Button) findViewById(R.id.btnChallengeTry_turn3);
 		btnChallengeTry_turn3.setOnClickListener(new OnClickListener() {

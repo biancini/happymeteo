@@ -22,8 +22,6 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.happymeteo.models.User;
@@ -31,6 +29,8 @@ import com.happymeteo.utils.Const;
 import com.happymeteo.utils.LocationManagerHelper;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.widget.AppyMeteoSeekBar;
+import com.happymeteo.widget.AppyMeteoSeekBar.OnAppyMeteoSeekBarChangeListener;
 
 public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 		onPostExecuteListener {
@@ -40,7 +40,6 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 	private LocationManagerHelper locationListener;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
-	private int windowWidth;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -147,20 +146,6 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 						linearLayout.addView(textView);
 
 						if (type == 1) {
-							final TextView tvText = new TextView(this);
-							tvText.setText("1°");
-							tvText.setBackgroundResource(R.drawable.baloon);
-							tvText.setGravity(Gravity.CENTER);
-							tvText.setTextColor(getResources().getColor(
-									R.color.white));
-							tvText.setTextSize(15.0f);
-							LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
-									LayoutParams.WRAP_CONTENT,
-									LayoutParams.WRAP_CONTENT);
-							llpBaloon.leftMargin = (int) ((((float) 0 * windowWidth) / 90) - (0 * 0.5));
-							tvText.setLayoutParams(llpBaloon);
-							linearLayout.addView(tvText);
-
 							LinearLayout.LayoutParams llpImg = new LinearLayout.LayoutParams(
 									LinearLayout.LayoutParams.WRAP_CONTENT,
 									LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -181,23 +166,30 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 									LayoutParams.WRAP_CONTENT);
 							llp_seekBar.weight = 80;
 
-							SeekBar seekBar = new SeekBar(this);
-							seekBar.setMax(90);
-							seekBar.setProgress(0);
-							seekBar.setLayoutParams(llp_seekBar);
-							seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
+							final AppyMeteoSeekBar appyMeteoSeekBar = new AppyMeteoSeekBar(this);
+							appyMeteoSeekBar.setMax(90);
+							appyMeteoSeekBar.setProgress(0);
+							appyMeteoSeekBar.setLayoutParams(llp_seekBar);
+							
+							final TextView tvText = new TextView(this);
+							tvText.setText("1°");
+							tvText.setBackgroundResource(R.drawable.baloon);
+							tvText.setGravity(Gravity.CENTER);
+							tvText.setTextColor(getResources().getColor(
+									R.color.white));
+							tvText.setTextSize(15.0f);
+							LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
+									LayoutParams.WRAP_CONTENT,
+									LayoutParams.WRAP_CONTENT);
+							llpBaloon.leftMargin = appyMeteoSeekBar.getProgressPosX();
+							tvText.setLayoutParams(llpBaloon);
+							linearLayout.addView(tvText);
+							
+							appyMeteoSeekBar.setOnAppyMeteoSeekBarChangeListener(new OnAppyMeteoSeekBarChangeListener() {
+								
 								@Override
-								public void onStopTrackingTouch(SeekBar seekBar) {
-								}
-
-								@Override
-								public void onStartTrackingTouch(SeekBar seekBar) {
-								}
-
-								@Override
-								public void onProgressChanged(SeekBar seekBar,
-										int progress, boolean fromUser) {
+								public void onProgressPosXChanged(AppyMeteoSeekBar seekBar, int progress,
+										int progressPosX) {
 									String value = String
 											.valueOf((progress / 10) + 1);
 									try {
@@ -206,37 +198,18 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 										e.printStackTrace();
 									}
 									tvText.setText(value + "°");
-
-									/*
-									 * int measure = (int)((((float)progress *
-									 * seekBar.getWidth()) / 100) - (progress *
-									 * 0.5))
-									 */;
-
-									Log.i(Const.TAG, "seekBar.getWidth(): "
-											+ seekBar.getWidth());
-
-									int measure = (int) ((float) progress
-											/ seekBar.getMax() * seekBar
-											.getWidth());
-
-									LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+									
+									LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
 											LinearLayout.LayoutParams.WRAP_CONTENT,
 											LinearLayout.LayoutParams.WRAP_CONTENT);
 
-									if (windowWidth - measure < tvText
-											.getWidth()) {
-										params.leftMargin = windowWidth
-												- tvText.getWidth();
-									} else {
-										params.leftMargin = measure;
-									}
-
-									tvText.setLayoutParams(params);
+									llpBaloon.leftMargin = progressPosX;
+									
+									tvText.setLayoutParams(llpBaloon);
 								}
 							});
 
-							linearLayout1.addView(seekBar);
+							linearLayout1.addView(appyMeteoSeekBar);
 
 							ImageView imageView2 = new ImageView(this);
 							imageView2.setImageResource(R.drawable.felice);

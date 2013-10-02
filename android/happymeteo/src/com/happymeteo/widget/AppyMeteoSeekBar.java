@@ -1,63 +1,58 @@
 package com.happymeteo.widget;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.util.Log;
 import android.widget.SeekBar;
-import android.widget.TextView;
+
+import com.happymeteo.utils.Const;
 
 public class AppyMeteoSeekBar extends SeekBar {
-	private TextView labelBackground;
 	private int viewWidth;
-	private int barHeight;
+	private Rect barBounds;
+	private int progressPosX;
 	
-	public AppyMeteoSeekBar(Context context) {
-		super(context);
+	public interface OnAppyMeteoSeekBarChangeListener {
+		void onProgressPosXChanged(AppyMeteoSeekBar seekBar, int progress, int progressPosX);
 	}
+	
+	 private OnAppyMeteoSeekBarChangeListener mOnAppyMeteoSeekBarChangeListener;
+	
+	public AppyMeteoSeekBar(Context context/*, TextView labelBackground*/) {
+		super(context);
+		
+		barBounds = new Rect();
+	}
+	
+	public void setOnAppyMeteoSeekBarChangeListener(OnAppyMeteoSeekBarChangeListener l) {
+        mOnAppyMeteoSeekBarChangeListener = l;
+    }
 	
     @Override
     protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
      {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        if (labelBackground != null)
-        {
-        	viewWidth = getMeasuredWidth();
-            barHeight = getMeasuredHeight();// returns only the bar height (without the label);
-            setMeasuredDimension(viewWidth, barHeight + labelBackground.getHeight());
-        }
-
+        viewWidth = getMeasuredWidth();
     }
 
-    /*@Override
+    @Override
     protected synchronized void onDraw(Canvas canvas)
     {
-        if (labelBackground != null)
-        {
-            barBounds.left = getPaddingLeft();
-            barBounds.top = labelBackground.getHeight() + getPaddingTop();
-            barBounds.right = barBounds.left + viewWidth - getPaddingRight() - getPaddingLeft();
-            barBounds.bottom = barBounds.top + barHeight - getPaddingBottom() - getPaddingTop();
+        barBounds.left = getPaddingLeft();
+        barBounds.right = barBounds.left + viewWidth - getPaddingRight() - getPaddingLeft();
 
-            progressPosX = barBounds.left + ((float) this.getProgress() / (float) this.getMax()) * barBounds.width();
-
-            labelPos.x = (int) progressPosX - labelOffset;
-            labelPos.y = getPaddingTop();
-
-            progressDrawable = getProgressDrawable();
-            progressDrawable.setBounds(barBounds.left, barBounds.top, barBounds.right, barBounds.bottom);
-            progressDrawable.draw(canvas);
-
-            labelTextPaint.getTextBounds(labelText, 0, labelText.length(), labelTextRect);
-
-            canvas.drawBitmap(labelBackground, labelPos.x, labelPos.y, labelBackgroundPaint);
-            canvas.drawText(labelText, labelPos.x + labelBackground.getWidth() / 2 - labelTextRect.width() / 2, labelPos.y + labelBackground.getHeight() / 2 + labelTextRect.height() / 2, labelTextPaint);
-
-            thumbX = (int) progressPosX - getThumbOffset();
-            thumbDrawable.setBounds(thumbX, barBounds.top, thumbX + thumbDrawable.getIntrinsicWidth(), barBounds.top + thumbDrawable.getIntrinsicHeight());
-            thumbDrawable.draw(canvas);
-        } else
-        {
-            super.onDraw(canvas);
+        progressPosX = (int) (barBounds.left + ((float) this.getProgress() / (float) this.getMax()) * barBounds.width() + getThumbOffset()/2);
+        Log.i(Const.TAG, "progressPosX: "+progressPosX);
+        
+        if (mOnAppyMeteoSeekBarChangeListener != null) {
+        	mOnAppyMeteoSeekBarChangeListener.onProgressPosXChanged(this, getProgress(), progressPosX);
         }
-    }*/
-
+        
+        super.onDraw(canvas);
+    }
+    
+    public int getProgressPosX() {
+    	return progressPosX;
+    }
 }

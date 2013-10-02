@@ -17,13 +17,6 @@
 	        android:text="@string/begin_questions" />
 	    
 	    <Button
-	        android:id="@+id/btnChallengeTry"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_margin="10dp"
-	        android:text="@string/challenge_facebook" />
-	    
-	    <Button
 	        android:id="@+id/btnChallengeTry_request"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
@@ -44,12 +37,12 @@
 	        android:layout_margin="10dp"
 	        android:text="turn1_false" />
 	    
-	    <Button
+	    <!-- Button
 	        android:id="@+id/btnChallengeTry_turn2"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_margin="10dp"
-	        android:text="turn2" />
+	        android:text="turn2" /  -->
 	    
 	    <Button
 	        android:id="@+id/btnChallengeTry_turn3"
