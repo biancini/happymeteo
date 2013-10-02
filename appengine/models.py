@@ -18,9 +18,10 @@ class User(db.Model):
     confirmation_code = db.StringProperty()
     password = db.StringProperty()
     status = db.IntegerProperty()
-    contatore_impulsi = db.IntegerProperty(default=0)
-    contatore_sfidante = db.IntegerProperty(default=0) #contatore sfidante quando sfida è accettata
-    contatore_sfidato = db.IntegerProperty(default=0) #contatore sfidato quando sfida è accettata
+    contatore_impulsi = db.IntegerProperty()
+    contatore_sfidante = db.IntegerProperty() #contatore sfidante quando sfida viene accettata
+    contatore_sfidato = db.IntegerProperty() #contatore sfidato quando sfida viene accettata
+    contatore_amici_invitati = db.IntegerProperty()
 
     def toJson(self):
         return {

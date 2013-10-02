@@ -207,7 +207,11 @@ class CreateAccountHandler(BaseRequestHandler):
                     work=work,
                     cap=cap,
                     status=0,
-                    password=password)
+                    password=password,
+                    contatore_impulsi=0,
+                    contatore_sfidante=0,
+                    contatore_sfidato=0,
+                    contatore_amici_invitati=0)
         
                 if facebook_id and facebook_id != "0":
                   # already confirmed
@@ -465,7 +469,7 @@ class RequestChallengeHandler(BaseRequestHandler):
               challenge.created = datetime.now()
               challenge.put()
             else:
-              challenge = Challenge(user_id_a=userId, user_id_b='%s' % user.key().id(), registration_id_a=registrationId, registration_id_b=device.registration_id, accepted=False)
+              challenge = Challenge(user_id_a='%s'%userId, user_id_b='%s'%user.key().id(), registration_id_a=registrationId, registration_id_b=device.registration_id, accepted=False)
               challenge.put()
             
             # Send message to the device
@@ -499,17 +503,17 @@ class AcceptChallengeHandler(BaseRequestHandler):
     challenge = Challenge.get_by_id(int(challengeId))
     
     if challenge:
-        sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge': challenge.toJson(), 'turn': '1'})
-        challenge.accepted = (accepted == "true")
-        challenge.put()
-        
-        user_a = User(int(challenge.user_id_a))
+        user_a = User.get_by_id(int(challenge.user_id_a))
         user_a.contatore_sfidante = user_a.contatore_sfidante + 1
         user_a.put()
         
-        user_b = User(int(challenge.user_id_b))
+        user_b = User.get_by_id(int(challenge.user_id_b))
         user_b.contatore_sfidato = user_b.contatore_sfidato + 1
         user_b.put()
+        
+        sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge': challenge.toJson(), 'turn': '1'})
+        challenge.accepted = (accepted == "true")
+        challenge.put()
         
         data = {
           'message': 'ok'

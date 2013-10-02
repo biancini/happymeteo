@@ -28,7 +28,7 @@ public class MenuActivity extends AppyMeteoLoggedActivity {
 			public void onClick(View view) {
 				Bundle extras = new Bundle();
 				extras.putString("collapse_key", "request_challenge");
-				extras.putString("challenge", "{'challenge_id': '1', 'user_id_a': '1', 'user_id_b': '2'}");
+				extras.putString("challenge", "{'challenge_id': '5383844584751104', 'user_id_a': '6221964502892544', 'user_id_b': '4827508880965632'}");
 				GCMIntentService.generateNotification(view.getContext(), extras);
 			}
 		});

@@ -12,11 +12,13 @@ import ua.org.zasadnyy.zvalidations.validations.NotEmpty;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -59,6 +61,11 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 
 		this.user_id = "";
 		this.facebook_id = "";
+		
+		String welcome = "<u><b>Registrati</b> su appymeteo!</u>";
+		
+		TextView create_account_welcome = (TextView) findViewById(R.id.create_account_welcome);
+		create_account_welcome.setText(Html.fromHtml(welcome));
 
 		create_account_fist_name = (EditText) findViewById(R.id.create_account_fist_name);
 		create_account_last_name = (EditText) findViewById(R.id.create_account_last_name);

@@ -8,5 +8,5 @@
     <color name="black">#000000</color>
     <color name="black_light">#333</color>
     <color name="grey_light">#A1A1A1</color>
-
+	<color name="yellow">#ffe400</color>
 </resources>

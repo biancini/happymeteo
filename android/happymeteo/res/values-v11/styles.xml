@@ -9,6 +9,11 @@
         <item name="android:actionButtonStyle">@style/AppyMeteoTheme.ActionButtonStyle</item>
         <item name="switchStyle">@style/AppyMeteoTheme.switchStyle</item>
         <item name="android:seekBarStyle">@style/AppyMeteoTheme.seekBarStyle</item>
+        <item name="android:editTextStyle">@style/AppyMeteoTheme.editTextStyle</item>
+        <item name="spinnerItemStyle">@style/AppyMeteoTheme.SpinnerItem</item>
+        <item name="android:spinnerItemStyle">@style/AppyMeteoTheme.SpinnerItem</item>
+        <item name="spinnerDropDownItemStyle">@style/AppyMeteoTheme.DropDownItem</item>
+        <item name="android:spinnerDropDownItemStyle">@style/AppyMeteoTheme.DropDownItem</item>
     </style>
 
     <style name="AppyMeteoTheme.ActionBarStyle" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
@@ -29,7 +34,7 @@
         <item name="switchMinWidth">40dip</item>
         <item name="switchPadding">0dip</item>
     </style>
-    
+
     <style name="AppyMeteoTheme.seekBarStyle" parent="android:Widget.SeekBar">
         <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
         <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
@@ -39,5 +44,25 @@
         <item name="android:thumbOffset">16dip</item>
         <item name="android:paddingLeft">16dip</item>
         <item name="android:paddingRight">16dip</item>
+    </style>
+
+    <style name="AppyMeteoTheme.editTextStyle" parent="android:Widget.EditText">
+        <item name="android:textColorHint">@color/yellow</item>
+    </style>
+
+    <style name="AppyMeteoTheme.SpinnerItem" parent="Widget.Sherlock.TextView.SpinnerItem">
+        <item name="android:textAppearance">@style/AppyMeteoTheme.TextAppearance.SpinnerItem</item>
+    </style>
+
+    <style name="AppyMeteoTheme.TextAppearance.SpinnerItem" parent="TextAppearance.Sherlock.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/yellow</item>
+    </style>
+    
+    <style name="AppyMeteoTheme.DropDownItem" parent="Widget.Sherlock.DropDownItem.Spinner">
+        <item name="android:textAppearance">@style/AppyMeteoTheme.TextAppearance.DropDownItem</item>
+    </style>
+    
+    <style name="AppyMeteoTheme.TextAppearance.DropDownItem" parent="TextAppearance.Sherlock.Widget.DropDownItem">
+        <item name="android:textColor">@color/yellow</item>
     </style>
 </resources>
