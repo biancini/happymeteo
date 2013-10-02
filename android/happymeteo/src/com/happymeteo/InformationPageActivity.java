@@ -24,7 +24,7 @@ public class InformationPageActivity extends AppyMeteoLoggedActivity {
 				"&#8226; Registrati / crea un account<br/>" +
 				"&#8226; Aspetta gli impulsi del tuo smartphone e rispondi alle domande che ti verranno poste<br/>" +
 				"&#8226; Ricevi di sera le previsioni meteo della tua felicità e divertiti a guardare cosa ti succede intorno<br/>" +
-				"&#8226; Vuoi vedere quanto sono felici i tuoi amici di Facebook? Invitali nella sezione 'Game'<br/>" +
+				"&#8226; Vuoi vedere quanto sono felici i tuoi amici di Facebook? Invitali nella sezione appygame<br/>" +
 				"<br/>" +
 				"Perchè mai dovrei fare questa scocciatura?<br/><br/>" +
 				"&#8226; Innanzitutto, perché è divertente<br/>" +

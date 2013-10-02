@@ -287,13 +287,14 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 			try {
 				JSONObject jsonObject = new JSONObject(result);
 				Bundle extras = new Bundle();
+				extras.putBoolean("ChallengeScoreActivity", true);
 				extras.putString("ioChallenge", jsonObject.getString("score"));
 				
 				if(enemyScore != null) {
 					extras.putString("tuChallenge", enemyScore);
 				}
 				
-				invokeActivity(ChallengeScoreActivity.class, extras);
+				invokeActivity(HappyMeteoActivity.class, extras);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

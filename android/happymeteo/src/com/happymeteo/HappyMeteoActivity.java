@@ -1,6 +1,7 @@
 package com.happymeteo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -193,6 +194,21 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 				return false;
 			}
 		});
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		
+		Log.i(Const.TAG, "intent.getExtras(): "+intent.getExtras());
+		Log.i(Const.TAG, "getIntent().getExtras(): "+getIntent().getExtras());
+		
+		if(intent.getExtras() != null) {
+			boolean challengeScoreActivity = intent.getExtras().getBoolean("ChallengeScoreActivity", false);
+			
+			if(challengeScoreActivity)
+				invokeActivity(ChallengeScoreActivity.class, intent.getExtras());
+		}
 	}
 
 	@Override
