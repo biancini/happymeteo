@@ -82,17 +82,17 @@ def happymeteo(user_id):
     tomorrow = today + timedelta(1)
     yesterday = today - timedelta(1)
     beforeyesterday = yesterday - timedelta(1)
-    query_today = db.GqlQuery('SELECT * FROM Answer WHERE date >= DATE(\'%s\') AND date < DATE(\'%s\') AND question_id = \'6434359225614336\' AND user_id = \'%s\'' % (today, tomorrow, user_id))
-    query_yesterday = db.GqlQuery('SELECT * FROM Answer WHERE date >= DATE(\'%s\') AND date < DATE(\'%s\') AND question_id = \'6434359225614336\' AND user_id = \'%s\'' % (yesterday, today, user_id))
     query_beforeyesterday = db.GqlQuery('SELECT * FROM Answer WHERE date >= DATE(\'%s\') AND date < DATE(\'%s\') AND question_id = \'6434359225614336\' AND user_id = \'%s\'' % (beforeyesterday, yesterday, user_id))
+    query_yesterday = db.GqlQuery('SELECT * FROM Answer WHERE date >= DATE(\'%s\') AND date < DATE(\'%s\') AND question_id = \'6434359225614336\' AND user_id = \'%s\'' % (yesterday, today, user_id))
+    query_today = db.GqlQuery('SELECT * FROM Answer WHERE date >= DATE(\'%s\') AND date < DATE(\'%s\') AND question_id = \'6434359225614336\' AND user_id = \'%s\'' % (today, tomorrow, user_id))
     
-    today_value = 1.0
-    today_sum = 0.0
-    if query_today.count() > 0:
-        for answer in query_today:
-            today_sum = today_sum + int(answer.value)
+    beforeyesterday_value = 1.0
+    beforeyesterday_sum = 0.0
+    if query_beforeyesterday.count() > 0:
+        for answer in query_beforeyesterday:
+            beforeyesterday_sum = beforeyesterday_sum + int(answer.value)
         
-        today_value = today_sum / query_today.count()
+        beforeyesterday_value = beforeyesterday_sum / query_beforeyesterday.count()
         
     yesterday_value = 1.0
     yesterday_sum = 0.0
@@ -101,14 +101,26 @@ def happymeteo(user_id):
             yesterday_sum = yesterday_sum + int(answer.value)
         
         yesterday_value = yesterday_sum / query_yesterday.count()
+    
+    today_value = 1.0
+    today_sum = 0.0
+    if query_today.count() > 0:
+        for answer in query_today:
+            today_sum = today_sum + int(answer.value)
         
-    beforeyesterday_value = 1.0
-    beforeyesterday_sum = 0.0
-    if query_beforeyesterday.count() > 0:
-        for answer in query_beforeyesterday:
-            beforeyesterday_sum = beforeyesterday_sum + int(answer.value)
+        today_value = today_sum / query_today.count()
+    else:
+        beforebeforeyesterday = beforeyesterday - timedelta(1)
+        query_beforebeforeyesterday = db.GqlQuery('SELECT * FROM Answer WHERE date >= DATE(\'%s\') AND date < DATE(\'%s\') AND question_id = \'6434359225614336\' AND user_id = \'%s\'' % (beforebeforeyesterday, beforeyesterday, user_id))
+        beforebeforeyesterday_value = 1.0
+        beforebeforeyesterday_sum = 0.0
+        if query_beforebeforeyesterday.count() > 0:
+            for answer in query_today:
+                beforebeforeyesterday_sum = beforebeforeyesterday_sum + int(answer.value)
         
-        beforeyesterday_value = beforeyesterday_sum / query_beforeyesterday.count()
+            beforebeforeyesterday_value = beforebeforeyesterday_sum / query_beforebeforeyesterday.count()
+        
+        today_value = int((beforebeforeyesterday_value + yesterday_value + beforeyesterday_value) / 3)
         
     tomorrow_value = int((today_value + yesterday_value + beforeyesterday_value) / 3)
     
