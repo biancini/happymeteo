@@ -10,3 +10,8 @@ indexes:
   - name: question_id
   - name: user_id
   - name: date
+  
+- kind: ChallengeAnswer
+  properties:
+  - name: challenge_id
+  - name: order

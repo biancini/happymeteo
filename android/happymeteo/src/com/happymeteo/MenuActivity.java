@@ -55,16 +55,18 @@ public class MenuActivity extends AppyMeteoLoggedActivity {
 			}
 		});
 		
-//		Button btnChallengeTry_turn2 = (Button) findViewById(R.id.btnChallengeTry_turn2);
-//		btnChallengeTry_turn2.setOnClickListener(new OnClickListener() {
-//			public void onClick(View view) {
-//				Bundle extras = new Bundle();
-//				extras.putString("collapse_key", "do_not_collapse");
-//				extras.putString("appy_key", "accepted_challenge_turn2");
-//				extras.putString("score", "10");
-//				GCMIntentService.generateNotification(view.getContext(), extras);
-//			}
-//		});
+		Button btnChallengeTry_turn2 = (Button) findViewById(R.id.btnChallengeTry_turn2);
+		btnChallengeTry_turn2.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				Bundle extras = new Bundle();
+				extras.putString("challenge", "{'challenge_id': '6361714148769792', 'user_id_a': '5288891447771136', 'user_id_b': '5904755398279168'}");
+				extras.putString("collapse_key", "do_not_collapse");
+				extras.putString("appy_key", "accepted_challenge_turn2");
+				extras.putString("score", "10");
+				extras.putString("turn", "2");
+				GCMIntentService.generateNotification(view.getContext(), extras);
+			}
+		});
 		
 		Button btnChallengeTry_turn3 = (Button) findViewById(R.id.btnChallengeTry_turn3);
 		btnChallengeTry_turn3.setOnClickListener(new OnClickListener() {

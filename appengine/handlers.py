@@ -462,13 +462,21 @@ class RequestChallengeHandler(BaseRequestHandler):
             
             # Save challenge
             query = Challenge.gql("WHERE user_id_a = :1 and user_id_b = :2 and accepted = false", userId, '%s' % user.key().id())
+            add = False
             if query.count() > 0:
               challenge = query.get()
-              challenge.registration_id_a = registrationId
-              challenge.registration_id_b = device.registration_id
-              challenge.created = datetime.now()
-              challenge.put()
+              
+              if challenge:
+                  challenge.registration_id_a = registrationId
+                  challenge.registration_id_b = device.registration_id
+                  challenge.created = datetime.now()
+                  challenge.put()
+              else:
+                  add = True
             else:
+              add = True
+              
+            if add:
               challenge = Challenge(user_id_a='%s' % userId, user_id_b='%s' % user.key().id(), registration_id_a=registrationId, registration_id_b=device.registration_id, accepted=False)
               challenge.put()
             
@@ -552,8 +560,9 @@ class QuestionsChallengeHandler(BaseRequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps(questions_json))
     else:
-        answers = ChallengeAnswer.gql("WHERE challenge_id = :1 ORDER BY order", challengeId)
+        answers = ChallengeAnswer.gql("WHERE challenge_id = :1", challengeId)
         questions = [ChallengeQuestion.get_by_id(int(answer.question_id)) for answer in answers]
+        questions.sort(key=lambda x: x.order, reverse=False)
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps([q.toJson() for q in questions]))
         
@@ -660,7 +669,7 @@ class SubmitChallengeHandler(BaseRequestHandler):
             data = {'score': score}
             
             # aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
-            if(turn == "1"):
+            if turn == "1":
                 challenge.score_a = float(score)
                 sendMessage(challenge.registration_id_b, {'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge': challenge.toJson(), 'turn': '2'})
             else:
