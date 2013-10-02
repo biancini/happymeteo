@@ -59,22 +59,38 @@ class Question(db.Model):
     question = db.StringProperty()
     type = db.IntegerProperty()
     order = db.IntegerProperty()
+    textYes = db.StringProperty()
+    textNo = db.StringProperty()
     
     def toJson(self):
         return {
             'id': self.key().id(),
             'question': self.question,
-            'type': self.type
+            'type': self.type,
+            'textYes': self.textYes,
+            'textNo': self.textNo
         }
         
 class ChallengeQuestion(db.Model):
     question = db.StringProperty()
+    type = db.IntegerProperty()
+    weight = db.FloatProperty()
+    category_id = db.IntegerProperty()
+    textYes = db.StringProperty()
+    textNo = db.StringProperty()
+    order = db.IntegerProperty()
     
     def toJson(self):
         return {
             'id': self.key().id(),
-            'question': self.question
+            'question': self.question,
+            'type': self.type,
+            'textYes': self.textYes,
+            'textNo': self.textNo
         }
+
+class ChallengeQuestionCategory(db.Model):
+    name = db.StringProperty()
         
 class Answer(db.Model):
     user_id = db.StringProperty()

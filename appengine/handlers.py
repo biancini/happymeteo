@@ -10,7 +10,7 @@ from jinja2.runtime import TemplateNotFound
 from google.appengine.ext import db
 
 from models import User, Device, Challenge, Question, ChallengeQuestion, Answer, \
-    ChallengeAnswer
+    ChallengeAnswer, ChallengeQuestionCategory
 
 from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA, CREATE_ACCOUNT_EMAIL
 
@@ -469,7 +469,7 @@ class RequestChallengeHandler(BaseRequestHandler):
               challenge.created = datetime.now()
               challenge.put()
             else:
-              challenge = Challenge(user_id_a='%s'%userId, user_id_b='%s'%user.key().id(), registration_id_a=registrationId, registration_id_b=device.registration_id, accepted=False)
+              challenge = Challenge(user_id_a='%s' % userId, user_id_b='%s' % user.key().id(), registration_id_a=registrationId, registration_id_b=device.registration_id, accepted=False)
               challenge.put()
             
             # Send message to the device
@@ -550,6 +550,66 @@ class QuestionsChallengeHandler(BaseRequestHandler):
         questions = [ChallengeQuestion.get_by_id(int(answer.question_id)) for answer in answers]
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps([q.toJson() for q in questions]))
+        
+"""        
+  def get(self):
+      questions = ChallengeQuestion.all()
+      
+      for q in questions:
+          q.delete()
+          
+      questions = ChallengeQuestionCategory.all()
+      
+      for q in questions:
+          q.delete()
+          
+      q1 = ChallengeQuestion(question="In termini generali quanto ti senti felice?", type=1, weight=1.0, textYes="Si", textNo="No", category_id=0, order=0)
+      q1.put()
+      
+      c1 = ChallengeQuestionCategory(name="Stili di vita")
+      c1.put()
+      
+      questions = ["Come hai mangiato oggi?", "Ti senti in forma?", "Sei soddisfatto/a di come ti muovi per la citt&agrave;?", "Ti piace come sei vestita/o?",
+                   "Sei contento/a per un acquisto fatto?", "Sei contento/a di quel che bevi?", "Sei contento/a di come usi Internet?", "Sei contento/a del tuo lavoro?",
+                   "Sei contento/a della tua vita sessuale?", "Sei contento/a della tua attivit&agrave; sportiva?", "Ti trovi bene con gli altri?"]
+      
+      for q in questions:
+          print q
+          q1 = ChallengeQuestion(question=q, type=2, weight=1.0, textYes="Si", textNo="No", category_id=c1.key().id(), order=1)
+          q1.put()
+      
+      c2 = ChallengeQuestionCategory(name="Episodi quotidiani")
+      c2.put()
+      
+      questions = ["Sei contento/a delle notizie di oggi?", "Sei contento/a del tempo che fa?", "Sei contento/a degli incontri fatti oggi?",
+                   "Sei contento/a della musica ascoltata oggi?", "Sei contento/a delle idee avute oggi?", "Sei contento/a di come &egrave; andata al lavoro oggi?"]
+      
+      for q in questions:
+          print q
+          q1 = ChallengeQuestion(question=q, type=2, weight=1.0, textYes="Si", textNo="No", category_id=c2.key().id(), order=1)
+          q1.put()
+      
+      c3 = ChallengeQuestionCategory(name="Stati emotivi e psico-fisici")
+      c3.put()
+      
+      questions = ["Sei arrabbiata/o?", "Sei confuso/a?", "Sei stressato/a?", "Sei teso/a?", "Sei nervoso/a?", "Sei malinconico/a?", "Sei stanco/a?",
+                   "Sei depresso/a?", "Sei allegro/a?", "Sei spaventato/a?", "Sei curioso/a?", "Sei ottimista?", "Sei pessimista?", "Sei fiducioso/a?"]
+      
+      for q in questions:
+          print q
+          q1 = ChallengeQuestion(question=q, type=2, weight=1.0, textYes="Si", textNo="No", category_id=c3.key().id(), order=1)
+          q1.put()
+      
+      c4 = ChallengeQuestionCategory(name="Analisi retrospettiva")
+      c4.put()
+      
+      questions = ["Eri contento/a ieri?", "Ti sentivi bene la settimana scorsa?", "Sei contento/a dell'anno passato?"]
+      
+      for q in questions:
+          print q
+          q1 = ChallengeQuestion(question=q, type=2, weight=1.0, textYes="Si", textNo="No", category_id=c4.key().id(), order=1)
+          q1.put()
+"""
 
 class SubmitChallengeHandler(BaseRequestHandler):
 
