@@ -185,6 +185,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 									LayoutParams.WRAP_CONTENT);
 							llpBaloon.leftMargin = appyMeteoSeekBar.getProgressPosX();
 							tvText.setLayoutParams(llpBaloon);
+							tvText.setPadding(0, 0, 0, 10);
 							linearLayout.addView(tvText);
 							
 							appyMeteoSeekBar.setOnAppyMeteoSeekBarChangeListener(new OnAppyMeteoSeekBarChangeListener() {
@@ -206,7 +207,6 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 											LinearLayout.LayoutParams.WRAP_CONTENT);
 
 									llpBaloon.leftMargin = progressPosX;
-									
 									tvText.setLayoutParams(llpBaloon);
 								}
 							});

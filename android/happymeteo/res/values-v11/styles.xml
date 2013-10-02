@@ -38,8 +38,8 @@
     <style name="AppyMeteoTheme.seekBarStyle" parent="android:Widget.SeekBar">
         <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
         <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
-        <item name="android:minHeight">1dip</item>
-        <item name="android:maxHeight">1dip</item>
+        <item name="android:minHeight">5dip</item>
+        <item name="android:maxHeight">5dip</item>
         <item name="android:thumb">@drawable/scrubber_control_selector_holo_light</item>
         <item name="android:thumbOffset">16dip</item>
         <item name="android:paddingLeft">16dip</item>
