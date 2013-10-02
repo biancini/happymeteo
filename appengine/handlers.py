@@ -538,15 +538,21 @@ class QuestionsChallengeHandler(BaseRequestHandler):
     print "turn: %s" % turn
     
     if turn == "1":
-        questions = ChallengeQuestion.all()
-       
-        if questions.count() > 0:
-           import random
-           questions = sample(random.random, questions, 5)
-           self.response.headers['Content-Type'] = 'application/json'
-           self.response.out.write(json.dumps([q.toJson() for q in questions]))
+        import random
+        
+        questions = ChallengeQuestion.gql("WHERE category_id = 0")
+        questions_json = [questions.get().toJson()]
+        
+        categories = ChallengeQuestionCategory.all()
+        for c in categories:
+            questions = ChallengeQuestion.gql("WHERE category_id = :1", c.key().id())
+            question = sample(random.random, questions, 1)
+            questions_json.append(question[0].toJson())
+        
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(json.dumps(questions_json))
     else:
-        answers = ChallengeAnswer.gql("WHERE challenge_id = :1", challengeId)
+        answers = ChallengeAnswer.gql("WHERE challenge_id = :1 ORDER BY order", challengeId)
         questions = [ChallengeQuestion.get_by_id(int(answer.question_id)) for answer in answers]
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(json.dumps([q.toJson() for q in questions]))

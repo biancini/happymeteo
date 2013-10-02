@@ -131,7 +131,9 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 						final String id_question = jsonObject.getString("id");
 						final String question = jsonObject
 								.getString("question");
-						final int type = 2; //jsonObject.getInt("type");
+						final int type = jsonObject.getInt("type");
+						final String textYes = jsonObject.getString("textYes");
+						final String textNo = jsonObject.getString("textNo");
 						Log.i(Const.TAG, jsonObject.toString());
 
 						LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
@@ -238,10 +240,10 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 									.setOrientation(LinearLayout.HORIZONTAL);
 							linearLayout1.setGravity(Gravity.CENTER);
 
-							TextView textSi = new TextView(this);
-							textSi.setText(R.string.on);
-							textSi.setLayoutParams(llp);
-							linearLayout1.addView(textSi);
+							TextView textYesView = new TextView(this);
+							textYesView.setText(textYes);
+							textYesView.setLayoutParams(llp);
+							linearLayout1.addView(textYesView);
 
 							final Switch switchButton = new Switch(this);
 							switchButton.setLayoutParams(llp);
@@ -264,10 +266,10 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 
 							linearLayout1.addView(switchButton);
 
-							TextView textNo = new TextView(this);
-							textNo.setText(R.string.off);
-							textNo.setLayoutParams(llp);
-							linearLayout1.addView(textNo);
+							TextView textNoView = new TextView(this);
+							textNoView.setText(textNo);
+							textNoView.setLayoutParams(llp);
+							linearLayout1.addView(textNoView);
 
 							linearLayout.addView(linearLayout1);
 							questions.put(id_question, "0");
