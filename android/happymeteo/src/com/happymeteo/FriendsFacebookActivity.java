@@ -9,39 +9,94 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ListView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.facebook.Session;
-import com.happymeteo.facebook.FriendsAdapter;
+import com.facebook.widget.ProfilePictureView;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.FeedDialogBuilder;
+import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.models.Friend;
+import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.GetRequest;
+import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onGetExecuteListener;
 
-public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements onGetExecuteListener {
-	
-	public class MyFriendComparable implements Comparator<Friend>{
-	 
-	    @Override
-	    public int compare(Friend o1, Friend o2) {
-	        return o1.getName().compareTo(o2.getName());
-	    }
-	} 
+public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
+		onGetExecuteListener {
+
+	public class MyFriendComparable implements Comparator<Friend> {
+
+		@Override
+		public int compare(Friend o1, Friend o2) {
+			return o1.getName().compareTo(o2.getName());
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_friends_facebook);
 		super.onCreate(savedInstanceState);
-		
-		if(Session.getActiveSession() == null)
+
+		if (Session.getActiveSession() == null)
 			invokeActivity(IndexActivity.class, null);
 		else {
 			String accessToken = Session.getActiveSession().getAccessToken();
-			String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token="+accessToken;
-			Log.i(Const.TAG, "serverUrl: "+serverUrl);
+			String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token="
+					+ accessToken;
+			Log.i(Const.TAG, "serverUrl: " + serverUrl);
 			new GetRequest(this, this).execute(serverUrl);
+		}
+	}
+	
+	private void attachFriendToView(View rowView, final Friend friend) {
+		ProfilePictureView profilePictureView = (ProfilePictureView) rowView
+				.findViewById(R.id.picker_profile_pic_stub);
+		profilePictureView.setProfileId(friend.getId());
+
+		/* Set Profile name */
+		TextView picker_title = (TextView) rowView.findViewById(R.id.picker_title);
+		picker_title.setText(friend.getName());
+
+		/* Set Button text */
+		Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
+		
+		final Activity activity = this;
+
+		if (friend.isInstalled()) {
+			picker_title.setBackgroundColor(getResources().getColor(R.color.black));
+			picker_title.setTextColor(getResources().getColor(R.color.white));
+			picker_button.setBackgroundResource(R.drawable.pulsante_sfida);
+			picker_button.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View view) {
+					ServerUtilities.requestChallenge(
+						activity, 
+						User.getUser_id(view.getContext()),
+						friend.getId(),
+						GCMRegistrar.getRegistrationId(view.getContext()));
+				}
+			});
+		} else {
+			/* Feed Dialog: https://developers.facebook.com/docs/reference/dialogs/feed/ */
+			picker_button.setBackgroundResource(R.drawable.pulsante_invita);
+			picker_button.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View view) {
+					FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(activity, Session.getActiveSession());
+					feedDialogBuilder.setTo(friend.getId());
+					WebDialog webDialog = feedDialogBuilder.build();
+					webDialog.show();
+				}
+			});
 		}
 	}
 
@@ -59,27 +114,46 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 					friend.setId(profile.getString("id"));
 					friend.setName(profile.getString("name"));
 					try {
-						friend.setInstalled(profile.getString("installed") != null && profile.getBoolean("installed"));
-					} catch(JSONException e) {
+						friend.setInstalled(profile.getString("installed") != null
+								&& profile.getBoolean("installed"));
+					} catch (JSONException e) {
 						friend.setInstalled(false);
 					}
-					if(friend.isInstalled()) {
+					if (friend.isInstalled()) {
 						friendsWithApp.add(friend);
 					} else {
 						friendsNoApp.add(friend);
 					}
 				}
 			}
-			
+
 			Collections.sort(friendsWithApp, new MyFriendComparable());
 			Collections.sort(friendsNoApp, new MyFriendComparable());
 			
-			FriendsAdapter withApp = new FriendsAdapter(this, friendsWithApp);
-			FriendsAdapter noApp = new FriendsAdapter(this, friendsNoApp);
-			ListView facebookPickerListViewWithApp = (ListView) findViewById(R.id.facebookPickerListViewWithApp);
-			facebookPickerListViewWithApp.setAdapter(withApp);
-			ListView facebookPickerListViewNoApp = (ListView) findViewById(R.id.facebookPickerListViewNoApp);
-			facebookPickerListViewNoApp.setAdapter(noApp);
+			// FriendsAdapter withApp = new FriendsAdapter(this,
+			// friendsWithApp);
+			// FriendsAdapter noApp = new FriendsAdapter(this, friendsNoApp);
+			LinearLayout facebookPickerListViewWithApp = (LinearLayout) findViewById(R.id.facebookPickerListViewWithApp);
+
+			for (int i = 0; i < friendsWithApp.size(); i++) {
+				Friend friend = friendsWithApp.get(i);
+				View vi = getLayoutInflater().inflate(
+						R.layout.activity_friends_facebook_list_row, null);
+				attachFriendToView(vi, friend);
+				facebookPickerListViewWithApp.addView(vi);
+			}
+
+			// facebookPickerListViewWithApp.setAdapter(withApp);
+			LinearLayout facebookPickerListViewNoApp = (LinearLayout) findViewById(R.id.facebookPickerListViewNoApp);
+			// facebookPickerListViewNoApp.setAdapter(noApp);
+			
+			for (int i = 0; i < friendsNoApp.size(); i++) {
+				Friend friend = friendsNoApp.get(i);
+				View vi = getLayoutInflater().inflate(
+						R.layout.activity_friends_facebook_list_row, null);
+				attachFriendToView(vi, friend);
+				facebookPickerListViewNoApp.addView(vi);
+			}
 		} catch (Exception e) {
 			Log.e(Const.TAG, e.getMessage(), e);
 		}

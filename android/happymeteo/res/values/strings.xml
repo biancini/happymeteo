@@ -34,8 +34,8 @@
 	<string name="loading">Caricamento..</string>
 	<string name="challenge">appygame</string>
 	<string name="challenge_done">Partite fatte</string>
-	<string name="titleWithApp">Amici che hanno Happy Meteo</string>
-	<string name="titleNoApp">Amici che non hanno Happy Meteo</string>
+	<string name="titleWithApp">AMICI CHE HANNO APPYMETEO</string>
+	<string name="titleNoApp">AMICI CHE NON HANNO APPYMETEO</string>
 	<string name="challenge_friend_with_app">Sfida!</string>
 	<string name="challenge_friend_no_app">Invita!</string>
 	<string name="accept_challenge">Accetta</string>

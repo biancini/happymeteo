@@ -1,62 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/background_gradient"
-    android:orientation="vertical"
-    android:paddingBottom="5dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp" >
-
-    <ImageView
-        android:layout_width="200dip"
-        android:layout_height="206dip"
-        android:adjustViewBounds="true"
-        android:src="@drawable/logo_nuova_sfida" />
+    android:background="@drawable/background_gradient" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
 
-        <TextView
-            android:id="@+id/facebookPickerListTitleWithApp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
-            android:layout_marginTop="20dip"
-            android:text="@string/titleWithApp" />
+        <ImageView
+            android:layout_width="200dip"
+            android:layout_height="206dip"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
+            android:src="@drawable/logo_nuova_sfida" />
 
-        <ListView
-            android:id="@+id/facebookPickerListViewWithApp"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:cacheColorHint="#FFFFFF"
-            android:divider="@drawable/com_facebook_list_divider"
-            android:fastScrollEnabled="true"
-            android:listSelector="@drawable/com_facebook_picker_list_selector"
-            android:scrollbars="vertical" />
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" >
 
-        <TextView
-            android:id="@+id/facebookPickerListTitleNoApp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
-            android:layout_marginTop="20dip"
-            android:text="@string/titleNoApp" />
+            <TextView
+                android:id="@+id/facebookPickerListTitleWithApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:text="@string/titleWithApp"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
-        <ListView
-            android:id="@+id/facebookPickerListViewNoApp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:cacheColorHint="#FFFFFF"
-            android:divider="@drawable/com_facebook_list_divider"
-            android:fastScrollEnabled="true"
-            android:listSelector="@drawable/com_facebook_picker_list_selector"
-            android:scrollbars="vertical" />
+            <LinearLayout
+                android:id="@+id/facebookPickerListViewWithApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+            <!-- android:divider="@drawable/com_facebook_list_divider" -->
+            <!-- android:listSelector="@drawable/com_facebook_picker_list_selector" -->
+
+            <TextView
+                android:id="@+id/facebookPickerListTitleNoApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:text="@string/titleNoApp"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/facebookPickerListViewNoApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
