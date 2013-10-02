@@ -11,7 +11,7 @@ public class InformationPageActivity extends AppyMeteoLoggedActivity {
 		setContentView(R.layout.activity_information_page);
 		super.onCreate(savedInstanceState);
 		
-		String help = "<html><body>Lo scopo di Happy Meteo è quello di raccogliere una mole di dati " +
+		String help = "<html><body>Lo scopo di appymeteo è quello di raccogliere una mole di dati " +
 				"che coprano l\'intero territorio italiano per produrre delle previsioni meteo di felicità su tutto " +
 				"il Paese. Le previsioni riguarderanno sia tu che leggi, sia l\'area geografica che ti sta intorno. " +
 				"Vuoi vedere quanto è felice il tuo quartiere? Vuoi vedere se c\'è una zona di bassa pressione della " +
@@ -29,7 +29,7 @@ public class InformationPageActivity extends AppyMeteoLoggedActivity {
 				"Perchè mai dovrei fare questa scocciatura?<br/><br/>" +
 				"&#8226; Innanzitutto, perché è divertente<br/>" +
 				"&#8226; E poi perché ogni risposta ti fa guadagnare punti, così come invitare i tuoi amici a scaricare l'app e giocare. E una classifica aggiornata ti dirà dove ti posizioni. <br/><br/>" +
-				"Buon divertimento! E appy meteo</body></html>!";
+				"Buon divertimento! E appymeteo! </body></html>";
 		
 		TextView information_page = (TextView) findViewById(R.id.information_page);
 		information_page.setText(Html.fromHtml(help));

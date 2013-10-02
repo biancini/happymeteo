@@ -82,6 +82,9 @@
 	        mapTypeControlOptions: {
       	            mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'custom_style']
                 },
+                panControl: false,
+                streetViewControl: false,
+		mapTypeControl: false,
 	        mapTypeId: 'custom_style'
 	    });
 
@@ -155,7 +158,7 @@
 
 	        google.maps.event.addListener(marker, 'click', function(event) {
 	            infoWindow.setPosition(coordinate);
-	            infoWindow.setContent("Area: " + territorio + '<br>Appyess: ' + appyness);
+	            infoWindow.setContent("Luogo: " + territorio + '<br>Appiness: ' + appyness);
 	            infoWindow.open(map);
 	        });
 

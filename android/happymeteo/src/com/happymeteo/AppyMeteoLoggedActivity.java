@@ -114,7 +114,7 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 	
 			case R.id.side_navigation_menu_item4:
 				if(User.isFacebookSession(this)) {
-					invokeActivity(FriendsFacebookActivity.class);
+					invokeActivity(ChallengeActivity.class);
 				}
 				break;
 	

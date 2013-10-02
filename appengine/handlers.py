@@ -634,7 +634,15 @@ class SubmitChallengeHandler(BaseRequestHandler):
     
         if challenge and challenge.accepted:
             questions = json.loads(questions)
+            score = 0
+            
             for q in questions:
+                print "id q: %s"%q
+                question = ChallengeQuestion.get_by_id(int(q))
+                print "question: %s"%question
+                
+                score = score + float(questions[q]) * question.weight
+                
                 challengeAnswer = ChallengeAnswer(
                     user_id=user_id,
                     question_id=q,
@@ -648,22 +656,21 @@ class SubmitChallengeHandler(BaseRequestHandler):
                 
                 challengeAnswer.put()
                 
-            # TODO Calcolare lo score
-            score = 10
+            # calcolare lo score
             data = {'score': score}
             
             # aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
             if(turn == "1"):
-                challenge.score_a = score
+                challenge.score_a = float(score)
                 sendMessage(challenge.registration_id_b, {'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge': challenge.toJson(), 'turn': '2'})
             else:
-                challenge.score_b = score
+                challenge.score_b = float(score)
                 sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn3', 'ioChallenge': challenge.score_a, 'tuChallenge': score, 'challenge': challenge.toJson(), 'turn': '2'})
                 
             challenge.put()
         else:
             data = {
-              'error': 'Accept Challenge error',
+              'error': 'Submit Challenge error',
               'message': 'No challenge found'
             }
     except Exception as e:

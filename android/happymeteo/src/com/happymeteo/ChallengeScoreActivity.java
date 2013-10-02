@@ -12,20 +12,20 @@ public class ChallengeScoreActivity extends AppyMeteoNotLoggedActivity {
 	private void setValues(Intent intent) {
 		Log.i(Const.TAG, "ChallengeScoreActivity.setValues extras: "+intent.getExtras());
 		
-		Integer ioScore = null;
-		Integer tuScore = null;
+		Float ioScore = null;
+		Float tuScore = null;
 
 		TextView ioChallengeTextView = (TextView) findViewById(R.id.ioChallenge);
 		String ioChallenge = intent.getExtras().getString("ioChallenge");
 		if(ioChallenge != null) {
-			ioScore = Integer.valueOf(ioChallenge);
+			ioScore = Float.valueOf(ioChallenge);
 			ioChallengeTextView.setText(ioChallenge);
 		}
 		
 		TextView tuChallengeTextView = (TextView) findViewById(R.id.tuChallenge);
 		String tuChallenge = intent.getExtras().getString("tuChallenge");
 		if(tuChallenge != null) {
-			tuScore = Integer.valueOf(ioChallenge);
+			tuScore = Float.valueOf(tuChallenge);
 			tuChallengeTextView.setText(tuChallenge);
 		}
 		

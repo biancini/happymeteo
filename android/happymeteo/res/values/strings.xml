@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Appy Meteo</string>
-	<string name="version">Versione 0.1.10</string>
+	<string name="app_name">appymeteo</string>
+	<string name="version">Versione 0.1.11b</string>
 	<string name="app_id">405414319576008</string>
     <string name="create_account">Crea Account</string>
     <string name="normal_login">Login tramite Happy Meteo</string>
@@ -41,10 +41,8 @@
 	<string name="insert_password">Inserisci la tua password</string>
 	<string name="insert_cap">Inserisci il tuo cap</string>
 	<string name="loading">Caricamento..</string>
-	<string name="challenge">Game</string>
-	<string name="challenge_happymeteo">Sfida un tuo amico di happymeteo</string>
-	<string name="challenge_facebook">Sfida un tuo amico di facebook</string>
-	<string name="challenge_random">Sfida una persona a caso</string>
+	<string name="challenge">appygame</string>
+	<string name="challenge_done">Partite fatte</string>
 	<string name="titleWithApp">Amici che hanno Happy Meteo</string>
 	<string name="titleNoApp">Amici che non hanno Happy Meteo</string>
 	<string name="challenge_friend_with_app">Sfida!</string>
@@ -56,8 +54,7 @@
 	<string name="unlink_user_to_facebook">Scollega Profilo a facebook</string>
 	<string name="yesterday">Ieri</string>
 	<string name="tomorrow">Domani</string>
-	<string name="off">No</string>
-	<string name="on">Si</string>
 	<string name="empty"></string>
 	<string name="welcome">Innanzitutto benvenuta/o!</string>
+	<string name="challenge_new">Nuova sfida</string>
 </resources>

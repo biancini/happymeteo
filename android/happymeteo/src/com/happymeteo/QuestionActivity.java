@@ -279,7 +279,6 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 				
 				User.setMeteo(this, today, yesterday, tomorrow);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

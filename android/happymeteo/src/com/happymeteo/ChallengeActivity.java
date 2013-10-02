@@ -16,24 +16,19 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 		setContentView(R.layout.activity_challenge);
 		super.onCreate(savedInstanceState);
 
-		Button btnChallengeFacebook = (Button) findViewById(R.id.btnChallengeFacebook);
-		Button btnChallengeRandom = (Button) findViewById(R.id.btnChallengeRandom);
+		Button btnChallengeNew = (Button) findViewById(R.id.btnChallengeNew);
+		Button btnChallengeDone = (Button) findViewById(R.id.btnChallengeDone);
 		
 		if(!User.isFacebookSession(this)) {
-			btnChallengeFacebook.setVisibility(View.GONE);
+			btnChallengeNew.setEnabled(false);
 		}
 
-		btnChallengeFacebook.setOnClickListener(new OnClickListener() {
+		btnChallengeNew.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
 				Intent intent = new Intent(context,
 						FriendsFacebookActivity.class);
 				context.startActivity(intent);
-			}
-		});
-		
-		btnChallengeRandom.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
 			}
 		});
 	}

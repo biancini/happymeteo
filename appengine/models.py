@@ -43,8 +43,8 @@ class Challenge(db.Model):
     user_id_b = db.StringProperty() # sfidato
     registration_id_a = db.StringProperty() # registration_id sfidante
     registration_id_b = db.StringProperty() # registration_id sfidato
-    score_a = db.IntegerProperty()
-    score_b = db.IntegerProperty()
+    score_a = db.FloatProperty()
+    score_b = db.FloatProperty()
     created = db.DateTimeProperty(auto_now_add=True)
     accepted = db.BooleanProperty(default=False)
     

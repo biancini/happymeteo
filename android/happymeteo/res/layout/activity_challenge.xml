@@ -6,17 +6,17 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/btnChallengeFacebook"
+        android:id="@+id/btnChallengeNew"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="@string/challenge_facebook" />
+        android:text="@string/challenge_new" />
     
     <Button
-        android:id="@+id/btnChallengeRandom"
+        android:id="@+id/btnChallengeDone"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="@string/challenge_random" />
+        android:text="@string/challenge_done" />
 
 </LinearLayout>
