@@ -3,13 +3,11 @@
 	<string name="app_name">appymeteo</string>
 	<string name="version">Versione 0.1.12</string>
 	<string name="app_id">405414319576008</string>
-    <string name="normal_login">Login tramite Happy Meteo</string>
     <string name="information_page">info</string>
     <string name="happy_meteo">my meteo</string>
     <string name="happy_map">mappa</string>
     <string name="logout">logout</string>
     <string name="begin_questions">Il momento delle domande!</string>
-    <string name="create_profile_user">Crea utente</string>
     <string name="select_gender">Seleziona il sesso</string>
     <string name="male">Maschio</string>
     <string name="female">Femmina</string>
