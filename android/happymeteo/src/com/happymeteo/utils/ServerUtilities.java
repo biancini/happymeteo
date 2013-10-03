@@ -93,12 +93,14 @@ public class ServerUtilities {
 	}
 
 	public static void acceptChallenge(onPostExecuteListener onPostExecuteListener, Activity activity, String challengeId,
-			Boolean accepted) {
+			Boolean accepted, String registrationId, String userId) {
 		Log.i(Const.TAG, "accept challenge (challengeId = " + challengeId
 				+ ", accepted = " + accepted.toString() + ")");
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("challengeId", challengeId));
 		nvps.add(new BasicNameValuePair("accepted", accepted.toString()));
+		nvps.add(new BasicNameValuePair("registrationId", registrationId));
+		nvps.add(new BasicNameValuePair("userId", userId));
 		new PostRequest(Const.ACCEPT_CHALLENGE_URL_ID, activity, nvps, onPostExecuteListener).execute(Const.ACCEPT_CHALLENGE_URL);
 	}
 

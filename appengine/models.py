@@ -47,6 +47,7 @@ class Challenge(db.Model):
     score_b = db.FloatProperty()
     created = db.DateTimeProperty(auto_now_add=True)
     accepted = db.BooleanProperty(default=False)
+    turn = db.IntegerProperty()
     
     def toJson(self):
         return {

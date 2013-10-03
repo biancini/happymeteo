@@ -9,41 +9,50 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.google.android.gcm.GCMRegistrar;
+import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 
-public class ChallengeRequestActivity extends AppyMeteoImpulseActivity implements onPostExecuteListener {
+public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
+		implements onPostExecuteListener {
 	private Activity activity;
 	private onPostExecuteListener onPostExecuteListener;
-	
+
 	private final String CHALLENGE_ID = "challenge_id";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_challenge_request);
 		super.onCreate(savedInstanceState);
-		
+
 		this.activity = this;
 		this.onPostExecuteListener = this;
-		
+
 		Button btnAcceptChallenge = (Button) findViewById(R.id.btnAcceptChallenge);
 		btnAcceptChallenge.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				ServerUtilities.acceptChallenge(onPostExecuteListener, activity, CHALLENGE_ID, true);
+				ServerUtilities.acceptChallenge(onPostExecuteListener,
+						activity, intentParameters.get(CHALLENGE_ID), true,
+						SessionCache.getUser_id(activity),
+						GCMRegistrar.getRegistrationId(activity));
 			}
 		});
-		
+
 		Button btnRefuseChallenge = (Button) findViewById(R.id.btnRefuseChallenge);
 		btnRefuseChallenge.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				ServerUtilities.acceptChallenge(onPostExecuteListener, activity, intentParameters.get(CHALLENGE_ID), false);
+				ServerUtilities.acceptChallenge(onPostExecuteListener,
+						activity, intentParameters.get(CHALLENGE_ID), false,
+						SessionCache.getUser_id(activity),
+						GCMRegistrar.getRegistrationId(activity));
 			}
 		});
 	}
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if(exception == null) {
+		if (exception == null) {
 			finish();
 		}
 	}

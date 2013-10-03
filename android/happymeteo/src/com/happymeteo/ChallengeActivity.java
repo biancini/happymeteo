@@ -17,7 +17,6 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 		super.onCreate(savedInstanceState);
 
 		Button btnChallengeNew = (Button) findViewById(R.id.btnChallengeNew);
-		Button btnChallengeDone = (Button) findViewById(R.id.btnChallengeDone);
 		
 		if(!SessionCache.isFacebookSession(this)) {
 			btnChallengeNew.setEnabled(false);

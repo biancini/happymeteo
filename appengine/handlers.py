@@ -349,17 +349,9 @@ class RegisterHandler(BaseRequestHandler):
     userId = self.request.get('userId')
     query = Device.gql("WHERE user_id = :1 AND registration_id = :2", userId, registrationId)
     
-    """
-       device = query.get()
-      if device.registration_id != registrationId:
-        device.registration_id = registrationId
-        device.put()
-    else:
-    """
-
     if query.count() == 0:
-      device = Device(registration_id=registrationId, user_id=userId)
-      device.put()
+       device = Device(registration_id=registrationId, user_id=userId)
+       device.put()
       
     data = { 'message': 'ok' }
     self.response.headers['Content-Type'] = 'application/json'
@@ -461,57 +453,64 @@ class RequestChallengeHandler(BaseRequestHandler):
     
   @check_hash
   def post(self):
-    userId = self.request.get('userId')
-    registrationId = self.request.get('registrationId')
-    facebookId = self.request.get('facebookId')
-    
-    query1 = db.GqlQuery("SELECT * FROM User WHERE facebook_id = :1", str(facebookId))
-    data = {}
-    
-    if query1.count() > 0:
-        user = query1.get()
-        query2 = db.GqlQuery("SELECT * FROM Device WHERE user_id = :1", str(user.key().id()))
+    try:
+        userId = self.request.get('userId')
+        registrationId = self.request.get('registrationId')
+        facebookId = self.request.get('facebookId')
         
-        if query2.count() > 0:
-            # Get the device
-            device = query2.get()
+        query1 = db.GqlQuery("SELECT * FROM User WHERE facebook_id = :1", str(facebookId))
+        data = {}
+        
+        if query1.count() == 0:
+            raise Exception('Nessun utente trovato')
+        
+        user = query1.get()
+        if userId == str(user.key().id()):
+            raise Exception('Non puoi sfidare te stesso')
+        
+        query2 = db.GqlQuery("SELECT * FROM Device WHERE user_id = :1", str(user.key().id()))
             
-            # Save challenge
-            query = Challenge.gql("WHERE user_id_a = :1 and user_id_b = :2 and accepted = false", userId, '%s' % user.key().id())
-            add = False
-            if query.count() > 0:
-              challenge = query.get()
-              
-              if challenge:
-                  challenge.registration_id_a = registrationId
-                  challenge.registration_id_b = device.registration_id
-                  challenge.created = datetime.now()
-                  challenge.put()
-              else:
-                  add = True
-            else:
-              add = True
-              
-            if add:
-              challenge = Challenge(user_id_a='%s' % userId, user_id_b='%s' % user.key().id(), registration_id_a=registrationId, registration_id_b=device.registration_id, accepted=False)
+        if query2.count() == 0:
+            raise Exception('Nessun device trovato')
+        
+        # Save challenge
+        query = Challenge.gql("WHERE user_id_a = :1 and user_id_b = :2 and accepted = false and turn = 0", userId, '%s' % user.key().id())
+        add = False
+        if query.count() > 0:
+          challenge = query.get()
+          
+          if challenge:
+              challenge.registration_id_a = registrationId
+              challenge.created = datetime.now()
+              challenge.turn = 0
               challenge.put()
-            
-            # Send message to the device
-            sendMessage(device.registration_id, user_id='%s' % user.key().id(), collapse_key='request_challenge', payload={'challenge_id': challenge.key().id()})
-            data = {
-              'message': 'ok'
-            }
+          else:
+              add = True
         else:
-            data = {
-              'error': 'Send Message error',
-              'message': 'No device found'
-            }
-    else:
+          add = True
+          
+        if add:
+          challenge = Challenge(user_id_a='%s' % userId, user_id_b='%s' % user.key().id(), registration_id_a=registrationId, accepted=False)
+          challenge.put()
+          
+          # Get the device
+        device = query2.get()
+        
+        if registrationId == device.registration_id:
+            raise Exception('Non puoi sfidare te stesso')
+        
+        # Send message to the device
+        sendMessage(device.registration_id, user_id='%s' % user.key().id(), collapse_key='request_challenge', payload={'challenge_id': challenge.key().id()})
         data = {
-          'error': 'Send Message error',
-          'message': 'No user found'
+          'message': 'ok'
         }
-    
+    except Exception as e:
+        logging.exception(e)
+        data = {
+          'error': 'Request Challenge error',
+          'message': '%s' % str(e)
+        }
+        
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))
     
@@ -519,13 +518,30 @@ class AcceptChallengeHandler(BaseRequestHandler):
     
   @check_hash
   def post(self):
-    challengeId = self.request.get('challengeId')
-    accepted = self.request.get('accepted')
+    try:
+        challengeId = self.request.get('challengeId')
+        accepted = self.request.get('accepted')
+        registrationId = self.request.get('registrationId')
+        userId = self.request.get('userId')
+        
+        data = {}
+        
+        challenge = Challenge.get_by_id(int(challengeId))
     
-    data = {}
-    challenge = Challenge.get_by_id(int(challengeId))
-    
-    if challenge:
+        if not challenge:
+            raise Exception('Nessuna sfida trovata')
+        
+        if challenge.user_id_b != userId:
+            raise Exception('C\'è stato un errore con la sfida')
+        
+        if challenge.turn > 0:
+            raise Exception('Sfida scaduta')
+        
+        query2 = db.GqlQuery("SELECT * FROM Device WHERE registration_id = :1 and user_id = :2", registrationId, userId)
+            
+        if query2.count() == 0:
+            raise Exception('Nessun device trovato')
+        
         user_a = User.get_by_id(int(challenge.user_id_a))
         user_a.contatore_sfidante = user_a.contatore_sfidante + 1
         user_a.put()
@@ -536,15 +552,18 @@ class AcceptChallengeHandler(BaseRequestHandler):
         
         sendMessage(challenge.registration_id_a, user_id=challenge.user_id_a, payload={'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge_id': challenge.key().id(), 'turn': '1'})
         challenge.accepted = (accepted == "true")
+        challenge.registration_id_b = registrationId,
+        challenge.turn = 1
         challenge.put()
         
         data = {
           'message': 'ok'
         }
-    else:
+    except Exception as e:
+        logging.exception(e)
         data = {
           'error': 'Accept Challenge error',
-          'message': 'No challenge found'
+          'message': '%s' % str(e)
         }
     
     self.response.headers['Content-Type'] = 'application/json'
@@ -556,9 +575,6 @@ class QuestionsChallengeHandler(BaseRequestHandler):
   def post(self):
     challengeId = self.request.get('challengeId')
     turn = self.request.get('turn')
-    
-    print "challengeId: %s" % challengeId
-    print "turn: %s" % turn
     
     if turn == "1":
         import random
@@ -656,47 +672,55 @@ class SubmitChallengeHandler(BaseRequestHandler):
         
         challenge = Challenge.get_by_id(int(challenge_id))
     
-        if challenge and challenge.accepted:
-            questions = json.loads(questions)
-            score = 0
+        if not challenge:
+            raise Exception('Sfida non trovata')
+        
+        if not challenge.accepted:
+            raise Exception('C\'è stato un errore con la sfida')
+        
+        if turn != "1" and challenge.turn == 1:
+            raise Exception('C\'è stato un errore con la sfida')
+        
+        if turn != "2" and challenge.turn == 2:
+            raise Exception('C\'è stato un errore con la sfida')
+        
+        questions = json.loads(questions)
+        score = 0
+        
+        for q in questions:
+            print "id q: %s"%q
+            question = ChallengeQuestion.get_by_id(int(q))
+            print "question: %s"%question
             
-            for q in questions:
-                print "id q: %s"%q
-                question = ChallengeQuestion.get_by_id(int(q))
-                print "question: %s"%question
-                
-                score = score + float(questions[q]) * question.weight
-                
-                challengeAnswer = ChallengeAnswer(
-                    user_id=user_id,
-                    question_id=q,
-                    date=datetime.now(),
-                    value=questions[q],
-                    challenge_id=challenge_id,
-                    turn=turn)
-                
-                if latitude and longitude:
-                   challengeAnswer.location = latitude + "," + longitude
-                
-                challengeAnswer.put()
-                
-            # calcolare lo score
-            data = {'score': score}
+            score = score + float(questions[q]) * question.weight
             
-            # aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
-            if turn == "1":
-                challenge.score_a = float(score)
-                sendMessage(challenge.registration_id_b, user_id=challenge.user_id_b, payload={'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge_id': challenge.key().id(), 'turn': '2'})
-            else:
-                challenge.score_b = float(score)
-                sendMessage(challenge.registration_id_a, user_id=challenge.user_id_a, payload={'appy_key': 'accepted_challenge_turn3', 'ioChallenge': challenge.score_a, 'tuChallenge': score, 'challenge_id': challenge.key().id(), 'turn': '3'})
-                
-            challenge.put()
+            challengeAnswer = ChallengeAnswer(
+                user_id=user_id,
+                question_id=q,
+                date=datetime.now(),
+                value=questions[q],
+                challenge_id=challenge_id,
+                turn=turn)
+            
+            if latitude and longitude:
+               challengeAnswer.location = latitude + "," + longitude
+            
+            challengeAnswer.put()
+            
+        # calcolare lo score
+        data = {'score': score}
+        
+        # aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
+        if turn == "1":
+            challenge.score_a = float(score)
+            challenge.turn = 2
+            sendMessage(challenge.registration_id_b, user_id=challenge.user_id_b, payload={'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge_id': challenge.key().id(), 'turn': '2'})
         else:
-            data = {
-              'error': 'Submit Challenge error',
-              'message': 'No challenge found'
-            }
+            challenge.score_b = float(score)
+            challenge.turn = 3
+            sendMessage(challenge.registration_id_a, user_id=challenge.user_id_a, payload={'appy_key': 'accepted_challenge_turn3', 'ioChallenge': challenge.score_a, 'tuChallenge': score, 'challenge_id': challenge.key().id(), 'turn': '3'})
+            
+        challenge.put()
     except Exception as e:
        logging.exception(e)
        data = {
