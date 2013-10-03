@@ -108,7 +108,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 			btnCreateUser.setText(R.string.modify_account);
 		}
 
-		if (!facebook_id.equals("")) {
+		if (facebook_id != null && !facebook_id.equals("")) {
 			btnCreateUserFacebook.setText(R.string.unlink_user_to_facebook);
 		} else {
 			btnCreateUserFacebook.setText(R.string.link_user_to_facebook);
