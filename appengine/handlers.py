@@ -490,7 +490,7 @@ class RequestChallengeHandler(BaseRequestHandler):
           add = True
           
         if add:
-          challenge = Challenge(user_id_a=userId, user_id_b='%s'%user.key().id(), registration_id_a=registrationId, accepted=False)
+          challenge = Challenge(user_id_a=userId, user_id_b='%s'%user.key().id(), registration_id_a=registrationId, accepted=False, turn=0)
           challenge.put()
           
         # Send request to all devices of user_b
@@ -546,11 +546,14 @@ class AcceptChallengeHandler(BaseRequestHandler):
         user_b.contatore_sfidato = user_b.contatore_sfidato + 1
         user_b.put()
         
-        sendMessage(challenge.registration_id_a, payload={'user_id': challenge.user_id_a, 'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge_id': challenge.key().id(), 'turn': '1'})
+        print "registrationId: %s"%registrationId
+        
         challenge.accepted = (accepted == "true")
-        challenge.registration_id_b = registrationId,
+        challenge.registration_id_b = registrationId
         challenge.turn = 1
         challenge.put()
+        
+        sendMessage(challenge.registration_id_a, payload={'user_id': challenge.user_id_a, 'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge_id': '%s'%challenge.key().id(), 'turn': '1'})
         
         data = {
           'message': 'ok'
@@ -680,14 +683,17 @@ class SubmitChallengeHandler(BaseRequestHandler):
         if turn != "2" and challenge.turn == 2:
             raise Exception('C\'è stato un errore con la sfida')
         
+        if turn == "1" and challenge.turn != 1:
+            raise Exception('C\'è stato un errore con la sfida')
+        
+        if turn == "2" and challenge.turn != 2:
+            raise Exception('C\'è stato un errore con la sfida')
+        
         questions = json.loads(questions)
         score = 0
         
         for q in questions:
-            print "id q: %s"%q
             question = ChallengeQuestion.get_by_id(int(q))
-            print "question: %s"%question
-            
             score = score + float(questions[q]) * question.weight
             
             challengeAnswer = ChallengeAnswer(

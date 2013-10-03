@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.happymeteo.utils.AlertDialogManager;
+import com.happymeteo.utils.Const;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 public abstract class AppyMeteoImpulseActivity extends
 		AppyMeteoNotLoggedActivity {
@@ -45,6 +47,7 @@ public abstract class AppyMeteoImpulseActivity extends
 		}
 		
 		for(String key : keyIntentParamteres) {
+			Log.i(Const.TAG, "initialize: "+key+" => "+intent.getExtras().getString(key));
 			intentParameters.put(key, intent.getExtras().getString(key));
 		}
 	}

@@ -34,8 +34,8 @@ public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
 			public void onClick(View view) {
 				ServerUtilities.acceptChallenge(onPostExecuteListener,
 						activity, intentParameters.get(CHALLENGE_ID), true,
-						SessionCache.getUser_id(activity),
-						GCMRegistrar.getRegistrationId(activity));
+						GCMRegistrar.getRegistrationId(activity),
+						SessionCache.getUser_id(activity));
 			}
 		});
 
@@ -44,8 +44,8 @@ public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
 			public void onClick(View view) {
 				ServerUtilities.acceptChallenge(onPostExecuteListener,
 						activity, intentParameters.get(CHALLENGE_ID), false,
-						SessionCache.getUser_id(activity),
-						GCMRegistrar.getRegistrationId(activity));
+						GCMRegistrar.getRegistrationId(activity),
+						SessionCache.getUser_id(activity));
 			}
 		});
 	}

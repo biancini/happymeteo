@@ -88,8 +88,6 @@ handlers:
   script: main.app
   secure: always
   
-
-
 # The skip_files element specifies which files in the application directory 
 # are not to be uploaded to App Engine. The value is either a regular 
 # expression, or a list of regular expressions. Any filename that matches 
