@@ -6,7 +6,7 @@ from secrets import GOOGLE_API_KEY, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN,\
     CALL_SECRET_KEY
 import hashlib
 
-def sendMessage(registrationId, user_id, collapse_key=None, payload=None):
+def sendMessage(registrationId, collapse_key=None, payload=None):
     print "send message to %s"%registrationId
     
     data = {
@@ -18,10 +18,6 @@ def sendMessage(registrationId, user_id, collapse_key=None, payload=None):
     
     if payload:
        data['data'] = payload
-    else:
-       data['data'] = {}
-       
-    data['data']['user_id'] = user_id
     
     req = urllib2.Request('https://android.googleapis.com/gcm/send')
     req.add_header('Content-Type', 'application/json')

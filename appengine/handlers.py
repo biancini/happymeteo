@@ -380,7 +380,7 @@ class SendMessageHandler(BaseRequestHandler):
     devices = Device.all()
     
     for d in devices:
-        sendMessage(d.registration_id, user_id=d.user_id, collapse_key='questions', payload={'timestamp': '%s'%ts})
+        sendMessage(d.registration_id, collapse_key='questions', payload={'user_id': d.user_id, 'timestamp': '%s'%ts})
         print '%s'%ts
 
 """ Questions Management """
@@ -490,17 +490,13 @@ class RequestChallengeHandler(BaseRequestHandler):
           add = True
           
         if add:
-          challenge = Challenge(user_id_a='%s' % userId, user_id_b='%s' % user.key().id(), registration_id_a=registrationId, accepted=False)
+          challenge = Challenge(user_id_a=userId, user_id_b='%s'%user.key().id(), registration_id_a=registrationId, accepted=False)
           challenge.put()
           
-          # Get the device
-        device = query2.get()
+        # Send request to all devices of user_b
+        for device in query2.run():
+            sendMessage(device.registration_id, collapse_key='request_challenge', payload={'user_id': challenge.user_id_b, 'challenge_id': '%s'%challenge.key().id()})
         
-        if registrationId == device.registration_id:
-            raise Exception('Non puoi sfidare te stesso')
-        
-        # Send message to the device
-        sendMessage(device.registration_id, user_id='%s' % user.key().id(), collapse_key='request_challenge', payload={'challenge_id': challenge.key().id()})
         data = {
           'message': 'ok'
         }
@@ -550,7 +546,7 @@ class AcceptChallengeHandler(BaseRequestHandler):
         user_b.contatore_sfidato = user_b.contatore_sfidato + 1
         user_b.put()
         
-        sendMessage(challenge.registration_id_a, user_id=challenge.user_id_a, payload={'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge_id': challenge.key().id(), 'turn': '1'})
+        sendMessage(challenge.registration_id_a, payload={'user_id': challenge.user_id_a, 'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge_id': challenge.key().id(), 'turn': '1'})
         challenge.accepted = (accepted == "true")
         challenge.registration_id_b = registrationId,
         challenge.turn = 1
@@ -714,11 +710,11 @@ class SubmitChallengeHandler(BaseRequestHandler):
         if turn == "1":
             challenge.score_a = float(score)
             challenge.turn = 2
-            sendMessage(challenge.registration_id_b, user_id=challenge.user_id_b, payload={'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge_id': challenge.key().id(), 'turn': '2'})
+            sendMessage(challenge.registration_id_b, payload={'user_id': challenge.user_id_b, 'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge_id': challenge.key().id(), 'turn': '2'})
         else:
             challenge.score_b = float(score)
             challenge.turn = 3
-            sendMessage(challenge.registration_id_a, user_id=challenge.user_id_a, payload={'appy_key': 'accepted_challenge_turn3', 'ioChallenge': challenge.score_a, 'tuChallenge': score, 'challenge_id': challenge.key().id(), 'turn': '3'})
+            sendMessage(challenge.registration_id_a, payload={'user_id': challenge.user_id_a, 'appy_key': 'accepted_challenge_turn3', 'ioChallenge': challenge.score_a, 'tuChallenge': score, 'challenge_id': challenge.key().id(), 'turn': '3'})
             
         challenge.put()
     except Exception as e:
