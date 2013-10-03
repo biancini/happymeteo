@@ -12,10 +12,9 @@ from google.appengine.ext import db
 from models import User, Device, Challenge, Question, ChallengeQuestion, Answer, \
     ChallengeAnswer, ChallengeQuestionCategory
 
-from secrets import EMAIL, DOMANDA, SFIDA, RISPOSTA, RISPOSTA_SFIDA, CREATE_ACCOUNT_EMAIL
+from secrets import EMAIL, CREATE_ACCOUNT_EMAIL
 
-from utils import sendMessage, sendSyncMessage, getGoogleAccessToken, sqlGetFusionTable, sqlPostFusionTable, \
-    happymeteo, sample, check_call
+from utils import sendMessage, happymeteo, sample, check_call
 
 import traceback
 import logging
@@ -348,14 +347,17 @@ class RegisterHandler(BaseRequestHandler):
   def post(self):
     registrationId = self.request.get('registrationId')
     userId = self.request.get('userId')
-    query = Device.gql("WHERE user_id = :1", userId)
-
-    if query.count() > 0:
-      device = query.get()
+    query = Device.gql("WHERE user_id = :1 AND registration_id = :2", userId, registrationId)
+    
+    """
+       device = query.get()
       if device.registration_id != registrationId:
         device.registration_id = registrationId
         device.put()
     else:
+    """
+
+    if query.count() == 0:
       device = Device(registration_id=registrationId, user_id=userId)
       device.put()
       
@@ -383,7 +385,7 @@ class SendMessageHandler(BaseRequestHandler):
     devices = Device.all()
     
     for d in devices:
-        sendSyncMessage(d.registration_id, 'questions')
+        sendMessage(d.registration_id, collapse_key='questions')
 
 """ Questions Management """
 class GetQuestionsHandler(BaseRequestHandler):
@@ -481,7 +483,7 @@ class RequestChallengeHandler(BaseRequestHandler):
               challenge.put()
             
             # Send message to the device
-            sendSyncMessage(device.registration_id, 'request_challenge', {'challenge': challenge.toJson()})
+            sendMessage(device.registration_id, collapse_key='request_challenge', payload={'challenge': challenge.toJson()})
             data = {
               'message': 'ok',
               'challenge': challenge.toJson()

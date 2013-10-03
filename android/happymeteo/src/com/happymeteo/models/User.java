@@ -53,7 +53,7 @@ public class User {
 		editor.putInt("today", today);
 		editor.putInt("yesterday", yesterday);
 		editor.putInt("tomorrow", tomorrow);
-		
+		editor.putBoolean("initialized", true);
 		editor.commit();
 	}
 	
@@ -74,6 +74,7 @@ public class User {
 		editor.putInt("today", today);
 		editor.putInt("yesterday", yesterday);
 		editor.putInt("tomorrow", tomorrow);
+		editor.putBoolean("initialized", true);
 		editor.commit();
 	}
 	
@@ -161,5 +162,10 @@ public class User {
 		editor.putInt("tomorrow", tomorrow);
 		
 		editor.commit();
+	}
+	
+	public static boolean isInitialized(Context context) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		return preferences.getBoolean("initialized", false);
 	}
 }

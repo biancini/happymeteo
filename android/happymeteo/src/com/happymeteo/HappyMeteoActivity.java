@@ -174,8 +174,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		super.onCreate(savedInstanceState);
 
 		/* Initialize PushNotificationsService */
-		PushNotificationsService.register(getApplicationContext(),
-				User.getUser_id(this));
+		PushNotificationsService.register(getApplicationContext());
 
 		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
 		welcomeToday.setText(User.getFirst_name(this).toLowerCase() + "_OGGI");

@@ -4,16 +4,20 @@ import java.util.Arrays;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.facebook.LoggingBehavior;
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.happymeteo.models.User;
+import com.facebook.Settings;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.ConnectionDetector;
@@ -22,6 +26,85 @@ import com.happymeteo.utils.Const;
 public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 	protected ProgressDialog spinner;
 
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		Log.i(Const.TAG, this.getClass() + " onCreate");
+		Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler());
+
+		super.onCreate(savedInstanceState);
+
+		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
+		/* Check internet */
+		if (!cd.isConnectingToInternet()) {
+			AlertDialogManager alert = new AlertDialogManager();
+			alert.showAlertDialog(this, "Errore di connessione Internet",
+					"Connettere Internet per utilizzare Appy Meteo", false,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							finish();
+						}
+					});
+			return;
+		}
+
+		spinner = new ProgressDialog(this);
+		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		spinner.setMessage("Connessione a facebook..");
+		
+		Settings.addLoggingBehavior(LoggingBehavior.CACHE);
+		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+		Settings.addLoggingBehavior(LoggingBehavior.DEVELOPER_ERRORS);
+		
+		Session session = Session.getActiveSession();
+		if (session == null) {
+			Log.i(Const.TAG, "session null");
+			session = new Session(this);
+			Session.setActiveSession(session);
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		/*
+		 * Terminate PushNotificationsService
+		 * HappyMeteoApplication.getPushNotificationsService
+		 * ().terminate(getApplicationContext());
+		 */
+
+		Log.i(Const.TAG, this.getClass() + " onDestroy");
+		super.onDestroy();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		Log.i(Const.TAG, this.getClass() + " onSaveInstanceState");
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		Log.i(Const.TAG, this.getClass() + " onNewIntent");
+		super.onNewIntent(intent);
+	}
+
+	@Override
+	public void onStart() {
+		Log.i(Const.TAG, this.getClass() + " onStart");
+		super.onStart();
+	}
+
+	@Override
+	public void onStop() {
+		Log.i(Const.TAG, this.getClass() + " onStop");
+		super.onStop();
+	}
+
+	@Override
+	protected void onResume() {
+		Log.i(Const.TAG, this.getClass() + " onResume");
+		super.onResume();
+	}
+
 	private class DefaultExceptionHandler implements
 			Thread.UncaughtExceptionHandler {
 		@Override
@@ -29,8 +112,8 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 			Log.e(Const.TAG, ex.getMessage(), ex);
 		}
 	}
-
-	public void openActiveSession(Session.StatusCallback statusCallback,
+	
+	private void openActiveSession(Session.StatusCallback statusCallback,
 			Session session, boolean allowLoginUI) {
 		spinner.show();
 		if (session == null) {
@@ -81,38 +164,22 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 	}
 
 	public void onClickLogout() {
-		User.initialize(getApplicationContext(), "", "", "", "", 0, "", 0, 0,
-				0, "", 0, 0, 0, 0);
+		/* Clear every data */
+		SharedPreferences preferences = getApplicationContext()
+				.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		editor.clear();
+		editor.commit();
+
+		/* Clear Facebook session */
 		Session session = new Session(this, null, null, false);
 		Session.setActiveSession(session);
+
+		/* Terminate PushNotificationsService */
 		PushNotificationsService.terminate(getApplicationContext());
+
+		/* Go to Index */
 		invokeActivity(IndexActivity.class);
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		Log.i(Const.TAG, this.getClass() + " onCreate");
-		Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler());
-
-		super.onCreate(savedInstanceState);
-
-		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
-		/* Check internet */
-		if (!cd.isConnectingToInternet()) {
-			AlertDialogManager alert = new AlertDialogManager();
-			alert.showAlertDialog(this, "Errore di connessione Internet",
-					"Connettere Internet per utilizzare Appy Meteo", false,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							finish();
-						}
-					});
-			return;
-		}
-
-		spinner = new ProgressDialog(this);
-		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		spinner.setMessage("Connessione a facebook..");
 	}
 
 	public void invokeActivity(Class<? extends Activity> clazz) {
@@ -131,47 +198,4 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 			startActivity(intent);
 		}
 	}
-
-	@Override
-	protected void onDestroy() {
-		/*
-		 * Terminate PushNotificationsService
-		 * HappyMeteoApplication.getPushNotificationsService
-		 * ().terminate(getApplicationContext());
-		 */
-
-		Log.i(Const.TAG, this.getClass() + " onDestroy");
-		super.onDestroy();
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		Log.i(Const.TAG, this.getClass() + " onSaveInstanceState");
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		Log.i(Const.TAG, this.getClass() + " onNewIntent");
-		super.onNewIntent(intent);
-	}
-
-	@Override
-	public void onStart() {
-		Log.i(Const.TAG, this.getClass() + " onStart");
-		super.onStart();
-	}
-
-	@Override
-	public void onStop() {
-		Log.i(Const.TAG, this.getClass() + " onStop");
-		super.onStop();
-	}
-
-	@Override
-	protected void onResume() {
-		Log.i(Const.TAG, this.getClass() + " onResume");
-		super.onResume();
-	}
-
 }

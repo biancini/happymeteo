@@ -55,13 +55,6 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 
 		addContentView(sideNavigationView, layoutParams);
 		
-		/* Check facebook connection */
-		Session session = Session.getActiveSession();
-		if(session == null) {
-			session = new Session(this);
-			Session.setActiveSession(session);
-		}
-		
 		if(User.isFacebookSession(this) && !Session.getActiveSession().isOpened()) {
 			onFacebookConnect(statusCallback, false);
 		}

@@ -118,41 +118,45 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
 	public static void generateNotification(Context context, Bundle extras) {
-		int icon = R.drawable.ic_launcher;
-		long when = System.currentTimeMillis();
-		NotificationManager notificationManager = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
+		String user_id = extras.getString("user_id");
 		
-		String collapse_key = extras.getString("collapse_key");
-		if(collapse_key == null || collapse_key.equals("do_not_collapse"))
-			collapse_key = extras.getString("appy_key");
-		
-		String message = getMessageFromCollapseKey(collapse_key);
-		Class<? extends Activity> clazz = getActivityFromCollapseKey(collapse_key);
-		
-		Notification notification = new Notification(icon, message, when);
-		String title = context.getString(R.string.app_name);
-
-		Intent notificationIntent = new Intent(context, clazz);
-		notificationIntent.putExtras(extras);
-		
-		Log.i(Const.TAG, "extras: "+extras.toString());
-		
-		// set intent so it does not start a new activity
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-				notificationIntent, 0);
-		notification.setLatestEventInfo(context, title, message, pendingIntent);
-		notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-		// Play default notification sound
-		notification.defaults |= Notification.DEFAULT_SOUND;
-
-		// notification.sound = Uri.parse("android.resource://" +
-		// context.getPackageName() + "your_sound_file_name.mp3");
-
-		// Vibrate if vibrate is enabled
-		notification.defaults |= Notification.DEFAULT_VIBRATE;
-		notificationManager.notify(0, notification);
+		if(user_id != null && User.getUser_id(context) != null && user_id.equals(User.getUser_id(context))) {
+			int icon = R.drawable.ic_launcher;
+			long when = System.currentTimeMillis();
+			NotificationManager notificationManager = (NotificationManager) context
+					.getSystemService(Context.NOTIFICATION_SERVICE);
+			
+			String collapse_key = extras.getString("collapse_key");
+			if(collapse_key == null || collapse_key.equals("do_not_collapse"))
+				collapse_key = extras.getString("appy_key");
+			
+			String message = getMessageFromCollapseKey(collapse_key);
+			Class<? extends Activity> clazz = getActivityFromCollapseKey(collapse_key);
+			
+			Notification notification = new Notification(icon, message, when);
+			String title = context.getString(R.string.app_name);
+	
+			Intent notificationIntent = new Intent(context, clazz);
+			notificationIntent.putExtras(extras);
+			
+			Log.i(Const.TAG, "extras: "+extras.toString());
+			
+			// set intent so it does not start a new activity
+			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+					notificationIntent, 0);
+			notification.setLatestEventInfo(context, title, message, pendingIntent);
+			notification.flags |= Notification.FLAG_AUTO_CANCEL;
+	
+			// Play default notification sound
+			notification.defaults |= Notification.DEFAULT_SOUND;
+	
+			// notification.sound = Uri.parse("android.resource://" +
+			// context.getPackageName() + "your_sound_file_name.mp3");
+	
+			// Vibrate if vibrate is enabled
+			notification.defaults |= Notification.DEFAULT_VIBRATE;
+			notificationManager.notify(0, notification);
+		}
 	}
 }

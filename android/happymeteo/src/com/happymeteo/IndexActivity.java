@@ -12,10 +12,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.facebook.LoggingBehavior;
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.facebook.Settings;
 import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
@@ -52,19 +50,11 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 				onFacebookConnect(statusCallback, false);
 			}
 		});
-
-		Settings.addLoggingBehavior(LoggingBehavior.CACHE);
-		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-		Settings.addLoggingBehavior(LoggingBehavior.DEVELOPER_ERRORS);
 		
-		Session session = Session.getActiveSession();
-		if (session == null) {
-			Log.i(Const.TAG, "session null");
-			session = new Session(this);
+		Log.i(Const.TAG, "user_id: "+User.getUser_id(getApplicationContext()));
+		if(User.isInitialized(getApplicationContext())) {
+			invokeActivity(HappyMeteoActivity.class);
 		}
-		Session.setActiveSession(session);
-		
-		User.initialize(getApplicationContext(), "", "", "", "", 0, "", 0, 0, 0, "", 0, 0, 0, 0);
 	}
 
 	@Override

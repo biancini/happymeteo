@@ -6,29 +6,16 @@ from secrets import GOOGLE_API_KEY, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN,\
     CALL_SECRET_KEY
 import hashlib
 
-def sendMessage(registrationId, payload):
-    print "send message to %s"%registrationId
-    
-    data = {
-      'registration_ids': [registrationId]
-    }
-    
-    if payload:
-       data['data'] = payload 
-    
-    req = urllib2.Request('https://android.googleapis.com/gcm/send')
-    req.add_header('Content-Type', 'application/json')
-    req.add_header('Authorization', 'key=%s' % GOOGLE_API_KEY)
-    response = urllib2.urlopen(req, json.dumps(data))
-    print response.read()
-
-def sendSyncMessage(registrationId, collapse_key, payload=None):
+def sendMessage(registrationId, user_id, collapse_key=None, payload=None):
     print "send message to %s"%registrationId
     
     data = {
       'registration_ids': [registrationId],
-      'collapse_key': collapse_key
+      'user_id': 0
     }
+    
+    if collapse_key:
+       data['collapse_key'] = collapse_key
     
     if payload:
        data['data'] = payload 
