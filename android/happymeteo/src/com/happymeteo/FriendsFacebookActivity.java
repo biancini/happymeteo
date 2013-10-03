@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +25,7 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.models.Friend;
-import com.happymeteo.models.User;
+import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.GetRequest;
 import com.happymeteo.utils.ServerUtilities;
@@ -33,13 +34,7 @@ import com.happymeteo.utils.onGetExecuteListener;
 public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 		onGetExecuteListener {
 
-	public class MyFriendComparable implements Comparator<Friend> {
-
-		@Override
-		public int compare(Friend o1, Friend o2) {
-			return o1.getName().compareTo(o2.getName());
-		}
-	}
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +75,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 				public void onClick(View view) {
 					ServerUtilities.requestChallenge(
 						activity, 
-						User.getUser_id(view.getContext()),
+						SessionCache.getUser_id(view.getContext()),
 						friend.getId(),
 						GCMRegistrar.getRegistrationId(view.getContext()));
 				}
@@ -126,36 +121,67 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 					}
 				}
 			}
-
-			Collections.sort(friendsWithApp, new MyFriendComparable());
-			Collections.sort(friendsNoApp, new MyFriendComparable());
 			
-			// FriendsAdapter withApp = new FriendsAdapter(this,
-			// friendsWithApp);
-			// FriendsAdapter noApp = new FriendsAdapter(this, friendsNoApp);
-			LinearLayout facebookPickerListViewWithApp = (LinearLayout) findViewById(R.id.facebookPickerListViewWithApp);
-
-			for (int i = 0; i < friendsWithApp.size(); i++) {
-				Friend friend = friendsWithApp.get(i);
-				View vi = getLayoutInflater().inflate(
-						R.layout.activity_friends_facebook_list_row, null);
-				attachFriendToView(vi, friend);
-				facebookPickerListViewWithApp.addView(vi);
-			}
-
-			// facebookPickerListViewWithApp.setAdapter(withApp);
-			LinearLayout facebookPickerListViewNoApp = (LinearLayout) findViewById(R.id.facebookPickerListViewNoApp);
-			// facebookPickerListViewNoApp.setAdapter(noApp);
-			
-			for (int i = 0; i < friendsNoApp.size(); i++) {
-				Friend friend = friendsNoApp.get(i);
-				View vi = getLayoutInflater().inflate(
-						R.layout.activity_friends_facebook_list_row, null);
-				attachFriendToView(vi, friend);
-				facebookPickerListViewNoApp.addView(vi);
-			}
+			new ListFriend(this, friendsWithApp, friendsNoApp).execute();
 		} catch (Exception e) {
 			Log.e(Const.TAG, e.getMessage(), e);
 		}
+	}
+	
+	private class ListFriend extends AsyncTask<String, Void, Void> {
+		private Activity activity;
+		private List<Friend> friendsWithApp;
+		private List<Friend> friendsNoApp;
+		
+		public ListFriend(Activity activity, List<Friend> friendsWithApp, List<Friend> friendsNoApp) {
+			this.activity = activity;
+			this.friendsWithApp = friendsWithApp;
+			this.friendsNoApp = friendsNoApp;
+		}
+		
+		private class MyFriendComparable implements Comparator<Friend> {
+
+			@Override
+			public int compare(Friend o1, Friend o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		}
+
+		@Override
+		protected Void doInBackground(String... params) {
+			Collections.sort(friendsWithApp, new MyFriendComparable());
+			Collections.sort(friendsNoApp, new MyFriendComparable());
+			
+			final LinearLayout facebookPickerListViewWithApp = (LinearLayout) activity.findViewById(R.id.facebookPickerListViewWithApp);
+			
+			for (int i = 0; i < friendsWithApp.size(); i++) {
+				Friend friend = friendsWithApp.get(i);
+				final View vi = getLayoutInflater().inflate(
+						R.layout.activity_friends_facebook_list_row, null);
+				attachFriendToView(vi, friend);
+				runOnUiThread(new Runnable() {
+				     public void run() {
+				    	 facebookPickerListViewWithApp.addView(vi);
+				    }
+				});
+			}
+
+			final LinearLayout facebookPickerListViewNoApp = (LinearLayout) activity.findViewById(R.id.facebookPickerListViewNoApp);
+			
+			for (int i = 0; i < friendsNoApp.size(); i++) {
+				Friend friend = friendsNoApp.get(i);
+				final View vi = getLayoutInflater().inflate(
+						R.layout.activity_friends_facebook_list_row, null);
+				attachFriendToView(vi, friend);
+				runOnUiThread(new Runnable() {
+				     public void run() {
+				    	 facebookPickerListViewNoApp.addView(vi);
+				    }
+				});
+			}
+			
+			return null;
+		}
+		
 	}
 }

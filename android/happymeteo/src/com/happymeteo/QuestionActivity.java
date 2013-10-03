@@ -26,7 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.happymeteo.models.User;
+import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.LocationManagerHelper;
 import com.happymeteo.utils.ServerUtilities;
@@ -78,7 +78,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 
 		linearLayout = (LinearLayout) findViewById(R.id.layoutQuestions);
 
-		ServerUtilities.getQuestions(onPostExecuteListener, activity, User.getUser_id(this));
+		ServerUtilities.getQuestions(onPostExecuteListener, activity, SessionCache.getUser_id(this));
 
 		final Button btnAnswerQuestions = (Button) findViewById(R.id.btnAnswerQuestions);
 		btnAnswerQuestions.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +97,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 							String.valueOf(location.getLongitude()));
 				}
 
-				params.put("user_id", User.getUser_id(view.getContext()));
+				params.put("user_id", SessionCache.getUser_id(view.getContext()));
 				params.put("questions", questions.toString());
 				params.put("timestamp", intentParameters.get(TIMESTAMP));
 
@@ -282,7 +282,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 				int yesterday = jsonObject.getInt("yesterday");
 				int tomorrow = jsonObject.getInt("tomorrow");
 				
-				User.setMeteo(this, today, yesterday, tomorrow);
+				SessionCache.setMeteo(this, today, yesterday, tomorrow);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

@@ -15,7 +15,7 @@ import com.devspark.sidenavigation.SideNavigationView;
 import com.devspark.sidenavigation.SideNavigationView.Mode;
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.happymeteo.models.User;
+import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 
 public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implements
@@ -55,7 +55,7 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 
 		addContentView(sideNavigationView, layoutParams);
 		
-		if(User.isFacebookSession(this) && !Session.getActiveSession().isOpened()) {
+		if(SessionCache.isFacebookSession(this) && !Session.getActiveSession().isOpened()) {
 			onFacebookConnect(statusCallback, false);
 		}
 	}
@@ -106,7 +106,7 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 				break;
 	
 			case R.id.side_navigation_menu_item4:
-				if(User.isFacebookSession(this)) {
+				if(SessionCache.isFacebookSession(this)) {
 					invokeActivity(ChallengeActivity.class);
 				}
 				break;

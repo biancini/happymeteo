@@ -20,7 +20,7 @@ import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
-import com.happymeteo.models.User;
+import com.happymeteo.models.SessionCache;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
 
@@ -177,7 +177,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		PushNotificationsService.register(getApplicationContext());
 
 		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
-		welcomeToday.setText(User.getFirst_name(this).toLowerCase() + "_OGGI");
+		welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase() + "_OGGI");
 
 		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
 		gestureDetector = new GestureDetector(new MyGestureDetector(this, viewFlipper));
@@ -214,9 +214,9 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 	public void onStart() {
 		super.onStart();
 		
-		int today_int = User.getToday(this);
-		int yesterday_int = User.getYesterday(this);
-		int tomorrow_int = User.getTomorrow(this);
+		int today_int = SessionCache.getToday(this);
+		int yesterday_int = SessionCache.getYesterday(this);
+		int tomorrow_int = SessionCache.getTomorrow(this);
 
 		TextView today_text = (TextView) findViewById(R.id.today_text);
 		today_text.setText(String.valueOf(today_int));
@@ -251,8 +251,8 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.profile_picture);
 		ImageView facebook = (ImageView) findViewById(R.id.facebook);
 		
-		if (User.isFacebookSession(this)) {
-			userImage.setProfileId(User.getFacebook_id(this));
+		if (SessionCache.isFacebookSession(this)) {
+			userImage.setProfileId(SessionCache.getFacebook_id(this));
 			userImage.setCropped(true);
 			facebook.setVisibility(View.VISIBLE);
 		} else {

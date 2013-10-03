@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
-import com.happymeteo.models.User;
+import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
@@ -29,7 +29,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		ServerUtilities.registerDevice(
 				context,
 				registrationId,
-				User.getUser_id(this));
+				SessionCache.getUser_id(this));
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	public static void generateNotification(Context context, Bundle extras) {
 		String user_id = extras.getString("user_id");
 		
-		if(user_id != null && User.getUser_id(context) != null && user_id.equals(User.getUser_id(context))) {
+		if(user_id != null && SessionCache.getUser_id(context) != null && user_id.equals(SessionCache.getUser_id(context))) {
 			int icon = R.drawable.ic_launcher;
 			long when = System.currentTimeMillis();
 			NotificationManager notificationManager = (NotificationManager) context

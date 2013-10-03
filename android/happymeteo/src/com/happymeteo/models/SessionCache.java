@@ -9,7 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-public class User {
+public class SessionCache {
 	public static int USER_NOT_REGISTERED = 0;
 	public static int USER_REGISTERED = 1;
 	
@@ -130,7 +130,7 @@ public class User {
 
 	public static int getRegistered(Context context) {
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
-		return preferences.getInt("registered", User.USER_NOT_REGISTERED);
+		return preferences.getInt("registered", SessionCache.USER_NOT_REGISTERED);
 	}
 
 	public static String getCap(Context context) {

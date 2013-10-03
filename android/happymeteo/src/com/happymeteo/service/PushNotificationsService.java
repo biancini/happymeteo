@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.android.gcm.GCMRegistrar;
-import com.happymeteo.models.User;
+import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
@@ -20,7 +20,7 @@ public class PushNotificationsService {
 		String registrationId = GCMRegistrar.getRegistrationId(context);
 		
 		/* Get User Id */
-		String userId = User.getUser_id(context);
+		String userId = SessionCache.getUser_id(context);
 		
 		Log.i(Const.TAG, "registrationId: "+registrationId);
 		if (registrationId.equals("")) {

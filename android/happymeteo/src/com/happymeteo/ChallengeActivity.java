@@ -1,6 +1,6 @@
 package com.happymeteo;
 
-import com.happymeteo.models.User;
+import com.happymeteo.models.SessionCache;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +19,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 		Button btnChallengeNew = (Button) findViewById(R.id.btnChallengeNew);
 		Button btnChallengeDone = (Button) findViewById(R.id.btnChallengeDone);
 		
-		if(!User.isFacebookSession(this)) {
+		if(!SessionCache.isFacebookSession(this)) {
 			btnChallengeNew.setEnabled(false);
 		}
 

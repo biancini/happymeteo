@@ -14,7 +14,7 @@ import android.widget.Button;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.happymeteo.models.User;
+import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
@@ -51,8 +51,8 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 			}
 		});
 		
-		Log.i(Const.TAG, "user_id: "+User.getUser_id(getApplicationContext()));
-		if(User.isInitialized(getApplicationContext())) {
+		Log.i(Const.TAG, "user_id: "+SessionCache.getUser_id(getApplicationContext()));
+		if(SessionCache.isInitialized(getApplicationContext())) {
 			invokeActivity(HappyMeteoActivity.class);
 		}
 	}
@@ -129,8 +129,8 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 			try {
 				JSONObject jsonObject = new JSONObject(result);
 
-				User.initialize(this, jsonObject);
-				if (User.getRegistered(this) == User.USER_NOT_REGISTERED) {
+				SessionCache.initialize(this, jsonObject);
+				if (SessionCache.getRegistered(this) == SessionCache.USER_NOT_REGISTERED) {
 					Bundle extras = new Bundle();
 					extras.putBoolean("create", true);
 					invokeActivity(CreateAccountActivity.class, extras);
