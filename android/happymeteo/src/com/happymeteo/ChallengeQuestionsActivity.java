@@ -1,6 +1,8 @@
 package com.happymeteo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jraf.android.backport.switchwidget.Switch;
@@ -24,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.happymeteo.models.Challenge;
 import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.LocationManagerHelper;
@@ -33,7 +34,7 @@ import com.happymeteo.utils.onPostExecuteListener;
 import com.happymeteo.widget.AppyMeteoSeekBar;
 import com.happymeteo.widget.AppyMeteoSeekBar.OnAppyMeteoSeekBarChangeListener;
 
-public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implements
+public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity implements
 		onPostExecuteListener {
 	private AppyMeteoNotLoggedActivity activity;
 	private onPostExecuteListener onPostExecuteListener;
@@ -41,81 +42,72 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 	private LocationManagerHelper locationListener;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
-	private String enemyScore;
+	
+	private final String CHALLENGE_ID = "challenge_id";
+	private final String TURN = "turn";
+	private final String SCORE = "score";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_challenge_questions);
 		super.onCreate(savedInstanceState);
 		
-		try {
-			final String challengeJson = getIntent().getStringExtra("challenge");
-			final String turn = getIntent().getStringExtra("turn");
-			enemyScore = getIntent().getStringExtra("score");
-			
-			JSONObject object = new JSONObject(challengeJson);
-			final Challenge challenge = new Challenge(object);
-			
-			this.activity = this;
-			this.onPostExecuteListener = this;
+		this.activity = this;
+		this.onPostExecuteListener = this;
 
-			// Get the location manager
-			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		// Get the location manager
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-			locationListener = new LocationManagerHelper();
+		locationListener = new LocationManagerHelper();
 
-			if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			locationManager.requestLocationUpdates(
+					LocationManager.GPS_PROVIDER, 30000, 100, locationListener);
+		} else {
+			Log.i(Const.TAG, "GPS is not turned on...");
+			if (locationManager
+					.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 				locationManager.requestLocationUpdates(
-						LocationManager.GPS_PROVIDER, 30000, 100, locationListener);
+						LocationManager.NETWORK_PROVIDER, 30000, 100,
+						locationListener);
 			} else {
-				Log.i(Const.TAG, "GPS is not turned on...");
-				if (locationManager
-						.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-					locationManager.requestLocationUpdates(
-							LocationManager.NETWORK_PROVIDER, 30000, 100,
-							locationListener);
-				} else {
-					Log.i(Const.TAG, "Network is not turned on...");
-				}
+				Log.i(Const.TAG, "Network is not turned on...");
 			}
-
-			params = new HashMap<String, String>();
-			questions = new JSONObject();
-
-			linearLayout = (LinearLayout) findViewById(R.id.layoutChallengeQuestions);
-			
-			ServerUtilities.getChallengeQuestions(onPostExecuteListener, activity, challenge.getChallenge_id(), turn);
-			
-			final Button btnBeginChallengeQuestions = (Button) findViewById(R.id.btnBeginChallengeQuestions);
-			btnBeginChallengeQuestions.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View view) {
-					Location location = locationListener.getLocation();
-					Log.d(Const.TAG, "location: " + location);
-
-					if (location != null) {
-						Log.i(Const.TAG, "Latitude: " + location.getLatitude()
-								+ ", Longitude: " + location.getLongitude());
-						params.put("latitude",
-								String.valueOf(location.getLatitude()));
-						params.put("longitude",
-								String.valueOf(location.getLongitude()));
-					}
-
-					params.put("user_id", User.getUser_id(view.getContext()));
-					params.put("questions", questions.toString());
-					params.put("challenge_id", challenge.getChallenge_id());
-					params.put("turn", turn);
-
-					ServerUtilities.submitChallenge(onPostExecuteListener,
-							activity, params);
-				}
-			});
-		} catch (JSONException e) {
-			Log.e(Const.TAG, e.getMessage(), e);
-			finish();
 		}
+
+		params = new HashMap<String, String>();
+		questions = new JSONObject();
+
+		linearLayout = (LinearLayout) findViewById(R.id.layoutChallengeQuestions);
+		
+		ServerUtilities.getChallengeQuestions(onPostExecuteListener, activity, intentParameters.get(CHALLENGE_ID), intentParameters.get(TURN));
+		
+		final Button btnBeginChallengeQuestions = (Button) findViewById(R.id.btnBeginChallengeQuestions);
+		btnBeginChallengeQuestions.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				Location location = locationListener.getLocation();
+				Log.d(Const.TAG, "location: " + location);
+
+				if (location != null) {
+					Log.i(Const.TAG, "Latitude: " + location.getLatitude()
+							+ ", Longitude: " + location.getLongitude());
+					params.put("latitude",
+							String.valueOf(location.getLatitude()));
+					params.put("longitude",
+							String.valueOf(location.getLongitude()));
+				}
+
+				params.put("user_id", User.getUser_id(view.getContext()));
+				params.put("questions", questions.toString());
+				params.put("challenge_id", intentParameters.get(CHALLENGE_ID));
+				params.put("turn", intentParameters.get(TURN));
+
+				ServerUtilities.submitChallenge(onPostExecuteListener,
+						activity, params);
+			}
+		});
 	}
 
 	@Override
@@ -290,6 +282,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 				extras.putBoolean("ChallengeScoreActivity", true);
 				extras.putString("ioChallenge", jsonObject.getString("score"));
 				
+				String enemyScore = intentParameters.get(SCORE);
 				if(enemyScore != null) {
 					extras.putString("tuChallenge", enemyScore);
 				}
@@ -299,5 +292,14 @@ public class ChallengeQuestionsActivity extends AppyMeteoLoggedActivity implemen
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public List<String> getKeyIntentParameters() {
+		ArrayList<String> keyIntentParameters = new ArrayList<String>();
+		keyIntentParameters.add(CHALLENGE_ID);
+		keyIntentParameters.add(TURN);
+		keyIntentParameters.add(SCORE);
+		return keyIntentParameters;
 	}
 }

@@ -1,6 +1,5 @@
 package com.happymeteo;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -98,20 +97,20 @@ public class GCMIntentService extends GCMBaseIntentService {
 		return collapse_key;
 	}
 	
-	private static Class<? extends Activity> getActivityFromCollapseKey(String collapse_key) {
+	private static Class<? extends AppyMeteoImpulseActivity> getActivityFromCollapseKey(String collapse_key) {
 		if(collapse_key.equals("questions"))
 			return QuestionActivity.class;
 		if(collapse_key.equals("request_challenge"))
 			return ChallengeRequestActivity.class;
 		if(collapse_key.equals("accepted_challenge_turn1_true"))
 			return ChallengeQuestionsActivity.class;
-		if(collapse_key.equals("accepted_challenge_turn1_false"))
-			return HappyMeteoActivity.class;
+		/*if(collapse_key.equals("accepted_challenge_turn1_false"))
+			return HappyMeteoActivity.class;*/
 		if(collapse_key.equals("accepted_challenge_turn2"))
 			return ChallengeQuestionsActivity.class;
 		if(collapse_key.equals("accepted_challenge_turn3"))
 			return ChallengeScoreActivity.class;
-		return HappyMeteoActivity.class;
+		return null;
 	}
 
 	/**
@@ -131,12 +130,18 @@ public class GCMIntentService extends GCMBaseIntentService {
 				collapse_key = extras.getString("appy_key");
 			
 			String message = getMessageFromCollapseKey(collapse_key);
-			Class<? extends Activity> clazz = getActivityFromCollapseKey(collapse_key);
+			Class<? extends AppyMeteoImpulseActivity> clazz = getActivityFromCollapseKey(collapse_key);
+			Intent notificationIntent = null;
+			
+			if(clazz == null) {
+				notificationIntent = new Intent(context, HappyMeteoActivity.class);
+			} else {
+				notificationIntent = new Intent(context, clazz);
+			}
 			
 			Notification notification = new Notification(icon, message, when);
 			String title = context.getString(R.string.app_name);
 	
-			Intent notificationIntent = new Intent(context, clazz);
 			notificationIntent.putExtras(extras);
 			
 			Log.i(Const.TAG, "extras: "+extras.toString());

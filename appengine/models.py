@@ -98,6 +98,7 @@ class Answer(db.Model):
     location = db.GeoPtProperty()
     date = db.DateTimeProperty()
     value = db.StringProperty()
+    timestamp = db.StringProperty()
     
 class ChallengeAnswer(db.Model):
     user_id = db.StringProperty()

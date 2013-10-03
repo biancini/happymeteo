@@ -1,29 +1,30 @@
 package com.happymeteo;
 
-import com.happymeteo.utils.Const;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
-public class ChallengeScoreActivity extends AppyMeteoNotLoggedActivity {
+public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 	
-	private void setValues(Intent intent) {
-		Log.i(Const.TAG, "ChallengeScoreActivity.setValues extras: "+intent.getExtras());
-		
+	private final String IO_CHALLENGE = "ioChallenge";
+	private final String TU_CHALLENGE = "tuChallenge";
+	
+	private void setValues() {
 		Float ioScore = null;
 		Float tuScore = null;
 
 		TextView ioChallengeTextView = (TextView) findViewById(R.id.ioChallenge);
-		String ioChallenge = intent.getExtras().getString("ioChallenge");
+		String ioChallenge = intentParameters.get(IO_CHALLENGE);
 		if(ioChallenge != null) {
 			ioScore = Float.valueOf(ioChallenge);
 			ioChallengeTextView.setText(ioChallenge);
 		}
 		
 		TextView tuChallengeTextView = (TextView) findViewById(R.id.tuChallenge);
-		String tuChallenge = intent.getExtras().getString("tuChallenge");
+		String tuChallenge = intentParameters.get(TU_CHALLENGE);
 		if(tuChallenge != null) {
 			tuScore = Float.valueOf(tuChallenge);
 			tuChallengeTextView.setText(tuChallenge);
@@ -45,13 +46,21 @@ public class ChallengeScoreActivity extends AppyMeteoNotLoggedActivity {
 		setContentView(R.layout.activity_challenge_score);
 		super.onCreate(savedInstanceState);
 		
-		setValues(getIntent());
+		setValues();
 	}
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		
-		setValues(intent);
+		setValues();
+	}
+	
+	@Override
+	public List<String> getKeyIntentParameters() {
+		ArrayList<String> keyIntentParameters = new ArrayList<String>();
+		keyIntentParameters.add(IO_CHALLENGE);
+		keyIntentParameters.add(TU_CHALLENGE);
+		return keyIntentParameters;
 	}
 }

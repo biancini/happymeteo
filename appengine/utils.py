@@ -10,15 +10,18 @@ def sendMessage(registrationId, user_id, collapse_key=None, payload=None):
     print "send message to %s"%registrationId
     
     data = {
-      'registration_ids': [registrationId],
-      'user_id': 0
+      'registration_ids': [registrationId]
     }
     
     if collapse_key:
        data['collapse_key'] = collapse_key
     
     if payload:
-       data['data'] = payload 
+       data['data'] = payload
+    else:
+       data['data'] = {}
+       
+    data['data']['user_id'] = user_id
     
     req = urllib2.Request('https://android.googleapis.com/gcm/send')
     req.add_header('Content-Type', 'application/json')

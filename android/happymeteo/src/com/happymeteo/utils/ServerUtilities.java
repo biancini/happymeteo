@@ -65,9 +65,10 @@ public class ServerUtilities {
 		new PostRequest(Const.UNREGISTER_URL_ID, context, nvps).execute(Const.REGISTER_URL);
 	}
 
-	public static void getQuestions(onPostExecuteListener onPostExecuteListener, Activity activity) {
+	public static void getQuestions(onPostExecuteListener onPostExecuteListener, Activity activity, String userId) {
 		Log.i(Const.TAG, "getQuestions");
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("userId", userId));
 		new PostRequest(Const.GET_QUESTIONS_URL_ID, activity, nvps, onPostExecuteListener).execute(Const.GET_QUESTIONS_URL);
 	}
 

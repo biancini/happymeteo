@@ -30,52 +30,55 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	private List<NameValuePair> nvps;
 	private onPostExecuteListener onPostExecuteListener;
 	private ProgressDialog spinner;
-	
-	public PostRequest(int id, Context context, List<NameValuePair> nvps, onPostExecuteListener onPostExecuteListener) {
+
+	public PostRequest(int id, Context context, List<NameValuePair> nvps,
+			onPostExecuteListener onPostExecuteListener) {
 		this(id, context, nvps);
 		this.onPostExecuteListener = onPostExecuteListener;
 	}
-	
+
 	public PostRequest(int id, Context context, List<NameValuePair> nvps) {
 		this.id = id;
 		this.onPostExecuteListener = null;
 		this.context = context;
 		this.nvps = nvps;
-		if(context instanceof Activity) {
+		if (context instanceof Activity) {
 			spinner = new ProgressDialog(context);
 			spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			spinner.setMessage(context.getString(com.happymeteo.R.string.loading)+" "+this.id);
+			spinner.setMessage(context
+					.getString(com.happymeteo.R.string.loading) + " " + this.id);
 		}
 	}
-	
+
 	private Exception showError(String json) {
 		Exception exception = null;
-		
+
 		try {
 			JSONObject jsonObject = new JSONObject(json);
-			
-			if (jsonObject != null && jsonObject.getString("error") != null && jsonObject.getString("message") != null) {
+
+			if (jsonObject != null && jsonObject.getString("error") != null
+					&& jsonObject.getString("message") != null) {
 				AlertDialogManager alert = new AlertDialogManager();
 				alert.showAlertDialog(context, jsonObject.getString("error"),
-							jsonObject.getString("message"), false,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int which) {
-								}
-							});
+						jsonObject.getString("message"), false,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+							}
+						});
 				exception = new Exception(jsonObject.getString("message"));
-				Log.i(Const.TAG, "showError exception: "+exception);
+				Log.i(Const.TAG, "showError exception: " + exception);
 			}
 		} catch (JSONException e) {
 			exception = null;
 		}
 		return exception;
 	}
-	
+
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		if(spinner != null) {
+		if (spinner != null) {
 			spinner.show();
 		}
 	}
@@ -85,12 +88,12 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		StringBuffer output = new StringBuffer();
 		for (String url : urls) {
 			try {
-				Log.i(Const.TAG, "PostRequest url: "+url);
+				Log.i(Const.TAG, "PostRequest url: " + url);
 				DefaultHttpClient client = new DefaultHttpClient();
 				HttpPost request = new HttpPost(url);
 				String query_string = "";
 				boolean first = true;
-				
+
 				Collections.sort(nvps, new Comparator<NameValuePair>() {
 
 					@Override
@@ -98,50 +101,52 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 						return lhs.getName().compareTo(rhs.getName());
 					}
 				});
-				
+
 				for (NameValuePair pair : nvps) {
-					if(!first)
+					if (!first)
 						query_string += "&";
-					
+
 					query_string += pair.getName() + "=" + pair.getValue();
 					first = false;
 				}
-				Log.i(Const.TAG, "query_string: "+query_string);
-				nvps.add(new BasicNameValuePair("hashing", SHA1.hexdigest(Const.CALL_SECRET_KEY, query_string)));
-				
+				Log.i(Const.TAG, "query_string: " + query_string);
+				nvps.add(new BasicNameValuePair("hashing", SHA1.hexdigest(
+						Const.CALL_SECRET_KEY, query_string)));
+
 				request.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
 				HttpResponse response = client.execute(request);
-	
+
 				InputStream inputStream = response.getEntity().getContent();
-				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+				BufferedReader bufferedReader = new BufferedReader(
+						new InputStreamReader(inputStream));
 				String inputLine;
 				while ((inputLine = bufferedReader.readLine()) != null) {
 					output.append(inputLine);
 				}
 				bufferedReader.close();
 				inputStream.close();
-			} catch(Exception e) {
+			} catch (Exception e) {
 				Log.e(Const.TAG, e.getMessage(), e);
 			}
 		}
 
 		return output.toString();
 	}
-	
+
 	@Override
-    protected void onPostExecute(String result) {
+	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-		
+
 		Exception exception = showError(result);
-		
-		Log.i(Const.TAG, id+" PostRequest result: "+result);
-		Log.i(Const.TAG, id+" PostRequest exception: "+exception);
-		
-		if(onPostExecuteListener != null) {
+
+		Log.i(Const.TAG, id + " PostRequest result: " + result);
+		Log.i(Const.TAG, id + " PostRequest exception: " + exception);
+
+		if (onPostExecuteListener != null) {
 			onPostExecuteListener.onPostExecute(id, result, exception);
 		}
-		if(spinner != null) {
+		if (spinner != null) {
 			spinner.dismiss();
 		}
-    }
+	}
 }

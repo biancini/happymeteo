@@ -1,6 +1,8 @@
 package com.happymeteo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jraf.android.backport.switchwidget.Switch;
@@ -32,7 +34,7 @@ import com.happymeteo.utils.onPostExecuteListener;
 import com.happymeteo.widget.AppyMeteoSeekBar;
 import com.happymeteo.widget.AppyMeteoSeekBar.OnAppyMeteoSeekBarChangeListener;
 
-public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
+public class QuestionActivity extends AppyMeteoImpulseActivity implements
 		onPostExecuteListener {
 	private AppyMeteoNotLoggedActivity activity;
 	private onPostExecuteListener onPostExecuteListener;
@@ -40,12 +42,14 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 	private LocationManagerHelper locationListener;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
+	
+	private final String TIMESTAMP = "timestamp";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_questions);
 		super.onCreate(savedInstanceState);
-
+		
 		this.activity = this;
 		this.onPostExecuteListener = this;
 
@@ -74,7 +78,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 
 		linearLayout = (LinearLayout) findViewById(R.id.layoutQuestions);
 
-		ServerUtilities.getQuestions(onPostExecuteListener, activity);
+		ServerUtilities.getQuestions(onPostExecuteListener, activity, User.getUser_id(this));
 
 		final Button btnAnswerQuestions = (Button) findViewById(R.id.btnAnswerQuestions);
 		btnAnswerQuestions.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +99,7 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 
 				params.put("user_id", User.getUser_id(view.getContext()));
 				params.put("questions", questions.toString());
+				params.put("timestamp", intentParameters.get(TIMESTAMP));
 
 				ServerUtilities.submitQuestions(onPostExecuteListener,
 						activity, params);
@@ -284,5 +289,12 @@ public class QuestionActivity extends AppyMeteoNotLoggedActivity implements
 
 			finish();
 		}
+	}
+
+	@Override
+	public List<String> getKeyIntentParameters() {
+		ArrayList<String> keyIntentParameters = new ArrayList<String>();
+		keyIntentParameters.add(TIMESTAMP);
+		return keyIntentParameters;
 	}
 }

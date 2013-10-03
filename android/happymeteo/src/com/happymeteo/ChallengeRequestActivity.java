@@ -1,23 +1,22 @@
 package com.happymeteo;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.happymeteo.models.Challenge;
-import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 
-public class ChallengeRequestActivity extends AppyMeteoNotLoggedActivity implements onPostExecuteListener {
+public class ChallengeRequestActivity extends AppyMeteoImpulseActivity implements onPostExecuteListener {
 	private Activity activity;
 	private onPostExecuteListener onPostExecuteListener;
+	
+	private final String CHALLENGE_ID = "challenge_id";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -27,29 +26,19 @@ public class ChallengeRequestActivity extends AppyMeteoNotLoggedActivity impleme
 		this.activity = this;
 		this.onPostExecuteListener = this;
 		
-		final String challengeJson = getIntent().getStringExtra("challenge");
+		Button btnAcceptChallenge = (Button) findViewById(R.id.btnAcceptChallenge);
+		btnAcceptChallenge.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				ServerUtilities.acceptChallenge(onPostExecuteListener, activity, CHALLENGE_ID, true);
+			}
+		});
 		
-		try {
-			JSONObject object = new JSONObject(challengeJson);
-			final Challenge challenge = new Challenge(object);
-			
-			Button btnAcceptChallenge = (Button) findViewById(R.id.btnAcceptChallenge);
-			btnAcceptChallenge.setOnClickListener(new OnClickListener() {
-				public void onClick(View view) {
-					ServerUtilities.acceptChallenge(onPostExecuteListener, activity, challenge.getChallenge_id(), true);
-				}
-			});
-			
-			Button btnRefuseChallenge = (Button) findViewById(R.id.btnRefuseChallenge);
-			btnRefuseChallenge.setOnClickListener(new OnClickListener() {
-				public void onClick(View view) {
-					ServerUtilities.acceptChallenge(onPostExecuteListener, activity, challenge.getChallenge_id(), false);
-				}
-			});
-		} catch (JSONException e) {
-			Log.e(Const.TAG, e.getMessage(), e);
-			finish();
-		}
+		Button btnRefuseChallenge = (Button) findViewById(R.id.btnRefuseChallenge);
+		btnRefuseChallenge.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				ServerUtilities.acceptChallenge(onPostExecuteListener, activity, intentParameters.get(CHALLENGE_ID), false);
+			}
+		});
 	}
 
 	@Override
@@ -57,5 +46,12 @@ public class ChallengeRequestActivity extends AppyMeteoNotLoggedActivity impleme
 		if(exception == null) {
 			finish();
 		}
+	}
+
+	@Override
+	public List<String> getKeyIntentParameters() {
+		ArrayList<String> keyIntentParameters = new ArrayList<String>();
+		keyIntentParameters.add(CHALLENGE_ID);
+		return keyIntentParameters;
 	}
 }

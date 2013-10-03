@@ -168,7 +168,7 @@ class FacebookLoginHandler(BaseRequestHandler):
       logging.exception(e)
       data = {
         'error': 'Facebook Login error',
-        'message': '%s' % sys.exc_info()[0],
+        'message': '%s' % str(e)
       }
       
     self.response.headers['Content-Type'] = 'application/json'
@@ -321,7 +321,7 @@ class NormalLoginHandler(BaseRequestHandler):
         logging.exception(e)
         data = {
           'error': 'Normal Login error',
-          'message': '%s' % sys.exc_info()[0],
+          'message': '%s' % str(e)
         }
       
       self.response.headers['Content-Type'] = 'application/json'
@@ -382,10 +382,14 @@ class UnregisterHandler(BaseRequestHandler):
 class SendMessageHandler(BaseRequestHandler):
 
   def get(self):
+    import time
+    ts = time.time()
+    
     devices = Device.all()
     
     for d in devices:
-        sendMessage(d.registration_id, collapse_key='questions')
+        sendMessage(d.registration_id, user_id=d.user_id, collapse_key='questions', payload={'timestamp': '%s'%ts})
+        print '%s'%ts
 
 """ Questions Management """
 class GetQuestionsHandler(BaseRequestHandler):
@@ -409,6 +413,15 @@ class SubmitQuestionsHandler(BaseRequestHandler):
         user_id = self.request.get('user_id')
         latitude = self.request.get('latitude')
         longitude = self.request.get('longitude')
+        timestamp = self.request.get('timestamp')
+        
+        if not timestamp or timestamp == "":
+            raise Exception('You need to specify the timestamp')
+        
+        answers = Answer.gql("WHERE user_id = :1 AND timestamp = :2", user_id, timestamp)
+        
+        if answers.count() > 0:
+            raise Exception('You already answer this impulse')
         
         user = User.get_by_id(int(user_id))
         user.contatore_impulsi = user.contatore_impulsi + 1
@@ -420,7 +433,8 @@ class SubmitQuestionsHandler(BaseRequestHandler):
                 user_id=user_id,
                 question_id=q,
                 date=datetime.now(),
-                value=questions[q])
+                value=questions[q],
+                timestamp=timestamp)
             
             if latitude and longitude:
                answer.location = latitude + "," + longitude
@@ -436,7 +450,7 @@ class SubmitQuestionsHandler(BaseRequestHandler):
         logging.exception(e)
         data = {
           'error': 'Submit Question error',
-          'message': '%s' % sys.exc_info()[0],
+          'message': '%s' % str(e)
         }
         
     self.response.headers['Content-Type'] = 'application/json'
@@ -483,10 +497,9 @@ class RequestChallengeHandler(BaseRequestHandler):
               challenge.put()
             
             # Send message to the device
-            sendMessage(device.registration_id, collapse_key='request_challenge', payload={'challenge': challenge.toJson()})
+            sendMessage(device.registration_id, user_id='%s' % user.key().id(), collapse_key='request_challenge', payload={'challenge_id': challenge.key().id()})
             data = {
-              'message': 'ok',
-              'challenge': challenge.toJson()
+              'message': 'ok'
             }
         else:
             data = {
@@ -521,7 +534,7 @@ class AcceptChallengeHandler(BaseRequestHandler):
         user_b.contatore_sfidato = user_b.contatore_sfidato + 1
         user_b.put()
         
-        sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge': challenge.toJson(), 'turn': '1'})
+        sendMessage(challenge.registration_id_a, user_id=challenge.user_id_a, payload={'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge_id': challenge.key().id(), 'turn': '1'})
         challenge.accepted = (accepted == "true")
         challenge.put()
         
@@ -673,10 +686,10 @@ class SubmitChallengeHandler(BaseRequestHandler):
             # aggiornare il challenge & Se primo turno manda la notifica a utente b o b manda la fine ad a
             if turn == "1":
                 challenge.score_a = float(score)
-                sendMessage(challenge.registration_id_b, {'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge': challenge.toJson(), 'turn': '2'})
+                sendMessage(challenge.registration_id_b, user_id=challenge.user_id_b, payload={'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge_id': challenge.key().id(), 'turn': '2'})
             else:
                 challenge.score_b = float(score)
-                sendMessage(challenge.registration_id_a, {'appy_key': 'accepted_challenge_turn3', 'ioChallenge': challenge.score_a, 'tuChallenge': score, 'challenge': challenge.toJson(), 'turn': '2'})
+                sendMessage(challenge.registration_id_a, user_id=challenge.user_id_a, payload={'appy_key': 'accepted_challenge_turn3', 'ioChallenge': challenge.score_a, 'tuChallenge': score, 'challenge_id': challenge.key().id(), 'turn': '3'})
                 
             challenge.put()
         else:
@@ -688,7 +701,7 @@ class SubmitChallengeHandler(BaseRequestHandler):
        logging.exception(e)
        data = {
          'error': 'Submit Challenge error',
-          'message': '%s' % sys.exc_info()[0],
+          'message': '%s' % str(e)
        }
     
     self.response.headers['Content-Type'] = 'application/json'
