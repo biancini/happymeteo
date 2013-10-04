@@ -36,7 +36,7 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 				resultChallengeTextView.setText("Hai vinto!");
 			if(ioScore < tuScore)
 				resultChallengeTextView.setText("Hai perso!");
-			if(ioScore == tuScore)
+			if(ioScore.equals(tuScore))
 				resultChallengeTextView.setText("Hai pareggiato!");
 		}
 	}

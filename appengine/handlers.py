@@ -598,29 +598,42 @@ class QuestionsChallengeHandler(BaseRequestHandler):
 
   @check_hash
   def post(self):
-    challengeId = self.request.get('challengeId')
-    turn = self.request.get('turn')
+    try:
+        challengeId = self.request.get('challengeId')
+        turn = self.request.get('turn')
+        
+        challenge = Challenge.get_by_id(int(challengeId))
+        
+        if not challenge:
+            raise Exception('Nessuna sfida trovata')
+        
+        if challenge.turn != int(turn):
+            raise Exception('C\'è stato un errore con la sfida')
+        
+        if turn == "1":
+            import random
+            
+            questions = ChallengeQuestion.gql("WHERE category_id = 0")
+            data = [questions.get().toJson()]
+            
+            categories = ChallengeQuestionCategory.all()
+            for c in categories:
+                questions = ChallengeQuestion.gql("WHERE category_id = :1", c.key().id())
+                question = sample(random.random, questions, 1)
+                data.append(question[0].toJson())
+        else:
+            answers = ChallengeAnswer.gql("WHERE challenge_id = :1", challengeId)
+            questions = [ChallengeQuestion.get_by_id(int(answer.question_id)) for answer in answers]
+            questions.sort(key=lambda x: x.order, reverse=False)
+            data = [q.toJson() for q in questions]
+    except Exception as e:
+        logging.exception(e)
+        data = {
+          'error': '%s' % str(e)
+        }
     
-    if turn == "1":
-        import random
-        
-        questions = ChallengeQuestion.gql("WHERE category_id = 0")
-        questions_json = [questions.get().toJson()]
-        
-        categories = ChallengeQuestionCategory.all()
-        for c in categories:
-            questions = ChallengeQuestion.gql("WHERE category_id = :1", c.key().id())
-            question = sample(random.random, questions, 1)
-            questions_json.append(question[0].toJson())
-        
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(questions_json))
-    else:
-        answers = ChallengeAnswer.gql("WHERE challenge_id = :1", challengeId)
-        questions = [ChallengeQuestion.get_by_id(int(answer.question_id)) for answer in answers]
-        questions.sort(key=lambda x: x.order, reverse=False)
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps([q.toJson() for q in questions]))
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
         
 """        
   def get(self):

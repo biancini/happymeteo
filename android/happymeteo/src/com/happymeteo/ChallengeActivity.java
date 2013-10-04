@@ -54,7 +54,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 		
 		Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
 		
-		final Activity activity = this;
+		final AppyMeteoLoggedActivity activity = this;
 		
 		if(challenge.getTurn() < 3) {
 			result_image.setVisibility(View.GONE);
@@ -62,18 +62,38 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 			picker_button.setVisibility(View.GONE);
 		}
 		
+		boolean viewToAdd = false;
+		
 		if(challenge.getTurn() == 0) {
 			picker_button.setBackgroundResource(R.drawable.pulsante_sfida);
 			picker_button.setOnClickListener(new OnClickListener() {
 				
 				public void onClick(View view) {
 					ServerUtilities.requestChallenge(
-						activity, 
+						(Activity) activity, 
 						SessionCache.getUser_id(view.getContext()),
 						challenge.getAdversary().getFacebook_id(),
 						GCMRegistrar.getRegistrationId(view.getContext()));
 				}
 			});
+			viewToAdd = true;
+		}
+		
+		if(challenge.getTurn() == 1 && SessionCache.getUser_id(this).equals(challenge.getUser_id_a()) || 
+			challenge.getTurn() == 2 && SessionCache.getUser_id(this).equals(challenge.getUser_id_b())) {
+			picker_button.setText("Rispondi");
+			picker_button.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View view) {
+					Bundle extras = new Bundle();
+					extras.putString("challenge_id", challenge.getChallenge_id());
+					extras.putString("turn", String.valueOf(challenge.getTurn()));
+					if(challenge.getTurn() == 2)
+						extras.putString("score", String.valueOf(challenge.getScore_a()));
+					activity.invokeActivity(ChallengeQuestionsActivity.class, extras);
+				}
+			});
+			viewToAdd = true;
 		}
 
 		if(challenge.getTurn() == 3) {
@@ -101,14 +121,19 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 					picker_result.setText("Hai perso!  " + ioScore.toString() + "-"
 							+ tuScore.toString());
 				}
-				if (ioScore == tuScore) {
+				if (ioScore.equals(tuScore)) {
 					result_image.setBackgroundResource(R.drawable.smile);
 					picker_result.setText("Hai pareggiato!  " + ioScore.toString()
 							+ "-" + tuScore.toString());
 				}
 			}
+			viewToAdd = true;
 		}
-		return rowView;
+		
+		if(viewToAdd)
+			return rowView;
+		else
+			return null;
 	}
 
 	@Override
@@ -181,11 +206,14 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 					final Challenge challenge = new Challenge(jsonObject);
 
 					final View view = attachChallengeToView(challenge);
-					runOnUiThread(new Runnable() {
-						public void run() {
-							challengeTurns.get(challenge.getTurn()).addView(view);
-						}
-					});
+					
+					if(view != null) {
+						runOnUiThread(new Runnable() {
+							public void run() {
+								challengeTurns.get(challenge.getTurn()).addView(view);
+							}
+						});
+					}
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
