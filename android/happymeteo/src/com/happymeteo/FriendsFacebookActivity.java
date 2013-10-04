@@ -34,8 +34,6 @@ import com.happymeteo.utils.onGetExecuteListener;
 public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 		onGetExecuteListener {
 
-	
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_friends_facebook);

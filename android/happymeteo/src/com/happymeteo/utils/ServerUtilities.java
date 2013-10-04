@@ -125,7 +125,7 @@ public class ServerUtilities {
 	public static void getChallenges(onPostExecuteListener onPostExecuteListener, Activity activity, String userId) {
 		Log.i(Const.TAG, "getChallenges");
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("userId", userId));
+		nvps.add(new BasicNameValuePair("user_id", userId));
 		new PostRequest(Const.GET_CHALENGES_URL_ID, activity, nvps, onPostExecuteListener).execute(Const.GET_CHALLENGES_URL);
 	}
 }
