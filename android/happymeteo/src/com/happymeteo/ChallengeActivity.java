@@ -1,15 +1,19 @@
 package com.happymeteo;
 
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.utils.Const;
+import com.happymeteo.utils.ServerUtilities;
+import com.happymeteo.utils.onPostExecuteListener;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class ChallengeActivity extends AppyMeteoLoggedActivity {
+public class ChallengeActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -30,5 +34,16 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 				context.startActivity(intent);
 			}
 		});
+		
+		ServerUtilities.getChallenges(this, this, SessionCache.getUser_id(this));
+	}
+
+	@Override
+	public void onPostExecute(int id, String result, Exception exception) {
+		if(exception != null) {
+			return;
+		}
+		
+		Log.i(Const.TAG, "result: "+result);
 	}
 }

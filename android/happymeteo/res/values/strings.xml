@@ -48,4 +48,5 @@
 	<string name="empty"></string>
 	<string name="welcome">Innanzitutto benvenuta/o!</string>
 	<string name="mail">Invia una mail..</string>
+	<string name="error">Errore</string>
 </resources>

@@ -18,6 +18,7 @@ public final class Const {
 	public static final String ACCEPT_CHALLENGE_URL = BASE_URL + "/accept_challenge";
 	public static final String QUESTIONS_CHALLENGE_URL = BASE_URL + "/questions_challenge";
 	public static final String SUBMIT_CHALLENGE_URL = BASE_URL + "/submit_challenge";
+	public static final String GET_CHALLENGES_URL = BASE_URL + "/get_challenges";
 	
 	/* Id Post */
 	public static final int CREATE_ACCOUNT_ID = 1;
@@ -35,8 +36,7 @@ public final class Const {
 	public static final int QUESTIONS_CHALLENGE_URL_ID = 10;
 	public static final int SUBMIT_CHALLENGE_URL_ID = 11;
 	
-	public static final int HAPPY_METEO_URL_ID = 12;
-	public static final int HAPPY_CONTEXT_URL_ID = 13;
+	public static final int GET_CHALENGES_URL_ID = 12;
 	
 	/* Google */
 	public static final String GOOGLE_ID = "347057775979";

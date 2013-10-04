@@ -45,8 +45,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		if (context instanceof Activity) {
 			spinner = new ProgressDialog(context);
 			spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			spinner.setMessage(context
-					.getString(com.happymeteo.R.string.loading) + " " + this.id);
+			spinner.setMessage(context.getString(com.happymeteo.R.string.loading));
 		}
 	}
 
@@ -56,11 +55,10 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		try {
 			JSONObject jsonObject = new JSONObject(json);
 
-			if (jsonObject != null && jsonObject.getString("error") != null
-					&& jsonObject.getString("message") != null) {
+			if (jsonObject != null && jsonObject.getString("error") != null) {
 				AlertDialogManager alert = new AlertDialogManager();
-				alert.showAlertDialog(context, jsonObject.getString("error"),
-						jsonObject.getString("message"), false,
+				alert.showAlertDialog(context, context.getString(com.happymeteo.R.string.error),
+						jsonObject.getString("error"), false,
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog,
 									int which) {

@@ -389,7 +389,6 @@ class GetQuestionsHandler(BaseRequestHandler):
 class SubmitQuestionsHandler(BaseRequestHandler):
 
   @check_hash
-  @check_hash
   def post(self):
     data = {}
     try:
@@ -442,30 +441,33 @@ class SubmitQuestionsHandler(BaseRequestHandler):
 """ Challenge Management """
 class GetChallengesHandler(BaseRequestHandler):
 
-  def get(self):
+  @check_hash
+  def post(self):
     try:
         user_id = self.request.get('user_id')
         
         if not user_id:
            raise Exception('You need to specify the user_id') 
-        
-        challenges = Challenge.gql("WHERE turn = 3 AND (user_id_a = :1 or user_id_b = :1)", user_id)
-        
+       
         data = []
         
+        challenges = Challenge.gql("WHERE user_id_a = :1", user_id)
         if challenges.count() > 0:
             for c in challenges:
-                if user_id == c.user_id_a:
-                    query = User.gql("WHERE user_id = :1", c.user_id_b)
-                    if query.count() > 0:
-                        user_adversary = query.get()
-                if user_id == c.user_id_b:
-                    query = User.gql("WHERE user_id = :1", c.user_id_a)
-                    if query.count() > 0:
-                        user_adversary = query.get()
-                c_object = c.toJson()
-                c_object['adversary'] = user_adversary.toJson()
-                data.append(c_object)
+                user_adversary = User.get_by_id(int(c.user_id_b))
+                if user_adversary:
+                    c_object = c.toJson()
+                    c_object['adversary'] = user_adversary.toJson()
+                    data.append(c_object)
+        
+        challenges = Challenge.gql("WHERE user_id_b = :1", user_id)
+        if challenges.count() > 0:        
+            for c in challenges:
+                user_adversary = User.get_by_id(int(c.user_id_a))
+                if user_adversary:
+                    c_object = c.toJson()
+                    c_object['adversary'] = user_adversary.toJson()
+                    data.append(c_object)
     except Exception as e:
         logging.exception(e)
         data = {
