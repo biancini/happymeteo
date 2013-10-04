@@ -1,5 +1,8 @@
 package com.happymeteo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,54 +21,94 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
+import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.models.Challenge;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 
-public class ChallengeActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {
-	
-	private void attachChallengeToView(View rowView, final Challenge challenge) {
+public class ChallengeActivity extends AppyMeteoLoggedActivity implements
+		onPostExecuteListener {
+
+	private View attachChallengeToView(final Challenge challenge) {
+		View rowView = getLayoutInflater().inflate(
+				R.layout.activity_challenge_row, null);
 		ProfilePictureView profilePictureView = (ProfilePictureView) rowView
 				.findViewById(R.id.picker_profile_pic_stub);
-		profilePictureView.setProfileId(challenge.getAdversary().getFacebook_id());
+		profilePictureView.setProfileId(challenge.getAdversary()
+				.getFacebook_id());
 
-		TextView picker_title = (TextView) rowView.findViewById(R.id.picker_title);
-		picker_title.setText("Sfida con "+challenge.getAdversary().getFirst_name());
+		TextView picker_title = (TextView) rowView
+				.findViewById(R.id.picker_title);
+		picker_title.setText("Sfida con "
+				+ challenge.getAdversary().getFirst_name());
 
-		TextView picker_result = (TextView) rowView.findViewById(R.id.picker_result);
-		picker_title.setText("Sfida con "+challenge.getAdversary().getFirst_name());
+		TextView picker_result = (TextView) rowView
+				.findViewById(R.id.picker_result);
+		picker_title.setText("Sfida con "
+				+ challenge.getAdversary().getFirst_name());
+
+		ImageView result_image = (ImageView) rowView
+				.findViewById(R.id.result_image);
 		
-		ImageView result_image = (ImageView) rowView.findViewById(R.id.result_image);
+		Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
 		
-		Float ioScore = null;
-		Float tuScore = null;
+		final Activity activity = this;
 		
-		if(SessionCache.getUser_id(this).equals(challenge.getUser_id_a())) {
-			ioScore = Float.valueOf(challenge.getScore_a());
-			tuScore = Float.valueOf(challenge.getScore_b());
+		if(challenge.getTurn() < 3) {
+			result_image.setVisibility(View.GONE);
+		} else {
+			picker_button.setVisibility(View.GONE);
 		}
 		
-		if(SessionCache.getUser_id(this).equals(challenge.getUser_id_b())) {
-			ioScore = Float.valueOf(challenge.getScore_b());
-			tuScore = Float.valueOf(challenge.getScore_a());
+		if(challenge.getTurn() == 0) {
+			picker_button.setBackgroundResource(R.drawable.pulsante_sfida);
+			picker_button.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View view) {
+					ServerUtilities.requestChallenge(
+						activity, 
+						SessionCache.getUser_id(view.getContext()),
+						challenge.getAdversary().getFacebook_id(),
+						GCMRegistrar.getRegistrationId(view.getContext()));
+				}
+			});
 		}
-		
-		if(ioScore != null && tuScore != null) {
-			if(ioScore > tuScore) {
-				result_image.setBackgroundResource(R.drawable.smilepositivo);
-				picker_result.setText("Hai vinto! "+ioScore.toString()+"-"+tuScore.toString());
+
+		if(challenge.getTurn() == 3) {
+			Float ioScore = null;
+			Float tuScore = null;
+	
+			if (SessionCache.getUser_id(this).equals(challenge.getUser_id_a())) {
+				ioScore = Float.valueOf(challenge.getScore_a());
+				tuScore = Float.valueOf(challenge.getScore_b());
 			}
-			if(ioScore < tuScore) {
-				result_image.setBackgroundResource(R.drawable.smilenegativo);
-				picker_result.setText("Hai perso! "+ioScore.toString()+"-"+tuScore.toString());
+	
+			if (SessionCache.getUser_id(this).equals(challenge.getUser_id_b())) {
+				ioScore = Float.valueOf(challenge.getScore_b());
+				tuScore = Float.valueOf(challenge.getScore_a());
 			}
-			if(ioScore == tuScore) {
-				result_image.setBackgroundResource(R.drawable.smile);
-				picker_result.setText("Hai pareggiato! "+ioScore.toString()+"-"+tuScore.toString());
+	
+			if (ioScore != null && tuScore != null) {
+				if (ioScore > tuScore) {
+					result_image.setBackgroundResource(R.drawable.smilepositivo);
+					picker_result.setText("Hai vinto!  " + ioScore.toString() + "-"
+							+ tuScore.toString());
+				}
+				if (ioScore < tuScore) {
+					result_image.setBackgroundResource(R.drawable.smilenegativo);
+					picker_result.setText("Hai perso!  " + ioScore.toString() + "-"
+							+ tuScore.toString());
+				}
+				if (ioScore == tuScore) {
+					result_image.setBackgroundResource(R.drawable.smile);
+					picker_result.setText("Hai pareggiato!  " + ioScore.toString()
+							+ "-" + tuScore.toString());
+				}
 			}
 		}
+		return rowView;
 	}
 
 	@Override
@@ -74,8 +117,8 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements onPost
 		super.onCreate(savedInstanceState);
 
 		Button btnChallengeNew = (Button) findViewById(R.id.btnChallengeNew);
-		
-		if(!SessionCache.isFacebookSession(this)) {
+
+		if (!SessionCache.isFacebookSession(this)) {
 			btnChallengeNew.setEnabled(false);
 		}
 
@@ -87,69 +130,69 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements onPost
 				context.startActivity(intent);
 			}
 		});
-		
-		ServerUtilities.getChallenges(this, this, SessionCache.getUser_id(this));
+
+		ServerUtilities
+				.getChallenges(this, this, SessionCache.getUser_id(this));
 	}
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if(exception != null) {
+		if (exception != null) {
 			return;
 		}
-		
-		Log.i(Const.TAG, "result: "+result);
-		
+
+		Log.i(Const.TAG, "result: " + result);
+
 		try {
 			JSONArray challenges = new JSONArray(result);
-			
-			Log.i(Const.TAG, "challenges.length(): "+challenges.length());
-			
-			if(challenges.length() == 0)
+
+			Log.i(Const.TAG, "challenges.length(): " + challenges.length());
+
+			if (challenges.length() == 0)
 				return;
-			
+
 			new ListChallenges(this, challenges).execute();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private class ListChallenges extends AsyncTask<String, Void, Void> {
 		private Activity activity;
 		private JSONArray challenges;
-		
+
 		public ListChallenges(Activity activity, JSONArray challenges) {
 			this.activity = activity;
 			this.challenges = challenges;
 		}
-		
+
 		@Override
 		protected Void doInBackground(String... params) {
-			final LinearLayout challengeDone = (LinearLayout) activity.findViewById(R.id.challengeDone);
-			
+			final List<LinearLayout> challengeTurns = new ArrayList<LinearLayout>();
+			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn0));
+			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn1));
+			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn2));
+			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn3));
+
 			for (int i = 0; i < challenges.length(); i++) {
 				JSONObject jsonObject;
 				try {
 					jsonObject = challenges.getJSONObject(i);
-					Challenge challenge = new Challenge(jsonObject);
-					
-					if(challenge.getTurn() < 3)
-						continue;
-					
-					final View vi = getLayoutInflater().inflate(
-							R.layout.activity_challenge_row, null);
-					attachChallengeToView(vi, challenge);
+					final Challenge challenge = new Challenge(jsonObject);
+
+					final View view = attachChallengeToView(challenge);
 					runOnUiThread(new Runnable() {
-					     public void run() {
-					    	 challengeDone.addView(vi);
-					    }
+						public void run() {
+							challengeTurns.get(challenge.getTurn()).addView(view);
+						}
 					});
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			}
-			
+
 			return null;
 		}
-		
+
 	}
 }

@@ -84,12 +84,10 @@
         <activity
             android:name="com.happymeteo.CreateAccountActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.happymeteo.NormalLoginActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.happymeteo.QuestionActivity"
@@ -99,7 +97,6 @@
         <activity
             android:name="com.happymeteo.ChallengeActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.happymeteo.FriendsFacebookActivity"

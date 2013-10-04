@@ -15,3 +15,8 @@ indexes:
   properties:
   - name: challenge_id
   - name: order
+  
+- kind: Challenge
+  properties:
+  - name: user_id_b
+  - name: turn

@@ -14,7 +14,6 @@
         android:layout_width="237dip"
         android:layout_height="35dip"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="20dip"
         android:layout_marginTop="5dip"
         android:background="@drawable/nuovasfida" />
 
@@ -23,11 +22,60 @@
         android:layout_width="237dip"
         android:layout_height="22dip"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dip"
         android:adjustViewBounds="true"
         android:src="@drawable/partitefatte" />
 
     <LinearLayout
-        android:id="@+id/challengeDone"
+        android:id="@+id/challengeTurn0"
+        android:layout_width="237dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="#E7E7E7"
+        android:orientation="vertical" />
+
+    <ImageView
+        android:layout_width="237dip"
+        android:layout_height="22dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dip"
+        android:adjustViewBounds="true"
+        android:src="@drawable/partitefatte" />
+
+    <LinearLayout
+        android:id="@+id/challengeTurn1"
+        android:layout_width="237dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="#E7E7E7"
+        android:orientation="vertical" />
+
+    <ImageView
+        android:layout_width="237dip"
+        android:layout_height="22dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dip"
+        android:adjustViewBounds="true"
+        android:src="@drawable/partitefatte" />
+
+    <LinearLayout
+        android:id="@+id/challengeTurn2"
+        android:layout_width="237dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="#E7E7E7"
+        android:orientation="vertical" />
+
+    <ImageView
+        android:layout_width="237dip"
+        android:layout_height="22dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dip"
+        android:adjustViewBounds="true"
+        android:src="@drawable/partitefatte" />
+
+    <LinearLayout
+        android:id="@+id/challengeTurn3"
         android:layout_width="237dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

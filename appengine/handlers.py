@@ -460,7 +460,7 @@ class GetChallengesHandler(BaseRequestHandler):
                     c_object['adversary'] = user_adversary.toJson()
                     data.append(c_object)
         
-        challenges = Challenge.gql("WHERE user_id_b = :1", user_id)
+        challenges = Challenge.gql("WHERE turn > 0 AND user_id_b = :1", user_id)
         if challenges.count() > 0:        
             for c in challenges:
                 user_adversary = User.get_by_id(int(c.user_id_a))
