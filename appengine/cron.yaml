@@ -1,4 +1,4 @@
 cron:
 - description: questions
   url: /send_message
-  schedule: every 6 hours
+  schedule: every 4 hours from 08:00 to 20:00
