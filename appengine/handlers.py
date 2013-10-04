@@ -82,8 +82,7 @@ def check_hash(handler_method):
     def check_hash(self, *args, **kwargs):
         if not check_call(self.request):
             data = {
-              'error': 'access-denied',
-              'message': 'Accesso Negato'
+              'error': 'access-denied'
             }
             
             self.response.headers['Content-Type'] = 'application/json'
@@ -167,8 +166,7 @@ class FacebookLoginHandler(BaseRequestHandler):
     except Exception as e:
       logging.exception(e)
       data = {
-        'error': 'Facebook Login error',
-        'message': '%s' % str(e)
+        'error': '%s' % str(e)
       }
       
     self.response.headers['Content-Type'] = 'application/json'
@@ -238,8 +236,7 @@ class CreateAccountHandler(BaseRequestHandler):
                 data['user_id'] = user.key().id()
             else:
                 data = {
-                  'error': 'Create Account error',
-                  'message': 'user with same email already exists',
+                  'error': 'user with same email already exists'
                 }
         else:
             ok = False
@@ -254,8 +251,7 @@ class CreateAccountHandler(BaseRequestHandler):
                     user2 = query.get()
                     if user.key().id() != user2.key().id():
                         data = {
-                          'error': 'Create Account error',
-                          'message': 'user with same facebook account already exists',
+                          'error': 'user with same facebook account already exists'
                         }
                     else:
                         ok = True
@@ -280,8 +276,7 @@ class CreateAccountHandler(BaseRequestHandler):
       except Exception as e:
         logging.exception(e)
         data = {
-          'error': 'Create Account error',
-          'message': '%s' % traceback.format_exc(),
+          'error': '%s' % str(e)
         }
     
       self.response.headers['Content-Type'] = 'application/json'
@@ -309,19 +304,16 @@ class NormalLoginHandler(BaseRequestHandler):
             data['tomorrow'] = tomorrow_value
           else:
             data = {
-              'error': 'Normal Login error',
-              'message': 'Password didn\'t match',
+              'error': 'Password didn\'t match'
             }
         else:
           data = {
-            'error': 'Normal Login error',
-            'message': 'User not found or not confirmed',
+            'error': 'User not found or not confirmed'
           }
       except Exception as e:
         logging.exception(e)
         data = {
-          'error': 'Normal Login error',
-          'message': '%s' % str(e)
+          'error': '%s' % str(e)
         }
       
       self.response.headers['Content-Type'] = 'application/json'
@@ -441,14 +433,48 @@ class SubmitQuestionsHandler(BaseRequestHandler):
     except Exception as e:
         logging.exception(e)
         data = {
-          'error': 'Submit Question error',
-          'message': '%s' % str(e)
+          'error': '%s' % str(e)
         }
         
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))
     
 """ Challenge Management """
+class GetChallengesHandler(BaseRequestHandler):
+
+  def get(self):
+    try:
+        user_id = self.request.get('user_id')
+        
+        if not user_id:
+           raise Exception('You need to specify the user_id') 
+        
+        challenges = Challenge.gql("WHERE turn = 3 AND (user_id_a = :1 or user_id_b = :1)", user_id)
+        
+        data = []
+        
+        if challenges.count() > 0:
+            for c in challenges:
+                if user_id == c.user_id_a:
+                    query = User.gql("WHERE user_id = :1", c.user_id_b)
+                    if query.count() > 0:
+                        user_adversary = query.get()
+                if user_id == c.user_id_b:
+                    query = User.gql("WHERE user_id = :1", c.user_id_a)
+                    if query.count() > 0:
+                        user_adversary = query.get()
+                c_object = c.toJson()
+                c_object['adversary'] = user_adversary.toJson()
+                data.append(c_object)
+    except Exception as e:
+        logging.exception(e)
+        data = {
+          'error': '%s' % str(e)
+        }
+    
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
+
 class RequestChallengeHandler(BaseRequestHandler):
     
   @check_hash
@@ -503,8 +529,7 @@ class RequestChallengeHandler(BaseRequestHandler):
     except Exception as e:
         logging.exception(e)
         data = {
-          'error': 'Request Challenge error',
-          'message': '%s' % str(e)
+          'error': '%s' % str(e)
         }
         
     self.response.headers['Content-Type'] = 'application/json'
@@ -561,8 +586,7 @@ class AcceptChallengeHandler(BaseRequestHandler):
     except Exception as e:
         logging.exception(e)
         data = {
-          'error': 'Accept Challenge error',
-          'message': '%s' % str(e)
+          'error': '%s' % str(e)
         }
     
     self.response.headers['Content-Type'] = 'application/json'
@@ -726,8 +750,7 @@ class SubmitChallengeHandler(BaseRequestHandler):
     except Exception as e:
        logging.exception(e)
        data = {
-         'error': 'Submit Challenge error',
-          'message': '%s' % str(e)
+         'error': '%s' % str(e)
        }
     
     self.response.headers['Content-Type'] = 'application/json'

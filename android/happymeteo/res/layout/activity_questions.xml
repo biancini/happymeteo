@@ -33,7 +33,7 @@
             android:layout_height="20dip"
             android:layout_margin="10dip"
             android:background="@drawable/next" 
-            android:layout_gravity="top"/>
+            android:layout_gravity="center" />
     </LinearLayout>
 
 </LinearLayout>

@@ -32,6 +32,7 @@ routes = [
   Route('/submit_questions', handler='handlers.SubmitQuestionsHandler'),
   
   # challenge management
+  Route('/get_challenges', handler='handlers.GetChallengesHandler'),
   Route('/request_challenge', handler='handlers.RequestChallengeHandler'),
   Route('/accept_challenge', handler='handlers.AcceptChallengeHandler'),
   Route('/questions_challenge', handler='handlers.QuestionsChallengeHandler'),

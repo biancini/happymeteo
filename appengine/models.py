@@ -53,7 +53,10 @@ class Challenge(db.Model):
         return {
             'challenge_id': self.key().id(),
             'user_id_a': self.user_id_a,
-            'user_id_b': self.user_id_b
+            'user_id_b': self.user_id_b,
+            'score_a': self.score_a,
+            'score_b': self.score_b,
+            'turn': self.turn
         }
         
 class Question(db.Model):

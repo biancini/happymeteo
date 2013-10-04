@@ -52,9 +52,15 @@
                     android:paddingBottom="5dp">
                     
                     <ImageView
+	                    android:id="@+id/mail"
+	                    android:layout_width="25dp"
+	                    android:layout_height="25dp"
+	                    android:src="@drawable/mail" />
+                    
+                    <ImageView
 	                    android:id="@+id/facebook"
-	                    android:layout_width="20dp"
-	                    android:layout_height="20dp"
+	                    android:layout_width="25dp"
+	                    android:layout_height="25dp"
 	                    android:src="@drawable/facebook" />
                 </LinearLayout>
             </RelativeLayout>

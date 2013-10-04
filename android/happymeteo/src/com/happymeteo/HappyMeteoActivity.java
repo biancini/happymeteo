@@ -14,6 +14,7 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.facebook.Session;
@@ -181,6 +182,25 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 
 		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
 		gestureDetector = new GestureDetector(new MyGestureDetector(this, viewFlipper));
+		
+		ImageView mail = (ImageView) findViewById(R.id.mail);
+		mail.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View view, MotionEvent event) {
+				Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("message/rfc822");
+				i.putExtra(Intent.EXTRA_EMAIL  , new String[]{""});
+				i.putExtra(Intent.EXTRA_SUBJECT, "");
+				i.putExtra(Intent.EXTRA_TEXT   , "");
+				try {
+				    startActivity(Intent.createChooser(i, view.getContext().getString(R.string.mail)));
+				} catch (android.content.ActivityNotFoundException ex) {
+				    Toast.makeText(HappyMeteoActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+				}
+				return false;
+			}
+		});
 
 		ImageView facebook = (ImageView) findViewById(R.id.facebook);
 		facebook.setOnTouchListener(new OnTouchListener() {
