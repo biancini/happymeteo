@@ -74,6 +74,10 @@ handlers:
 - url: /(robots\.txt)
   static_files: static/\1
   upload: static/robots\.txt
+  
+- url: /(weather_map\.html)
+  static_files: static/\1
+  upload: static/weather_map\.html
 
 - url: /(img|css|js)/(.*)
   static_files: static/\1/\2
