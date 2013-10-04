@@ -82,12 +82,12 @@ handlers:
 - url: /(img|css|js)/(.*)
   static_files: static/\1/\2
   upload: static/(img|css|js)/(.*)
-    
-# dynamic handlers
+
 - url: /send_message
   script: main.app
   login: admin
-
+  
+# dynamic handlers
 - url: /.*
   script: main.app
   secure: always

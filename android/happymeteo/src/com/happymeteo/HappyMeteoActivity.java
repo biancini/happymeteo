@@ -24,8 +24,10 @@ import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
+import com.happymeteo.utils.ServerUtilities;
+import com.happymeteo.utils.onPostExecuteListener;
 
-public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
+public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {
 
 	class MyGestureDetector extends SimpleOnGestureListener {
 		private ViewFlipper flipper;
@@ -279,6 +281,8 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 			userImage.setProfileId(null);
 			facebook.setVisibility(View.GONE);
 		}
+		
+		ServerUtilities.getAppynessByDay(this, this, SessionCache.getUser_id(this));
 	}
 
 	@Override
@@ -288,5 +292,10 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity {
 		} else {
 			return true;
 		}
+	}
+
+	@Override
+	public void onPostExecute(int id, String result, Exception exception) {
+		// TODO Auto-generated method stub
 	}
 }

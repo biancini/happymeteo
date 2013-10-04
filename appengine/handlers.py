@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
 import json
 import urllib2
 
@@ -16,7 +15,6 @@ from secrets import EMAIL, CREATE_ACCOUNT_EMAIL
 
 from utils import sendMessage, happymeteo, sample, check_call
 
-import traceback
 import logging
 
 from datetime import datetime
@@ -768,5 +766,59 @@ class SubmitChallengeHandler(BaseRequestHandler):
          'error': '%s' % str(e)
        }
     
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
+    
+class GetAppinessByDayHandler(BaseRequestHandler):
+
+  @check_hash
+  def post(self):
+    """
+    mapreduce_pipeline.MapreducePipeline(
+        "word_count",
+        "maprd.get_appyness_by_day_map",
+        "maprd.get_appyness_by_day_reduce",
+        "mapreduce.input_readers.DatastoreInputReader",
+        "mapreduce.output_writers.BlobstoreOutputWriter",
+        mapper_params={
+            "entity_kind": Answer,
+            "namespace": ''
+        },
+        reducer_params={
+            "mime_type": "text/plain",
+        },
+        shards=16)
+    """  
+    
+    data = {}
+    
+    try:
+        user_id = self.request.get('user_id')
+        
+        if not user_id:
+           raise Exception('You need to specify the user_id') 
+        
+        count = {}
+        sum = {}
+        
+        answers = Answer.gql("WHERE user_id = :1", user_id)
+        
+        for answer in answers:
+            index = str(answer.date.date())
+            if index in count:
+                count[index] = count[index]+1
+                sum[index] = sum[index]+int(answer.value)
+            else:
+                count[index] = 1
+                sum[index] = int(answer.value)
+                
+        for index in count:
+            data[index] = sum[index] / count[index]
+    except Exception as e:
+       logging.exception(e)
+       data = {
+         'error': '%s' % str(e)
+       }
+       
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))

@@ -18,5 +18,4 @@ public class HappyMapActivity extends AppyMeteoLoggedActivity {
 		webSettings.setJavaScriptEnabled(true);
 		webmapview.loadUrl(Const.BASE_URL+"/weather_map.html");
 	}
-
 }

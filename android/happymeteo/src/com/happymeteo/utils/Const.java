@@ -20,6 +20,8 @@ public final class Const {
 	public static final String SUBMIT_CHALLENGE_URL = BASE_URL + "/submit_challenge";
 	public static final String GET_CHALLENGES_URL = BASE_URL + "/get_challenges";
 	
+	public static final String GET_APPINESS_BY_DAY_URL = BASE_URL + "/get_appiness_by_day";
+	
 	/* Id Post */
 	public static final int CREATE_ACCOUNT_ID = 1;
 	public static final int FACEBOOK_LOGIN_URL_ID = 2;
@@ -37,6 +39,8 @@ public final class Const {
 	public static final int SUBMIT_CHALLENGE_URL_ID = 11;
 	
 	public static final int GET_CHALENGES_URL_ID = 12;
+	
+	public static final int GET_APPINESS_BY_DAY_ID = 13;
 	
 	/* Google */
 	public static final String GOOGLE_ID = "347057775979";

@@ -128,4 +128,11 @@ public class ServerUtilities {
 		nvps.add(new BasicNameValuePair("user_id", userId));
 		new PostRequest(Const.GET_CHALENGES_URL_ID, activity, nvps, onPostExecuteListener).execute(Const.GET_CHALLENGES_URL);
 	}
+	
+	public static void getAppynessByDay(onPostExecuteListener onPostExecuteListener, Activity activity, String userId) {
+		Log.i(Const.TAG, "getChallenges");
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("user_id", userId));
+		new PostRequest(Const.GET_APPINESS_BY_DAY_ID, activity, nvps, onPostExecuteListener).execute(Const.GET_APPINESS_BY_DAY_URL);
+	}
 }
