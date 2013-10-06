@@ -107,7 +107,9 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 				break;
 	
 			/*case R.id.side_navigation_menu_item5:
-				invokeActivity(HappyContextActivity.class);
+				Bundle extras = new Bundle();
+				extras.putString("timestamp", "test");
+				invokeActivity(QuestionActivity.class, extras);
 				break;*/
 				
 			case R.id.side_navigation_menu_item6:

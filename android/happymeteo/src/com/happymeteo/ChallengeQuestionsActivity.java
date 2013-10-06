@@ -12,7 +12,9 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +22,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,24 +31,26 @@ import android.widget.TextView;
 
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
-import com.happymeteo.utils.LocationManagerHelper;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 import com.happymeteo.widget.AppyMeteoSeekBar;
 import com.happymeteo.widget.AppyMeteoSeekBar.OnAppyMeteoSeekBarChangeListener;
 
 public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity implements
-		onPostExecuteListener {
+		onPostExecuteListener, LocationListener {
 	private AppyMeteoNotLoggedActivity activity;
 	private onPostExecuteListener onPostExecuteListener;
 	private Map<String, String> params;
-	private LocationManagerHelper locationListener;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
 	
 	private final String CHALLENGE_ID = "challenge_id";
 	private final String TURN = "turn";
 	private final String SCORE = "score";
+	
+	private LocationManager locationManager;
+	private String provider;
+	private Location location;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,25 +59,23 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 		
 		this.activity = this;
 		this.onPostExecuteListener = this;
-
+		
+		/* Initialize location */
 		// Get the location manager
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		
+		// Define the criteria how to select the locatioin provider -> use
+		// default
+		Criteria criteria = new Criteria();
+		provider = locationManager.getBestProvider(criteria, false);
+		Location localLocation = locationManager.getLastKnownLocation(provider);
 
-		locationListener = new LocationManagerHelper();
-
-		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			locationManager.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 30000, 100, locationListener);
+		// Initialize the location fields
+		if (localLocation != null) {
+			onLocationChanged(localLocation);
 		} else {
-			Log.i(Const.TAG, "GPS is not turned on...");
-			if (locationManager
-					.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-				locationManager.requestLocationUpdates(
-						LocationManager.NETWORK_PROVIDER, 30000, 100,
-						locationListener);
-			} else {
-				Log.i(Const.TAG, "Network is not turned on...");
-			}
+			Toast.makeText(this, "location not available",
+					Toast.LENGTH_LONG).show();
 		}
 
 		params = new HashMap<String, String>();
@@ -87,7 +90,6 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 
 			@Override
 			public void onClick(View view) {
-				Location location = locationListener.getLocation();
 				Log.d(Const.TAG, "location: " + location);
 
 				if (location != null) {
@@ -301,5 +303,33 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 		keyIntentParameters.add(TURN);
 		keyIntentParameters.add(SCORE);
 		return keyIntentParameters;
+	}
+	
+	@Override
+	public void onLocationChanged(Location location) {
+		this.location = location;
+		Toast.makeText(
+				this,
+				"location: " + Double.toString(location.getLatitude()) + " "
+						+ Double.toString(location.getLongitude()) + " " + location.getProvider(),
+				Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		Toast.makeText(this, "onProviderDisabled: " + provider,
+				Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		Toast.makeText(this, "onProviderEnabled: " + provider,
+				Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		Toast.makeText(this, "onStatusChanged: " + provider + " " + status,
+				Toast.LENGTH_LONG).show();
 	}
 }

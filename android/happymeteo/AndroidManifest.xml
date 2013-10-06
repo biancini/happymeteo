@@ -6,7 +6,7 @@
 
     <!-- GCM requires Android SDK version 2.2 (API level 8) or above. -->
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="8"
         android:targetSdkVersion="16" />
 
     <!-- GCM connects to Internet Services. -->
@@ -44,7 +44,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppyMeteoTheme" >
-
+        
         <!-- Activities -->
         <activity
             android:name="com.happymeteo.SplashActivity"
@@ -116,6 +116,7 @@
             android:name="com.facebook.LoginActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
@@ -138,4 +139,5 @@
         <!-- DEVE ESSERE nello stesso package delle classi che lo usano, meglio se in quello specificato nell'AndroidManifest.xml -->
         <service android:name="com.happymeteo.GCMIntentService" />
     </application>
+
 </manifest>

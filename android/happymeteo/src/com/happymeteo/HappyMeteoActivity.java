@@ -7,9 +7,9 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.View;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -27,7 +27,8 @@ import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 
-public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {
+public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
+		onPostExecuteListener {
 
 	class MyGestureDetector extends SimpleOnGestureListener {
 		private ViewFlipper flipper;
@@ -51,16 +52,18 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 					&& flipper.getDisplayedChild() == 0) {
 				flipper.setInAnimation(context, R.anim.in_from_right);
 				flipper.setOutAnimation(context, R.anim.out_to_left);
-				Log.i(Const.TAG, " in onFling() :: showNext"
-						+ flipper.getDisplayedChild());
+				Log.i(Const.TAG,
+						" in onFling() :: showNext"
+								+ flipper.getDisplayedChild());
 				flipper.showNext();
 			} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
 					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
 					&& flipper.getDisplayedChild() == 1) {
 				flipper.setInAnimation(context, R.anim.in_from_left);
 				flipper.setOutAnimation(context, R.anim.out_to_right);
-				Log.i(Const.TAG, " in onFling() :: showPrevious"
-						+ flipper.getDisplayedChild());
+				Log.i(Const.TAG,
+						" in onFling() :: showPrevious"
+								+ flipper.getDisplayedChild());
 				flipper.showPrevious();
 			}
 			return super.onFling(e1, e2, velocityX, velocityY);
@@ -171,71 +174,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		return R.drawable.white_1happy;
 	}
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.activity_happy_meteo);
-		super.onCreate(savedInstanceState);
-
-		/* Initialize PushNotificationsService */
-		PushNotificationsService.register(getApplicationContext());
-
-		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
-		welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase() + "_OGGI");
-
-		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
-		gestureDetector = new GestureDetector(new MyGestureDetector(this, viewFlipper));
-		
-		ImageView mail = (ImageView) findViewById(R.id.mail);
-		mail.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View view, MotionEvent event) {
-				Intent i = new Intent(Intent.ACTION_SEND);
-				i.setType("message/rfc822");
-				i.putExtra(Intent.EXTRA_EMAIL  , new String[]{""});
-				i.putExtra(Intent.EXTRA_SUBJECT, "");
-				i.putExtra(Intent.EXTRA_TEXT   , "");
-				try {
-				    startActivity(Intent.createChooser(i, view.getContext().getString(R.string.mail)));
-				} catch (android.content.ActivityNotFoundException ex) {
-				    Toast.makeText(HappyMeteoActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-				}
-				return false;
-			}
-		});
-
-		ImageView facebook = (ImageView) findViewById(R.id.facebook);
-		facebook.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View view, MotionEvent event) {
-				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(view.getContext(), Session.getActiveSession());
-				WebDialog webDialog = feedDialogBuilder.build();
-				webDialog.show();
-				return false;
-			}
-		});
-	}
-	
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		
-		Log.i(Const.TAG, "intent.getExtras(): "+intent.getExtras());
-		Log.i(Const.TAG, "getIntent().getExtras(): "+getIntent().getExtras());
-		
-		if(intent.getExtras() != null) {
-			boolean challengeScoreActivity = intent.getExtras().getBoolean("ChallengeScoreActivity", false);
-			
-			if(challengeScoreActivity)
-				invokeActivity(ChallengeScoreActivity.class, intent.getExtras());
-		}
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		
+	private void setupView() {
 		int today_int = SessionCache.getToday(this);
 		int yesterday_int = SessionCache.getYesterday(this);
 		int tomorrow_int = SessionCache.getTomorrow(this);
@@ -255,24 +194,26 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 		yesterday_pic.setImageResource(getGrayIcon(yesterday_int));
 		ImageView tomorrow_pic = (ImageView) findViewById(R.id.tomorrow_pic);
 		tomorrow_pic.setImageResource(getGrayIcon(tomorrow_int));
-		
+
 		RelativeLayout relativeLayoutMeteoUp1 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp1);
 		GradientDrawable gradientDrawable = new GradientDrawable(
 				GradientDrawable.Orientation.TOP_BOTTOM,
 				getColorByToday(today_int));
 		relativeLayoutMeteoUp1.setBackgroundDrawable(gradientDrawable);
-		
+
 		try {
-			Typeface helveticaneueltstd_ultlt_webfont = Typeface.createFromAsset(
-					getAssets(), "helveticaneueltstd-ultlt-webfont.ttf");
+			Typeface helveticaneueltstd_ultlt_webfont = Typeface
+					.createFromAsset(getAssets(),
+							"helveticaneueltstd-ultlt-webfont.ttf");
 			today_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 			yesterday_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 			tomorrow_text.setTypeface(helveticaneueltstd_ultlt_webfont);
-		} catch(Exception e) {}
-		
+		} catch (Exception e) {
+		}
+
 		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.profile_picture);
 		ImageView facebook = (ImageView) findViewById(R.id.facebook);
-		
+
 		if (SessionCache.isFacebookSession(this)) {
 			userImage.setProfileId(SessionCache.getFacebook_id(this));
 			userImage.setCropped(true);
@@ -281,8 +222,78 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements onPos
 			userImage.setProfileId(null);
 			facebook.setVisibility(View.GONE);
 		}
-		
-		ServerUtilities.getAppynessByDay(this, this, SessionCache.getUser_id(this));
+
+		ServerUtilities.getAppynessByDay(this, this,
+				SessionCache.getUser_id(this));
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		setContentView(R.layout.activity_happy_meteo);
+		super.onCreate(savedInstanceState);
+
+		/* Initialize PushNotificationsService */
+		PushNotificationsService.register(getApplicationContext());
+
+		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
+		welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase()
+				+ "_OGGI");
+
+		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
+		gestureDetector = new GestureDetector(new MyGestureDetector(this,
+				viewFlipper));
+
+		ImageView mail = (ImageView) findViewById(R.id.mail);
+		mail.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View view, MotionEvent event) {
+				Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("message/rfc822");
+				i.putExtra(Intent.EXTRA_EMAIL, new String[] { "" });
+				i.putExtra(Intent.EXTRA_SUBJECT, "");
+				i.putExtra(Intent.EXTRA_TEXT, "");
+				try {
+					startActivity(Intent.createChooser(i, view.getContext()
+							.getString(R.string.mail)));
+				} catch (android.content.ActivityNotFoundException ex) {
+					Toast.makeText(HappyMeteoActivity.this,
+							"There are no email clients installed.",
+							Toast.LENGTH_SHORT).show();
+				}
+				return false;
+			}
+		});
+
+		ImageView facebook = (ImageView) findViewById(R.id.facebook);
+		facebook.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View view, MotionEvent event) {
+				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(
+						view.getContext(), Session.getActiveSession());
+				WebDialog webDialog = feedDialogBuilder.build();
+				webDialog.show();
+				return false;
+			}
+		});
+
+		setupView();
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
+		if (intent.getExtras() != null) {
+			boolean challengeScoreActivity = intent.getExtras().getBoolean(
+					"ChallengeScoreActivity", false);
+
+			if (challengeScoreActivity)
+				invokeActivity(ChallengeScoreActivity.class, intent.getExtras());
+		}
+
+		setupView();
 	}
 
 	@Override

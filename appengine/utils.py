@@ -87,13 +87,13 @@ def happymeteo(user_id):
             yesterday_sum = yesterday_sum + int(answer.value)
         
         yesterday_value = yesterday_sum / query_yesterday.count()
-    
+        
     today_value = 1.0
     today_sum = 0.0
     if query_today.count() > 0:
         for answer in query_today:
             today_sum = today_sum + int(answer.value)
-        
+            
         today_value = today_sum / query_today.count()
     else:
         beforebeforeyesterday = beforeyesterday - timedelta(1)
@@ -105,8 +105,14 @@ def happymeteo(user_id):
                 beforebeforeyesterday_sum = beforebeforeyesterday_sum + int(answer.value)
         
             beforebeforeyesterday_value = beforebeforeyesterday_sum / query_beforebeforeyesterday.count()
-        
+            
         today_value = int((beforebeforeyesterday_value + yesterday_value + beforeyesterday_value) / 3)
+        
+    if yesterday_value < 1:
+        yesterday_value = 1
+        
+    if today_value < 1:
+        today_value = 1
         
     tomorrow_value = int((today_value + yesterday_value + beforeyesterday_value) / 3)
     

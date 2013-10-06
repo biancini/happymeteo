@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">appymeteo</string>
-	<string name="version">Versione 0.1.17</string>
+	<string name="version">Versione 0.1.18b</string>
 	<string name="app_id">405414319576008</string>
     <string name="information_page">info</string>
     <string name="happy_meteo">my meteo</string>
+    <string name="happy_context">contesto</string>
     <string name="happy_map">mappa</string>
     <string name="logout">logout</string>
     <string name="begin_questions">Il momento delle domande!</string>

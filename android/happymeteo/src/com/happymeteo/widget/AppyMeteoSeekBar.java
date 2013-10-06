@@ -3,10 +3,7 @@ package com.happymeteo.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 import android.widget.SeekBar;
-
-import com.happymeteo.utils.Const;
 
 public class AppyMeteoSeekBar extends SeekBar {
 	private int viewWidth;
@@ -19,7 +16,7 @@ public class AppyMeteoSeekBar extends SeekBar {
 	
 	 private OnAppyMeteoSeekBarChangeListener mOnAppyMeteoSeekBarChangeListener;
 	
-	public AppyMeteoSeekBar(Context context/*, TextView labelBackground*/) {
+	public AppyMeteoSeekBar(Context context) {
 		super(context);
 		
 		barBounds = new Rect();
@@ -43,7 +40,6 @@ public class AppyMeteoSeekBar extends SeekBar {
         barBounds.right = barBounds.left + viewWidth - getPaddingRight() - getPaddingLeft();
 
         progressPosX = (int) (barBounds.left + ((float) this.getProgress() / (float) this.getMax()) * barBounds.width() + getThumbOffset()/2);
-        Log.i(Const.TAG, "progressPosX: "+progressPosX);
         
         if (mOnAppyMeteoSeekBarChangeListener != null) {
         	mOnAppyMeteoSeekBarChangeListener.onProgressPosXChanged(this, getProgress(), progressPosX);

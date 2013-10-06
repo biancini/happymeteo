@@ -370,8 +370,9 @@ class SendMessageHandler(BaseRequestHandler):
     devices = Device.all()
     
     for d in devices:
-        sendMessage(d.registration_id, collapse_key='questions', payload={'user_id': d.user_id, 'timestamp': '%s'%ts})
-        print '%s'%ts
+        if d.user_id != "":
+            sendMessage(d.registration_id, collapse_key='questions', payload={'user_id': d.user_id, 'timestamp': '%s'%ts})
+            print '%s'%ts
 
 """ Questions Management """
 class GetQuestionsHandler(BaseRequestHandler):

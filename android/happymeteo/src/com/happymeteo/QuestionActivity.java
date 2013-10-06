@@ -12,7 +12,9 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,67 +27,68 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
-import com.happymeteo.utils.LocationManagerHelper;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 import com.happymeteo.widget.AppyMeteoSeekBar;
 import com.happymeteo.widget.AppyMeteoSeekBar.OnAppyMeteoSeekBarChangeListener;
 
 public class QuestionActivity extends AppyMeteoImpulseActivity implements
-		onPostExecuteListener {
+		onPostExecuteListener, LocationListener {
 	private AppyMeteoNotLoggedActivity activity;
 	private onPostExecuteListener onPostExecuteListener;
 	private Map<String, String> params;
-	private LocationManagerHelper locationListener;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
-	
+
 	private final String TIMESTAMP = "timestamp";
+
+	private LocationManager locationManager;
+	private String provider;
+	private Location location;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_questions);
 		super.onCreate(savedInstanceState);
+
+		/* Initialize location */
+		// Get the location manager
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		
+		// Define the criteria how to select the locatioin provider -> use
+		// default
+		Criteria criteria = new Criteria();
+		provider = locationManager.getBestProvider(criteria, false);
+		Location localLocation = locationManager.getLastKnownLocation(provider);
+
+		// Initialize the location fields
+		if (localLocation != null) {
+			onLocationChanged(localLocation);
+		} else {
+			Toast.makeText(this, "location not available",
+					Toast.LENGTH_LONG).show();
+		}
 		
 		this.activity = this;
 		this.onPostExecuteListener = this;
-
-		// Get the location manager
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-		locationListener = new LocationManagerHelper();
-
-		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			locationManager.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 30000, 100, locationListener);
-		} else {
-			Log.i(Const.TAG, "GPS is not turned on...");
-			if (locationManager
-					.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-				locationManager.requestLocationUpdates(
-						LocationManager.NETWORK_PROVIDER, 30000, 100,
-						locationListener);
-			} else {
-				Log.i(Const.TAG, "Network is not turned on...");
-			}
-		}
 
 		params = new HashMap<String, String>();
 		questions = new JSONObject();
 
 		linearLayout = (LinearLayout) findViewById(R.id.layoutQuestions);
 
-		ServerUtilities.getQuestions(onPostExecuteListener, activity, SessionCache.getUser_id(this));
+		ServerUtilities.getQuestions(onPostExecuteListener, activity,
+				SessionCache.getUser_id(this));
 
 		final Button btnAnswerQuestions = (Button) findViewById(R.id.btnAnswerQuestions);
 		btnAnswerQuestions.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				Location location = locationListener.getLocation();
 				Log.d(Const.TAG, "location: " + location);
 
 				if (location != null) {
@@ -97,7 +100,8 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 							String.valueOf(location.getLongitude()));
 				}
 
-				params.put("user_id", SessionCache.getUser_id(view.getContext()));
+				params.put("user_id",
+						SessionCache.getUser_id(view.getContext()));
 				params.put("questions", questions.toString());
 				params.put("timestamp", intentParameters.get(TIMESTAMP));
 
@@ -105,6 +109,13 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 						activity, params);
 			}
 		});
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		locationManager.requestLocationUpdates(provider, 400, 1, this);
 	}
 
 	@Override
@@ -173,11 +184,12 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 									LayoutParams.WRAP_CONTENT);
 							llp_seekBar.weight = 80;
 
-							final AppyMeteoSeekBar appyMeteoSeekBar = new AppyMeteoSeekBar(this);
+							final AppyMeteoSeekBar appyMeteoSeekBar = new AppyMeteoSeekBar(
+									this);
 							appyMeteoSeekBar.setMax(90);
 							appyMeteoSeekBar.setProgress(0);
 							appyMeteoSeekBar.setLayoutParams(llp_seekBar);
-							
+
 							final TextView tvText = new TextView(this);
 							tvText.setText("1°");
 							tvText.setBackgroundResource(R.drawable.baloon);
@@ -188,33 +200,37 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 							LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
 									LayoutParams.WRAP_CONTENT,
 									LayoutParams.WRAP_CONTENT);
-							llpBaloon.leftMargin = appyMeteoSeekBar.getProgressPosX();
+							llpBaloon.leftMargin = appyMeteoSeekBar
+									.getProgressPosX();
 							tvText.setLayoutParams(llpBaloon);
 							tvText.setPadding(0, 0, 0, 10);
 							linearLayout.addView(tvText);
-							
-							appyMeteoSeekBar.setOnAppyMeteoSeekBarChangeListener(new OnAppyMeteoSeekBarChangeListener() {
-								
-								@Override
-								public void onProgressPosXChanged(AppyMeteoSeekBar seekBar, int progress,
-										int progressPosX) {
-									String value = String
-											.valueOf((progress / 10) + 1);
-									try {
-										questions.put(id_question, value);
-									} catch (JSONException e) {
-										e.printStackTrace();
-									}
-									tvText.setText(value + "°");
-									
-									LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
-											LinearLayout.LayoutParams.WRAP_CONTENT,
-											LinearLayout.LayoutParams.WRAP_CONTENT);
 
-									llpBaloon.leftMargin = progressPosX;
-									tvText.setLayoutParams(llpBaloon);
-								}
-							});
+							appyMeteoSeekBar
+									.setOnAppyMeteoSeekBarChangeListener(new OnAppyMeteoSeekBarChangeListener() {
+
+										@Override
+										public void onProgressPosXChanged(
+												AppyMeteoSeekBar seekBar,
+												int progress, int progressPosX) {
+											String value = String
+													.valueOf((progress / 10) + 1);
+											try {
+												questions.put(id_question,
+														value);
+											} catch (JSONException e) {
+												e.printStackTrace();
+											}
+											tvText.setText(value + "°");
+
+											LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
+													LinearLayout.LayoutParams.WRAP_CONTENT,
+													LinearLayout.LayoutParams.WRAP_CONTENT);
+
+											llpBaloon.leftMargin = progressPosX;
+											tvText.setLayoutParams(llpBaloon);
+										}
+									});
 
 							linearLayout1.addView(appyMeteoSeekBar);
 
@@ -281,7 +297,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 				int today = jsonObject.getInt("today");
 				int yesterday = jsonObject.getInt("yesterday");
 				int tomorrow = jsonObject.getInt("tomorrow");
-				
+
 				SessionCache.setMeteo(this, today, yesterday, tomorrow);
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -296,5 +312,33 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 		ArrayList<String> keyIntentParameters = new ArrayList<String>();
 		keyIntentParameters.add(TIMESTAMP);
 		return keyIntentParameters;
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		this.location = location;
+		Toast.makeText(
+				this,
+				"location: " + Double.toString(location.getLatitude()) + " "
+						+ Double.toString(location.getLongitude()) + " " + location.getProvider(),
+				Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		Toast.makeText(this, "onProviderDisabled: " + provider,
+				Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		Toast.makeText(this, "onProviderEnabled: " + provider,
+				Toast.LENGTH_LONG).show();
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		Toast.makeText(this, "onStatusChanged: " + provider + " " + status,
+				Toast.LENGTH_LONG).show();
 	}
 }

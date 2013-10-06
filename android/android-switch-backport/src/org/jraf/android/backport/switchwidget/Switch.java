@@ -38,7 +38,6 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -98,8 +97,6 @@ public class Switch extends CompoundButton {
     private Layout mOffLayout;
 
     private final Rect mTempRect = new Rect();
-    
-    private static String TAG = "android-switch-backport"; 
 
     private static final int[] CHECKED_STATE_SET = { android.R.attr.state_checked };
 
