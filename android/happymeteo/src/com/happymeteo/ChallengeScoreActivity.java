@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.facebook.widget.ProfilePictureView;
+import com.happymeteo.models.SessionCache;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +13,6 @@ import android.widget.TextView;
 public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 	
 	private final String IO_CHALLENGE = "ioChallenge";
-	private final String IO_FACEBOOK_ID = "ioFacebookId";
-	private final String IO_NAME = "ioName";
 	private final String TU_CHALLENGE = "tuChallenge";
 	private final String TU_FACEBOOK_ID = "tuFacebookId";
 	private final String TU_NAME = "tuName";
@@ -33,15 +32,8 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 			ioChallengeTextView.setText(ioScore.toString());
 		}
 		
-		String ioFacebookId = intentParameters.get(IO_FACEBOOK_ID);
-		if(ioFacebookId != null) {
-			ioPic.setProfileId(ioFacebookId);
-		}
-		
-		String ioName = intentParameters.get(IO_NAME);
-		if(ioName != null) {
-			ioNameTextView.setText(ioName.toUpperCase());
-		}
+		ioPic.setProfileId(SessionCache.getFacebook_id(this));
+		ioNameTextView.setText(SessionCache.getFirst_name(this).toUpperCase());
 		
 		TextView tuChallengeTextView = (TextView) findViewById(R.id.tuChallenge);
 		ProfilePictureView tuPic = (ProfilePictureView) findViewById(R.id.tuPic);
@@ -73,8 +65,6 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 			if(ioScore.equals(tuScore))
 				resultChallengeTextView.setText("Hai pareggiato!");
 		}
-		
-		
 	}
 
 	@Override
@@ -96,8 +86,6 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 	public List<String> getKeyIntentParameters() {
 		ArrayList<String> keyIntentParameters = new ArrayList<String>();
 		keyIntentParameters.add(IO_CHALLENGE);
-		keyIntentParameters.add(IO_FACEBOOK_ID);
-		keyIntentParameters.add(IO_NAME);
 		keyIntentParameters.add(TU_CHALLENGE);
 		keyIntentParameters.add(TU_FACEBOOK_ID);
 		keyIntentParameters.add(TU_NAME);

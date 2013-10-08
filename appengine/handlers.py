@@ -730,6 +730,14 @@ class SubmitChallengeHandler(BaseRequestHandler):
         if turn == "2" and challenge.turn != 2:
             raise Exception('C\'è stato un errore con la sfida')
         
+        user_a = User.get_by_id(int(challenge.user_id_a))
+        if not challenge:
+            raise Exception('C\'è stato un errore con la sfida')
+        
+        user_b = User.get_by_id(int(challenge.user_id_b))
+        if not challenge:
+            raise Exception('C\'è stato un errore con la sfida')
+        
         questions = json.loads(questions)
         score = 0
         
@@ -758,10 +766,16 @@ class SubmitChallengeHandler(BaseRequestHandler):
             challenge.score_a = float(score)
             challenge.turn = 2
             sendMessage(challenge.registration_id_b, payload={'user_id': challenge.user_id_b, 'appy_key': 'accepted_challenge_turn2', 'score': score, 'challenge_id': challenge.key().id(), 'turn': '2'})
+            data['tuFacebookId'] = user_b.facebook_id
+            data['tuName'] = user_b.first_name
         else:
             challenge.score_b = float(score)
             challenge.turn = 3
-            sendMessage(challenge.registration_id_a, payload={'user_id': challenge.user_id_a, 'appy_key': 'accepted_challenge_turn3', 'ioChallenge': challenge.score_a, 'tuChallenge': score, 'challenge_id': challenge.key().id(), 'turn': '3'})
+            sendMessage(challenge.registration_id_a, payload={'user_id': challenge.user_id_a, 'appy_key': 'accepted_challenge_turn3', 
+                                                              'ioChallenge': challenge.score_a, 'tuFacebookId': user_b.facebook_id, 
+                                                              'tuName': user_b.first_name, 'tuChallenge': score, 'challenge_id': challenge.key().id(), 'turn': '3'})
+            data['tuFacebookId'] = user_a.facebook_id
+            data['tuName'] = user_a.first_name
             
         challenge.put()
     except Exception as e:

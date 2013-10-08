@@ -277,12 +277,13 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 			}
 			break;
 		case Const.SUBMIT_CHALLENGE_URL_ID:
-			Log.i(Const.TAG, "result: "+result);
 			try {
 				JSONObject jsonObject = new JSONObject(result);
 				Bundle extras = new Bundle();
 				extras.putBoolean("ChallengeScoreActivity", true);
 				extras.putString("ioChallenge", jsonObject.getString("score"));
+				extras.putString("tuFacebookId", jsonObject.getString("tuFacebookId"));
+				extras.putString("tuName", jsonObject.getString("tuName"));
 				
 				String enemyScore = intentParameters.get(SCORE);
 				if(enemyScore != null) {
