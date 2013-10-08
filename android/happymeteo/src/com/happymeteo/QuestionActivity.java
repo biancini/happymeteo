@@ -59,7 +59,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 		// Get the location manager
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
-		// Define the criteria how to select the locatioin provider -> use
+		// Define the criteria how to select the location provider -> use
 		// default
 		Criteria criteria = new Criteria();
 		provider = locationManager.getBestProvider(criteria, false);
@@ -248,7 +248,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 							linearLayout1
 									.setOrientation(LinearLayout.HORIZONTAL);
 							linearLayout1.setGravity(Gravity.CENTER);
-
+							
 							TextView textYesView = new TextView(this);
 							textYesView.setText(textYes);
 							textYesView.setLayoutParams(llp);

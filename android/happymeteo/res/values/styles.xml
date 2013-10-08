@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppyMeteoTheme" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="homeAsUpIndicator">@null</item>
@@ -25,9 +25,7 @@
         <item name="textOff">@string/empty</item>
         <item name="track">@drawable/selettore_bg</item>
         <item name="thumb">@drawable/selettore</item>
-        <item name="thumbTextPadding">8dip</item>
-        <item name="switchMinWidth">40dip</item>
-        <item name="switchPadding">0dip</item>
+        <item name="switchMinWidth">60dip</item>
     </style>
 
     <style name="AppyMeteoTheme.seekBarStyle" parent="android:Widget.SeekBar">
