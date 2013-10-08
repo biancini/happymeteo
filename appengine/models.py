@@ -121,10 +121,12 @@ class Region(db.Model):
 class Provincia(db.Model):
     name = db.StringProperty()
     geometry = db.TextProperty()
+    coordinate = db.GeoPtProperty()
     
 class Marker(db.Model):
     id = db.StringProperty()
     name = db.StringProperty()
     coordinate = db.GeoPtProperty()
     appyness = db.IntegerProperty()
+    type = db.StringProperty()
     

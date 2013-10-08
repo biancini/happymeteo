@@ -14,7 +14,8 @@ from models import User, Device, Challenge, Question, ChallengeQuestion, Answer,
 from secrets import EMAIL, CREATE_ACCOUNT_EMAIL
 
 from utils import sendMessage, happymeteo, sample, check_call,\
-    getGoogleAccessToken, sqlPostFusionTable, point_inside_polygon
+    getGoogleAccessToken, sqlPostFusionTable, point_inside_polygon,\
+    sqlGetFusionTable
 
 import logging
 
@@ -812,47 +813,13 @@ class GetAppinessByDayHandler(BaseRequestHandler):
 class CreateMap(BaseRequestHandler):
 
   def get(self):
-      # access_token = getGoogleAccessToken()
-      
-      # response = sqlPostFusionTable(access_token, "SELECT * FROM 1wBVVZ_IR4iXhvMQ0cZcAxblZYmH5Zs2Q7JSr3gM")
-      # response_json = json.loads(response)
-      
-      # for i in xrange(len(response_json["rows"])):
-      #     print "%s %s %s"%(response_json["rows"][i][1], 'geometry' in response_json["rows"][i][0], 'geometries' in response_json["rows"][i][0])
-      #     region = Region(name=str(response_json["rows"][i][1]), geometry=db.Text(json.dumps(response_json["rows"][i][0])))
-      #     region.put()
-          
-      #for i in xrange(len(response_json["rows"])):
-      #    print "%s %s %s"%(response_json["rows"][i][1], 'geometry' in response_json["rows"][i][0], 'geometries' in response_json["rows"][i][0])
-      #    region = Provincia(name=str(response_json["rows"][i][1]), geometry=db.Text(json.dumps(response_json["rows"][i][0])))
-      #    region.put()
-
-      
-      #answers = Answer.all()
-      
-      #for answer in answers:
-      #    if answer.location:
-      #        print "latitude: %s"%answer.location.lat
-      #        print "longitude: %s"%answer.location.lon
-
-      #rows = backend.GetKmls()
-    
-      #inside = False
-      #for row in rows:
-      #  inside = CheckPointInKml(eval(row[1]), lat, lng)
-      #  if inside:
-      #    print "Point [%s,%s] is in region %s." % (lat, lng, row[0])
-      #    break
-    
-      #if not inside:
-      #  print "Point [%s,%s] is NOT part of any French department." % (lat, lng)
-      
       from datetime import date, timedelta
       
       today = date.today()
       yesterday = today - timedelta(1)
       
       regions = Region.all()
+      provincie = Provincia.all()
       answers = Answer.gql('WHERE date >= DATE(\'%s\') AND date < DATE(\'%s\') AND question_id = \'6434359225614336\''%(yesterday, today))
       
       if answers.count() == 0:
@@ -866,6 +833,17 @@ class CreateMap(BaseRequestHandler):
         data[id]['name'] = region.name
         data[id]['sum'] = 0
         data[id]['count'] = 0
+        data[id]['type'] = 'R'
+        data[id]['coordinate'] = region.coordinate
+        
+      for provincia in provincie:
+        id = str(provincia.key().id())
+        data[id] = {}
+        data[id]['name'] = provincia.name
+        data[id]['sum'] = 0
+        data[id]['count'] = 0
+        data[id]['type'] = 'P'
+        data[id]['coordinate'] = provincia.coordinate
       
       for answer in answers:
           if answer.location:
@@ -880,7 +858,26 @@ class CreateMap(BaseRequestHandler):
                 is_inside = False
                 
                 if 'geometries' in geometry:
-                    data[id]['type'] = 'geometries'
+                    is_inside = False
+                    for g in geometry['geometries']:
+                        if point_inside_polygon(lat, lng, g['coordinates'][0]):
+                            is_inside = True
+                            break
+                    
+                if 'geometry' in geometry:
+                    is_inside = point_inside_polygon(lat, lng, geometry['geometry']['coordinates'][0])
+                    
+                if is_inside:
+                    data[id]['sum'] = data[id]['sum'] + int(answer.value)
+                    data[id]['count'] = data[id]['count'] + 1
+            
+            for provincia in provincie:
+                id = str(provincia.key().id())
+                geometry = json.loads(provincia.geometry)
+                
+                is_inside = False
+                
+                if 'geometries' in geometry:
                     is_inside = False
                     for g in geometry['geometries']:
                         if point_inside_polygon(lat, lng, g['coordinates'][0]):
@@ -894,23 +891,26 @@ class CreateMap(BaseRequestHandler):
                     data[id]['sum'] = data[id]['sum'] + int(answer.value)
                     data[id]['count'] = data[id]['count'] + 1
     
-      for region in regions:
-          id = str(region.key().id())
-          if data[id]['count'] == 0:
+      for id, object in data.iteritems():
+          if object['count'] == 0:
               appyness = 1
           else:
-              appyness = data[id]['sum']/data[id]['count']
+              appyness = object['sum']/object['count']
           marker = Marker.gql('WHERE id = :1', id)
           marker = marker.get()
-          marker.coordinate=region.coordinate
-          marker.appyness=appyness
-          marker.name=region.name
-          marker.put()
-          # marker = Marker(id=id, coordinate=region.coordinate, appyness=appyness, name=region.name)
-          # marker.put()
+          
+          if marker:
+              marker.coordinate=object['coordinate']
+              marker.appyness=appyness
+              marker.name=object['name']
+              marker.type=object['type']
+              marker.put()
+          else:
+              marker = Marker(id=id, coordinate=object['coordinate'], appyness=appyness, name=object['name'], type=object['type'])
+              marker.put()
       
       self.response.headers['Content-Type'] = 'application/json'
-      self.response.out.write(json.dumps(data))      
+      self.response.out.write("ok")      
 
 class GetDataMap(BaseRequestHandler):
 
@@ -919,7 +919,35 @@ class GetDataMap(BaseRequestHandler):
     
     markers = Marker.all()
     for marker in markers:
-        data.append({'name': marker.name, 'coordinate': str(marker.coordinate), 'appyness': marker.appyness})
+        data.append({'name': marker.name, 'coordinate': str(marker.coordinate), 'appyness': marker.appyness, 'type': marker.type })
     
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))
+
+"""
+class PutProvincieMap(BaseRequestHandler):
+
+  def get(self):
+      access_token = getGoogleAccessToken()
+      
+      response = sqlPostFusionTable(access_token, "SELECT * FROM 1wBVVZ_IR4iXhvMQ0cZcAxblZYmH5Zs2Q7JSr3gM")
+      response_json = json.loads(response)
+      
+      for i in xrange(len(response_json["rows"])):
+          print "%s %s %s"%(response_json["rows"][i][1], 'geometry' in response_json["rows"][i][0], 'geometries' in response_json["rows"][i][0])
+          region = Region(name=str(response_json["rows"][i][1]), geometry=db.Text(json.dumps(response_json["rows"][i][0])))
+          region.put()
+      
+      response = sqlGetFusionTable(access_token, "SELECT * FROM 1vMejPOyqzvc80l_7Q21TEgYKWjzNdg07WASl3N8 WHERE Type = 'P'")
+      response_json = json.loads(response)
+      
+      print "response_json: %s"%response_json
+          
+      for i in xrange(len(response_json["rows"])):
+        print "name: %s"%response_json["rows"][i][1].encode('utf-8')
+        provincia = Provincia(name=response_json["rows"][i][1].encode('utf-8'), geometry=db.Text(json.dumps(response_json["rows"][i][3])), coordinate=str(response_json["rows"][i][2]))
+        provincia.put()
+      
+      self.response.headers['Content-Type'] = 'application/json'
+      self.response.out.write("ok")
+"""

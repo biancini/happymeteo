@@ -105,60 +105,21 @@
 	}
 
 	function initializeData() {
-	    /*var query = "SELECT * FROM 1vMejPOyqzvc80l_7Q21TEgYKWjzNdg07WASl3N8";
-	    query = encodeURIComponent(query);
-	    var gvizQuery = new google.visualization.Query('http://www.google.com/fusiontables/gvizdata?tq=' + query);
- 
-	    gvizQuery.send(function(response) {
-	        var numRows = response.getDataTable().getNumberOfRows();
-
-	        // For each row in the table, create a marker
-                for (var i = 0; i < numRows; i++) {
-	            if (response.getDataTable().getValue(i, 0) == 'P') {
-	                var provincia = response.getDataTable().getValue(i, 1);
-	                var arrCoords = response.getDataTable().getValue(i, 2).split(',');
-	                var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
-	                var appyness = response.getDataTable().getValue(i, 4);
-	                province.push({'territorio': provincia, 'coordinate': coordinate, 'appyness': appyness});
-	            } else if (response.getDataTable().getValue(i, 0) == 'R') {
-	                var regione = response.getDataTable().getValue(i, 1);
-	                var arrCoords = response.getDataTable().getValue(i, 2).split(',');
-	                var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
-	                var appyness = response.getDataTable().getValue(i, 4);
-	                regioni.push({'territorio': regione, 'coordinate': coordinate, 'appyness': appyness});
-	            }
-	        }
-
-	        showData('regioni');
-	    });*/
-
-		$.getJSON( "https://happymeteo.appspot.com/get_data_map", function(response) {
+	    $.getJSON( "https://happymeteo.appspot.com/get_data_map", function(response) {
 		    console.log(response);
 
 		    $.each(response, function(key, object) {
 		    	console.log(key+" "+object.name);
-                var arrCoords = object.coordinate.split(',');
-                var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
-                regioni.push({'territorio': object.name, 'coordinate': coordinate, 'appyness': object.appyness});
+		    	if(object.type == 'P') {
+	                var arrCoords = object.coordinate.split(',');
+	                var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
+	                province.push({'territorio': object.name, 'coordinate': coordinate, 'appyness': object.appyness});
+		    	} else if(object.type == 'R') {
+	                var arrCoords = object.coordinate.split(',');
+	                var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
+	                regioni.push({'territorio': object.name, 'coordinate': coordinate, 'appyness': object.appyness});
+		    	}
 	    	});
-	        /*var numRows = response.getDataTable().getNumberOfRows();
-
-	        // For each row in the table, create a marker
-            for (var i = 0; i < numRows; i++) {
-	            if (response.getDataTable().getValue(i, 0) == 'P') {
-	                var provincia = response.getDataTable().getValue(i, 1);
-	                var arrCoords = response.getDataTable().getValue(i, 2).split(',');
-	                var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
-	                var appyness = response.getDataTable().getValue(i, 4);
-	                province.push({'territorio': provincia, 'coordinate': coordinate, 'appyness': appyness});
-	            } else if (response.getDataTable().getValue(i, 0) == 'R') {
-	                var regione = response.getDataTable().getValue(i, 1);
-	                var arrCoords = response.getDataTable().getValue(i, 2).split(',');
-	                var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
-	                var appyness = response.getDataTable().getValue(i, 4);
-	                regioni.push({'territorio': regione, 'coordinate': coordinate, 'appyness': appyness});
-	            }
-	        }*/
 
 	        showData('regioni');
 	   });

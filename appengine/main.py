@@ -42,7 +42,8 @@ routes = [
   
   Route('/get_appiness_by_day', handler='handlers.GetAppinessByDayHandler'),
   Route('/create_map', handler='handlers.CreateMap'),
-  Route('/get_data_map', handler='handlers.GetDataMap')
+  Route('/get_data_map', handler='handlers.GetDataMap'),
+  #Route('/put_provincie_map', handler='handlers.PutProvincieMap')
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

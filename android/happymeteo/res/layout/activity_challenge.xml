@@ -17,54 +17,54 @@
         android:layout_marginTop="5dip"
         android:background="@drawable/nuovasfida" />
 
-    <ImageView
-        android:id="@+id/partiteFatte"
-        android:layout_width="237dip"
-        android:layout_height="22dip"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dip"
-        android:adjustViewBounds="true"
-        android:src="@drawable/partitefatte" />
+<!--     <ImageView -->
+<!--         android:id="@+id/partiteFatte" -->
+<!--         android:layout_width="237dip" -->
+<!--         android:layout_height="22dip" -->
+<!--         android:layout_gravity="center_horizontal" -->
+<!--         android:layout_marginTop="20dip" -->
+<!--         android:adjustViewBounds="true" -->
+<!--         android:src="@drawable/partitefatte" /> -->
 
-    <LinearLayout
-        android:id="@+id/challengeTurn0"
-        android:layout_width="237dip"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="#E7E7E7"
-        android:orientation="vertical" />
+<!--     <LinearLayout -->
+<!--         android:id="@+id/challengeTurn0" -->
+<!--         android:layout_width="237dip" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_gravity="center_horizontal" -->
+<!--         android:background="#E7E7E7" -->
+<!--         android:orientation="vertical" /> -->
 
-    <ImageView
-        android:layout_width="237dip"
-        android:layout_height="22dip"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dip"
-        android:adjustViewBounds="true"
-        android:src="@drawable/partitefatte" />
+<!--     <ImageView -->
+<!--         android:layout_width="237dip" -->
+<!--         android:layout_height="22dip" -->
+<!--         android:layout_gravity="center_horizontal" -->
+<!--         android:layout_marginTop="20dip" -->
+<!--         android:adjustViewBounds="true" -->
+<!--         android:src="@drawable/partitefatte" /> -->
 
-    <LinearLayout
-        android:id="@+id/challengeTurn1"
-        android:layout_width="237dip"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="#E7E7E7"
-        android:orientation="vertical" />
+<!--     <LinearLayout -->
+<!--         android:id="@+id/challengeTurn1" -->
+<!--         android:layout_width="237dip" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_gravity="center_horizontal" -->
+<!--         android:background="#E7E7E7" -->
+<!--         android:orientation="vertical" /> -->
 
-    <ImageView
-        android:layout_width="237dip"
-        android:layout_height="22dip"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dip"
-        android:adjustViewBounds="true"
-        android:src="@drawable/partitefatte" />
+<!--     <ImageView -->
+<!--         android:layout_width="237dip" -->
+<!--         android:layout_height="22dip" -->
+<!--         android:layout_gravity="center_horizontal" -->
+<!--         android:layout_marginTop="20dip" -->
+<!--         android:adjustViewBounds="true" -->
+<!--         android:src="@drawable/partitefatte" /> -->
 
-    <LinearLayout
-        android:id="@+id/challengeTurn2"
-        android:layout_width="237dip"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="#E7E7E7"
-        android:orientation="vertical" />
+<!--     <LinearLayout -->
+<!--         android:id="@+id/challengeTurn2" -->
+<!--         android:layout_width="237dip" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_gravity="center_horizontal" -->
+<!--         android:background="#E7E7E7" -->
+<!--         android:orientation="vertical" /> -->
 
     <ImageView
         android:layout_width="237dip"

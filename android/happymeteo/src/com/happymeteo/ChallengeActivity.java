@@ -194,9 +194,9 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 		@Override
 		protected Void doInBackground(String... params) {
 			final List<LinearLayout> challengeTurns = new ArrayList<LinearLayout>();
-			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn0));
-			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn1));
-			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn2));
+//			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn0));
+//			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn1));
+//			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn2));
 			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn3));
 
 			for (int i = 0; i < challenges.length(); i++) {
@@ -204,13 +204,16 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 				try {
 					jsonObject = challenges.getJSONObject(i);
 					final Challenge challenge = new Challenge(jsonObject);
+					
+					if(challenge.getTurn() < 3)
+						continue;
 
 					final View view = attachChallengeToView(challenge);
 					
 					if(view != null) {
 						runOnUiThread(new Runnable() {
 							public void run() {
-								challengeTurns.get(challenge.getTurn()).addView(view);
+								challengeTurns.get(0 /*challenge.getTurn()*/).addView(view);
 							}
 						});
 					}
