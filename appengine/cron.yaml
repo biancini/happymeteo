@@ -1,4 +1,8 @@
 cron:
 - description: questions
   url: /send_message
-  schedule: every 4 hours from 08:00 to 20:00
+  schedule: every 4 hours from 23:00 to 11:00
+  
+- description: create_map
+  url: /create_map
+  schedule: every day 18:00

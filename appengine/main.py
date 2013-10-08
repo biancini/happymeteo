@@ -3,6 +3,8 @@ from secrets import SESSION_KEY
 
 from webapp2 import WSGIApplication, Route
 
+#import fix_path
+
 # webapp2 config
 app_config = {
   'webapp2_extras.sessions': {
@@ -38,7 +40,9 @@ routes = [
   Route('/questions_challenge', handler='handlers.QuestionsChallengeHandler'),
   Route('/submit_challenge', handler='handlers.SubmitChallengeHandler'),
   
-  Route('/get_appiness_by_day', handler='handlers.GetAppinessByDayHandler')
+  Route('/get_appiness_by_day', handler='handlers.GetAppinessByDayHandler'),
+  Route('/create_map', handler='handlers.CreateMap'),
+  Route('/get_data_map', handler='handlers.GetDataMap')
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

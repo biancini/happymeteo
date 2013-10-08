@@ -99,6 +99,10 @@ handlers:
   script: main.app
   login: admin
   
+- url: /create_map
+  script: main.app
+  login: admin
+  
 # dynamic handlers
 - url: /.*
   script: main.app

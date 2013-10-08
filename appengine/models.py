@@ -112,3 +112,19 @@ class ChallengeAnswer(db.Model):
     value = db.StringProperty()
     challenge_id =  db.StringProperty()
     turn = db.StringProperty()
+    
+class Region(db.Model):
+    name = db.StringProperty()
+    geometry = db.TextProperty()
+    coordinate = db.GeoPtProperty()
+    
+class Provincia(db.Model):
+    name = db.StringProperty()
+    geometry = db.TextProperty()
+    
+class Marker(db.Model):
+    id = db.StringProperty()
+    name = db.StringProperty()
+    coordinate = db.GeoPtProperty()
+    appyness = db.IntegerProperty()
+    

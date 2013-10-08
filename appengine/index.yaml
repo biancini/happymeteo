@@ -16,6 +16,11 @@ indexes:
   - name: user_id
   - name: date
   
+- kind: Answer
+  properties:
+  - name: question_id
+  - name: date
+  
 - kind: ChallengeAnswer
   properties:
   - name: challenge_id
