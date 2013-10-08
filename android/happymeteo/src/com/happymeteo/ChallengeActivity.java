@@ -65,7 +65,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 		boolean viewToAdd = false;
 		
 		if(challenge.getTurn() == 0) {
-			picker_button.setBackgroundResource(R.drawable.pulsante_sfida);
+			picker_button.setBackgroundResource(R.drawable.rilancio);
 			picker_button.setOnClickListener(new OnClickListener() {
 				
 				public void onClick(View view) {
@@ -81,7 +81,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 		
 		if(challenge.getTurn() == 1 && SessionCache.getUser_id(this).equals(challenge.getUser_id_a()) || 
 			challenge.getTurn() == 2 && SessionCache.getUser_id(this).equals(challenge.getUser_id_b())) {
-			picker_button.setText("Rispondi");
+			picker_button.setBackgroundResource(R.drawable.rispondi);
 			picker_button.setOnClickListener(new OnClickListener() {
 				
 				public void onClick(View view) {
@@ -166,8 +166,6 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 			return;
 		}
 
-		Log.i(Const.TAG, "result: " + result);
-
 		try {
 			JSONArray challenges = new JSONArray(result);
 
@@ -194,26 +192,38 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 		@Override
 		protected Void doInBackground(String... params) {
 			final List<LinearLayout> challengeTurns = new ArrayList<LinearLayout>();
-//			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn0));
-//			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn1));
-//			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn2));
+			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn0));
+			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn1));
+			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn2));
 			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn3));
+			
+			final List<Boolean> visibility = new ArrayList<Boolean>();
+			visibility.add(false);
+			visibility.add(false);
+			visibility.add(false);
+			visibility.add(false);
+			
+			final List<ImageView> imageTurns = new ArrayList<ImageView>();
+			imageTurns.add((ImageView) activity.findViewById(R.id.partiteTurn0));
+			imageTurns.add((ImageView) activity.findViewById(R.id.partiteTurn1));
+			imageTurns.add((ImageView) activity.findViewById(R.id.partiteTurn2));
+			imageTurns.add((ImageView) activity.findViewById(R.id.partiteTurn3));
 
-			for (int i = 0; i < challenges.length(); i++) {
+			for(int i = 0; i < challenges.length(); i++) {
 				JSONObject jsonObject;
 				try {
 					jsonObject = challenges.getJSONObject(i);
 					final Challenge challenge = new Challenge(jsonObject);
 					
-					if(challenge.getTurn() < 3)
-						continue;
-
 					final View view = attachChallengeToView(challenge);
 					
 					if(view != null) {
 						runOnUiThread(new Runnable() {
 							public void run() {
-								challengeTurns.get(0 /*challenge.getTurn()*/).addView(view);
+								Log.i(Const.TAG, "turn: "+challenge.getTurn());
+								challengeTurns.get(challenge.getTurn()).addView(view);
+								visibility.set(challenge.getTurn(), true);
+								Log.i(Const.TAG, "visibility: "+visibility.get(challenge.getTurn()));
 							}
 						});
 					}
@@ -221,6 +231,18 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 					e.printStackTrace();
 				}
 			}
+			
+			runOnUiThread(new Runnable() {
+				public void run() {
+					for(int i = 0; i < 4; i++) {
+						if(visibility.get(i)) {
+							Log.i(Const.TAG, "end visibility: "+i+" "+visibility.get(i));
+							challengeTurns.get(i).setVisibility(View.VISIBLE);
+							imageTurns.get(i).setVisibility(View.VISIBLE);
+						}
+					}
+				}
+			});
 
 			return null;
 		}

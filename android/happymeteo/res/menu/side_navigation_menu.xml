@@ -17,10 +17,10 @@
         android:id="@+id/side_navigation_menu_item4"
         android:icon="@drawable/icona_sfida"
         android:title="@string/challenge"/>
-    <!-- item
+    <item
         android:id="@+id/side_navigation_menu_item5"
         android:icon="@drawable/icona_contesto"
-        android:title="@string/happy_context"/  -->
+        android:title="@string/happy_context"/>
 	<item
         android:id="@+id/side_navigation_menu_item6"
         android:icon="@drawable/logout"

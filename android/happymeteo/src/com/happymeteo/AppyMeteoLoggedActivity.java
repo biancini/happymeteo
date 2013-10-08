@@ -104,11 +104,19 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 				}
 				break;
 	
-//			case R.id.side_navigation_menu_item5:
+			case R.id.side_navigation_menu_item5:
 //				Bundle extras = new Bundle();
 //				extras.putString("timestamp", "test");
 //				invokeActivity(QuestionActivity.class, extras);
-//				break;
+				Bundle extras = new Bundle();
+				extras.putString("ioChallenge", "1.0");
+				extras.putString("ioFacebookId", "757833642");
+				extras.putString("ioName", "Simon");
+				extras.putString("tuChallenge", "1.0");
+				extras.putString("tuFacebookId", "500674896");
+				extras.putString("tuName", "Andrea");
+				invokeActivity(ChallengeScoreActivity.class, extras);
+				break;
 				
 			case R.id.side_navigation_menu_item6:
 				onClickLogout();

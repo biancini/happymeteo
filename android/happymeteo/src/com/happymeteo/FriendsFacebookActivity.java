@@ -38,7 +38,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_friends_facebook);
 		super.onCreate(savedInstanceState);
-
+		
 		if (Session.getActiveSession() == null)
 			invokeActivity(IndexActivity.class, null);
 		else {
