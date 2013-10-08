@@ -131,13 +131,6 @@
                     android:inputType="textPersonName" />
 
                 <Button
-                    android:id="@+id/btnCreateUserFacebook"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dip"
-                    android:text="@string/link_user_to_facebook" />
-
-                <Button
                     android:id="@+id/btnCreateUser"
                     android:layout_width="237dip"
                     android:layout_height="35dip"

@@ -1,0 +1,157 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_gradient"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingTop="16dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="20dip"
+            android:adjustViewBounds="true"
+            android:src="@drawable/settings" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="10dip"
+            android:background="@color/white"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/modifica_dati_utente" />
+
+            <EditText
+                android:id="@+id/create_account_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:ems="10"
+                android:hint="@string/insert_email"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/create_account_fist_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:ems="10"
+                android:hint="@string/insert_fist_name"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/create_account_last_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:ems="10"
+                android:hint="@string/insert_last_name"
+                android:inputType="textPersonName" />
+
+            <Spinner
+                android:id="@+id/create_account_gender"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:entries="@array/genderlist"
+                android:prompt="@string/select_gender" />
+
+            <Spinner
+                android:id="@+id/create_account_age"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:entries="@array/agelist"
+                android:prompt="@string/select_age" />
+
+            <Spinner
+                android:id="@+id/create_account_education"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:entries="@array/educationlist"
+                android:prompt="@string/select_education" />
+
+            <Spinner
+                android:id="@+id/create_account_work"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:entries="@array/worklist"
+                android:prompt="@string/select_work" />
+
+            <EditText
+                android:id="@+id/create_account_cap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:ems="10"
+                android:hint="@string/insert_cap"
+                android:inputType="textPersonName" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dip"
+                android:src="@drawable/modifica_facebook" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dip"
+                android:gravity="center|fill_horizontal"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/iconfb" 
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/settingsFacebookText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/link_user_to_facebook" 
+                    android:layout_weight="1" />
+
+                <org.jraf.android.backport.switchwidget.Switch
+                    android:id="@+id/settingsFacebookSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" 
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnCreateUser"
+                android:layout_width="237dip"
+                android:layout_height="11dip"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/modifica_account" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

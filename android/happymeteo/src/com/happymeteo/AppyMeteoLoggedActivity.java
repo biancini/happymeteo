@@ -75,9 +75,7 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 			sideNavigationView.toggleMenu();
 			break;
 		case R.id.settings:
-			Bundle extras = new Bundle();
-			extras.putBoolean("create", false);
-			invokeActivity(CreateAccountActivity.class, extras);
+			invokeActivity(SettingsActivity.class);
 			break;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -106,11 +104,11 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 				}
 				break;
 	
-			/*case R.id.side_navigation_menu_item5:
-				Bundle extras = new Bundle();
-				extras.putString("timestamp", "test");
-				invokeActivity(QuestionActivity.class, extras);
-				break;*/
+//			case R.id.side_navigation_menu_item5:
+//				Bundle extras = new Bundle();
+//				extras.putString("timestamp", "test");
+//				invokeActivity(QuestionActivity.class, extras);
+//				break;
 				
 			case R.id.side_navigation_menu_item6:
 				onClickLogout();

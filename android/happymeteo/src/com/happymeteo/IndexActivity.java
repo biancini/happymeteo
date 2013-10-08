@@ -31,9 +31,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		btnCreateAccount.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				Bundle extras = new Bundle();
-				extras.putBoolean("create", true);
-				invokeActivity(CreateAccountActivity.class, extras);
+				invokeActivity(CreateAccountActivity.class);
 			}
 		});
 
@@ -131,9 +129,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 				SessionCache.initialize(this, jsonObject);
 				if (SessionCache.getRegistered(this) == SessionCache.USER_NOT_REGISTERED) {
-					Bundle extras = new Bundle();
-					extras.putBoolean("create", true);
-					invokeActivity(CreateAccountActivity.class, extras);
+					invokeActivity(CreateAccountActivity.class);
 				} else {
 					invokeActivity(HappyMeteoActivity.class);
 				}
