@@ -38,6 +38,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -377,9 +378,13 @@ public class Switch extends CompoundButton {
     // }
 
     private Layout makeLayout(CharSequence text) {
+    	if(text == null) {
+    		text = "";
+    	}
+    	float width = Layout.getDesiredWidth(text, mTextPaint);
     	return new StaticLayout(text, 
         		mTextPaint, 
-        		(int) Math.ceil(Layout.getDesiredWidth(text, mTextPaint)), 
+        		(int) Math.ceil(width), 
         		Layout.Alignment.ALIGN_NORMAL, 
         		1.f, 0, true);
     }
