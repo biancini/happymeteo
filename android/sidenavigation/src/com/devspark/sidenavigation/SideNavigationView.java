@@ -136,8 +136,10 @@ public class SideNavigationView extends LinearLayout {
     public void changeIcon(int id, int icon) {
     	if (menuItems != null && menuItems.size() > 0) {
     		for(int i=0; i<menuItems.size(); i++) {
-            	if(menuItems.get(i).getId() == id) {
+            	if(menuItems.get(i).getId() == id && menuItems.get(i).getIcon() != icon) {
             		menuItems.get(i).setIcon(icon);
+            		BaseAdapter baseAdapter = (BaseAdapter) listView.getAdapter();
+            		baseAdapter.notifyDataSetChanged();
             		break;
             	}
             }

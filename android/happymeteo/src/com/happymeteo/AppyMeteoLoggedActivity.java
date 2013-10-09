@@ -23,6 +23,16 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 	
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private SideNavigationView sideNavigationView;
+	
+	private void inShow() {
+		Log.i(Const.TAG, "inShow: "+SessionCache.isFacebookSession(this));
+		if(!SessionCache.isFacebookSession(this)) {
+			Log.i(Const.TAG, "changeIcon");
+			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4, R.drawable.icona_sfidagrigio);
+		} else {
+			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4, R.drawable.icona_sfida);
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +69,22 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 		if(SessionCache.isFacebookSession(this) && !Session.getActiveSession().isOpened()) {
 			onFacebookConnect(statusCallback, false);
 		}
+		
+		inShow();
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		
+		inShow();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		inShow();
 	}
 
 	@Override
