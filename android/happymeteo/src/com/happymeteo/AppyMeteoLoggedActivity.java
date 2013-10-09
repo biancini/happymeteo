@@ -46,6 +46,7 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 		/* Side Navigation Menu */
 		sideNavigationView = new SideNavigationView(getApplicationContext());
 		sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
+		sideNavigationView.removeItem(R.id.side_navigation_menu_item5);
 		sideNavigationView.setMenuClickCallback(this);
 		sideNavigationView.setMode(Mode.LEFT);
 
