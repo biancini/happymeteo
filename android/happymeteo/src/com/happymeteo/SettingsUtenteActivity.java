@@ -204,7 +204,8 @@ public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements
 							create_account_education.getSelectedItemPosition(),
 							create_account_work.getSelectedItemPosition(),
 							create_account_cap.getText().toString(),
-							SessionCache.USER_REGISTERED, 1, 1, 1);
+							SessionCache.USER_REGISTERED, jsonObject.getInt("today"), 
+							jsonObject.getInt("yesterday"), jsonObject.getInt("tomorrow"));
 					invokeActivity(HappyMeteoActivity.class);
 				} else { // NOT_CONFIRMED
 					AlertDialogManager alert = new AlertDialogManager();

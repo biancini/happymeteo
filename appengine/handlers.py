@@ -211,7 +211,7 @@ class CreateAccountHandler(BaseRequestHandler):
                     contatore_sfidante=0,
                     contatore_sfidato=0,
                     contatore_amici_invitati=0)
-        
+                
                 if facebook_id and facebook_id != "0":
                   # already confirmed
                   data = {
@@ -236,6 +236,11 @@ class CreateAccountHandler(BaseRequestHandler):
                 
                 user.put()
                 data['user_id'] = user.key().id()
+                if user.status == 2:
+                    (today_value, yesterday_value, tomorrow_value) = happymeteo(data['user_id'])
+                    data['today'] = today_value
+                    data['yesterday'] = yesterday_value
+                    data['tomorrow'] = tomorrow_value
             else:
                 data = {
                   'error': 'user with same email already exists'
@@ -276,9 +281,13 @@ class CreateAccountHandler(BaseRequestHandler):
                 user.work = work
                 user.cap = cap
                 user.put()
+                (today_value, yesterday_value, tomorrow_value) = happymeteo(user.key().id())
                 data = {
                     'message': 'CONFIRMED_OR_FACEBOOK',
-                    'user_id': user.key().id()
+                    'user_id': user.key().id(),
+                    'today': today_value,
+                    'yesterday': yesterday_value,
+                    'tomorrow': tomorrow_value
                 }
       except Exception as e:
         logging.exception(e)
