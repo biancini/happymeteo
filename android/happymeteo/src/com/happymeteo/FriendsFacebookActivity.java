@@ -85,6 +85,8 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 				
 				public void onClick(View view) {
 					FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(activity, Session.getActiveSession());
+					feedDialogBuilder.setDescription("Vieni in appymeteo!");
+					feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
 					feedDialogBuilder.setTo(friend.getId());
 					WebDialog webDialog = feedDialogBuilder.build();
 					webDialog.show();
