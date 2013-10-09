@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">appymeteo</string>
-	<string name="version">Versione 0.2.0</string>
+	<string name="version">Versione 0.2.1</string>
 	<string name="app_id">405414319576008</string>
     <string name="information_page">info</string>
     <string name="happy_meteo">my meteo</string>
@@ -31,6 +31,7 @@
     <string name="insert_last_name">Inserisci il tuo cognome</string>
     <string name="insert_location">Inserisci la tua città di residenza</string>
 	<string name="insert_password">Inserisci la tua password</string>
+	<string name="insert_confirm_password">Inserisci nuovamente la tua password</string>
 	<string name="insert_cap">Inserisci il tuo cap</string>
 	<string name="loading">Caricamento..</string>
 	<string name="challenge">appygame</string>
@@ -50,4 +51,13 @@
 	<string name="welcome">Innanzitutto benvenuta/o!</string>
 	<string name="mail">Invia una mail..</string>
 	<string name="error">Errore</string>
+	<string name="error_password">Questo campo e il campo password sono diversi</string>
+	<string name="insert_old_password">Inserisci la tua vecchia password</string>
+	<string name="insert_new_password">Inserisci la tua nuova password</string>
+	<string name="change_password">Modifica password</string>
+	<string name="error_captcha">Captcha sbagliato, reinserirlo</string>
+	<string name="insert_captcha">Inserisci il testo dell\'immagine</string>
+	<string name="are_you_sure">Sei sicuro che vuoi farlo? Questa operazione è irreversibile</string>
+	<string name="yes">Si</string>
+	<string name="no">No</string>
 </resources>

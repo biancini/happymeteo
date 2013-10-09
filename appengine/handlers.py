@@ -11,11 +11,12 @@ from google.appengine.ext import db
 from models import User, Device, Challenge, Question, ChallengeQuestion, Answer, \
     ChallengeAnswer, ChallengeQuestionCategory, Region, Provincia, Marker
 
-from secrets import EMAIL, CREATE_ACCOUNT_EMAIL
+from secrets import EMAIL, CREATE_ACCOUNT_EMAIL, CHANGE_FACEBOOK_EMAIL,\
+    LOST_PASSWORD_EMAIL
 
 from utils import sendMessage, happymeteo, sample, check_call,\
     getGoogleAccessToken, sqlPostFusionTable, point_inside_polygon,\
-    sqlGetFusionTable
+    sqlGetFusionTable, send_new_password
 
 import logging
 
@@ -240,14 +241,14 @@ class CreateAccountHandler(BaseRequestHandler):
                   'error': 'user with same email already exists'
                 }
         else:
-            ok = False
+            addUser = False
             user = User.get_by_id(int(user_id))
             
             if facebook_id != "":
                 query = User.gql('WHERE facebook_id = :1', facebook_id)
                 
                 if query.count() == 0:
-                    ok = True
+                    addUser = True
                 else:
                     user2 = query.get()
                     if user.key().id() != user2.key().id():
@@ -255,11 +256,16 @@ class CreateAccountHandler(BaseRequestHandler):
                           'error': 'user with same facebook account already exists'
                         }
                     else:
-                        ok = True
+                        addUser = True
             else:
-                ok = True
+                addUser = True
                 
-            if ok:
+            if addUser:
+                # utente che si scollega da facebook e non ha una password
+                if user.facebook_id != "" and facebook_id == "" and user.password == "":
+                    new_password = send_new_password(first_name, last_name, email, CHANGE_FACEBOOK_EMAIL)
+                    user.password = new_password
+                
                 user.facebook_id = facebook_id
                 user.first_name = first_name
                 user.last_name = last_name
@@ -731,11 +737,11 @@ class SubmitChallengeHandler(BaseRequestHandler):
             raise Exception('C\'è stato un errore con la sfida')
         
         user_a = User.get_by_id(int(challenge.user_id_a))
-        if not challenge:
+        if not user_a:
             raise Exception('C\'è stato un errore con la sfida')
         
         user_b = User.get_by_id(int(challenge.user_id_b))
-        if not challenge:
+        if not user_b:
             raise Exception('C\'è stato un errore con la sfida')
         
         questions = json.loads(questions)
@@ -934,6 +940,66 @@ class GetDataMap(BaseRequestHandler):
     markers = Marker.all()
     for marker in markers:
         data.append({'name': marker.name, 'coordinate': str(marker.coordinate), 'appyness': marker.appyness, 'type': marker.type })
+    
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
+    
+class LostPassword(BaseRequestHandler):
+
+  @check_hash
+  def post(self):
+    try:
+      user_id = self.request.get('user_id')
+      
+      if not user_id:
+         raise Exception('Devi specificare un user_id')
+     
+      user = User.get_by_id(int(user_id))
+      if not user:
+          raise Exception('Devi specificare un utente valido')
+     
+      data = {'message': 'ok'}
+    
+      new_password = send_new_password(user.first_name, user.last_name, user.email, LOST_PASSWORD_EMAIL)
+      user.password = new_password
+      user.put()
+    except Exception as e:
+     logging.exception(e)
+     data = {
+       'error': '%s' % str(e)
+     }
+    
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
+
+class ChangePassword(BaseRequestHandler):
+
+  @check_hash
+  def post(self):
+    try:
+      user_id = self.request.get('user_id')
+      old_password = self.request.get('old_password')
+      new_password = self.request.get('new_password')
+      
+      if not user_id:
+         raise Exception('Devi specificare un user_id')
+     
+      user = User.get_by_id(int(user_id))
+      if not user:
+          raise Exception('Devi specificare un utente valido')
+      
+      if user.password != old_password:
+          raise Exception('La vecchia password specificata è sbagliata')
+     
+      data = {'message': 'ok'}
+    
+      user.password = new_password
+      user.put()
+    except Exception as e:
+     logging.exception(e)
+     data = {
+       'error': '%s' % str(e)
+     }
     
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))

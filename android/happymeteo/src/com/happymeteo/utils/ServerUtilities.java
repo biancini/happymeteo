@@ -119,4 +119,18 @@ public class ServerUtilities {
 		nvps.add(new BasicNameValuePair("user_id", userId));
 		new PostRequest(Const.GET_APPINESS_BY_DAY_ID, activity, nvps, onPostExecuteListener).execute(Const.GET_APPINESS_BY_DAY_URL);
 	}
+	
+	public static void lostPassword(onPostExecuteListener onPostExecuteListener, Activity activity, String userId) {
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("user_id", userId));
+		new PostRequest(Const.LOST_PASSWORD_ID, activity, nvps, onPostExecuteListener).execute(Const.GET_APPINESS_BY_DAY_URL);
+	}
+	
+	public static void changePassword(onPostExecuteListener onPostExecuteListener, Activity activity, String userId, String newPassowrd, String oldPassword) {
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("user_id", userId));
+		nvps.add(new BasicNameValuePair("new_password", newPassowrd));
+		nvps.add(new BasicNameValuePair("old_password", oldPassword));
+		new PostRequest(Const.CHANGE_PASSWORD_ID, activity, nvps, onPostExecuteListener).execute(Const.GET_APPINESS_BY_DAY_URL);
+	}
 }

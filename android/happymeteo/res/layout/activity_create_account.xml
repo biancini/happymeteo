@@ -70,6 +70,15 @@
                     android:ems="10"
                     android:hint="@string/insert_password"
                     android:inputType="textPassword" />
+                
+                <EditText
+                    android:id="@+id/create_account_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dip"
+                    android:ems="10"
+                    android:hint="@string/insert_confirm_password"
+                    android:inputType="textPassword" />
 
                 <EditText
                     android:id="@+id/create_account_fist_name"

@@ -104,6 +104,14 @@
                 android:ems="10"
                 android:hint="@string/insert_cap"
                 android:inputType="textPersonName" />
+            
+            <Button
+                android:id="@+id/btnChangePassword"
+                android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:layout_margin="10dip"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/change_password" />
 
             <ImageView
                 android:layout_width="match_parent"

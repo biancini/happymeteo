@@ -3,6 +3,7 @@ package com.happymeteo;
 import java.util.Arrays;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -164,22 +165,36 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 	}
 
 	public void onClickLogout() {
-		/* Clear every data */
-		SharedPreferences preferences = getApplicationContext()
-				.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
-		Editor editor = preferences.edit();
-		editor.clear();
-		editor.commit();
+		new AlertDialog.Builder(this)
+		.setTitle(getApplicationContext().getString(com.happymeteo.R.string.empty))
+		.setMessage(getApplicationContext().getString(com.happymeteo.R.string.are_you_sure))
+		.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,
+					int which) {
+				/* Clear every data */
+				SharedPreferences preferences = getApplicationContext()
+						.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+				Editor editor = preferences.edit();
+				editor.clear();
+				editor.commit();
 
-		/* Clear Facebook session */
-		Session session = new Session(this, null, null, false);
-		Session.setActiveSession(session);
+				/* Clear Facebook session */
+				Session session = new Session(AppyMeteoNotLoggedActivity.this, null, null, false);
+				Session.setActiveSession(session);
 
-		/* Terminate PushNotificationsService */
-		PushNotificationsService.terminate(getApplicationContext());
+				/* Terminate PushNotificationsService */
+				PushNotificationsService.terminate(getApplicationContext());
 
-		/* Go to Index */
-		invokeActivity(IndexActivity.class);
+				/* Go to Index */
+				invokeActivity(IndexActivity.class);
+			}
+		})
+		.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,
+					int which) {
+				
+			}
+		}).show();
 	}
 
 	public void invokeActivity(Class<? extends Activity> clazz) {

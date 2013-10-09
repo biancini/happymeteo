@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 import urllib
 import urllib2
 import json
 
 from secrets import GOOGLE_API_KEY, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN,\
-    CALL_SECRET_KEY
+    CALL_SECRET_KEY, EMAIL, PASSWORD_SECRET_KEY
 import hashlib
 
 def sendMessage(registrationId, collapse_key=None, payload=None):
@@ -222,3 +223,18 @@ def point_inside_polygon(lat, lng, coordinates):
         p1x,p1y = p2x,p2y
 
     return inside
+
+def send_new_password(first_name, last_name, email, text):
+    from google.appengine.api import mail
+    import string
+    import random
+    
+    new_password = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(6))
+    message = mail.EmailMessage(sender="happymeteo <%s>" % EMAIL,
+                            subject="Nuova password su Appy Meteo")
+    message.to = "%s %s <%s>" % (first_name, last_name, email)
+    message.body = text.encode('utf-8') % (first_name, new_password)
+    message.send()
+    
+    hash = hashlib.sha1(PASSWORD_SECRET_KEY + new_password).hexdigest()
+    return hash

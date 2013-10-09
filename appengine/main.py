@@ -43,6 +43,8 @@ routes = [
   Route('/get_appiness_by_day', handler='handlers.GetAppinessByDayHandler'),
   Route('/create_map', handler='handlers.CreateMap'),
   Route('/get_data_map', handler='handlers.GetDataMap'),
+  Route('/lost_password', handler='handlers.LostPassword'),
+  Route('/change_password', handler='handlers.ChangePassword')
   #Route('/put_provincie_map', handler='handlers.PutProvincieMap')
 ]
 

@@ -28,9 +28,6 @@ import android.content.Context;
 
 import ua.org.zasadnyy.zvalidations.R;
 
-/**
- * Created by vitaliyzasadnyy on 04.08.13.
- */
 public class IsPassword extends BaseValidation {
 
     private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";

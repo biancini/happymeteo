@@ -37,6 +37,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 	private Spinner create_account_gender;
 	private EditText create_account_email;
 	private EditText create_account_password;
+	private EditText create_account_confirm_password;
 	private Spinner create_account_age;
 	private Spinner create_account_education;
 	private Spinner create_account_work;
@@ -63,6 +64,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		create_account_gender = (Spinner) findViewById(R.id.create_account_gender);
 		create_account_email = (EditText) findViewById(R.id.create_account_email);
 		create_account_password = (EditText) findViewById(R.id.create_account_password);
+		create_account_confirm_password = (EditText) findViewById(R.id.create_account_confirm_password);
 		create_account_age = (Spinner) findViewById(R.id.create_account_age);
 		create_account_education = (Spinner) findViewById(R.id.create_account_education);
 		create_account_work = (Spinner) findViewById(R.id.create_account_work);
@@ -88,8 +90,10 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		
 		if (SessionCache.isFacebookSession(this)) {
 			create_account_password.setVisibility(View.GONE);
+			create_account_confirm_password.setVisibility(View.GONE);
 		} else {
 			mForm.addField(Field.using(create_account_password).validate(NotEmpty.build(this)).validate(IsPassword.build(this)));
+			mForm.addField(Field.using(create_account_confirm_password).validate(NotEmpty.build(this)));
 		}
 
 		btnCreateUser.setOnClickListener(new View.OnClickListener() {
@@ -97,26 +101,34 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 			@Override
 			public void onClick(View view) {
 				if(mForm.isValid()) {
-					String password;
-					try {
-						password = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, create_account_password.getText().toString());
-					} catch (Exception e) {
-						e.printStackTrace();
-						password = "";
+					
+					if(create_account_password.getText().toString().equals(create_account_confirm_password.getText().toString())) {
+						String password = "";
+						
+						if(!SessionCache.isFacebookSession(activity)) {
+							try {
+								password = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, create_account_password.getText().toString());
+							} catch (Exception e) {
+								e.printStackTrace();
+								password = "";
+							}
+						}
+		
+						ServerUtilities.createAccount(
+								onPostExecuteListener, activity, user_id, facebook_id, 
+								create_account_fist_name.getText().toString(), 
+								create_account_last_name.getText().toString(), 
+								create_account_gender.getSelectedItemPosition(),
+								create_account_email.getText().toString(),
+								create_account_age.getSelectedItemPosition(),
+								create_account_education.getSelectedItemPosition(),
+								create_account_work.getSelectedItemPosition(),
+								create_account_cap.getText().toString(), password);
+		
+						Log.i(Const.TAG, "facebook_id: "+SessionCache.getFacebook_id(view.getContext()));
+					} else {
+						create_account_confirm_password.setError(getApplicationContext().getString(R.string.error_password));
 					}
-	
-					ServerUtilities.createAccount(
-							onPostExecuteListener, activity, user_id, facebook_id, 
-							create_account_fist_name.getText().toString(), 
-							create_account_last_name.getText().toString(), 
-							create_account_gender.getSelectedItemPosition(),
-							create_account_email.getText().toString(),
-							create_account_age.getSelectedItemPosition(),
-							create_account_education.getSelectedItemPosition(),
-							create_account_work.getSelectedItemPosition(),
-							create_account_cap.getText().toString(), password);
-	
-					Log.i(Const.TAG, "facebook_id: "+SessionCache.getFacebook_id(view.getContext()));
 				}
 			}
 		});

@@ -73,6 +73,7 @@ public class SettingsActivity extends AppyMeteoNotLoggedActivity implements
 		
 		settingsFacebookText  = (TextView) findViewById(R.id.settingsFacebookText);
 		settingsFacebookSwitch  = (Switch) findViewById(R.id.settingsFacebookSwitch);
+		Button btnChangePassword = (Button) findViewById(R.id.btnChangePassword);
 		
 		this.user_id = SessionCache.getUser_id(this);
 		this.facebook_id = SessionCache.getFacebook_id(this);
@@ -127,6 +128,14 @@ public class SettingsActivity extends AppyMeteoNotLoggedActivity implements
 							create_account_work.getSelectedItemPosition(),
 							create_account_cap.getText().toString(), "");
 				}
+			}
+		});
+		
+		btnChangePassword.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				invokeActivity(ChangePasswordActivity.class);
 			}
 		});
 	}
