@@ -26,10 +26,10 @@
 
     <string name="lib_name">Z-Validations</string>
 
-    <string name="zvalidations_not_positive_integer">Field should be positive integer</string>
-    <string name="zvalidations_empty">Field could not be empty</string>
-    <string name="zvalidations_not_in_range">Field should be between %1$d and %2$d</string>
-    <string name="zvalidations_not_email">Value is not a valid email address</string>
-    <string name="zvalidations_not_password">Value is not a valid password: a digit must occur at least once, a lower case letter must occur at least once, an upper case letter must occur at least once, a special character (@#$%^&amp;+=!) must occur at least once, no whitespace allowed in the entire string and at least eight places though</string>
+    <string name="zvalidations_not_positive_integer">Il valore deve essere un numero positivo</string>
+    <string name="zvalidations_empty">Il valore non deve essere vuoto</string>
+    <string name="zvalidations_not_in_range">Il valore deve essere tra %1$d e %2$d</string>
+    <string name="zvalidations_not_email">Il valore non è una e-mail valida</string>
+    <string name="zvalidations_not_password">Il valore non è una password valida: deve essere composta almeno da un numero, una lettera in minuscolo, una lettera maiuscolo e un carattere speciale (@#$%^&amp;+=!). Non sono ammessi spazi e la password deve avere almeno 8 caratteri.</string>
 
 </resources>
