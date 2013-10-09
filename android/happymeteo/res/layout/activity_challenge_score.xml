@@ -87,22 +87,10 @@
             android:layout_marginLeft="10dp" />
     </LinearLayout>
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/resultChallenge"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Risultato: " />
-
-        <TextView
-            android:id="@+id/resultChallenge"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp" />
-    </LinearLayout>
+        android:layout_height="20dip"
+        android:layout_margin="10dp" />
 
 </LinearLayout>

@@ -8,6 +8,7 @@ import com.happymeteo.models.SessionCache;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
@@ -55,15 +56,15 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 			tuNameTextView.setText(tuName.toUpperCase());
 		}
 		
-		TextView resultChallengeTextView = (TextView) findViewById(R.id.resultChallenge);
+		ImageView resultChallengeTextView = (ImageView) findViewById(R.id.resultChallenge);
 		
 		if(ioScore != null && tuScore != null) {
 			if(ioScore > tuScore)
-				resultChallengeTextView.setText("Hai vinto!");
+				resultChallengeTextView.setBackgroundResource(R.drawable.vinto);
 			if(ioScore < tuScore)
-				resultChallengeTextView.setText("Hai perso!");
+				resultChallengeTextView.setBackgroundResource(R.drawable.perso);
 			if(ioScore.equals(tuScore))
-				resultChallengeTextView.setText("Hai pareggiato!");
+				resultChallengeTextView.setBackgroundResource(R.drawable.pareggiato);
 		}
 	}
 
