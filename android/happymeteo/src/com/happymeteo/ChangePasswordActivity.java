@@ -23,7 +23,7 @@ import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 
-public class ChangePasswordActivity extends AppyMeteoNotLoggedActivity implements onPostExecuteListener {
+public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {
 	
 	private ImageView changePassword_imageCaptcha;
 	private Captcha captcha;

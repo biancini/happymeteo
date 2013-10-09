@@ -307,6 +307,5 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		// TODO Auto-generated method stub
 	}
 }
