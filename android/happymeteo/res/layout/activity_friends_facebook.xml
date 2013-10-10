@@ -16,7 +16,7 @@
 
         <ImageView
             android:layout_width="200dip"
-            android:layout_height="206dip"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:adjustViewBounds="true"
             android:src="@drawable/logo_nuova_sfida" />

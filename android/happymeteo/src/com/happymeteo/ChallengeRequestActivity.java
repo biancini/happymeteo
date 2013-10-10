@@ -20,6 +20,8 @@ public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
 	private onPostExecuteListener onPostExecuteListener;
 
 	private final String CHALLENGE_ID = "challenge_id";
+	private final String ADVERSARY_FACEBOOK_ID = "adversary_facebook_id";
+	private final String ADVERSARY_NAME = "adversary_name";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,8 @@ public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
 	public List<String> getKeyIntentParameters() {
 		ArrayList<String> keyIntentParameters = new ArrayList<String>();
 		keyIntentParameters.add(CHALLENGE_ID);
+		keyIntentParameters.add(ADVERSARY_FACEBOOK_ID);
+		keyIntentParameters.add(ADVERSARY_NAME);
 		return keyIntentParameters;
 	}
 }

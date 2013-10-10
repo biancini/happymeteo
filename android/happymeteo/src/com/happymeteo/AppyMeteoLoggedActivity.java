@@ -18,19 +18,21 @@ import com.facebook.SessionState;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 
-public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implements
-		ISideNavigationCallback {
-	
+public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
+		implements ISideNavigationCallback {
+
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private SideNavigationView sideNavigationView;
-	
+
 	private void inShow() {
-		Log.i(Const.TAG, "inShow: "+SessionCache.isFacebookSession(this));
-		if(!SessionCache.isFacebookSession(this)) {
+		Log.i(Const.TAG, "inShow: " + SessionCache.isFacebookSession(this));
+		if (!SessionCache.isFacebookSession(this)) {
 			Log.i(Const.TAG, "changeIcon");
-			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4, R.drawable.icona_sfidagrigio);
+			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4,
+					R.drawable.icona_sfidagrigio);
 		} else {
-			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4, R.drawable.icona_sfida);
+			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4,
+					R.drawable.icona_sfida);
 		}
 	}
 
@@ -56,7 +58,7 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 		/* Side Navigation Menu */
 		sideNavigationView = new SideNavigationView(getApplicationContext());
 		sideNavigationView.setMenuItems(R.menu.side_navigation_menu);
-		sideNavigationView.removeItem(R.id.side_navigation_menu_item5);
+		//sideNavigationView.removeItem(R.id.side_navigation_menu_item5);
 		sideNavigationView.setMenuClickCallback(this);
 		sideNavigationView.setMode(Mode.LEFT);
 
@@ -65,25 +67,26 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 				RelativeLayout.LayoutParams.MATCH_PARENT);
 
 		addContentView(sideNavigationView, layoutParams);
-		
-		if(SessionCache.isFacebookSession(this) && !Session.getActiveSession().isOpened()) {
+
+		if (SessionCache.isFacebookSession(this)
+				&& !Session.getActiveSession().isOpened()) {
 			onFacebookConnect(statusCallback, false);
 		}
-		
+
 		inShow();
 	}
-	
+
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		
+
 		inShow();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		inShow();
 	}
 
@@ -113,44 +116,49 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 	@Override
 	public void onSideNavigationItemClick(int itemId) {
 		switch (itemId) {
-			case R.id.side_navigation_menu_item1:
-				invokeActivity(InformationPageActivity.class);
-				break;
-	
-			case R.id.side_navigation_menu_item2:
-				invokeActivity(HappyMeteoActivity.class);
-				break;
-	
-			case R.id.side_navigation_menu_item3:
-				invokeActivity(HappyMapActivity.class);
-				break;
-	
-			case R.id.side_navigation_menu_item4:
-				if(SessionCache.isFacebookSession(this)) {
-					invokeActivity(ChallengeActivity.class);
-				}
-				break;
-	
-			case R.id.side_navigation_menu_item5:
-//				Bundle extras = new Bundle();
-//				extras.putString("timestamp", "test");
-//				invokeActivity(QuestionActivity.class, extras);
-				Bundle extras = new Bundle();
-				extras.putString("ioChallenge", "1.0");
-				extras.putString("ioFacebookId", "757833642");
-				extras.putString("ioName", "Simon");
-				extras.putString("tuChallenge", "1.0");
-				extras.putString("tuFacebookId", "500674896");
-				extras.putString("tuName", "Andrea");
-				invokeActivity(ChallengeScoreActivity.class, extras);
-				break;
-				
-			case R.id.side_navigation_menu_item6:
-				onClickLogout();
-				break;
-	
-			default:
-				return;
+		case R.id.side_navigation_menu_item1:
+			invokeActivity(InformationPageActivity.class);
+			break;
+
+		case R.id.side_navigation_menu_item2:
+			invokeActivity(HappyMeteoActivity.class);
+			break;
+
+		case R.id.side_navigation_menu_item3:
+			invokeActivity(HappyMapActivity.class);
+			break;
+
+		case R.id.side_navigation_menu_item4:
+			if (SessionCache.isFacebookSession(this)) {
+				invokeActivity(ChallengeActivity.class);
+			}
+			break;
+
+		case R.id.side_navigation_menu_item5:
+//			Bundle extras = new Bundle();
+//			extras.putString("timestamp", "test");
+//			invokeActivity(QuestionActivity.class, extras);
+//			Bundle extras = new Bundle();
+//			extras.putString("ioChallenge", "1.0");
+//			extras.putString("ioFacebookId", "757833642");
+//			extras.putString("ioName", "Simon");
+//			extras.putString("tuChallenge", "1.0");
+//			extras.putString("tuFacebookId", "500674896");
+//			extras.putString("tuName", "Andrea");
+//			invokeActivity(ChallengeScoreActivity.class, extras);
+			
+			Bundle extras = new Bundle();
+			extras.putString("challenge_id", "test");
+			extras.putString("adversary_facebook_id", "757833642");
+			invokeActivity(ChallengeRequestActivity.class, extras);
+			break;
+
+		case R.id.side_navigation_menu_item6:
+			onClickLogout();
+			break;
+
+		default:
+			return;
 		}
 	}
 
@@ -160,8 +168,9 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 		if (sideNavigationView.isShown()) {
 			sideNavigationView.hideMenu();
 		} else {
-			Log.i(Const.TAG, "invokeActivity: "+this.getClass()+" "+HappyMeteoActivity.class);
-			if(!this.getClass().equals(HappyMeteoActivity.class))
+			Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " "
+					+ HappyMeteoActivity.class);
+			if (!this.getClass().equals(HappyMeteoActivity.class))
 				super.onBackPressed();
 		}
 	}
@@ -174,7 +183,7 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 		}
 		return super.onKeyUp(keyCode, event);
 	}
-	
+
 	private class SessionStatusCallback implements Session.StatusCallback {
 		@Override
 		public void call(Session session, SessionState state,
@@ -183,7 +192,8 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 
 			// If there is an exception...
 			if (exception != null) {
-				spinner.setMessage("Eccezione facebook: "+exception.getMessage());
+				spinner.setMessage("Eccezione facebook: "
+						+ exception.getMessage());
 				return;
 			}
 
@@ -195,7 +205,7 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 			}
 		}
 	}
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -214,8 +224,7 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implemen
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		Session session = Session.getActiveSession();
-		session.onActivityResult(this, requestCode,
-					resultCode, data);
+		session.onActivityResult(this, requestCode, resultCode, data);
 	}
 
 	@Override

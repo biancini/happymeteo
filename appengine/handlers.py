@@ -15,8 +15,7 @@ from secrets import EMAIL, CREATE_ACCOUNT_EMAIL, CHANGE_FACEBOOK_EMAIL,\
     LOST_PASSWORD_EMAIL
 
 from utils import sendMessage, happymeteo, sample, check_call,\
-    getGoogleAccessToken, sqlPostFusionTable, point_inside_polygon,\
-    sqlGetFusionTable, send_new_password
+    point_inside_polygon, send_new_password
 
 import logging
 
@@ -1003,6 +1002,39 @@ class ChangePassword(BaseRequestHandler):
       data = {'message': 'ok'}
     
       user.password = new_password
+      user.put()
+    except Exception as e:
+     logging.exception(e)
+     data = {
+       'error': '%s' % str(e)
+     }
+    
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
+    
+class UpdateFacebook(BaseRequestHandler):
+
+  @check_hash
+  def post(self):
+    try:
+      user_id = self.request.get('user_id')
+      facebook_id = self.request.get('facebook_id')
+      
+      print "facebook_id: %s"%facebook_id
+      
+      if not user_id:
+         raise Exception('Devi specificare un user_id')
+     
+      # if not facebook_id:
+      #   raise Exception('Devi specificare un facebook_id')
+     
+      user = User.get_by_id(int(user_id))
+      if not user:
+          raise Exception('Devi specificare un utente valido')
+      
+      data = {'message': 'ok', 'facebook_id': facebook_id}
+    
+      user.facebook_id = facebook_id
       user.put()
     except Exception as e:
      logging.exception(e)

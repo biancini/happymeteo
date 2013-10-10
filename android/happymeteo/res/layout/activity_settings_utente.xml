@@ -98,46 +98,6 @@
                 android:hint="@string/insert_cap"
                 android:inputType="textPersonName" />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dip"
-                android:src="@drawable/modifica_facebook" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dip"
-                android:gravity="center|fill_horizontal"
-                android:orientation="horizontal" >
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:src="@drawable/iconfb" 
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/settingsFacebookText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="@string/link_user_to_facebook" 
-                    android:layout_weight="1" />
-
-                <org.jraf.android.backport.switchwidget.Switch
-                    android:id="@+id/settingsFacebookSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" 
-                    android:layout_weight="1" />
-            </LinearLayout>
-
             <Button
                 android:id="@+id/btnCreateUser"
                 android:layout_width="wrap_content"

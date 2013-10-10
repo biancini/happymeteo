@@ -88,6 +88,13 @@ public class SessionCache {
 		return preferences.getString("facebook_id", null);
 	}
 	
+	public static void setFacebook_id(Context context, String facebook_id) {
+		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		editor.putString("facebook_id", facebook_id.equals("") ? null : facebook_id);
+		editor.commit();
+	}
+	
 	public static String getUser_id(Context context) {
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
 		return preferences.getString("user_id", null);

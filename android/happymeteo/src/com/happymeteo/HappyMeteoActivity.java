@@ -295,6 +295,13 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 
 		setupView();
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		setupView();
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent touchevent) {

@@ -133,4 +133,11 @@ public class ServerUtilities {
 		nvps.add(new BasicNameValuePair("old_password", oldPassword));
 		new PostRequest(Const.CHANGE_PASSWORD_ID, activity, nvps, onPostExecuteListener).execute(Const.CHANGE_PASSWORD_URL);
 	}
+	
+	public static void updateFacebook(onPostExecuteListener onPostExecuteListener, Activity activity, String userId, String facebookId) {
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("user_id", userId));
+		nvps.add(new BasicNameValuePair("facebook_id", facebookId));
+		new PostRequest(Const.UPDATE_FACEBOOK_ID, activity, nvps, onPostExecuteListener).execute(Const.UPDATE_FACEBOOK_URL);
+	}
 }
