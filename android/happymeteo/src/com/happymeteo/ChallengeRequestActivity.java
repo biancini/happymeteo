@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.facebook.widget.ProfilePictureView;
 import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.ServerUtilities;
@@ -30,6 +32,18 @@ public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
 
 		this.activity = this;
 		this.onPostExecuteListener = this;
+		
+		ProfilePictureView adversaryPic = (ProfilePictureView) findViewById(R.id.adversaryPic);
+		String adversaryFacebookId = intentParameters.get(ADVERSARY_FACEBOOK_ID);
+		if(adversaryFacebookId != null) {
+			adversaryPic.setProfileId(adversaryFacebookId);
+		}
+
+		TextView adversaryPicTextView = (TextView) findViewById(R.id.adversaryName);
+		String adversaryName = intentParameters.get(ADVERSARY_NAME);
+		if(adversaryName != null) {
+			adversaryPicTextView.setText(adversaryName.toUpperCase());
+		}
 
 		Button btnAcceptChallenge = (Button) findViewById(R.id.btnAcceptChallenge);
 		btnAcceptChallenge.setOnClickListener(new OnClickListener() {

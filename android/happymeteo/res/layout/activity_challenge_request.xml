@@ -24,28 +24,32 @@
         android:padding="10dip" >
 
         <com.facebook.widget.ProfilePictureView
+            android:layout_margin="10dp"
             android:id="@+id/adversaryPic"
             android:layout_width="fill_parent"
             android:layout_height="50dip"
             android:src="@drawable/com_facebook_profile_default_icon" />
-        
+
         <TextView
             android:id="@+id/adversaryName"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="20dp" />
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="30dp" />
 
         <Button
             android:id="@+id/btnAcceptChallenge"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="237dip"
+            android:layout_height="35dip"
+            android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
             android:background="@drawable/accetta" />
 
         <Button
             android:id="@+id/btnRefuseChallenge"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="237dip"
+            android:layout_height="35dip"
+            android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
             android:background="@drawable/rifiuta" />
     </LinearLayout>

@@ -64,7 +64,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 									int which) {
 							}
 						});
-				exception = new Exception(jsonObject.getString("message"));
+				exception = new Exception(jsonObject.getString("error"));
 				Log.i(Const.TAG, "showError exception: " + exception);
 			}
 		} catch (JSONException e) {

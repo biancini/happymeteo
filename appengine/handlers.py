@@ -539,7 +539,10 @@ class RequestChallengeHandler(BaseRequestHandler):
           
         # Send request to all devices of user_b
         for device in query2.run():
-            sendMessage(device.registration_id, collapse_key='request_challenge', payload={'user_id': challenge.user_id_b, 'challenge_id': '%s'%challenge.key().id()})
+            sendMessage(device.registration_id, collapse_key='request_challenge', payload={'user_id': challenge.user_id_b, 
+                                                                                           'challenge_id': '%s'%challenge.key().id(), 
+                                                                                           'adversary_facebook_id': user.facebook_id,
+                                                                                           'adversary_name': user.first_name })
         
         data = {
           'message': 'ok'
