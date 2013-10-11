@@ -101,10 +101,13 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 				});
 
 				for (NameValuePair pair : nvps) {
+					String value = "";
+					if(pair.getValue() != null)
+						value = pair.getValue();
 					if (!first)
 						query_string += "&";
 
-					query_string += pair.getName() + "=" + pair.getValue();
+					query_string += pair.getName() + "=" + value;
 					first = false;
 				}
 				Log.i(Const.TAG, "query_string: " + query_string);

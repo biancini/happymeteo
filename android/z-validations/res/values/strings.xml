@@ -30,6 +30,6 @@
     <string name="zvalidations_empty">Il valore non deve essere vuoto</string>
     <string name="zvalidations_not_in_range">Il valore deve essere tra %1$d e %2$d</string>
     <string name="zvalidations_not_email">Il valore non è una e-mail valida</string>
-    <string name="zvalidations_not_password">Il valore non è una password valida: deve essere composta almeno da un numero, una lettera in minuscolo, una lettera maiuscolo e un carattere speciale (@#$%^&amp;+=!). Non sono ammessi spazi e la password deve avere almeno 8 caratteri.</string>
+    <string name="zvalidations_not_password">Il valore non è una password valida: deve essere composta almeno da un numero, una lettera in minuscolo, una lettera in maiuscolo e un carattere speciale (@#$%^&amp;+=!). Non sono ammessi spazi e la password deve avere almeno 8 caratteri.</string>
 
 </resources>
