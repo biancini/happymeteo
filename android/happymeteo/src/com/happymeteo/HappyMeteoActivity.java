@@ -29,6 +29,8 @@ import com.happymeteo.utils.onPostExecuteListener;
 
 public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 		onPostExecuteListener {
+	
+	private TextView welcomeToday;
 
 	class MyGestureDetector extends SimpleOnGestureListener {
 		private ViewFlipper flipper;
@@ -47,26 +49,27 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 				float velocityY) {
 			if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
 				return false;
+			
 			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
 					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
 					&& flipper.getDisplayedChild() == 0) {
 				flipper.setInAnimation(context, R.anim.in_from_right);
 				flipper.setOutAnimation(context, R.anim.out_to_left);
-				Log.i(Const.TAG,
-						" in onFling() :: showNext"
-								+ flipper.getDisplayedChild());
+				welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase()
+						+ "_DIARIO");
 				flipper.showNext();
+				return true;
 			} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
 					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
 					&& flipper.getDisplayedChild() == 1) {
 				flipper.setInAnimation(context, R.anim.in_from_left);
 				flipper.setOutAnimation(context, R.anim.out_to_right);
-				Log.i(Const.TAG,
-						" in onFling() :: showPrevious"
-								+ flipper.getDisplayedChild());
 				flipper.showPrevious();
+				welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase()
+						+ "_OGGI");
+				return true;
 			}
-			return super.onFling(e1, e2, velocityX, velocityY);
+			return false;
 		}
 	}
 
@@ -235,7 +238,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 		/* Initialize PushNotificationsService */
 		PushNotificationsService.register(getApplicationContext());
 
-		TextView welcomeToday = (TextView) findViewById(R.id.welcomeToday);
+		welcomeToday = (TextView) findViewById(R.id.welcomeToday);
 		welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase()
 				+ "_OGGI");
 
