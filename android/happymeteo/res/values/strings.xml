@@ -61,5 +61,5 @@
 	<string name="yes">Si</string>
 	<string name="no">No</string>
 	<string name="renew_captcha">Rigenera captcha</string>
-	<string name="lost_password">Mandami un email con la nuova password</string>
+	<string name="lost_password">Non ricordo la mia password</string>
 </resources>

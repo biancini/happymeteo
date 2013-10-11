@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
     android:orientation="vertical" >
-    
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -13,15 +13,15 @@
         <ImageView
             android:layout_width="200dip"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:adjustViewBounds="true"
-             android:layout_centerInParent="true"
             android:src="@drawable/login_logo" />
-        
+
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
             android:layout_alignParentBottom="true"
+            android:adjustViewBounds="true"
             android:src="@drawable/login_icon" />
     </RelativeLayout>
 
@@ -54,9 +54,17 @@
             android:layout_width="237dip"
             android:layout_height="35dip"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="5dip"
             android:layout_marginTop="5dip"
             android:background="@drawable/login" />
+
+        <Button
+            android:id="@+id/btnLostPassword"
+            android:layout_width="237dip"
+            android:layout_height="35dip"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dip"
+            android:layout_marginBottom="5dip"
+            android:text="@string/lost_password" />
     </LinearLayout>
 
 </LinearLayout>

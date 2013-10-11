@@ -33,20 +33,20 @@
             android:orientation="vertical" >
 
             <Button
-                android:id="@+id/btnChangePassword"
-                android:layout_width="237dip"
-                android:layout_height="35dip"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dip"
-                android:background="@drawable/modificapw" />
-
-            <Button
                 android:id="@+id/btnCreateUser"
                 android:layout_width="237dip"
                 android:layout_height="35dip"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="10dip"
                 android:background="@drawable/modificadatiutente" />
+            
+            <Button
+                android:id="@+id/btnChangePassword"
+                android:layout_width="237dip"
+                android:layout_height="35dip"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dip"
+                android:background="@drawable/modificapw" />
 
             <LinearLayout
                 android:layout_width="237dip"

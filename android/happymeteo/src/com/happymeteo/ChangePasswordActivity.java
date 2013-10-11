@@ -53,7 +53,6 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements o
         final EditText changePassword_confirm_password = (EditText) findViewById(R.id.changePassword_confirm_password);
         Button btnChangePassword = (Button) findViewById(R.id.btnChangePassword);
         Button btnRenewCaptcha = (Button) findViewById(R.id.btnRenewCaptcha);
-        Button btnLostPassword = (Button) findViewById(R.id.btnLostPassword);
         
         captchaWidth = changePassword_textCaptcha.getWidth();
         captchaHeight = changePassword_textCaptcha.getHeight();
@@ -107,26 +106,6 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements o
         btnRenewCaptcha.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				newCapthca();
-			}
-		});
-        
-        btnLostPassword.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				new AlertDialog.Builder(ChangePasswordActivity.this)
-				.setTitle(getApplicationContext().getString(com.happymeteo.R.string.empty))
-				.setMessage(getApplicationContext().getString(com.happymeteo.R.string.are_you_sure))
-				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int which) {
-						ServerUtilities.lostPassword(onPostExecuteListener, activity, SessionCache.getUser_id(activity));
-					}
-				})
-				.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int which) {
-						
-					}
-				}).show();
 			}
 		});
     }
