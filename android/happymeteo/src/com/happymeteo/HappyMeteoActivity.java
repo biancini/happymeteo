@@ -24,6 +24,7 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.service.PushNotificationsService;
+import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 import com.jjoe64.graphview.GraphView.GraphViewData;
@@ -230,9 +231,6 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 			facebook.setVisibility(View.GONE);
 		}
 
-		ServerUtilities.getAppynessByDay(this, this,
-				SessionCache.getUser_id(this));
-		
 		RelativeLayout relativeLayoutMeteoUp2 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp2);
 		
 		GraphViewData[] viewData = new  GraphViewData[90];
@@ -307,8 +305,9 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
-				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(
-						view.getContext(), Session.getActiveSession());
+				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(view.getContext(), Session.getActiveSession());
+				feedDialogBuilder.setDescription("Vieni in appymeteo!");
+				feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
 				WebDialog webDialog = feedDialogBuilder.build();
 				webDialog.show();
 				return false;
@@ -316,6 +315,9 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 		});
 
 		setupView();
+		
+		ServerUtilities.getAppynessByDay(this, this,
+				SessionCache.getUser_id(this));
 	}
 
 	@Override

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -13,12 +13,12 @@
             android:id="@+id/viewFlipperUp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
-            
+            android:layout_weight="1" >
+
             <RelativeLayout
                 android:id="@+id/relativeLayoutMeteoUp1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent" >
 
                 <com.facebook.widget.ProfilePictureView
                     android:id="@+id/profile_picture"
@@ -41,45 +41,37 @@
                     android:layout_height="100dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true" />
-                
-                <LinearLayout 
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true" 
-                    android:paddingRight="5dp"
-                    android:paddingBottom="5dp">
-                    
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingRight="5dp" >
+
                     <ImageView
-	                    android:id="@+id/mail"
-	                    android:layout_width="25dp"
-	                    android:layout_height="25dp"
-	                    android:src="@drawable/mail" />
-                    
+                        android:id="@+id/mail"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/mail" />
+
                     <ImageView
-	                    android:id="@+id/facebook"
-	                    android:layout_width="25dp"
-	                    android:layout_height="25dp"
-	                    android:src="@drawable/facebook" />
+                        android:id="@+id/facebook"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/facebook" />
                 </LinearLayout>
             </RelativeLayout>
-            
+
             <RelativeLayout
                 android:id="@+id/relativeLayoutMeteoUp2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white">
-                
-<!--                 <TextView -->
-<!--                     android:layout_width="wrap_content" -->
-<!--                     android:layout_height="wrap_content" -->
-<!--                     android:layout_centerHorizontal="true" -->
-<!--                     android:layout_centerVertical="true" -->
-<!--                     android:textColor="#ffffff" -->
-<!--                     android:textSize="100sp"  -->
-<!--                     android:text="PR"/> -->
-                
+                android:background="@color/white" >
             </RelativeLayout>
         </ViewFlipper>
 
