@@ -1,11 +1,12 @@
 package com.happymeteo;
 
+import java.util.Random;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -23,14 +24,19 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.service.PushNotificationsService;
-import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
+import com.jjoe64.graphview.GraphView.GraphViewData;
+import com.jjoe64.graphview.GraphViewSeries;
+import com.jjoe64.graphview.GraphViewStyle;
+import com.jjoe64.graphview.GraphViewSeries.GraphViewSeriesStyle;
+import com.jjoe64.graphview.LineGraphView;
 
 public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 		onPostExecuteListener {
 	
 	private TextView welcomeToday;
+	private GestureDetector gestureDetector;
 
 	class MyGestureDetector extends SimpleOnGestureListener {
 		private ViewFlipper flipper;
@@ -72,8 +78,6 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 			return false;
 		}
 	}
-
-	private GestureDetector gestureDetector;
 
 	private int[] getColorByToday(int today) {
 		int colors[] = { 0, 0 };
@@ -228,6 +232,36 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 
 		ServerUtilities.getAppynessByDay(this, this,
 				SessionCache.getUser_id(this));
+		
+		RelativeLayout relativeLayoutMeteoUp2 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp2);
+		
+		GraphViewData[] viewData = new  GraphViewData[90];
+		Random random = new Random();
+		
+		for(int i=0; i<90; i++) {
+			double y = random.nextInt(11);
+			viewData[i] = new GraphViewData(i+1, y);
+		}
+		
+	    // init example series data  
+	    GraphViewSeries exampleSeries = new GraphViewSeries(
+	    	  null, // description
+	    	  new GraphViewSeriesStyle(0xffffffff, 1),
+	    	  viewData
+	    );
+	    
+	    LineGraphView graphView = new LineGraphView(  
+	          this, // context  
+	          "" // heading  
+	    );  
+	    graphView.addSeries(exampleSeries); // data
+	    graphView.setDrawBackground(true);
+	    graphView.setBackgroundColor(getResources().getColor(R.color.yellow));
+		graphView.setHorizontalLabels(new String[] {"Marzo", "Aprile", "Maggio"});
+		graphView.setVerticalLabels(new String[] {});
+		graphView.setGraphViewStyle(new GraphViewStyle(0xff000000, 0xffffffff, 0xffffffff));
+		
+	    relativeLayoutMeteoUp2.addView(graphView);  
 	}
 
 	@Override

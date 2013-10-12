@@ -134,45 +134,45 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 			}
 			break;
 
-		case R.id.side_navigation_menu_item5a:
+//		case R.id.side_navigation_menu_item5a:
+////			Bundle extras = new Bundle();
+////			extras.putString("timestamp", "test");
+////			invokeActivity(QuestionActivity.class, extras);
+////			Bundle extras = new Bundle();
+////			extras.putString("ioChallenge", "1.0");
+////			extras.putString("ioFacebookId", "757833642");
+////			extras.putString("ioName", "Simon");
+////			extras.putString("tuChallenge", "1.0");
+////			extras.putString("tuFacebookId", "500674896");
+////			extras.putString("tuName", "Andrea");
+////			invokeActivity(ChallengeScoreActivity.class, extras);
+//			
 //			Bundle extras = new Bundle();
-//			extras.putString("timestamp", "test");
-//			invokeActivity(QuestionActivity.class, extras);
-//			Bundle extras = new Bundle();
-//			extras.putString("ioChallenge", "1.0");
-//			extras.putString("ioFacebookId", "757833642");
-//			extras.putString("ioName", "Simon");
-//			extras.putString("tuChallenge", "1.0");
-//			extras.putString("tuFacebookId", "500674896");
-//			extras.putString("tuName", "Andrea");
-//			invokeActivity(ChallengeScoreActivity.class, extras);
-			
-			Bundle extras = new Bundle();
-			extras.putString("challenge_id", "test");
-			extras.putString("adversary_facebook_id", "757833642");
-			extras.putString("adversary_name", "Simon");
-			invokeActivity(ChallengeRequestActivity.class, extras);
-			break;
-			
-		case R.id.side_navigation_menu_item5b:
-//			Bundle extras = new Bundle();
-//			extras.putString("timestamp", "test");
-//			invokeActivity(QuestionActivity.class, extras);
-			Bundle extras2 = new Bundle();
-			extras2.putString("ioChallenge", "1.0");
-			extras2.putString("ioFacebookId", "757833642");
-			extras2.putString("ioName", "Simon");
-			extras2.putString("tuChallenge", "1.0");
-			extras2.putString("tuFacebookId", "500674896");
-			extras2.putString("tuName", "Andrea");
-			invokeActivity(ChallengeScoreActivity.class, extras2);
+//			extras.putString("challenge_id", "test");
+//			extras.putString("adversary_facebook_id", "757833642");
+//			extras.putString("adversary_name", "Simon");
+//			invokeActivity(ChallengeRequestActivity.class, extras);
+//			break;
+//			
+//		case R.id.side_navigation_menu_item5b:
+////			Bundle extras = new Bundle();
+////			extras.putString("timestamp", "test");
+////			invokeActivity(QuestionActivity.class, extras);
+//			Bundle extras2 = new Bundle();
+//			extras2.putString("ioChallenge", "1.0");
+//			extras2.putString("ioFacebookId", "757833642");
+//			extras2.putString("ioName", "Simon");
+//			extras2.putString("tuChallenge", "1.0");
+//			extras2.putString("tuFacebookId", "500674896");
+//			extras2.putString("tuName", "Andrea");
+//			invokeActivity(ChallengeScoreActivity.class, extras2);
 			
 //			Bundle extras = new Bundle();
 //			extras.putString("challenge_id", "test");
 //			extras.putString("adversary_facebook_id", "757833642");
 //			extras.putString("adversary_name", "Simon");
 //			invokeActivity(ChallengeRequestActivity.class, extras);
-			break;
+//			break;
 
 		case R.id.side_navigation_menu_item6:
 			onClickLogout();

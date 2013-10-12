@@ -4,8 +4,6 @@ import ua.org.zasadnyy.zvalidations.Field;
 import ua.org.zasadnyy.zvalidations.Form;
 import ua.org.zasadnyy.zvalidations.validations.IsPassword;
 import ua.org.zasadnyy.zvalidations.validations.NotEmpty;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
