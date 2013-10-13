@@ -1050,6 +1050,26 @@ class UpdateFacebook(BaseRequestHandler):
     
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))
+    
+class CrashReport(BaseRequestHandler):
+
+  def post(self):
+    arguments = self.request.arguments()
+    arguments.sort()
+    query_string = ""
+    first = True
+    
+    for a in arguments:
+        if not first:
+            query_string = query_string + "&"
+        
+        query_string = query_string + a + "=" + self.request.get(a)
+        first = False
+
+    print "query_string: %s"%query_string
+    data = {'message': 'ok'}
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
 
 """
 class PutProvincieMap(BaseRequestHandler):

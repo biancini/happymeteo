@@ -29,9 +29,6 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i(Const.TAG, this.getClass() + " onCreate");
-		Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler());
-
 		super.onCreate(savedInstanceState);
 
 		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
@@ -58,7 +55,6 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 		
 		Session session = Session.getActiveSession();
 		if (session == null) {
-			Log.i(Const.TAG, "session null");
 			session = new Session(this);
 			Session.setActiveSession(session);
 		}
@@ -66,12 +62,6 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 
 	@Override
 	protected void onDestroy() {
-		/*
-		 * Terminate PushNotificationsService
-		 * HappyMeteoApplication.getPushNotificationsService
-		 * ().terminate(getApplicationContext());
-		 */
-
 		Log.i(Const.TAG, this.getClass() + " onDestroy");
 		super.onDestroy();
 	}
@@ -106,14 +96,6 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 		super.onResume();
 	}
 
-	private class DefaultExceptionHandler implements
-			Thread.UncaughtExceptionHandler {
-		@Override
-		public void uncaughtException(Thread thread, Throwable ex) {
-			Log.e(Const.TAG, ex.getMessage(), ex);
-		}
-	}
-	
 	private void openActiveSession(Session.StatusCallback statusCallback,
 			Session session, boolean allowLoginUI) {
 		spinner.show();
