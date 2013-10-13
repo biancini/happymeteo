@@ -1,12 +1,18 @@
 package com.happymeteo;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Random;
+
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -27,6 +33,7 @@ import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
+import com.jjoe64.graphview.BarGraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.GraphViewStyle;
@@ -229,37 +236,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 		} else {
 			userImage.setProfileId(null);
 			facebook.setVisibility(View.GONE);
-		}
-
-		RelativeLayout relativeLayoutMeteoUp2 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp2);
-		
-		GraphViewData[] viewData = new  GraphViewData[90];
-		Random random = new Random();
-		
-		for(int i=0; i<90; i++) {
-			double y = random.nextInt(11);
-			viewData[i] = new GraphViewData(i+1, y);
-		}
-		
-	    // init example series data  
-	    GraphViewSeries exampleSeries = new GraphViewSeries(
-	    	  null, // description
-	    	  new GraphViewSeriesStyle(0xffffffff, 1),
-	    	  viewData
-	    );
-	    
-	    LineGraphView graphView = new LineGraphView(  
-	          this, // context  
-	          "" // heading  
-	    );  
-	    graphView.addSeries(exampleSeries); // data
-	    graphView.setDrawBackground(true);
-	    graphView.setBackgroundColor(getResources().getColor(R.color.yellow));
-		graphView.setHorizontalLabels(new String[] {"Marzo", "Aprile", "Maggio"});
-		graphView.setVerticalLabels(new String[] {});
-		graphView.setGraphViewStyle(new GraphViewStyle(0xff000000, 0xffffffff, 0xffffffff));
-		
-	    relativeLayoutMeteoUp2.addView(graphView);  
+		} 
 	}
 
 	@Override
@@ -353,5 +330,54 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
+		if(exception != null) {
+			return;
+		}
+		
+		try
+		{
+			JSONObject jsonObject = new JSONObject(result);
+			RelativeLayout relativeLayoutMeteoUp2 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp2);
+			int lenData = 90;
+			
+			GraphViewData[] viewData = new  GraphViewData[lenData];
+			Random random = new Random();
+			
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DATE, -(lenData+1));
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			for(int i=0; i<lenData; i++) {
+				cal.add(Calendar.DATE, +1);
+				String date = dateFormat.format(cal.getTime());
+				double y = 1;
+				if(!jsonObject.isNull(date))
+					y = jsonObject.getInt(date);
+				Log.i(Const.TAG, "date: "+date+" "+y);
+				viewData[i] = new GraphViewData(i+1, y);
+			}
+			
+		    // init example series data  
+		    GraphViewSeries exampleSeries = new GraphViewSeries(
+		    	  null, // description
+		    	  new GraphViewSeriesStyle(getResources().getColor(R.color.yellow), 1),
+		    	  viewData
+		    );
+		    
+		    BarGraphView graphView = new BarGraphView(  
+		          this, // context  
+		          "" // heading  
+		    );
+		    graphView.setManualYAxisBounds(10, 0);
+		    graphView.addSeries(exampleSeries); // data
+		    //graphView.setDrawBackground(true);
+		    //graphView.setBackgroundColor(getResources().getColor(R.color.yellow));
+			graphView.setHorizontalLabels(new String[] {"Marzo", "Aprile", "Maggio"});
+			graphView.setVerticalLabels(new String[] {});
+			graphView.setGraphViewStyle(new GraphViewStyle(0xff000000, 0xffffffff, 0xffffffff));
+			
+		    relativeLayoutMeteoUp2.addView(graphView);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

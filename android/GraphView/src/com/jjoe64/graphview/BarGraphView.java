@@ -42,7 +42,7 @@ public class BarGraphView extends GraphView {
 	public void drawSeries(Canvas canvas, GraphViewDataInterface[] values, float graphwidth, float graphheight,
 			float border, double minX, double minY, double diffX, double diffY,
 			float horstart, GraphViewSeriesStyle style) {
-		float colwidth = (graphwidth - (2 * border)) / values.length;
+		float colwidth = (graphwidth/* - (2 * border)*/) / values.length;
 
 		paint.setStrokeWidth(style.thickness);
 		paint.setColor(style.color);

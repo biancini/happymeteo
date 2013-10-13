@@ -91,32 +91,32 @@ public class LineGraphView extends GraphView {
 			}
 		}
 
-		// draw data
-		paint.setStrokeWidth(style.thickness);
-		paint.setColor(style.color);
-
-		lastEndY = 0;
-		lastEndX = 0;
-		for (int i = 0; i < values.length; i++) {
-			double valY = values[i].getY() - minY;
-			double ratY = valY / diffY;
-			double y = graphheight * ratY;
-
-			double valX = values[i].getX() - minX;
-			double ratX = valX / diffX;
-			double x = graphwidth * ratX;
-
-			if (i > 0) {
-				float startX = (float) lastEndX + (horstart + 1);
-				float startY = (float) (border - lastEndY) + graphheight;
-				float endX = (float) x + (horstart + 1);
-				float endY = (float) (border - y) + graphheight;
-
-				canvas.drawLine(startX, startY, endX, endY, paint);
-			}
-			lastEndY = y;
-			lastEndX = x;
-		}
+//		// draw data
+//		paint.setStrokeWidth(style.thickness);
+//		paint.setColor(style.color);
+//
+//		lastEndY = 0;
+//		lastEndX = 0;
+//		for (int i = 0; i < values.length; i++) {
+//			double valY = values[i].getY() - minY;
+//			double ratY = valY / diffY;
+//			double y = graphheight * ratY;
+//
+//			double valX = values[i].getX() - minX;
+//			double ratX = valX / diffX;
+//			double x = graphwidth * ratX;
+//
+//			if (i > 0) {
+//				float startX = (float) lastEndX + (horstart + 1);
+//				float startY = (float) (border - lastEndY) + graphheight;
+//				float endX = (float) x + (horstart + 1);
+//				float endY = (float) (border - y) + graphheight;
+//
+//				canvas.drawLine(startX, startY, endX, endY, paint);
+//			}
+//			lastEndY = y;
+//			lastEndX = x;
+//		}
 	}
 
 	public int getBackgroundColor() {

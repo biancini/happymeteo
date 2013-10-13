@@ -136,7 +136,7 @@ abstract public class GraphView extends LinearLayout {
 				float x = ((graphwidth / hors) * i) + horstart;
 				float x_next = ((graphwidth / hors) * (i+1)) + horstart;
 //				canvas.drawLine(x, height - border, x, border, paint);
-				canvas.drawRect(x, height - 4, x_next, height - border, paint);
+				canvas.drawRect(x, height, x_next, height - border, paint);
 				paint.setTextAlign(Align.CENTER);
 //				if (i==horlabels.length-1)
 //					paint.setTextAlign(Align.RIGHT);

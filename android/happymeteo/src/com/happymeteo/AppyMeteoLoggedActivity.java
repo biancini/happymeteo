@@ -25,9 +25,7 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 	private SideNavigationView sideNavigationView;
 
 	private void inShow() {
-		Log.i(Const.TAG, "inShow: " + SessionCache.isFacebookSession(this));
 		if (!SessionCache.isFacebookSession(this)) {
-			Log.i(Const.TAG, "changeIcon");
 			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4,
 					R.drawable.icona_sfidagrigio);
 		} else {
