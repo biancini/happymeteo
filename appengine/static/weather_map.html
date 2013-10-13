@@ -106,10 +106,7 @@
 
 	function initializeData() {
 	    $.getJSON( "https://happymeteo.appspot.com/get_data_map", function(response) {
-		    console.log(response);
-
 		    $.each(response, function(key, object) {
-		    	console.log(key+" "+object.name);
 		    	if(object.type == 'P') {
 	                var arrCoords = object.coordinate.split(',');
 	                var coordinate = new google.maps.LatLng(arrCoords[0], arrCoords[1]);
@@ -121,7 +118,7 @@
 		    	}
 	    	});
 
-	        showData('regioni');
+	    	showData('regioni');
 	   });
 	}
 
