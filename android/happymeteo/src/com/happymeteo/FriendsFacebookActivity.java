@@ -67,7 +67,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 		if (friend.isInstalled()) {
 			picker_title.setBackgroundColor(getResources().getColor(R.color.black));
 			picker_title.setTextColor(getResources().getColor(R.color.white));
-			picker_button.setBackgroundResource(R.drawable.pulsante_sfida);
+			picker_button.setBackgroundResource(R.drawable.pulsante_gioca);
 			picker_button.setOnClickListener(new OnClickListener() {
 				
 				public void onClick(View view) {

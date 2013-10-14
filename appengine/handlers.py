@@ -877,8 +877,8 @@ class GetAppinessByMonthHandler(BaseRequestHandler):
         len_months = 5;
         
         for i in range(len_months):
-            index = str(month-i)
-            dMonth = str((month-i)%12)
+            index = str(month-i-1)
+            dMonth = str((month-i-1)%12)
             firstOfMonth = mkDateTime("%s-%s-%s"%(dYear,dMonth,dDay))
             lastOfMonth = mkLastOfMonth(firstOfMonth)
             

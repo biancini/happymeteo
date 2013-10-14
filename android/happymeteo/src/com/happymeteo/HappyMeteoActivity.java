@@ -266,7 +266,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 				i.setType("message/rfc822");
 				i.putExtra(Intent.EXTRA_EMAIL, new String[] { "" });
 				i.putExtra(Intent.EXTRA_SUBJECT, "appymeteo");
-				i.putExtra(Intent.EXTRA_TEXT, "Facciamo una sfida di felicità con appymeteo? LINK");
+				i.putExtra(Intent.EXTRA_TEXT, "Ciao, io mi sto divertendo con appymeteo, vuoi farlo anche tu?");
 				try {
 					startActivity(Intent.createChooser(i, view.getContext()
 							.getString(R.string.mail)));
@@ -285,7 +285,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
 				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(view.getContext(), Session.getActiveSession());
-				feedDialogBuilder.setDescription("Facciamo una sfida di felicità con appymeteo? LINK");
+				feedDialogBuilder.setDescription("Ho appena misurato la mia felicità con appymeteo. LINK");
 				feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
 				WebDialog webDialog = feedDialogBuilder.build();
 				webDialog.show();
@@ -413,8 +413,8 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 				
 				GraphViewData[] viewMonthData = new  GraphViewData[len_months];
 				for(int i=0; i<len_months; i++) {
-					int id_month = (month-len_months+i+1)%12;
-					double y = 1;
+					int id_month = (month-len_months+i)%12;
+					double y = 10;
 					if(!jsonObject.isNull(String.valueOf(id_month+1)))
 						y = jsonObject.getInt(String.valueOf(id_month+1));
 					viewMonthData[i] = new GraphViewData(i+1, y);
