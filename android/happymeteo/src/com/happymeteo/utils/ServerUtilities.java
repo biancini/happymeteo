@@ -120,9 +120,15 @@ public class ServerUtilities {
 		new PostRequest(Const.GET_APPINESS_BY_DAY_ID, activity, nvps, onPostExecuteListener).execute(Const.GET_APPINESS_BY_DAY_URL);
 	}
 	
-	public static void lostPassword(onPostExecuteListener onPostExecuteListener, Activity activity, String userId) {
+	public static void getAppynessByMonth(onPostExecuteListener onPostExecuteListener, Activity activity, String userId) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("user_id", userId));
+		new PostRequest(Const.GET_APPINESS_BY_MONTH_ID, activity, nvps, onPostExecuteListener).execute(Const.GET_APPINESS_BY_MONTH_URL);
+	}
+	
+	public static void lostPassword(onPostExecuteListener onPostExecuteListener, Activity activity, String email) {
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("email", email));
 		new PostRequest(Const.LOST_PASSWORD_ID, activity, nvps, onPostExecuteListener).execute(Const.LOST_PASSWORD_URL);
 	}
 	

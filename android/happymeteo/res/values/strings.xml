@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">appymeteo</string>
-	<string name="version">Versione 0.2.6</string>
+	<string name="version">Versione 0.2.7</string>
 	<string name="app_id">405414319576008</string>
     <string name="information_page">info</string>
     <string name="happy_meteo">my meteo</string>
@@ -62,4 +62,20 @@
 	<string name="no">No</string>
 	<string name="renew_captcha">Rigenera captcha</string>
 	<string name="lost_password">Non ricordo la mia password</string>
+	<string name="january">GENNAIO</string>
+	<string name="february">FEBBRAIO</string>
+	<string name="march">MARZO</string>
+	<string name="april">APRILE</string>
+	<string name="may">MAGGIO</string>
+	<string name="june">GIUGNO</string>
+	<string name="july">LUGLIO</string>
+	<string name="august">AGOSTO</string>
+	<string name="september">SETTEMBRE</string>
+	<string name="october">OTTOBRE</string>
+	<string name="november">NOVEMBRE</string>
+	<string name="december">DICEMBRE</string>
+	<string name="lost_password">Hai dimenticato la tua password? Inserisci la tua email e vai Avanti.</string>
+	<string name="next">Avanti</string>
+	<string name="cancel">Cancella</string>
+	<string name="success_email">Email impostata con successo</string>
 </resources>

@@ -59,6 +59,7 @@ public class BarGraphView extends GraphView {
 			}
 
 			canvas.drawRect((i * colwidth) + horstart, (border - y) + graphheight, ((i * colwidth) + horstart) + (colwidth - 1), graphheight + border - 1, paint);
+			canvas.drawText(String.valueOf(i+1), (i * colwidth) + horstart, graphheight + 2*border, paint);
 		}
 	}
 }

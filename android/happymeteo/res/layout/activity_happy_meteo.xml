@@ -16,7 +16,7 @@
             android:layout_weight="1" >
 
             <RelativeLayout
-                android:id="@+id/relativeLayoutMeteoUp1"
+                android:id="@+id/relativeLayoutMeteoUpToday"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
 
@@ -68,7 +68,14 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/relativeLayoutMeteoUp2"
+                android:id="@+id/relativeLayoutMeteoUpGraphByDay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white" >
+            </RelativeLayout>
+            
+            <RelativeLayout
+                android:id="@+id/relativeLayoutMeteoUpGraphByMonth"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white" >

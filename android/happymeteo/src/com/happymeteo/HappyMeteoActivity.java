@@ -3,7 +3,7 @@ package com.happymeteo;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Random;
+import java.util.Date;
 
 import org.json.JSONObject;
 
@@ -28,17 +28,17 @@ import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
+import com.happymeteo.graph.DayBarGraphView;
+import com.happymeteo.graph.GraphView.GraphViewData;
+import com.happymeteo.graph.GraphViewSeries;
+import com.happymeteo.graph.GraphViewSeries.GraphViewSeriesStyle;
+import com.happymeteo.graph.GraphViewStyle;
+import com.happymeteo.graph.MonthBarGraphView;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
-import com.jjoe64.graphview.BarGraphView;
-import com.jjoe64.graphview.GraphView.GraphViewData;
-import com.jjoe64.graphview.GraphViewSeries;
-import com.jjoe64.graphview.GraphViewStyle;
-import com.jjoe64.graphview.GraphViewSeries.GraphViewSeriesStyle;
-import com.jjoe64.graphview.LineGraphView;
 
 public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 		onPostExecuteListener {
@@ -66,7 +66,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 			
 			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
 					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-					&& flipper.getDisplayedChild() == 0) {
+					&& flipper.getDisplayedChild() < flipper.getChildCount() - 1) {
 				flipper.setInAnimation(context, R.anim.in_from_right);
 				flipper.setOutAnimation(context, R.anim.out_to_left);
 				welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase()
@@ -75,12 +75,14 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 				return true;
 			} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
 					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-					&& flipper.getDisplayedChild() == 1) {
+					&& flipper.getDisplayedChild() > 0) {
 				flipper.setInAnimation(context, R.anim.in_from_left);
 				flipper.setOutAnimation(context, R.anim.out_to_right);
 				flipper.showPrevious();
-				welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase()
-						+ "_OGGI");
+				if(flipper.getDisplayedChild() == 0) {
+					welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase()
+							+ "_OGGI");
+				}
 				return true;
 			}
 			return false;
@@ -210,11 +212,11 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 		ImageView tomorrow_pic = (ImageView) findViewById(R.id.tomorrow_pic);
 		tomorrow_pic.setImageResource(getGrayIcon(tomorrow_int));
 
-		RelativeLayout relativeLayoutMeteoUp1 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp1);
+		RelativeLayout relativeLayoutMeteoUpToday = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUpToday);
 		GradientDrawable gradientDrawable = new GradientDrawable(
 				GradientDrawable.Orientation.TOP_BOTTOM,
 				getColorByToday(today_int));
-		relativeLayoutMeteoUp1.setBackgroundDrawable(gradientDrawable);
+		relativeLayoutMeteoUpToday.setBackgroundDrawable(gradientDrawable);
 
 		try {
 			Typeface helveticaneueltstd_ultlt_webfont = Typeface
@@ -263,14 +265,14 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 				Intent i = new Intent(Intent.ACTION_SEND);
 				i.setType("message/rfc822");
 				i.putExtra(Intent.EXTRA_EMAIL, new String[] { "" });
-				i.putExtra(Intent.EXTRA_SUBJECT, "");
-				i.putExtra(Intent.EXTRA_TEXT, "");
+				i.putExtra(Intent.EXTRA_SUBJECT, "appymeteo");
+				i.putExtra(Intent.EXTRA_TEXT, "Facciamo una sfida di felicità con appymeteo? LINK");
 				try {
 					startActivity(Intent.createChooser(i, view.getContext()
 							.getString(R.string.mail)));
 				} catch (android.content.ActivityNotFoundException ex) {
 					Toast.makeText(HappyMeteoActivity.this,
-							"There are no email clients installed.",
+							"Non ci sono mail client installati.",
 							Toast.LENGTH_SHORT).show();
 				}
 				return false;
@@ -283,7 +285,7 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
 				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(view.getContext(), Session.getActiveSession());
-				feedDialogBuilder.setDescription("Vieni in appymeteo!");
+				feedDialogBuilder.setDescription("Facciamo una sfida di felicità con appymeteo? LINK");
 				feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
 				WebDialog webDialog = feedDialogBuilder.build();
 				webDialog.show();
@@ -294,6 +296,9 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 		setupView();
 		
 		ServerUtilities.getAppynessByDay(this, this,
+				SessionCache.getUser_id(this));
+		
+		ServerUtilities.getAppynessByMonth(this, this,
 				SessionCache.getUser_id(this));
 	}
 
@@ -334,48 +339,95 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 			return;
 		}
 		
+		
+		
 		try
 		{
 			JSONObject jsonObject = new JSONObject(result);
-			RelativeLayout relativeLayoutMeteoUp2 = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUp2);
-			int lenData = 90;
-			
-			GraphViewData[] viewData = new  GraphViewData[lenData];
-			Random random = new Random();
-			
 			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.DATE, -(lenData+1));
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			for(int i=0; i<lenData; i++) {
-				cal.add(Calendar.DATE, +1);
-				String date = dateFormat.format(cal.getTime());
-				double y = 1;
-				if(!jsonObject.isNull(date))
-					y = jsonObject.getInt(date);
-				Log.i(Const.TAG, "date: "+date+" "+y);
-				viewData[i] = new GraphViewData(i+1, y);
+			Date today = cal.getTime();
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+			int month = cal.get(Calendar.MONTH);
+			int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+			
+			String[] months = new String[] {
+					getApplicationContext().getString(R.string.january),
+					getApplicationContext().getString(R.string.february),
+					getApplicationContext().getString(R.string.march),
+					getApplicationContext().getString(R.string.april),
+					getApplicationContext().getString(R.string.may),
+					getApplicationContext().getString(R.string.june),
+					getApplicationContext().getString(R.string.july),
+					getApplicationContext().getString(R.string.august),
+					getApplicationContext().getString(R.string.september),
+					getApplicationContext().getString(R.string.october),
+					getApplicationContext().getString(R.string.november),
+					getApplicationContext().getString(R.string.december)};
+			
+			GraphViewStyle graphViewStyle = new GraphViewStyle(0xff000000, 0xffffffff, 0xffffffff);
+			
+			switch(id) {
+			case Const.GET_APPINESS_BY_DAY_ID:
+				RelativeLayout relativeLayoutMeteoUpGraphByDay = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUpGraphByDay);
+				GraphViewData[] viewDayData = new  GraphViewData[daysInMonth];
+				boolean future = false;
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				for(int i=0; i<daysInMonth; i++) {
+					String date = dateFormat.format(cal.getTime());
+					double y = 1;
+					if(future) {
+						y = 0;
+					} else {
+						if(!jsonObject.isNull(date))
+							y = jsonObject.getInt(date);
+					}
+					viewDayData[i] = new GraphViewData(i+1, y);
+					if(cal.getTime().equals(today)) {
+						future = true;
+					}
+					cal.add(Calendar.DATE, +1);
+				}
+				
+			    // init example series data  
+			    GraphViewSeries dayDataSeries = new GraphViewSeries(
+			    	  new GraphViewSeriesStyle(getResources().getColor(R.color.yellow), 1),
+			    	  viewDayData
+			    );
+			    
+			    DayBarGraphView dayBarGraphView = new DayBarGraphView(this);
+			    dayBarGraphView.setManualYAxisBounds(10, 0);
+			    dayBarGraphView.addSeries(dayDataSeries); // data
+			    dayBarGraphView.setHorizontalLabels(new String[] {months[month]});
+				dayBarGraphView.setGraphViewStyle(graphViewStyle);
+				relativeLayoutMeteoUpGraphByDay.addView(dayBarGraphView);
+				break;
+			case Const.GET_APPINESS_BY_MONTH_ID:
+				RelativeLayout relativeLayoutMeteoUpGraphByMonth = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUpGraphByMonth);
+				MonthBarGraphView monthBarGraphView = new MonthBarGraphView(this);
+				monthBarGraphView.setManualYAxisBounds(10, 0);
+				monthBarGraphView.setGraphViewStyle(graphViewStyle);
+				monthBarGraphView.setHorizontalLabels(new String[] {months[month-1]});
+				
+				int len_months = 5;
+				String[] horLabels = new String[len_months];
+				
+				GraphViewData[] viewMonthData = new  GraphViewData[len_months];
+				for(int i=0; i<len_months; i++) {
+					int id_month = (month-len_months+i+1)%12;
+					double y = 1;
+					if(!jsonObject.isNull(String.valueOf(id_month+1)))
+						y = jsonObject.getInt(String.valueOf(id_month+1));
+					viewMonthData[i] = new GraphViewData(i+1, y);
+					horLabels[i] = months[id_month];
+				}
+				GraphViewSeries monthDataSeries = new GraphViewSeries(
+				    	  new GraphViewSeriesStyle(getResources().getColor(R.color.yellow), 1),
+				    	  viewMonthData
+				    );
+				monthBarGraphView.addSeries(monthDataSeries); // data
+				monthBarGraphView.setHorizontalLabels(horLabels);
+				relativeLayoutMeteoUpGraphByMonth.addView(monthBarGraphView);
 			}
-			
-		    // init example series data  
-		    GraphViewSeries exampleSeries = new GraphViewSeries(
-		    	  null, // description
-		    	  new GraphViewSeriesStyle(getResources().getColor(R.color.yellow), 1),
-		    	  viewData
-		    );
-		    
-		    BarGraphView graphView = new BarGraphView(  
-		          this, // context  
-		          "" // heading  
-		    );
-		    graphView.setManualYAxisBounds(10, 0);
-		    graphView.addSeries(exampleSeries); // data
-		    //graphView.setDrawBackground(true);
-		    //graphView.setBackgroundColor(getResources().getColor(R.color.yellow));
-			graphView.setHorizontalLabels(new String[] {"Marzo", "Aprile", "Maggio"});
-			graphView.setVerticalLabels(new String[] {});
-			graphView.setGraphViewStyle(new GraphViewStyle(0xff000000, 0xffffffff, 0xffffffff));
-			
-		    relativeLayoutMeteoUp2.addView(graphView);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

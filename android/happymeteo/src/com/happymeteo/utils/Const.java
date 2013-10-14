@@ -26,6 +26,8 @@ public final class Const {
 	public static final String CHANGE_PASSWORD_URL = BASE_URL + "/change_password";
 	public static final String UPDATE_FACEBOOK_URL = BASE_URL + "/update_facebook";
 	
+	public static final String GET_APPINESS_BY_MONTH_URL = BASE_URL + "/get_appiness_by_month";
+	
 	/* Id Post */
 	public static final int CREATE_ACCOUNT_ID = 1;
 	public static final int FACEBOOK_LOGIN_URL_ID = 2;
@@ -49,6 +51,8 @@ public final class Const {
 	public static final int LOST_PASSWORD_ID = 14;
 	public static final int CHANGE_PASSWORD_ID = 15;
 	public static final int UPDATE_FACEBOOK_ID = 16;
+	
+	public static final int GET_APPINESS_BY_MONTH_ID = 17;
 	
 	/* Google */
 	public static final String GOOGLE_ID = "347057775979";

@@ -41,11 +41,15 @@ routes = [
   Route('/submit_challenge', handler='handlers.SubmitChallengeHandler'),
   
   Route('/get_appiness_by_day', handler='handlers.GetAppinessByDayHandler'),
+  Route('/get_appiness_by_month', handler='handlers.GetAppinessByMonthHandler'),
+  
   Route('/create_map', handler='handlers.CreateMap'),
   Route('/get_data_map', handler='handlers.GetDataMap'),
+  
   Route('/lost_password', handler='handlers.LostPassword'),
   Route('/change_password', handler='handlers.ChangePassword'),
   Route('/update_facebook', handler='handlers.UpdateFacebook'),
+  
   Route('/crash_report', handler='handlers.CrashReport')
   #Route('/put_provincie_map', handler='handlers.PutProvincieMap')
 ]

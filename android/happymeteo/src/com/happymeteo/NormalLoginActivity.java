@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
@@ -66,24 +67,27 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements
 
 		btnLostPassword.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				final EditText input = new EditText(v.getContext());
+				
 				new AlertDialog.Builder(activity)
 						.setTitle(
 								getApplicationContext().getString(
 										com.happymeteo.R.string.empty))
 						.setMessage(
 								getApplicationContext().getString(
-										com.happymeteo.R.string.are_you_sure))
-						.setPositiveButton(R.string.yes,
+										com.happymeteo.R.string.lost_password))
+						.setView(input)
+						.setPositiveButton(R.string.next,
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int which) {
+										String email = input.getText().toString();
 										ServerUtilities.lostPassword(
 												onPostExecuteListener,
-												activity, SessionCache
-														.getUser_id(activity));
+												activity, email);
 									}
 								})
-						.setNegativeButton(R.string.no,
+						.setNegativeButton(R.string.cancel,
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int which) {
@@ -96,13 +100,18 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		try {
-			JSONObject jsonObject = new JSONObject(result);
-			SessionCache.initialize(this, jsonObject);
-			invokeActivity(HappyMeteoActivity.class);
-		} catch (JSONException e) {
-			e.printStackTrace();
+		if(exception != null) {
+			return;
 		}
+		
+		AlertDialogManager alert = new AlertDialogManager();
+		alert.showAlertDialog(this, this.getString(com.happymeteo.R.string.empty),
+				this.getString(com.happymeteo.R.string.success_email), false,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int which) {
+					}
+				});
 	}
 
 }

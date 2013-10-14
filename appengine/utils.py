@@ -2,10 +2,18 @@
 import urllib
 import urllib2
 import json
+import datetime
+import time
+import hashlib
+import string
+import random
+
+from datetime import date, timedelta
+from google.appengine.ext import db
+from google.appengine.api import mail
 
 from secrets import GOOGLE_API_KEY, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN,\
     CALL_SECRET_KEY, EMAIL, PASSWORD_SECRET_KEY
-import hashlib
 
 def sendMessage(registrationId, collapse_key=None, payload=None):
     print "send message to %s"%registrationId
@@ -62,8 +70,6 @@ def sqlPostFusionTable(access_token, sql):
     return response
 
 def happymeteo(user_id):
-    from datetime import date, timedelta
-    from google.appengine.ext import db
     
     today = date.today()
     tomorrow = today + timedelta(1)
@@ -225,10 +231,6 @@ def point_inside_polygon(lat, lng, coordinates):
     return inside
 
 def send_new_password(first_name, last_name, email, text):
-    from google.appengine.api import mail
-    import string
-    import random
-    
     new_password = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(6))
     message = mail.EmailMessage(sender="happymeteo <%s>" % EMAIL,
                             subject="Nuova password su Appy Meteo")
@@ -238,3 +240,33 @@ def send_new_password(first_name, last_name, email, text):
     
     hash = hashlib.sha1(PASSWORD_SECRET_KEY + new_password).hexdigest()
     return hash
+
+def mkDateTime(dateString,strFormat="%Y-%m-%d"):
+    # Expects "YYYY-MM-DD" string
+    # returns a datetime object
+    eSeconds = time.mktime(time.strptime(dateString,strFormat))
+    return datetime.datetime.fromtimestamp(eSeconds)
+
+def formatDate(dtDateTime,strFormat="%Y-%m-%d"):
+    # format a datetime object as YYYY-MM-DD string and return
+    return dtDateTime.strftime(strFormat)
+
+def mkFirstOfMonth2(dtDateTime):
+    #what is the first day of the current month
+    ddays = int(dtDateTime.strftime("%d"))-1 #days to subtract to get to the 1st
+    delta = datetime.timedelta(days= ddays)  #create a delta datetime object
+    return dtDateTime - delta                #Subtract delta and return
+
+def mkFirstOfMonth(dtDateTime):
+    #what is the first day of the current month
+    #format the year and month + 01 for the current datetime, then form it back
+    #into a datetime object
+    return mkDateTime(formatDate(dtDateTime,"%Y-%m-01"))
+
+def mkLastOfMonth(dtDateTime):
+    dYear = dtDateTime.strftime("%Y")        #get the year
+    dMonth = str(int(dtDateTime.strftime("%m"))%12+1)#get next month, watch rollover
+    dDay = "1"                               #first day of next month
+    nextMonth = mkDateTime("%s-%s-%s"%(dYear,dMonth,dDay))#make a datetime obj for 1st of next month
+    delta = datetime.timedelta(seconds=1)    #create a delta of 1 second
+    return nextMonth - delta                 #subtract from nextMonth and return

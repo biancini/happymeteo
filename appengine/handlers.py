@@ -15,12 +15,12 @@ from secrets import EMAIL, CREATE_ACCOUNT_EMAIL, CHANGE_FACEBOOK_EMAIL,\
     LOST_PASSWORD_EMAIL
 
 from utils import sendMessage, happymeteo, sample, check_call,\
-    point_inside_polygon, send_new_password
+    point_inside_polygon, send_new_password, mkFirstOfMonth, mkLastOfMonth,\
+    mkDateTime, formatDate
 
 import logging
 
-from datetime import datetime
-#from shapely.geometry import shape, Point
+from datetime import datetime, date, timedelta
 
 class BaseRequestHandler(webapp2.RequestHandler):
   def dispatch(self):
@@ -817,12 +817,14 @@ class GetAppinessByDayHandler(BaseRequestHandler):
         user_id = self.request.get('user_id')
         
         if not user_id:
-           raise Exception('You need to specify the user_id') 
+           raise Exception('Devi specificare un user_id') 
         
         count = {}
         sum = {}
         
-        answers = Answer.gql("WHERE user_id = :1", user_id)
+        firstOfMonth = mkFirstOfMonth(date.today())
+        
+        answers = Answer.gql("WHERE user_id = :1 AND date >= DATE(:2)", user_id, formatDate(firstOfMonth))
         
         for answer in answers:
             index = str(answer.date.date())
@@ -843,12 +845,59 @@ class GetAppinessByDayHandler(BaseRequestHandler):
        
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))
+
+class GetAppinessByMonthHandler(BaseRequestHandler):
+
+  @check_hash
+  def post(self): 
+    data = {}
+    
+    try:
+        user_id = self.request.get('user_id')
+        
+        if not user_id:
+           raise Exception('Devi specificare un user_id') 
+        
+        count = {}
+        sum = {}
+        
+        dtDateTime = date.today()
+        dtDateTime = mkFirstOfMonth(dtDateTime)
+        month = int(dtDateTime.strftime("%m"))
+        dYear = dtDateTime.strftime("%Y")
+        dDay = "1"  
+        len_months = 5;
+        
+        for i in range(len_months):
+            index = str(month-i)
+            dMonth = str((month-i)%12)
+            firstOfMonth = mkDateTime("%s-%s-%s"%(dYear,dMonth,dDay))
+            lastOfMonth = mkLastOfMonth(firstOfMonth)
+            
+            answers = Answer.gql("WHERE user_id = :1 AND date >= DATE(:2) AND date <= DATE(:3)", user_id, formatDate(firstOfMonth), formatDate(lastOfMonth))
+            
+            if answers.count() > 0:
+                count[index] = 0
+                sum[index] = 0
+                for answer in answers:
+                    count[index] = count[index]+1
+                    sum[index] = sum[index]+int(answer.value)
+                if sum[index] == 0:
+                    data[index] = 1
+                else:    
+                    data[index] = sum[index] / count[index]
+    except Exception as e:
+       logging.exception(e)
+       data = {
+         'error': '%s' % str(e)
+       }
+       
+    self.response.headers['Content-Type'] = 'application/json'
+    self.response.out.write(json.dumps(data))
     
 class CreateMap(BaseRequestHandler):
 
   def get(self):
-      from datetime import date, timedelta
-      
       today = date.today()
       yesterday = today - timedelta(1)
       
@@ -963,14 +1012,16 @@ class LostPassword(BaseRequestHandler):
   @check_hash
   def post(self):
     try:
-      user_id = self.request.get('user_id')
+      email = self.request.get('email')
       
-      if not user_id:
-         raise Exception('Devi specificare un user_id')
+      if not email:
+         raise Exception('Devi specificare una email')
      
-      user = User.get_by_id(int(user_id))
-      if not user:
-          raise Exception('Devi specificare un utente valido')
+      query = User.gql("WHERE email = :1", email)
+      if query.count() == 0:
+          raise Exception('Devi specificare una email utilizzata nel sistema')
+      
+      user = query.get()
      
       data = {'message': 'ok'}
     
