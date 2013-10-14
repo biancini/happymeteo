@@ -73,8 +73,9 @@ class BaseRequestHandler(webapp2.RequestHandler):
     # read the template or 404.html
     try:
       self.response.write(self.jinja2.render_template(template_name, **values))
-    except TemplateNotFound:
-      self.abort(404)
+    except TemplateNotFound as tnf:
+      logging.exception(tnf)
+      self.abort(500)
 
   def head(self, *args):
     pass
@@ -337,16 +338,23 @@ class NormalLoginHandler(BaseRequestHandler):
 class ConfirmUserHandler(BaseRequestHandler):
     def get(self):
         confirmation_code = self.request.get('confirmation_code')
+        
+        if not confirmation_code:
+            self.abort(500)
+        
         q = db.GqlQuery("SELECT * FROM User WHERE confirmation_code = :1",
             confirmation_code)
 
         if q.count() > 0:
-          user = q.get()
-          user.status = 2
-          user.confirmation_code = ""
-          user.put()
-
-        self.response.out.write("User confirmed")
+           user = q.get()
+           user.status = 2
+           user.confirmation_code = ""
+           user.put()
+           self.render('confirm_user.html', template_vars={
+            'name': user.first_name,
+            'email': user.email})
+        else:
+           self.abort(500)
         
 """ Device Management """
 class RegisterHandler(BaseRequestHandler):

@@ -1,0 +1,90 @@
+@charset "UTF-8";
+body {
+	
+	margin:0;
+	border:0;
+	padding:0;
+	
+}
+
+#contenitore {
+	position:fixed;
+	width: 100%;
+	height: 115px;
+	z-index: 1;
+	background-color: #000000;
+}
+
+#logo {
+	width: 500px;
+	height: 80px;
+	position: absolute;
+	left: 50%;
+	top: 98px;
+	margin-left: -150px;
+	margin-top: -80px;
+	z-index: 2;
+}
+#cartello {
+	width: 800px;
+	height: 554px;
+	position: absolute;
+	left: 50%;
+	top: 98px;
+	margin-left: -380px;
+	margin-top: -10px;
+	z-index: 2;
+}
+
+
+#icon{
+width: 800px;
+	height: 108px;
+	position: absolute;
+	left: 50%;
+	top: 98px;
+	margin-left: -380px;
+	margin-top: 545px;
+	z-index: 2;
+}
+
+#testo{
+	width: 470px;
+	height: 200px;
+	position: absolute;
+	left: 50%;
+	top: 98px;
+	margin-left: -130px;
+	margin-top: 100px;
+	z-index: 2;
+	text-align: center;
+	color:#666 ;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:16px ;
+	}
+	
+	#linea{
+width: 4px;
+	height: 130px;
+	position: absolute;
+	left: 50%;
+	top: 98px;
+	margin-left: -335px;
+	margin-top: -100px;
+	z-index: 2;
+}
+
+#lineadx{
+width: 4px;
+	height: 98px;
+	position: absolute;
+	left: 50%;
+	top: 98px;
+	margin-left: 335px;
+	margin-top: -100px;
+	z-index: 2;
+}
+	 
+
+
+	
