@@ -248,6 +248,9 @@ def mkDateTime(dateString,strFormat="%Y-%m-%d"):
     return datetime.datetime.fromtimestamp(eSeconds)
 
 def formatDate(dtDateTime,strFormat="%Y-%m-%d"):
+    if not dtDateTime:
+        return ""
+    
     # format a datetime object as YYYY-MM-DD string and return
     return dtDateTime.strftime(strFormat)
 

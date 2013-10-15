@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 import json
 import urllib2
-
 import webapp2
+import logging
+
 from webapp2_extras import auth, sessions, jinja2
 from jinja2.runtime import TemplateNotFound
 
 from google.appengine.ext import db
 
 from models import User, Device, Challenge, Question, ChallengeQuestion, Answer, \
-    ChallengeAnswer, ChallengeQuestionCategory, Region, Provincia, Marker
+    ChallengeAnswer, ChallengeQuestionCategory, Region, Provincia, Marker,\
+    ErrorReport
 
 from secrets import EMAIL, CREATE_ACCOUNT_EMAIL, CHANGE_FACEBOOK_EMAIL,\
     LOST_PASSWORD_EMAIL
@@ -17,8 +19,6 @@ from secrets import EMAIL, CREATE_ACCOUNT_EMAIL, CHANGE_FACEBOOK_EMAIL,\
 from utils import sendMessage, happymeteo, sample, check_call,\
     point_inside_polygon, send_new_password, mkFirstOfMonth, mkLastOfMonth,\
     mkDateTime, formatDate
-
-import logging
 
 from datetime import datetime, date, timedelta
 
@@ -475,21 +475,23 @@ class GetChallengesHandler(BaseRequestHandler):
        
         data = []
         
-        challenges = Challenge.gql("WHERE user_id_a = :1", user_id)
+        challenges = Challenge.gql("WHERE user_id_a = :1 ORDER BY created DESC", user_id)
         if challenges.count() > 0:
-            for c in challenges:
-                user_adversary = User.get_by_id(int(c.user_id_b))
+            for challenge in challenges:
+                user_adversary = User.get_by_id(int(challenge.user_id_b))
                 if user_adversary:
-                    c_object = c.toJson()
+                    c_object = challenge.toJson()
                     c_object['adversary'] = user_adversary.toJson()
                     data.append(c_object)
         
-        challenges = Challenge.gql("WHERE turn > 0 AND user_id_b = :1", user_id)
+        challenges = Challenge.gql("WHERE user_id_b = :1 ORDER BY created DESC", user_id)
         if challenges.count() > 0:        
-            for c in challenges:
-                user_adversary = User.get_by_id(int(c.user_id_a))
+            for challenge in challenges:
+                if challenge.turn == 0:
+                    continue
+                user_adversary = User.get_by_id(int(challenge.user_id_a))
                 if user_adversary:
-                    c_object = c.toJson()
+                    c_object = challenge.toJson()
                     c_object['adversary'] = user_adversary.toJson()
                     data.append(c_object)
     except Exception as e:
@@ -603,11 +605,10 @@ class AcceptChallengeHandler(BaseRequestHandler):
         user_b.contatore_sfidato = user_b.contatore_sfidato + 1
         user_b.put()
         
-        print "registrationId: %s"%registrationId
-        
         challenge.accepted = (accepted == "true")
         challenge.registration_id_b = registrationId
         challenge.turn = 1
+        challenge.created = datetime.now()
         challenge.put()
         
         sendMessage(challenge.registration_id_a, payload={'user_id': challenge.user_id_a, 'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge_id': '%s'%challenge.key().id(), 'turn': '1'})
@@ -1125,7 +1126,8 @@ class CrashReport(BaseRequestHandler):
         query_string = query_string + a + "=" + self.request.get(a)
         first = False
 
-    print "query_string: %s"%query_string
+    crashReport = ErrorReport(queryString=db.Text(query_string))
+    crashReport.put()
     data = {'message': 'ok'}
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(json.dumps(data))

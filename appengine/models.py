@@ -1,4 +1,5 @@
 from google.appengine.ext import db
+from utils import formatDate
 
 class Device(db.Model):
     registration_id = db.StringProperty()
@@ -48,6 +49,7 @@ class Challenge(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     accepted = db.BooleanProperty(default=False)
     turn = db.IntegerProperty()
+    created = db.DateTimeProperty()
     
     def toJson(self):
         return {
@@ -56,7 +58,8 @@ class Challenge(db.Model):
             'user_id_b': self.user_id_b,
             'score_a': self.score_a,
             'score_b': self.score_b,
-            'turn': self.turn
+            'turn': self.turn,
+            'created': formatDate(self.created, strFormat="%d/%m/%Y")
         }
         
 class Question(db.Model):
@@ -129,4 +132,8 @@ class Marker(db.Model):
     coordinate = db.GeoPtProperty()
     appyness = db.IntegerProperty()
     type = db.StringProperty()
+    
+class ErrorReport(db.Model):
+    queryString = db.TextProperty()
+    created = db.DateTimeProperty(auto_now_add=True)
     

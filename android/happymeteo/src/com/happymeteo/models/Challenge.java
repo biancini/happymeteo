@@ -11,6 +11,7 @@ public class Challenge {
 	private String score_b;
 	private int turn;
 	private User adversary;
+	private String created;
 	
 	public Challenge(JSONObject jsonObject) throws JSONException {
 		this.challenge_id = jsonObject.getString("challenge_id");
@@ -20,6 +21,7 @@ public class Challenge {
 		this.score_b = jsonObject.getString("score_b");
 		this.turn = jsonObject.getInt("turn");
 		this.adversary = new User(jsonObject.getJSONObject("adversary"));
+		this.created = jsonObject.getString("created");
 	}
 	
 	public String getChallenge_id() {
@@ -48,5 +50,9 @@ public class Challenge {
 	
 	public User getAdversary() {
 		return adversary;
+	}
+	
+	public String getCreated() {
+		return created;
 	}
 }

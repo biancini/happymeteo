@@ -66,9 +66,12 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 
 		addContentView(sideNavigationView, layoutParams);
 
-		if (SessionCache.isFacebookSession(this)
-				&& !Session.getActiveSession().isOpened()) {
-			onFacebookConnect(statusCallback, false);
+		if (SessionCache.isFacebookSession(this)) {
+			if(Session.getActiveSession() == null) {
+				onFacebookConnect(statusCallback, true);
+			} else if(!Session.getActiveSession().isOpened()) {
+				onFacebookConnect(statusCallback, false);
+			}
 		}
 
 		inShow();
@@ -152,25 +155,25 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 //			invokeActivity(ChallengeRequestActivity.class, extras);
 //			break;
 //			
-//		case R.id.side_navigation_menu_item5b:
+		case R.id.side_navigation_menu_item5b:
 ////			Bundle extras = new Bundle();
 ////			extras.putString("timestamp", "test");
 ////			invokeActivity(QuestionActivity.class, extras);
-//			Bundle extras2 = new Bundle();
-//			extras2.putString("ioChallenge", "1.0");
-//			extras2.putString("ioFacebookId", "757833642");
-//			extras2.putString("ioName", "Simon");
-//			extras2.putString("tuChallenge", "1.0");
-//			extras2.putString("tuFacebookId", "500674896");
-//			extras2.putString("tuName", "Andrea");
-//			invokeActivity(ChallengeScoreActivity.class, extras2);
+			Bundle extras2 = new Bundle();
+			extras2.putString("ioChallenge", "1.0");
+			extras2.putString("ioFacebookId", "757833642");
+			extras2.putString("ioName", "Simon");
+			extras2.putString("tuChallenge", "1.0");
+			extras2.putString("tuFacebookId", "500674896");
+			extras2.putString("tuName", "Andrea");
+			invokeActivity(ChallengeScoreActivity.class, extras2);
 			
 //			Bundle extras = new Bundle();
 //			extras.putString("challenge_id", "test");
 //			extras.putString("adversary_facebook_id", "757833642");
 //			extras.putString("adversary_name", "Simon");
 //			invokeActivity(ChallengeRequestActivity.class, extras);
-//			break;
+			break;
 
 		case R.id.side_navigation_menu_item6:
 			onClickLogout();

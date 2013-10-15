@@ -3,33 +3,43 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/background_gradient"
+    android:fillViewport="true"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:fillViewport="true">
+    android:paddingRight="16dp" >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/white"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="5dp" >
 
-        <Button
+        <!-- <Button -->
+        <!-- android:id="@+id/btnChallengeNew" -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_gravity="center_horizontal" -->
+        <!-- android:layout_marginTop="5dip" -->
+        <!-- android:background="@drawable/nuovogioco" /> -->
+
+        <ImageView
             android:id="@+id/btnChallengeNew"
-            android:layout_width="237dip"
-            android:layout_height="35dip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dip"
-            android:background="@drawable/nuovasfida" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/nuovogioco" />
 
         <ImageView
             android:id="@+id/partiteTurn0"
             android:layout_width="match_parent"
-            android:layout_height="22dip"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dip"
-            android:scaleType="fitXY"
-            android:src="@drawable/attesa" 
+            android:layout_marginTop="5dip"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/partiteinattrisp"
             android:visibility="gone" />
 
         <LinearLayout
@@ -44,11 +54,11 @@
         <ImageView
             android:id="@+id/partiteTurn1"
             android:layout_width="match_parent"
-            android:layout_height="22dip"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dip"
+            android:layout_marginTop="5dip"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
             android:src="@drawable/partiteinsospeso"
             android:visibility="gone" />
 
@@ -64,11 +74,11 @@
         <ImageView
             android:id="@+id/partiteTurn2"
             android:layout_width="match_parent"
-            android:layout_height="22dip"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dip"
+            android:layout_marginTop="5dip"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
             android:src="@drawable/partiteinsospeso"
             android:visibility="gone" />
 
@@ -84,12 +94,12 @@
         <ImageView
             android:id="@+id/partiteTurn3"
             android:layout_width="match_parent"
-            android:layout_height="22dip"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dip"
+            android:layout_marginTop="5dip"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/partitefatte"
+            android:scaleType="fitCenter"
+            android:src="@drawable/partitecompletate"
             android:visibility="gone" />
 
         <LinearLayout

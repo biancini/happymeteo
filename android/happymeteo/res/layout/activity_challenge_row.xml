@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
 
     <com.facebook.widget.ProfilePictureView
         android:id="@+id/picker_profile_pic_stub"
@@ -47,11 +49,5 @@
         android:id="@+id/picker_button"
         android:layout_width="108dp"
     	android:layout_height="50dip" />
-
-    <ImageView
-        android:id="@+id/result_image"
-        android:layout_width="30dip"
-        android:layout_height="30dip"
-        android:layout_margin="10dip" />
 
 </LinearLayout>

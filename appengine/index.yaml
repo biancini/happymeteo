@@ -30,3 +30,15 @@ indexes:
   properties:
   - name: user_id_b
   - name: turn
+  
+- kind: Challenge
+  properties:
+  - name: user_id_a
+  - name: created
+    direction: desc
+    
+- kind: Challenge
+  properties:
+  - name: user_id_b
+  - name: created
+    direction: desc

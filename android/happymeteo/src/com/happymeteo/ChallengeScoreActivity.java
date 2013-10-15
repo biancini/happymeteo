@@ -3,13 +3,12 @@ package com.happymeteo;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.facebook.widget.ProfilePictureView;
-import com.happymeteo.models.SessionCache;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.facebook.widget.ProfilePictureView;
+import com.happymeteo.models.SessionCache;
 
 public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 	
@@ -54,17 +53,6 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 		String tuName = intentParameters.get(TU_NAME);
 		if(tuName != null) {
 			tuNameTextView.setText(tuName.toUpperCase());
-		}
-		
-		ImageView resultChallengeTextView = (ImageView) findViewById(R.id.resultChallenge);
-		
-		if(ioScore != null && tuScore != null) {
-			if(ioScore > tuScore)
-				resultChallengeTextView.setBackgroundResource(R.drawable.vinto);
-			if(ioScore < tuScore)
-				resultChallengeTextView.setBackgroundResource(R.drawable.perso);
-			if(ioScore.equals(tuScore))
-				resultChallengeTextView.setBackgroundResource(R.drawable.pareggiato);
 		}
 	}
 

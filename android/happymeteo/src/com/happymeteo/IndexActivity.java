@@ -49,7 +49,6 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 			}
 		});
 		
-		Log.i(Const.TAG, "user_id: "+SessionCache.getUser_id(getApplicationContext()));
 		if(SessionCache.isInitialized(getApplicationContext())) {
 			invokeActivity(HappyMeteoActivity.class);
 		}

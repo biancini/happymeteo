@@ -41,24 +41,18 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 
 		TextView picker_title = (TextView) rowView
 				.findViewById(R.id.picker_title);
-		picker_title.setText("Sfida con "
-				+ challenge.getAdversary().getFirst_name());
+		picker_title.setText("Hai giocato con "
+				+ challenge.getAdversary().getFirst_name() +
+				" il "+challenge.getCreated());
 
 		TextView picker_result = (TextView) rowView
 				.findViewById(R.id.picker_result);
-		picker_title.setText("Sfida con "
-				+ challenge.getAdversary().getFirst_name());
-
-		ImageView result_image = (ImageView) rowView
-				.findViewById(R.id.result_image);
 		
 		Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
 		
 		final AppyMeteoLoggedActivity activity = this;
 		
-		if(challenge.getTurn() < 3) {
-			result_image.setVisibility(View.GONE);
-		} else {
+		if(challenge.getTurn() == 3) {
 			picker_button.setVisibility(View.GONE);
 		}
 		
@@ -109,24 +103,27 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 				ioScore = Float.valueOf(challenge.getScore_b());
 				tuScore = Float.valueOf(challenge.getScore_a());
 			}
+			
+			picker_result.setText("Ecco il risultato.  " + ioScore.toString() + "-"
+					+ tuScore.toString());
 	
-			if (ioScore != null && tuScore != null) {
-				if (ioScore > tuScore) {
-					result_image.setBackgroundResource(R.drawable.smilepositivo);
-					picker_result.setText("Hai vinto!  " + ioScore.toString() + "-"
-							+ tuScore.toString());
-				}
-				if (ioScore < tuScore) {
-					result_image.setBackgroundResource(R.drawable.smilenegativo);
-					picker_result.setText("Hai perso!  " + ioScore.toString() + "-"
-							+ tuScore.toString());
-				}
-				if (ioScore.equals(tuScore)) {
-					result_image.setBackgroundResource(R.drawable.smile);
-					picker_result.setText("Hai pareggiato!  " + ioScore.toString()
-							+ "-" + tuScore.toString());
-				}
-			}
+//			if (ioScore != null && tuScore != null) {
+//				if (ioScore > tuScore) {
+//					result_image.setBackgroundResource(R.drawable.smilepositivo);
+//					picker_result.setText("Hai vinto!  " + ioScore.toString() + "-"
+//							+ tuScore.toString());
+//				}
+//				if (ioScore < tuScore) {
+//					result_image.setBackgroundResource(R.drawable.smilenegativo);
+//					picker_result.setText("Hai perso!  " + ioScore.toString() + "-"
+//							+ tuScore.toString());
+//				}
+//				if (ioScore.equals(tuScore)) {
+//					result_image.setBackgroundResource(R.drawable.smile);
+//					picker_result.setText("Hai pareggiato!  " + ioScore.toString()
+//							+ "-" + tuScore.toString());
+//				}
+//			}
 			viewToAdd = true;
 		}
 		
@@ -141,11 +138,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 		setContentView(R.layout.activity_challenge);
 		super.onCreate(savedInstanceState);
 
-		Button btnChallengeNew = (Button) findViewById(R.id.btnChallengeNew);
-
-		if (!SessionCache.isFacebookSession(this)) {
-			btnChallengeNew.setEnabled(false);
-		}
+		ImageView btnChallengeNew = (ImageView) findViewById(R.id.btnChallengeNew);
 
 		btnChallengeNew.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
@@ -168,8 +161,6 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 
 		try {
 			JSONArray challenges = new JSONArray(result);
-
-			Log.i(Const.TAG, "challenges.length(): " + challenges.length());
 
 			if (challenges.length() == 0)
 				return;
