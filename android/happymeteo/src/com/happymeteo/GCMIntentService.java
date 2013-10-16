@@ -1,5 +1,7 @@
 package com.happymeteo;
 
+import java.util.UUID;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -24,7 +26,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 **/
 	@Override
 	protected void onRegistered(Context context, String registrationId) {
-		Log.i(Const.TAG, "Device registered: regId = " + registrationId);
 		/* Register device on happymeteo backend */
 		ServerUtilities.registerDevice(
 				context,
@@ -37,8 +38,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * */
 	@Override
 	protected void onUnregistered(Context context, String registrationId) {
-		Log.i(Const.TAG, "Device unregistered");
-		
 		/* Unregister device on happymeteo backend */
 		ServerUtilities.unregisterDevice(getApplicationContext(), registrationId);
 	}
@@ -122,6 +121,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if(user_id != null && SessionCache.getUser_id(context) != null && user_id.equals(SessionCache.getUser_id(context))) {
 			int icon = R.drawable.ic_launcher;
 			long when = System.currentTimeMillis();
+			String notificationTag = String.valueOf(UUID.randomUUID());
 			NotificationManager notificationManager = (NotificationManager) context
 					.getSystemService(Context.NOTIFICATION_SERVICE);
 			
@@ -161,7 +161,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	
 			// Vibrate if vibrate is enabled
 			notification.defaults |= Notification.DEFAULT_VIBRATE;
-			notificationManager.notify(0, notification);
+			notificationManager.notify(notificationTag, 0, notification);
 		}
 	}
 }

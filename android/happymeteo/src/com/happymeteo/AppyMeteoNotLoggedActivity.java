@@ -21,33 +21,32 @@ import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.AlertDialogManager;
-import com.happymeteo.utils.ConnectionDetector;
 import com.happymeteo.utils.Const;
 
 public class AppyMeteoNotLoggedActivity extends SherlockActivity {
-	protected ProgressDialog spinner;
+//	protected ProgressDialog spinner;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
-		/* Check internet */
-		if (!cd.isConnectingToInternet()) {
-			AlertDialogManager alert = new AlertDialogManager();
-			alert.showAlertDialog(this, "Errore di connessione Internet",
-					"Connettere Internet per utilizzare Appy Meteo", false,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							finish();
-						}
-					});
-			return;
-		}
+//		ConnectionDetector cd = new ConnectionDetector(getApplicationContext());
+//		/* Check internet */
+//		if (!cd.isConnectingToInternet()) {
+//			AlertDialogManager alert = new AlertDialogManager();
+//			alert.showAlertDialog(this, "Errore di connessione Internet",
+//					"Connettere Internet per utilizzare Appy Meteo", false,
+//					new DialogInterface.OnClickListener() {
+//						public void onClick(DialogInterface dialog, int which) {
+//							finish();
+//						}
+//					});
+//			return;
+//		}
 
-		spinner = new ProgressDialog(this);
-		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		spinner.setMessage("Connessione a facebook..");
+//		spinner = new ProgressDialog(this);
+//		spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		spinner.setMessage("Connessione a facebook..");
 		
 		Settings.addLoggingBehavior(LoggingBehavior.CACHE);
 		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
@@ -98,7 +97,7 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 
 	private void openActiveSession(Session.StatusCallback statusCallback,
 			Session session, boolean allowLoginUI) {
-		spinner.show();
+//		spinner.show();
 		if (session == null) {
 			Log.i(Const.TAG, "session null");
 			session = new Session(this);
@@ -111,7 +110,7 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 					Arrays.asList(Const.FACEBOOK_PERMISSIONS)).setCallback(
 					statusCallback));
 		} else {
-			spinner.dismiss();
+//			spinner.dismiss();
 			statusCallback.call(session, session.getState(), null);
 		}
 	}
@@ -127,7 +126,7 @@ public class AppyMeteoNotLoggedActivity extends SherlockActivity {
 
 		if (!session.isOpened() && !session.isClosed()
 				&& session.getState() != SessionState.OPENING) {
-			spinner.show();
+//			spinner.show();
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(
 					Arrays.asList(Const.FACEBOOK_PERMISSIONS)).setCallback(
 					statusCallback));

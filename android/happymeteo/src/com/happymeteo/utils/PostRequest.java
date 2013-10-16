@@ -16,20 +16,16 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.Window;
 
 public class PostRequest extends AsyncTask<String, Void, String> {
 	private int id;
 	private Context context;
 	private List<NameValuePair> nvps;
 	private onPostExecuteListener onPostExecuteListener;
-	private ProgressDialog spinner;
+//	private ProgressDialog spinner;
 
 	public PostRequest(int id, Context context, List<NameValuePair> nvps,
 			onPostExecuteListener onPostExecuteListener) {
@@ -42,11 +38,11 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		this.onPostExecuteListener = null;
 		this.context = context;
 		this.nvps = nvps;
-		if (context instanceof Activity) {
-			spinner = new ProgressDialog(context);
-			spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			spinner.setMessage(context.getString(com.happymeteo.R.string.loading));
-		}
+//		if (context instanceof Activity) {
+//			spinner = new ProgressDialog(context);
+//			spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//			spinner.setMessage(context.getString(com.happymeteo.R.string.loading));
+//		}
 	}
 
 	private Exception showError(String json) {
@@ -56,16 +52,9 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 			JSONObject jsonObject = new JSONObject(json);
 
 			if (jsonObject != null && jsonObject.getString("error") != null) {
-				AlertDialogManager alert = new AlertDialogManager();
-				alert.showAlertDialog(context, context.getString(com.happymeteo.R.string.error),
-						jsonObject.getString("error"), false,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-							}
-						});
-				exception = new Exception(jsonObject.getString("error"));
-				Log.i(Const.TAG, "showError exception: " + exception);
+				String error = jsonObject.getString("error");
+				AlertDialogManager.showError(context, error);
+				exception = new Exception(error);
 			}
 		} catch (JSONException e) {
 			exception = null;
@@ -76,9 +65,9 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		if (spinner != null) {
-			spinner.show();
-		}
+//		if (spinner != null) {
+//			spinner.show();
+//		}
 	}
 
 	@Override
@@ -146,8 +135,8 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		if (onPostExecuteListener != null) {
 			onPostExecuteListener.onPostExecute(id, result, exception);
 		}
-		if (spinner != null) {
-			spinner.dismiss();
-		}
+//		if (spinner != null) {
+//			spinner.dismiss();
+//		}
 	}
 }

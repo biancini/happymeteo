@@ -8,32 +8,29 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.Window;
 
 public class GetRequest extends AsyncTask<String, Void, String> {
 	private onGetExecuteListener onGetExecuteListener;
-	private ProgressDialog spinner;
+//	private ProgressDialog spinner;
 	
 	public GetRequest(Context context, onGetExecuteListener onGetExecuteListener) {
 		this.onGetExecuteListener = onGetExecuteListener;
-		if(context instanceof Activity) {
-			spinner = new ProgressDialog(context);
-			spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			spinner.setMessage(context.getString(com.happymeteo.R.string.loading));
-		}
+//		if(context instanceof Activity) {
+//			spinner = new ProgressDialog(context);
+//			spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//			spinner.setMessage(context.getString(com.happymeteo.R.string.loading));
+//		}
 	}
 	
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		if(spinner != null) {
-			spinner.show();
-		}
+//		if(spinner != null) {
+//			spinner.show();
+//		}
 	}
 	
 	@Override
@@ -64,13 +61,12 @@ public class GetRequest extends AsyncTask<String, Void, String> {
 	
 	@Override
     protected void onPostExecute(String result) {
-		Log.i(Const.TAG, result);
-		
+		Log.i(Const.TAG, "GetRequest result: " + result);
 		if(onGetExecuteListener != null && result != null) {
-			onGetExecuteListener.onGetExecute(result, null);
+			onGetExecuteListener.onGetExecute(result);
 		}
-		if(spinner != null) {
-			spinner.dismiss();
-		}
+//		if(spinner != null) {
+//			spinner.dismiss();
+//		}
     }
 }

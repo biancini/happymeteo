@@ -31,6 +31,16 @@
             android:scaleType="fitCenter"
             android:src="@drawable/nuovogioco" />
 
+        <RelativeLayout
+            android:id="@+id/waitGetChallenges"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dip"
+            android:background="@color/white" >
+
+            <include layout="@layout/indeterminate_progress_action" />
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/partiteTurn0"
             android:layout_width="match_parent"
@@ -111,4 +121,5 @@
             android:orientation="vertical"
             android:visibility="gone" />
     </LinearLayout>
+
 </ScrollView>

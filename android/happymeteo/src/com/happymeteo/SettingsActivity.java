@@ -161,13 +161,8 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 	}
 	
 	@Override
-	public void onGetExecute(String result, Exception exception) {
-		Log.i(Const.TAG, "onGetExecute: " + result);
-		spinner.dismiss();
-		
-		if(exception != null) {
-			return;
-		}
+	public void onGetExecute(String result) {
+//		spinner.dismiss();
 		
 		try {
 			JSONObject jsonObject = new JSONObject(result);

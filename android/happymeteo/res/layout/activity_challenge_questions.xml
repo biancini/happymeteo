@@ -4,6 +4,16 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
     android:orientation="vertical">
+    
+    <RelativeLayout
+        android:id="@+id/waitGetChallengeQuestions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dip"
+        android:background="@color/white" >
+
+        <include layout="@layout/indeterminate_progress_action" />
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"

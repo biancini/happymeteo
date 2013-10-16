@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -126,6 +127,9 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 
 		switch (id) {
 		case Const.GET_QUESTIONS_URL_ID:
+			RelativeLayout wait = (RelativeLayout) findViewById(R.id.waitGetQuestions);
+			wait.setVisibility(View.GONE);
+			
 			try {
 				JSONArray jsonArray = new JSONArray(result);
 				for (int i = 0; i < jsonArray.length(); i++) {

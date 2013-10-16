@@ -41,4 +41,15 @@ public class AlertDialogManager {
 		// Showing Alert Message
 		alertDialog.show();
 	}
+	
+	static public void showError(Context context, String error) {
+		AlertDialogManager alert = new AlertDialogManager();
+		alert.showAlertDialog(context, context.getString(com.happymeteo.R.string.error),
+				error, false,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int which) {
+					}
+				});
+	}
 }

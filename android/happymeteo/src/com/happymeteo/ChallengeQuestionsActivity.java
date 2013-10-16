@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
@@ -114,8 +115,15 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
+		if(exception != null) {
+			return;
+		}
+		
 		switch (id) {
 		case Const.QUESTIONS_CHALLENGE_URL_ID:
+			RelativeLayout wait = (RelativeLayout) findViewById(R.id.waitGetChallengeQuestions);
+			wait.setVisibility(View.GONE);
+			
 			try {
 				JSONArray jsonArray = new JSONArray(result);
 				for (int i = 0; i < jsonArray.length(); i++) {

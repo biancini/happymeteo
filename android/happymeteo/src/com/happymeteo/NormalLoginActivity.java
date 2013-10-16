@@ -1,8 +1,5 @@
 package com.happymeteo;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import ua.org.zasadnyy.zvalidations.Field;
 import ua.org.zasadnyy.zvalidations.Form;
 import ua.org.zasadnyy.zvalidations.validations.NotEmpty;
@@ -14,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.SHA1;
@@ -68,7 +64,7 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements
 		btnLostPassword.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				final EditText input = new EditText(v.getContext());
-				
+
 				new AlertDialog.Builder(activity)
 						.setTitle(
 								getApplicationContext().getString(
@@ -81,7 +77,8 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int which) {
-										String email = input.getText().toString();
+										String email = input.getText()
+												.toString();
 										ServerUtilities.lostPassword(
 												onPostExecuteListener,
 												activity, email);
@@ -100,16 +97,16 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if(exception != null) {
+		if (exception != null) {
 			return;
 		}
-		
+
 		AlertDialogManager alert = new AlertDialogManager();
-		alert.showAlertDialog(this, this.getString(com.happymeteo.R.string.empty),
+		alert.showAlertDialog(this,
+				this.getString(com.happymeteo.R.string.empty),
 				this.getString(com.happymeteo.R.string.success_email), false,
 				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int which) {
+					public void onClick(DialogInterface dialog, int which) {
 					}
 				});
 	}

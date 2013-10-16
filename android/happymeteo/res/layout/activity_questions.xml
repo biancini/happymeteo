@@ -5,6 +5,16 @@
     android:background="@drawable/background_gradient"
     android:orientation="vertical" >
 
+    <RelativeLayout
+        android:id="@+id/waitGetQuestions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dip"
+        android:background="@color/white" >
+
+        <include layout="@layout/indeterminate_progress_action" />
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dip"
@@ -14,26 +24,26 @@
             android:id="@+id/layoutQuestions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:layout_gravity="center_vertical">
+            android:paddingRight="16dp" >
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" 
-        android:paddingBottom="10dip">
+        android:orientation="vertical"
+        android:paddingBottom="10dip" >
 
         <Button
             android:id="@+id/btnAnswerQuestions"
             android:layout_width="wrap_content"
             android:layout_height="20dip"
+            android:layout_gravity="center"
             android:layout_margin="10dip"
-            android:background="@drawable/next" 
-            android:layout_gravity="center" />
+            android:background="@drawable/next" />
     </LinearLayout>
 
 </LinearLayout>

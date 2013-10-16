@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
@@ -91,7 +93,8 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 			// If there is an exception...
 			if (exception != null) {
-				spinner.setMessage(exception.getMessage());
+				Context context = getApplicationContext();
+				AlertDialogManager.showError(context, exception.getMessage());
 				return;
 			}
 
@@ -100,23 +103,20 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	}
 
 	private void updateView(Session session) {
-		spinner.setMessage("state: " + session.getState());
+//		spinner.setMessage("state: " + session.getState());
 
 		if (session.isOpened()) {
-			spinner.dismiss();
+//			spinner.dismiss();
 			Log.i(Const.TAG, "permissions: "+Session.getActiveSession().getPermissions());
 			ServerUtilities.facebookLogin(this, this, Session
 					.getActiveSession().getAccessToken());
-		} else {
-			spinner.setMessage("not opened: " + session.getState());
-			Log.i(Const.TAG, "not opened");
 		}
 	}
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
 		if (exception != null) {
-			spinner.show();
+//			spinner.show();
 			Session session = new Session(this, null, null, false);
 			Session.setActiveSession(session);
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(

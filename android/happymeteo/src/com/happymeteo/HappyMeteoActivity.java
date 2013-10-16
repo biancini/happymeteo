@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -295,11 +294,11 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 
 		setupView();
 		
-		ServerUtilities.getAppynessByDay(this, this,
+		/*ServerUtilities.getAppynessByDay(this, this,
 				SessionCache.getUser_id(this));
 		
 		ServerUtilities.getAppynessByMonth(this, this,
-				SessionCache.getUser_id(this));
+				SessionCache.getUser_id(this));*/
 	}
 
 	@Override
@@ -338,8 +337,6 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 		if(exception != null) {
 			return;
 		}
-		
-		
 		
 		try
 		{

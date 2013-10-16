@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.Session;
@@ -96,7 +97,13 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 	}
 
 	@Override
-	public void onGetExecute(String result, Exception exception) {
+	public void onGetExecute(String result) {
+		RelativeLayout wait = (RelativeLayout) findViewById(R.id.waitFriendsWithApp);
+		wait.setVisibility(View.GONE);
+		
+		RelativeLayout wait2 = (RelativeLayout) findViewById(R.id.waitFriendsNoApp);
+		wait2.setVisibility(View.GONE);
+		
 		List<Friend> friendsWithApp = new ArrayList<Friend>();
 		List<Friend> friendsNoApp = new ArrayList<Friend>();
 		try {

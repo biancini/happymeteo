@@ -1,5 +1,6 @@
 package com.happymeteo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.devspark.sidenavigation.SideNavigationView.Mode;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 
 public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
@@ -211,19 +213,16 @@ public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 		public void call(Session session, SessionState state,
 				Exception exception) {
 			Log.i(Const.TAG, "SessionStatusCallback state: " + state);
+			
+			Context context = getApplicationContext();
 
 			// If there is an exception...
 			if (exception != null) {
-				spinner.setMessage("Eccezione facebook: "
-						+ exception.getMessage());
+//				spinner.setMessage("Eccezione facebook: "
+//						+ exception.getMessage());
+				
+				AlertDialogManager.showError(context, exception.getMessage());
 				return;
-			}
-
-			if (session.isOpened()) {
-				spinner.setMessage("Connessione a facebook completata");
-				spinner.dismiss();
-			} else {
-				spinner.setMessage("not opened: " + session.getState());
 			}
 		}
 	}

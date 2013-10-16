@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
@@ -149,8 +150,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 			}
 		});
 
-		ServerUtilities
-				.getChallenges(this, this, SessionCache.getUser_id(this));
+		ServerUtilities.getChallenges(this, this, SessionCache.getUser_id(this));
 	}
 
 	@Override
@@ -158,6 +158,9 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 		if (exception != null) {
 			return;
 		}
+		
+		RelativeLayout waitGetChallenges = (RelativeLayout) findViewById(R.id.waitGetChallenges);
+		waitGetChallenges.setVisibility(View.GONE);
 
 		try {
 			JSONArray challenges = new JSONArray(result);
