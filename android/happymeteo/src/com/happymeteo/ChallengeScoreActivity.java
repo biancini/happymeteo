@@ -80,4 +80,9 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 		keyIntentParameters.add(TU_NAME);
 		return keyIntentParameters;
 	}
+	
+	@Override
+	public void onPostExecute(int id, String result, Exception exception) {
+		// Do Nothing
+	}
 }

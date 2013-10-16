@@ -39,8 +39,6 @@ import com.happymeteo.widget.AppyMeteoSeekBar.OnAppyMeteoSeekBarChangeListener;
 
 public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity implements
 		onPostExecuteListener, LocationListener {
-	private AppyMeteoNotLoggedActivity activity;
-	private onPostExecuteListener onPostExecuteListener;
 	private Map<String, String> params;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
@@ -57,9 +55,6 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_challenge_questions);
 		super.onCreate(savedInstanceState);
-		
-		this.activity = this;
-		this.onPostExecuteListener = this;
 		
 		/* Initialize location */
 		// Get the location manager
@@ -84,7 +79,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 
 		linearLayout = (LinearLayout) findViewById(R.id.layoutChallengeQuestions);
 		
-		ServerUtilities.getChallengeQuestions(onPostExecuteListener, activity, intentParameters.get(CHALLENGE_ID), intentParameters.get(TURN));
+		ServerUtilities.getChallengeQuestions(this, intentParameters.get(CHALLENGE_ID), intentParameters.get(TURN));
 		
 		final Button btnBeginChallengeQuestions = (Button) findViewById(R.id.btnBeginChallengeQuestions);
 		btnBeginChallengeQuestions.setOnClickListener(new View.OnClickListener() {
@@ -107,8 +102,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 				params.put("challenge_id", intentParameters.get(CHALLENGE_ID));
 				params.put("turn", intentParameters.get(TURN));
 
-				ServerUtilities.submitChallenge(onPostExecuteListener,
-						activity, params);
+				ServerUtilities.submitChallenge(ChallengeQuestionsActivity.this, params);
 			}
 		});
 	}

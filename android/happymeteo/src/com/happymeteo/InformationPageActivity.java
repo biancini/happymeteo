@@ -34,4 +34,9 @@ public class InformationPageActivity extends AppyMeteoLoggedActivity {
 		TextView information_page = (TextView) findViewById(R.id.information_page);
 		information_page.setText(Html.fromHtml(help));
 	}
+
+	@Override
+	public void onPostExecute(int id, String result, Exception exception) {
+		// Do Nothing
+	}
 }

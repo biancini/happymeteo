@@ -39,8 +39,6 @@ import com.happymeteo.widget.AppyMeteoSeekBar.OnAppyMeteoSeekBarChangeListener;
 
 public class QuestionActivity extends AppyMeteoImpulseActivity implements
 		onPostExecuteListener, LocationListener {
-	private AppyMeteoNotLoggedActivity activity;
-	private onPostExecuteListener onPostExecuteListener;
 	private Map<String, String> params;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
@@ -73,17 +71,13 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 			Toast.makeText(this, "location not available",
 					Toast.LENGTH_LONG).show();
 		}
-		
-		this.activity = this;
-		this.onPostExecuteListener = this;
 
 		params = new HashMap<String, String>();
 		questions = new JSONObject();
 
 		linearLayout = (LinearLayout) findViewById(R.id.layoutQuestions);
 
-		ServerUtilities.getQuestions(onPostExecuteListener, activity,
-				SessionCache.getUser_id(this));
+		ServerUtilities.getQuestions(this, SessionCache.getUser_id(this));
 
 		final Button btnAnswerQuestions = (Button) findViewById(R.id.btnAnswerQuestions);
 		btnAnswerQuestions.setOnClickListener(new View.OnClickListener() {
@@ -106,8 +100,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 				params.put("questions", questions.toString());
 				params.put("timestamp", intentParameters.get(TIMESTAMP));
 
-				ServerUtilities.submitQuestions(onPostExecuteListener,
-						activity, params);
+				ServerUtilities.submitQuestions(QuestionActivity.this, params);
 			}
 		});
 	}

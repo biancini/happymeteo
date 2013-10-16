@@ -39,7 +39,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onUnregistered(Context context, String registrationId) {
 		/* Unregister device on happymeteo backend */
-		ServerUtilities.unregisterDevice(getApplicationContext(), registrationId);
+		ServerUtilities.unregisterDevice(context, registrationId);
 	}
 
 	/**

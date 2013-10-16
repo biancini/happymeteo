@@ -18,8 +18,6 @@ import com.happymeteo.utils.onPostExecuteListener;
 
 public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
 		implements onPostExecuteListener {
-	private Activity activity;
-	private onPostExecuteListener onPostExecuteListener;
 
 	private final String CHALLENGE_ID = "challenge_id";
 	private final String ADVERSARY_FACEBOOK_ID = "adversary_facebook_id";
@@ -29,9 +27,6 @@ public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_challenge_request);
 		super.onCreate(savedInstanceState);
-
-		this.activity = this;
-		this.onPostExecuteListener = this;
 		
 		ProfilePictureView adversaryPic = (ProfilePictureView) findViewById(R.id.adversaryPic);
 		String adversaryFacebookId = intentParameters.get(ADVERSARY_FACEBOOK_ID);
@@ -48,20 +43,20 @@ public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
 		Button btnAcceptChallenge = (Button) findViewById(R.id.btnAcceptChallenge);
 		btnAcceptChallenge.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				ServerUtilities.acceptChallenge(onPostExecuteListener,
-						activity, intentParameters.get(CHALLENGE_ID), true,
-						GCMRegistrar.getRegistrationId(activity),
-						SessionCache.getUser_id(activity));
+				ServerUtilities.acceptChallenge(ChallengeRequestActivity.this, 
+						intentParameters.get(CHALLENGE_ID), true,
+						GCMRegistrar.getRegistrationId(view.getContext()),
+						SessionCache.getUser_id(view.getContext()));
 			}
 		});
 
 		Button btnRefuseChallenge = (Button) findViewById(R.id.btnRefuseChallenge);
 		btnRefuseChallenge.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				ServerUtilities.acceptChallenge(onPostExecuteListener,
-						activity, intentParameters.get(CHALLENGE_ID), false,
-						GCMRegistrar.getRegistrationId(activity),
-						SessionCache.getUser_id(activity));
+				ServerUtilities.acceptChallenge(ChallengeRequestActivity.this,
+						intentParameters.get(CHALLENGE_ID), false,
+						GCMRegistrar.getRegistrationId(view.getContext()),
+						SessionCache.getUser_id(view.getContext()));
 			}
 		});
 	}

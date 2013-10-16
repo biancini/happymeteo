@@ -20,7 +20,7 @@ import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 
-public class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
+public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 		implements ISideNavigationCallback {
 
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();

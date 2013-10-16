@@ -30,8 +30,6 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		onPostExecuteListener {
 	private String user_id;
 	private String facebook_id;
-	private AppyMeteoNotLoggedActivity activity;
-	private onPostExecuteListener onPostExecuteListener;
 	private EditText create_account_fist_name;
 	private EditText create_account_last_name;
 	private Spinner create_account_gender;
@@ -47,9 +45,6 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_account);
-
-		this.activity = this;
-		this.onPostExecuteListener = this;
 
 		this.user_id = "";
 		this.facebook_id = "";
@@ -105,7 +100,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 					if(create_account_password.getText().toString().equals(create_account_confirm_password.getText().toString())) {
 						String password = "";
 						
-						if(!SessionCache.isFacebookSession(activity)) {
+						if(!SessionCache.isFacebookSession(view.getContext())) {
 							try {
 								password = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, create_account_password.getText().toString());
 							} catch (Exception e) {
@@ -115,7 +110,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 						}
 		
 						ServerUtilities.createAccount(
-								onPostExecuteListener, activity, user_id, facebook_id, 
+								CreateAccountActivity.this, user_id, facebook_id, 
 								create_account_fist_name.getText().toString(), 
 								create_account_last_name.getText().toString(), 
 								create_account_gender.getSelectedItemPosition(),
@@ -154,7 +149,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 				} else { // NOT_CONFIRMED
 					AlertDialogManager alert = new AlertDialogManager();
 					alert.showAlertDialog(
-							activity,
+							this,
 							"Account non verificato",
 							"Presto verra  inviata una email di conferma all'email indicata",
 							true, new DialogInterface.OnClickListener() {

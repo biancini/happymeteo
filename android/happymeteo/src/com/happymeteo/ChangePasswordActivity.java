@@ -27,11 +27,8 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements o
 	private Captcha captcha;
 	private int captchaWidth;
 	private int captchaHeight;
-	private AppyMeteoNotLoggedActivity activity;
-	private onPostExecuteListener onPostExecuteListener;
 	
 	private void newCapthca() {
-		
 		captcha = new TextCaptcha(captchaWidth, captchaHeight, 5, TextOptions.NUMBERS_AND_LETTERS);
         changePassword_imageCaptcha.setImageBitmap(captcha.getImage());
 	}
@@ -40,9 +37,6 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements o
     public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_change_password);
         super.onCreate(savedInstanceState);
-        
-        this.activity = this;
-		this.onPostExecuteListener = this;
         
         changePassword_imageCaptcha = (ImageView) findViewById(R.id.changePassword_imageCaptcha);
         final EditText changePassword_textCaptcha = (EditText) findViewById(R.id.changePassword_textCaptcha);
@@ -63,7 +57,7 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements o
 	    mForm.addField(Field.using(changePassword_confirm_password).validate(NotEmpty.build(this)));
         
         btnChangePassword.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
+			public void onClick(View view) {
 				
 				Log.i(Const.TAG, "captcha.checkAnswer: "+captcha.checkAnswer(changePassword_textCaptcha.getText().toString()));
 				
@@ -88,7 +82,7 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements o
 								oldPassword = "";
 							}
 							
-							ServerUtilities.changePassword(onPostExecuteListener, activity, SessionCache.getUser_id(activity),
+							ServerUtilities.changePassword(ChangePasswordActivity.this, SessionCache.getUser_id(view.getContext()),
 									newPassword, oldPassword);
 						} else {
 							changePassword_confirm_password.setError(getApplicationContext().getString(R.string.error_password));

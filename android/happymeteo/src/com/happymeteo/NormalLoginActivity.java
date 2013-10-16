@@ -1,5 +1,8 @@
 package com.happymeteo;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ua.org.zasadnyy.zvalidations.Field;
 import ua.org.zasadnyy.zvalidations.Form;
 import ua.org.zasadnyy.zvalidations.validations.NotEmpty;
@@ -11,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.SHA1;
@@ -19,8 +23,6 @@ import com.happymeteo.utils.onPostExecuteListener;
 
 public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements
 		onPostExecuteListener {
-	private AppyMeteoNotLoggedActivity activity;
-	private onPostExecuteListener onPostExecuteListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,9 +39,6 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements
 		mForm.addField(Field.using(normal_login_password).validate(
 				NotEmpty.build(this)));
 
-		this.activity = this;
-		this.onPostExecuteListener = this;
-
 		Button btnGoNormalLogin = (Button) findViewById(R.id.btnGoNormalLogin);
 		btnGoNormalLogin.setOnClickListener(new View.OnClickListener() {
 
@@ -55,8 +54,7 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements
 						e.printStackTrace();
 					}
 
-					ServerUtilities.normalLogin(onPostExecuteListener,
-							activity, email, password);
+					ServerUtilities.normalLogin(NormalLoginActivity.this, email, password);
 				}
 			}
 		});
@@ -65,32 +63,30 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements
 			public void onClick(View v) {
 				final EditText input = new EditText(v.getContext());
 
-				new AlertDialog.Builder(activity)
-						.setTitle(
-								getApplicationContext().getString(
-										com.happymeteo.R.string.empty))
-						.setMessage(
-								getApplicationContext().getString(
-										com.happymeteo.R.string.lost_password))
-						.setView(input)
-						.setPositiveButton(R.string.next,
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int which) {
-										String email = input.getText()
-												.toString();
-										ServerUtilities.lostPassword(
-												onPostExecuteListener,
-												activity, email);
-									}
-								})
-						.setNegativeButton(R.string.cancel,
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int which) {
+				new AlertDialog.Builder(NormalLoginActivity.this)
+					.setTitle(
+							getApplicationContext().getString(
+									com.happymeteo.R.string.empty))
+					.setMessage(
+							getApplicationContext().getString(
+									com.happymeteo.R.string.lost_password))
+					.setView(input)
+					.setPositiveButton(R.string.next,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									String email = input.getText()
+											.toString();
+									ServerUtilities.lostPassword(NormalLoginActivity.this, email);
+								}
+							})
+					.setNegativeButton(R.string.cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
 
-									}
-								}).show();
+								}
+							}).show();
 			}
 		});
 	}
@@ -100,15 +96,16 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements
 		if (exception != null) {
 			return;
 		}
+		
+		try {
+			JSONObject jsonObject = new JSONObject(result);
 
-		AlertDialogManager alert = new AlertDialogManager();
-		alert.showAlertDialog(this,
-				this.getString(com.happymeteo.R.string.empty),
-				this.getString(com.happymeteo.R.string.success_email), false,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				});
+			SessionCache.initialize(this, jsonObject);
+			invokeActivity(HappyMeteoActivity.class);
+			return;
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

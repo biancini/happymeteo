@@ -27,10 +27,8 @@ import com.happymeteo.models.Challenge;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.onPostExecuteListener;
 
-public class ChallengeActivity extends AppyMeteoLoggedActivity implements
-		onPostExecuteListener {
+public class ChallengeActivity extends AppyMeteoLoggedActivity {
 
 	private View attachChallengeToView(final Challenge challenge) {
 		View rowView = getLayoutInflater().inflate(
@@ -65,7 +63,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 				
 				public void onClick(View view) {
 					ServerUtilities.requestChallenge(
-						(Activity) activity, 
+						ChallengeActivity.this, 
 						SessionCache.getUser_id(view.getContext()),
 						challenge.getAdversary().getFacebook_id(),
 						GCMRegistrar.getRegistrationId(view.getContext()));
@@ -150,7 +148,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 			}
 		});
 
-		ServerUtilities.getChallenges(this, this, SessionCache.getUser_id(this));
+		ServerUtilities.getChallenges(this, SessionCache.getUser_id(this));
 	}
 
 	@Override
@@ -159,18 +157,24 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity implements
 			return;
 		}
 		
-		RelativeLayout waitGetChallenges = (RelativeLayout) findViewById(R.id.waitGetChallenges);
-		waitGetChallenges.setVisibility(View.GONE);
-
-		try {
-			JSONArray challenges = new JSONArray(result);
-
-			if (challenges.length() == 0)
-				return;
-
-			new ListChallenges(this, challenges).execute();
-		} catch (JSONException e) {
-			e.printStackTrace();
+		if(id == Const.GET_CHALENGES_URL_ID) {
+			RelativeLayout waitGetChallenges = (RelativeLayout) findViewById(R.id.waitGetChallenges);
+			waitGetChallenges.setVisibility(View.GONE);
+	
+			try {
+				JSONArray challenges = new JSONArray(result);
+	
+				if (challenges.length() == 0)
+					return;
+	
+				new ListChallenges(this, challenges).execute();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(id == Const.REQUEST_CHALLENGE_URL_ID) {
+			// Do nothing
 		}
 	}
 

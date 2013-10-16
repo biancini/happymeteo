@@ -1,6 +1,8 @@
 package com.happymeteo.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class SHA1 {
     /*
@@ -11,7 +13,7 @@ public class SHA1 {
      * String cs = SHA1.hexdigest(myString);
      */
 
-    public static String hexdigest(String constant, String text) throws Exception {
+    public static String hexdigest(String constant, String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         text = constant + text;
         MessageDigest md;
         md = MessageDigest.getInstance("SHA-1");

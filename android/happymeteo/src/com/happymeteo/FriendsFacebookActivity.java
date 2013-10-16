@@ -63,8 +63,6 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 		/* Set Button text */
 		Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
 		
-		final Activity activity = this;
-
 		if (friend.isInstalled()) {
 			picker_title.setBackgroundColor(getResources().getColor(R.color.black));
 			picker_title.setTextColor(getResources().getColor(R.color.white));
@@ -73,7 +71,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 				
 				public void onClick(View view) {
 					ServerUtilities.requestChallenge(
-						activity, 
+						FriendsFacebookActivity.this, 
 						SessionCache.getUser_id(view.getContext()),
 						friend.getId(),
 						GCMRegistrar.getRegistrationId(view.getContext()));
@@ -85,7 +83,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 			picker_button.setOnClickListener(new OnClickListener() {
 				
 				public void onClick(View view) {
-					FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(activity, Session.getActiveSession());
+					FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(FriendsFacebookActivity.this, Session.getActiveSession());
 					feedDialogBuilder.setDescription("Vieni in appymeteo!");
 					feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
 					feedDialogBuilder.setTo(friend.getId());
@@ -189,6 +187,10 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 			
 			return null;
 		}
-		
+	}
+	
+	@Override
+	public void onPostExecute(int id, String result, Exception exception) {
+		// Do Nothing
 	}
 }

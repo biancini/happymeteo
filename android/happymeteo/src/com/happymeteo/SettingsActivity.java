@@ -28,8 +28,6 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 	private TextView settingsFacebookText;
 	private Switch settingsFacebookSwitch;
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
-	private AppyMeteoNotLoggedActivity activity;
-	private onPostExecuteListener onPostExecuteListener;
 	private boolean nextTime = true;
 
 	@Override
@@ -39,9 +37,6 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 		
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
 		Button btnChangePassword = (Button) findViewById(R.id.btnChangePassword);
-		
-		this.activity = this;
-		this.onPostExecuteListener = this;
 		
 		settingsFacebookText  = (TextView) findViewById(R.id.settingsFacebookText);
 		settingsFacebookSwitch  = (Switch) findViewById(R.id.settingsFacebookSwitch);
@@ -83,8 +78,8 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 								onFacebookConnect(statusCallback, true);
 							} else {
 								settingsFacebookText.setText(R.string.link_user_to_facebook);
-								String userId = SessionCache.getUser_id(activity);
-								ServerUtilities.updateFacebook(onPostExecuteListener, activity, userId, "");
+								String userId = SessionCache.getUser_id(SettingsActivity.this);
+								ServerUtilities.updateFacebook(SettingsActivity.this, userId, "");
 							}
 						}
 					})
@@ -162,13 +157,12 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 	
 	@Override
 	public void onGetExecute(String result) {
-//		spinner.dismiss();
 		
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			String facebookId = jsonObject.getString("id");
 			String userId = SessionCache.getUser_id(this);
-			ServerUtilities.updateFacebook(onPostExecuteListener, activity, userId, facebookId);
+			ServerUtilities.updateFacebook(SettingsActivity.this, userId, facebookId);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

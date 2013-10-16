@@ -23,8 +23,6 @@ import com.happymeteo.utils.onPostExecuteListener;
 public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements
 		onPostExecuteListener {
 	private String user_id;
-	private AppyMeteoNotLoggedActivity activity;
-	private onPostExecuteListener onPostExecuteListener;
 	private EditText create_account_fist_name;
 	private EditText create_account_last_name;
 	private Spinner create_account_gender;
@@ -38,9 +36,6 @@ public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_settings_utente);
 		super.onCreate(savedInstanceState);
-
-		this.activity = this;
-		this.onPostExecuteListener = this;
 
 		create_account_fist_name = (EditText) findViewById(R.id.create_account_fist_name);
 		create_account_last_name = (EditText) findViewById(R.id.create_account_last_name);
@@ -74,8 +69,8 @@ public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements
 			public void onClick(View view) {
 				if(mForm.isValid()) {
 					ServerUtilities.createAccount(
-							onPostExecuteListener, activity, user_id, 
-							SessionCache.getFacebook_id(activity), 
+							SettingsUtenteActivity.this, user_id, 
+							SessionCache.getFacebook_id(view.getContext()), 
 							create_account_fist_name.getText().toString(), 
 							create_account_last_name.getText().toString(), 
 							create_account_gender.getSelectedItemPosition(),
@@ -95,7 +90,7 @@ public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements
 			try {
 				JSONObject jsonObject = new JSONObject(result);
 				if (jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) { // CONFIRMED_OR_FACEBOOK
-					String facebook_id = SessionCache.getFacebook_id(activity);
+					String facebook_id = SessionCache.getFacebook_id(this);
 					SessionCache.initialize(this, jsonObject.getString("user_id"), 
 							facebook_id,
 							create_account_fist_name.getText().toString(),
@@ -112,9 +107,9 @@ public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements
 				} else { // NOT_CONFIRMED
 					AlertDialogManager alert = new AlertDialogManager();
 					alert.showAlertDialog(
-							activity,
+							this,
 							"Account non verificato",
-							"Presto verra  inviata una email di conferma all'email indicata",
+							"Presto verrà inviata una email di conferma all'email indicata",
 							true, new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int which) {

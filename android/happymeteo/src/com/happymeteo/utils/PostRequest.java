@@ -16,38 +16,41 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.happymeteo.AppyMeteoNotLoggedActivity;
+
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class PostRequest extends AsyncTask<String, Void, String> {
 	private int id;
 	private Context context;
-	private List<NameValuePair> nvps;
 	private onPostExecuteListener onPostExecuteListener;
-//	private ProgressDialog spinner;
+	private List<NameValuePair> nvps;
+	private Exception exception;
 
-	public PostRequest(int id, Context context, List<NameValuePair> nvps,
-			onPostExecuteListener onPostExecuteListener) {
-		this(id, context, nvps);
-		this.onPostExecuteListener = onPostExecuteListener;
+	public PostRequest(int id, AppyMeteoNotLoggedActivity appyMeteoNotLoggedActivity, List<NameValuePair> nvps) {
+		this.id = id;
+		this.context = (Context) appyMeteoNotLoggedActivity;
+		this.nvps = nvps;
+		this.exception = null;
+		this.onPostExecuteListener = (onPostExecuteListener) appyMeteoNotLoggedActivity;
 	}
-
+	
 	public PostRequest(int id, Context context, List<NameValuePair> nvps) {
 		this.id = id;
-		this.onPostExecuteListener = null;
 		this.context = context;
 		this.nvps = nvps;
-//		if (context instanceof Activity) {
-//			spinner = new ProgressDialog(context);
-//			spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//			spinner.setMessage(context.getString(com.happymeteo.R.string.loading));
-//		}
+		this.exception = null;
+		this.onPostExecuteListener = null;
 	}
 
-	private Exception showError(String json) {
-		Exception exception = null;
-
+	private void searchError(String json) {
+		if(json == null)
+			return;
+		
 		try {
 			JSONObject jsonObject = new JSONObject(json);
 
@@ -56,24 +59,21 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 				AlertDialogManager.showError(context, error);
 				exception = new Exception(error);
 			}
-		} catch (JSONException e) {
-			exception = null;
-		}
-		return exception;
+		} catch (JSONException e) {}
 	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-//		if (spinner != null) {
-//			spinner.show();
-//		}
 	}
 
 	@Override
 	protected String doInBackground(String... urls) {
-		StringBuffer output = new StringBuffer();
-		for (String url : urls) {
+		ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+	    if (networkInfo != null && networkInfo.isConnected()) {
+	    	StringBuffer output = new StringBuffer();
+	    	final String url = urls[0];
 			try {
 				Log.i(Const.TAG, "PostRequest url: " + url);
 				DefaultHttpClient client = new DefaultHttpClient();
@@ -115,28 +115,29 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 				}
 				bufferedReader.close();
 				inputStream.close();
+				
+				return output.toString();
 			} catch (Exception e) {
 				Log.e(Const.TAG, e.getMessage(), e);
+				this.exception = e;
 			}
-		}
-
-		return output.toString();
+	    } else {
+	    	this.exception = new Exception("No connection");
+	    }
+	    return null;
 	}
 
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-
-		Exception exception = showError(result);
+		
+		searchError(result);
 
 		Log.i(Const.TAG, id + " PostRequest result: " + result);
 		Log.i(Const.TAG, id + " PostRequest exception: " + exception);
 
-		if (onPostExecuteListener != null) {
+		if(onPostExecuteListener != null) {
 			onPostExecuteListener.onPostExecute(id, result, exception);
 		}
-//		if (spinner != null) {
-//			spinner.dismiss();
-//		}
 	}
 }
