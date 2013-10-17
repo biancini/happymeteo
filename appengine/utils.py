@@ -75,9 +75,9 @@ def happymeteo(user_id):
     tomorrow = today + timedelta(1)
     yesterday = today - timedelta(1)
     beforeyesterday = yesterday - timedelta(1)
-    query_beforeyesterday = db.GqlQuery("SELECT * FROM Answer WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\' AND user_id = :3", beforeyesterday, yesterday, user_id)
-    query_yesterday = db.GqlQuery("SELECT * FROM Answer WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\' AND user_id = :3", yesterday, today, user_id)
-    query_today = db.GqlQuery("SELECT * FROM Answer WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\' AND user_id = :3", today, tomorrow, user_id)
+    query_beforeyesterday = db.GqlQuery("SELECT * FROM Answer WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\' AND user_id = :3", formatDate(beforeyesterday), formatDate(yesterday), user_id)
+    query_yesterday = db.GqlQuery("SELECT * FROM Answer WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\' AND user_id = :3", formatDate(yesterday), formatDate(today), user_id)
+    query_today = db.GqlQuery("SELECT * FROM Answer WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\' AND user_id = :3", formatDate(today), formatDate(tomorrow), user_id)
     
     beforeyesterday_value = 1.0
     beforeyesterday_sum = 0.0
@@ -104,7 +104,7 @@ def happymeteo(user_id):
         today_value = today_sum / query_today.count()
     else:
         beforebeforeyesterday = beforeyesterday - timedelta(1)
-        query_beforebeforeyesterday = db.GqlQuery('SELECT * FROM Answer WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\' AND user_id = :3', beforebeforeyesterday, beforeyesterday, user_id)
+        query_beforebeforeyesterday = db.GqlQuery('SELECT * FROM Answer WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\' AND user_id = :3', formatDate(beforebeforeyesterday), formatDate(beforeyesterday), user_id)
         beforebeforeyesterday_value = 1.0
         beforebeforeyesterday_sum = 0.0
         if query_beforebeforeyesterday.count() > 0:
