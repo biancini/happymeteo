@@ -132,6 +132,7 @@ public abstract class AppyMeteoNotLoggedActivity extends SherlockActivity implem
 				/* Clear every data */
 				SharedPreferences preferences = getApplicationContext()
 						.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+			
 				Editor editor = preferences.edit();
 				editor.clear();
 				editor.commit();

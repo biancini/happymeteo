@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,7 @@ import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.models.Friend;
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.GetRequest;
 import com.happymeteo.utils.ServerUtilities;
@@ -46,7 +48,6 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 			String accessToken = Session.getActiveSession().getAccessToken();
 			String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token="
 					+ accessToken;
-			Log.i(Const.TAG, "serverUrl: " + serverUrl);
 			new GetRequest(this, this).execute(serverUrl);
 		}
 	}
@@ -191,6 +192,10 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 	
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		// Do Nothing
+		AlertDialogManager.showNotification(this, R.string.empty, R.string.request_challenge_notification_msg, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,
+					int which) {
+			}
+		});
 	}
 }

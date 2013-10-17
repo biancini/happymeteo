@@ -3,13 +3,12 @@ package com.happymeteo;
 import java.util.HashMap;
 import java.util.List;
 
-import com.happymeteo.utils.AlertDialogManager;
-import com.happymeteo.utils.Const;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.happymeteo.utils.AlertDialogManager;
+import com.happymeteo.utils.Const;
 
 public abstract class AppyMeteoImpulseActivity extends
 		AppyMeteoNotLoggedActivity {
@@ -36,13 +35,7 @@ public abstract class AppyMeteoImpulseActivity extends
 		List<String> keyIntentParamteres = getKeyIntentParameters();
 
 		if (keyIntentParamteres == null || keyIntentParamteres.isEmpty() || intent.getExtras() == null) {
-			AlertDialogManager alert = new AlertDialogManager();
-			alert.showAlertDialog(this, "Errore", "C'è stato un errore", false,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							finish();
-						}
-					});
+			AlertDialogManager.showError(this, this.getString(R.string.error_impulse));
 			return;
 		}
 		

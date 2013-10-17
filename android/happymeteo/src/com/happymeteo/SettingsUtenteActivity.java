@@ -8,7 +8,6 @@ import ua.org.zasadnyy.zvalidations.Form;
 import ua.org.zasadnyy.zvalidations.validations.IsEmail;
 import ua.org.zasadnyy.zvalidations.validations.IsPositiveInteger;
 import ua.org.zasadnyy.zvalidations.validations.NotEmpty;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.happymeteo.models.SessionCache;
-import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.onPostExecuteListener;
 
@@ -104,18 +102,6 @@ public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements
 							SessionCache.USER_REGISTERED, jsonObject.getInt("today"), 
 							jsonObject.getInt("yesterday"), jsonObject.getInt("tomorrow"));
 					invokeActivity(HappyMeteoActivity.class);
-				} else { // NOT_CONFIRMED
-					AlertDialogManager alert = new AlertDialogManager();
-					alert.showAlertDialog(
-							this,
-							"Account non verificato",
-							"Presto verrà inviata una email di conferma all'email indicata",
-							true, new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int which) {
-									finish();
-								}
-							});
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();

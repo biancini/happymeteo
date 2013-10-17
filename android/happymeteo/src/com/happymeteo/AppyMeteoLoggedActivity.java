@@ -216,11 +216,7 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 			
 			Context context = getApplicationContext();
 
-			// If there is an exception...
 			if (exception != null) {
-//				spinner.setMessage("Eccezione facebook: "
-//						+ exception.getMessage());
-				
 				AlertDialogManager.showError(context, exception.getMessage());
 				return;
 			}

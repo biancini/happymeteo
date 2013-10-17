@@ -103,10 +103,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	}
 
 	private void updateView(Session session) {
-//		spinner.setMessage("state: " + session.getState());
-
 		if (session.isOpened()) {
-//			spinner.dismiss();
 			Log.i(Const.TAG, "permissions: "+Session.getActiveSession().getPermissions());
 			ServerUtilities.facebookLogin(this, Session
 					.getActiveSession().getAccessToken());
@@ -116,7 +113,6 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
 		if (exception != null) {
-//			spinner.show();
 			Session session = new Session(this, null, null, false);
 			Session.setActiveSession(session);
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(

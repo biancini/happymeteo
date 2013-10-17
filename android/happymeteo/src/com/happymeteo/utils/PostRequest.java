@@ -16,13 +16,14 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.happymeteo.AppyMeteoNotLoggedActivity;
-
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.happymeteo.AppyMeteoNotLoggedActivity;
 
 public class PostRequest extends AsyncTask<String, Void, String> {
 	private int id;
@@ -30,6 +31,15 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	private onPostExecuteListener onPostExecuteListener;
 	private List<NameValuePair> nvps;
 	private Exception exception;
+	private String url;
+	
+	public PostRequest(int id, Context context, onPostExecuteListener onPostExecuteListener, List<NameValuePair> nvps) {
+		this.id = id;
+		this.context = context;
+		this.nvps = nvps;
+		this.exception = null;
+		this.onPostExecuteListener = onPostExecuteListener;
+	}
 
 	public PostRequest(int id, AppyMeteoNotLoggedActivity appyMeteoNotLoggedActivity, List<NameValuePair> nvps) {
 		this.id = id;
@@ -56,7 +66,6 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 
 			if (jsonObject != null && jsonObject.getString("error") != null) {
 				String error = jsonObject.getString("error");
-				AlertDialogManager.showError(context, error);
 				exception = new Exception(error);
 			}
 		} catch (JSONException e) {}
@@ -73,7 +82,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 	    if (networkInfo != null && networkInfo.isConnected()) {
 	    	StringBuffer output = new StringBuffer();
-	    	final String url = urls[0];
+	    	url = urls[0];
 			try {
 				Log.i(Const.TAG, "PostRequest url: " + url);
 				DefaultHttpClient client = new DefaultHttpClient();
@@ -135,9 +144,15 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 
 		Log.i(Const.TAG, id + " PostRequest result: " + result);
 		Log.i(Const.TAG, id + " PostRequest exception: " + exception);
-
-		if(onPostExecuteListener != null) {
-			onPostExecuteListener.onPostExecute(id, result, exception);
+		
+		if(exception != null) {
+			if(context instanceof Activity) { // for "Unable to add window -- token null is not for an application"
+				ServerUtilities.showErrorAndRetry(exception.getMessage(), id, context, onPostExecuteListener, nvps, url);
+			}
+		} else {
+			if(onPostExecuteListener != null) {
+				onPostExecuteListener.onPostExecute(id, result, exception);
+			}
 		}
 	}
 }

@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.facebook.widget.ProfilePictureView;
 import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.models.Challenge;
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
@@ -105,24 +107,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 			
 			picker_result.setText("Ecco il risultato.  " + ioScore.toString() + "-"
 					+ tuScore.toString());
-	
-//			if (ioScore != null && tuScore != null) {
-//				if (ioScore > tuScore) {
-//					result_image.setBackgroundResource(R.drawable.smilepositivo);
-//					picker_result.setText("Hai vinto!  " + ioScore.toString() + "-"
-//							+ tuScore.toString());
-//				}
-//				if (ioScore < tuScore) {
-//					result_image.setBackgroundResource(R.drawable.smilenegativo);
-//					picker_result.setText("Hai perso!  " + ioScore.toString() + "-"
-//							+ tuScore.toString());
-//				}
-//				if (ioScore.equals(tuScore)) {
-//					result_image.setBackgroundResource(R.drawable.smile);
-//					picker_result.setText("Hai pareggiato!  " + ioScore.toString()
-//							+ "-" + tuScore.toString());
-//				}
-//			}
+			
 			viewToAdd = true;
 		}
 		
@@ -174,7 +159,11 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 		}
 		
 		if(id == Const.REQUEST_CHALLENGE_URL_ID) {
-			// Do nothing
+			AlertDialogManager.showNotification(this, R.string.empty, R.string.request_challenge_notification_msg, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,
+						int which) {
+				}
+			});
 		}
 	}
 

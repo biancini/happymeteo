@@ -48,9 +48,9 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 
 		this.user_id = "";
 		this.facebook_id = "";
-		
+
 		String welcome = "<u><b>Registrati</b> su appymeteo!</u>";
-		
+
 		TextView create_account_welcome = (TextView) findViewById(R.id.create_account_welcome);
 		create_account_welcome.setText(Html.fromHtml(welcome));
 
@@ -65,7 +65,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		create_account_work = (Spinner) findViewById(R.id.create_account_work);
 		create_account_cap = (EditText) findViewById(R.id.create_account_cap);
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
-		
+
 		this.user_id = SessionCache.getUser_id(this);
 		this.facebook_id = SessionCache.getFacebook_id(this);
 		create_account_fist_name.setText(SessionCache.getFirst_name(this));
@@ -76,53 +76,77 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		create_account_education.setSelection(SessionCache.getEducation(this));
 		create_account_work.setSelection(SessionCache.getWork(this));
 		create_account_cap.setText(SessionCache.getCap(this));
-		
+
 		final Form mForm = new Form();
-	    mForm.addField(Field.using(create_account_fist_name).validate(NotEmpty.build(this)));
-	    mForm.addField(Field.using(create_account_last_name).validate(NotEmpty.build(this)));
-	    mForm.addField(Field.using(create_account_email).validate(NotEmpty.build(this)).validate(IsEmail.build(this)));
-	    mForm.addField(Field.using(create_account_cap).validate(NotEmpty.build(this)).validate(IsPositiveInteger.build(this)));
-		
+		mForm.addField(Field.using(create_account_fist_name).validate(
+				NotEmpty.build(this)));
+		mForm.addField(Field.using(create_account_last_name).validate(
+				NotEmpty.build(this)));
+		mForm.addField(Field.using(create_account_email)
+				.validate(NotEmpty.build(this)).validate(IsEmail.build(this)));
+		mForm.addField(Field.using(create_account_cap)
+				.validate(NotEmpty.build(this))
+				.validate(IsPositiveInteger.build(this)));
+
 		if (SessionCache.isFacebookSession(this)) {
 			create_account_password.setVisibility(View.GONE);
 			create_account_confirm_password.setVisibility(View.GONE);
 		} else {
-			mForm.addField(Field.using(create_account_password).validate(NotEmpty.build(this)).validate(IsPassword.build(this)));
-			mForm.addField(Field.using(create_account_confirm_password).validate(NotEmpty.build(this)));
+			mForm.addField(Field.using(create_account_password)
+					.validate(NotEmpty.build(this))
+					.validate(IsPassword.build(this)));
+			mForm.addField(Field.using(create_account_confirm_password)
+					.validate(NotEmpty.build(this)));
 		}
 
 		btnCreateUser.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				if(mForm.isValid()) {
-					
-					if(create_account_password.getText().toString().equals(create_account_confirm_password.getText().toString())) {
+				if (mForm.isValid()) {
+
+					if (create_account_password
+							.getText()
+							.toString()
+							.equals(create_account_confirm_password.getText()
+									.toString())) {
 						String password = "";
-						
-						if(!SessionCache.isFacebookSession(view.getContext())) {
+
+						if (!SessionCache.isFacebookSession(view.getContext())) {
 							try {
-								password = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, create_account_password.getText().toString());
+								password = SHA1.hexdigest(
+										Const.PASSWORD_SECRET_KEY,
+										create_account_password.getText()
+												.toString());
 							} catch (Exception e) {
 								e.printStackTrace();
 								password = "";
 							}
 						}
-		
+
 						ServerUtilities.createAccount(
-								CreateAccountActivity.this, user_id, facebook_id, 
-								create_account_fist_name.getText().toString(), 
-								create_account_last_name.getText().toString(), 
+								CreateAccountActivity.this,
+								user_id,
+								facebook_id,
+								create_account_fist_name.getText().toString(),
+								create_account_last_name.getText().toString(),
 								create_account_gender.getSelectedItemPosition(),
 								create_account_email.getText().toString(),
 								create_account_age.getSelectedItemPosition(),
-								create_account_education.getSelectedItemPosition(),
+								create_account_education
+										.getSelectedItemPosition(),
 								create_account_work.getSelectedItemPosition(),
-								create_account_cap.getText().toString(), password);
-		
-						Log.i(Const.TAG, "facebook_id: "+SessionCache.getFacebook_id(view.getContext()));
+								create_account_cap.getText().toString(),
+								password);
+
+						Log.i(Const.TAG,
+								"facebook_id: "
+										+ SessionCache.getFacebook_id(view
+												.getContext()));
 					} else {
-						create_account_confirm_password.setError(getApplicationContext().getString(R.string.error_password));
+						create_account_confirm_password
+								.setError(getApplicationContext().getString(
+										R.string.error_password));
 					}
 				}
 			}
@@ -131,11 +155,12 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if(exception == null) {
+		if (exception == null) {
 			try {
 				JSONObject jsonObject = new JSONObject(result);
 				if (jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) { // CONFIRMED_OR_FACEBOOK
-					SessionCache.initialize(this, jsonObject.getString("user_id"), facebook_id,
+					SessionCache.initialize(this,
+							jsonObject.getString("user_id"), facebook_id,
 							create_account_fist_name.getText().toString(),
 							create_account_last_name.getText().toString(),
 							create_account_gender.getSelectedItemPosition(),
@@ -147,12 +172,10 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 							SessionCache.USER_REGISTERED, 1, 1, 1);
 					invokeActivity(HappyMeteoActivity.class);
 				} else { // NOT_CONFIRMED
-					AlertDialogManager alert = new AlertDialogManager();
-					alert.showAlertDialog(
-							this,
-							"Account non verificato",
-							"Presto verra  inviata una email di conferma all'email indicata",
-							true, new DialogInterface.OnClickListener() {
+					AlertDialogManager.showNotification(this,
+							R.string.not_confirmed_user_notification_title,
+							R.string.not_confirmed_user_notification_msg,
+							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int which) {
 									finish();

@@ -14,23 +14,14 @@ import android.util.Log;
 
 public class GetRequest extends AsyncTask<String, Void, String> {
 	private onGetExecuteListener onGetExecuteListener;
-//	private ProgressDialog spinner;
 	
 	public GetRequest(Context context, onGetExecuteListener onGetExecuteListener) {
 		this.onGetExecuteListener = onGetExecuteListener;
-//		if(context instanceof Activity) {
-//			spinner = new ProgressDialog(context);
-//			spinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//			spinner.setMessage(context.getString(com.happymeteo.R.string.loading));
-//		}
 	}
 	
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-//		if(spinner != null) {
-//			spinner.show();
-//		}
 	}
 	
 	@Override
@@ -65,8 +56,5 @@ public class GetRequest extends AsyncTask<String, Void, String> {
 		if(onGetExecuteListener != null && result != null) {
 			onGetExecuteListener.onGetExecute(result);
 		}
-//		if(spinner != null) {
-//			spinner.dismiss();
-//		}
     }
 }

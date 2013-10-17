@@ -7,49 +7,40 @@ import android.content.DialogInterface;
 import com.happymeteo.R;
 
 public class AlertDialogManager {
-	/**
-	 * Function to display simple Alert Dialog
-	 * 
-	 * @param context
-	 *            - application context
-	 * @param title
-	 *            - alert dialog title
-	 * @param message
-	 *            - alert message
-	 * @param status
-	 *            - success/failure (used to set icon) - pass null if you don't
-	 *            want icon
-	 * */
-	public void showAlertDialog(Context context, String title, String message,
-			Boolean status, DialogInterface.OnClickListener clickListener) {
-		AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-
-		// Setting Dialog Title
-		alertDialog.setTitle(title);
-
-		// Setting Dialog Message
-		alertDialog.setMessage(message);
-
-		if (status != null)
-			// Setting alert dialog icon
-			alertDialog
-					.setIcon((status) ? R.drawable.success : R.drawable.fail);
-
-		// Setting OK Button
-		alertDialog.setButton("OK", clickListener);
-
-		// Showing Alert Message
+	static public void showError(Context context, String error) {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(context)
+		.setTitle(context.getString(com.happymeteo.R.string.error))
+		.setMessage(error)
+		.setPositiveButton(context.getString(com.happymeteo.R.string.ok), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,
+					int which) {
+			}
+		})
+		.setIcon(R.drawable.fail);
+		
 		alertDialog.show();
 	}
 	
-	static public void showError(Context context, String error) {
-		AlertDialogManager alert = new AlertDialogManager();
-		alert.showAlertDialog(context, context.getString(com.happymeteo.R.string.error),
-				error, false,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int which) {
-					}
-				});
+	static public void showErrorAndRetry(Context context, String error, DialogInterface.OnClickListener retryClickListener) {
+		new AlertDialog.Builder(context)
+		.setTitle(context.getString(com.happymeteo.R.string.error))
+		.setMessage(error)
+		.setPositiveButton(context.getString(com.happymeteo.R.string.retry), retryClickListener)
+		.setNegativeButton(context.getString(com.happymeteo.R.string.cancel), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,
+					int which) {
+			}
+		})
+		.setIcon(R.drawable.fail)
+		.show();
+	}
+	
+	static public void showNotification(Context context, int title, int message, DialogInterface.OnClickListener clickListener) {
+		new AlertDialog.Builder(context)
+		.setTitle(context.getString(title))
+		.setMessage(context.getString(message))
+		.setPositiveButton(context.getString(com.happymeteo.R.string.ok), clickListener)
+		.setIcon(R.drawable.success)
+		.show();
 	}
 }

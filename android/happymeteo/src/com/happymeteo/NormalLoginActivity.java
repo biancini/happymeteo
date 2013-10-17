@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.happymeteo.models.SessionCache;
-import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
@@ -99,7 +98,6 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements
 		
 		try {
 			JSONObject jsonObject = new JSONObject(result);
-
 			SessionCache.initialize(this, jsonObject);
 			invokeActivity(HappyMeteoActivity.class);
 			return;
