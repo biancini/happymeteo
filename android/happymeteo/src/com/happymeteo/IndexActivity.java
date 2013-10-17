@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -91,10 +90,8 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 				Exception exception) {
 			Log.i(Const.TAG, "SessionStatusCallback state: " + state);
 
-			// If there is an exception...
 			if (exception != null) {
-				Context context = getApplicationContext();
-				AlertDialogManager.showError(context, exception.getMessage());
+				AlertDialogManager.showError(IndexActivity.this, exception.getMessage());
 				return;
 			}
 

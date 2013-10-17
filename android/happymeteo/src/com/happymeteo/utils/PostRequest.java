@@ -147,7 +147,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		
 		if(exception != null) {
 			if(context instanceof Activity) { // for "Unable to add window -- token null is not for an application"
-				ServerUtilities.showErrorAndRetry(exception.getMessage(), id, context, onPostExecuteListener, nvps, url);
+				ServerUtilities.showErrorAndRetry(exception.getMessage(), id, (Activity) context, onPostExecuteListener, nvps, url);
 			}
 		} else {
 			if(onPostExecuteListener != null) {

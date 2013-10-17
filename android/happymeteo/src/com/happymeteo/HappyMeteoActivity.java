@@ -294,11 +294,11 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 
 		setupView();
 		
-		/*ServerUtilities.getAppynessByDay(this, this,
+		ServerUtilities.getAppynessByDay(this,
 				SessionCache.getUser_id(this));
 		
-		ServerUtilities.getAppynessByMonth(this, this,
-				SessionCache.getUser_id(this));*/
+		ServerUtilities.getAppynessByMonth(this,
+				SessionCache.getUser_id(this));
 	}
 
 	@Override
@@ -365,6 +365,9 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 			
 			switch(id) {
 			case Const.GET_APPINESS_BY_DAY_ID:
+				RelativeLayout wait = (RelativeLayout) findViewById(R.id.waitGetAppinessByDay);
+				wait.setVisibility(View.GONE);
+				
 				RelativeLayout relativeLayoutMeteoUpGraphByDay = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUpGraphByDay);
 				GraphViewData[] viewDayData = new  GraphViewData[daysInMonth];
 				boolean future = false;
@@ -399,6 +402,9 @@ public class HappyMeteoActivity extends AppyMeteoLoggedActivity implements
 				relativeLayoutMeteoUpGraphByDay.addView(dayBarGraphView);
 				break;
 			case Const.GET_APPINESS_BY_MONTH_ID:
+				RelativeLayout waitGetAppinessByMonth = (RelativeLayout) findViewById(R.id.waitGetAppinessByMonth);
+				waitGetAppinessByMonth.setVisibility(View.GONE);
+				
 				RelativeLayout relativeLayoutMeteoUpGraphByMonth = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUpGraphByMonth);
 				MonthBarGraphView monthBarGraphView = new MonthBarGraphView(this);
 				monthBarGraphView.setManualYAxisBounds(10, 0);

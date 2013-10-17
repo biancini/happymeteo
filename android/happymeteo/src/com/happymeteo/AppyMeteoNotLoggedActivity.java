@@ -138,8 +138,10 @@ public abstract class AppyMeteoNotLoggedActivity extends SherlockActivity implem
 				editor.commit();
 
 				/* Clear Facebook session */
-				Session session = new Session(AppyMeteoNotLoggedActivity.this, null, null, false);
-				Session.setActiveSession(session);
+//				Session session = new Session(AppyMeteoNotLoggedActivity.this, null, null, false);
+				if(Session.getActiveSession() != null) {
+					Session.getActiveSession().closeAndClearTokenInformation();
+				}
 
 				/* Terminate PushNotificationsService */
 				PushNotificationsService.terminate(getApplicationContext());

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 
@@ -176,14 +177,14 @@ public class ServerUtilities {
 		new PostRequest(Const.UPDATE_FACEBOOK_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.UPDATE_FACEBOOK_URL);
 	}
 	
-	public static void showErrorAndRetry(final String error, final int id, final Context context, final onPostExecuteListener onPostExecuteListener, final List<NameValuePair> nvps, final String url) {
+	public static void showErrorAndRetry(final String error, final int id, final Activity activity, final onPostExecuteListener onPostExecuteListener, final List<NameValuePair> nvps, final String url) {
 		AlertDialogManager.showErrorAndRetry(
-			context, 
+			activity, 
 			error, 
 			new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog,
 						int which) {
-					new PostRequest(id, context, onPostExecuteListener, nvps).execute(url);
+					new PostRequest(id, activity, onPostExecuteListener, nvps).execute(url);
 				}
 			});
 	}
