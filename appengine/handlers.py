@@ -914,7 +914,7 @@ class CreateMap(BaseRequestHandler):
       
       regions = Region.all()
       provincie = Provincia.all()
-      answers = Answer.gql('WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\'', yesterday, today)
+      answers = Answer.gql('WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\'', formatDate(yesterday), formatDate(today))
       
       if answers.count() == 0:
           raise Exception('No answers') 
