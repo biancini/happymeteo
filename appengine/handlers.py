@@ -391,13 +391,14 @@ class SendMessageHandler(BaseRequestHandler):
   def get(self):
     import time
     ts = time.time()
+    print '%s'%ts
     
     devices = Device.all()
-    
-    for d in devices:
-        if d.user_id != "":
-            sendMessage(d.registration_id, collapse_key='questions', payload={'user_id': d.user_id, 'timestamp': '%s'%ts})
-            print '%s'%ts
+    for device in devices:
+        if device.user_id != "":
+            sendMessage(device.registration_id, collapse_key='questions', payload={'user_id': device.user_id, 'timestamp': '%s'%ts})
+        else:
+            db.delete(device)
 
 """ Questions Management """
 class GetQuestionsHandler(BaseRequestHandler):
@@ -833,19 +834,20 @@ class GetAppinessByDayHandler(BaseRequestHandler):
         
         firstOfMonth = mkFirstOfMonth(date.today())
         
-        answers = Answer.gql("WHERE user_id = :1 AND date >= DATE(:2)", user_id, formatDate(firstOfMonth))
+        answers = Answer.gql("WHERE user_id = :1 AND date >= DATE(:2) AND question_id = \'6434359225614336\'", user_id, formatDate(firstOfMonth))
         
-        for answer in answers:
-            index = str(answer.date.date())
-            if index in count:
-                count[index] = count[index]+1
-                sum[index] = sum[index]+int(answer.value)
-            else:
-                count[index] = 1
-                sum[index] = int(answer.value)
-                
-        for index in count:
-            data[index] = sum[index] / count[index]
+        if answers.count() > 0:
+            for answer in answers:
+                index = str(answer.date.date())
+                if index in count:
+                    count[index] = count[index]+1
+                    sum[index] = sum[index]+int(answer.value)
+                else:
+                    count[index] = 1
+                    sum[index] = int(answer.value)
+                    
+            for index in count:
+                data[index] = sum[index] / count[index]
     except Exception as e:
        logging.exception(e)
        data = {
@@ -883,7 +885,7 @@ class GetAppinessByMonthHandler(BaseRequestHandler):
             firstOfMonth = mkDateTime("%s-%s-%s"%(dYear,dMonth,dDay))
             lastOfMonth = mkLastOfMonth(firstOfMonth)
             
-            answers = Answer.gql("WHERE user_id = :1 AND date >= DATE(:2) AND date <= DATE(:3)", user_id, formatDate(firstOfMonth), formatDate(lastOfMonth))
+            answers = Answer.gql("WHERE user_id = :1 AND date >= DATE(:2) AND date <= DATE(:3) AND question_id = \'6434359225614336\'", user_id, formatDate(firstOfMonth), formatDate(lastOfMonth))
             
             if answers.count() > 0:
                 count[index] = 0
@@ -912,7 +914,7 @@ class CreateMap(BaseRequestHandler):
       
       regions = Region.all()
       provincie = Provincia.all()
-      answers = Answer.gql('WHERE date >= DATE(\'%s\') AND date < DATE(\'%s\') AND question_id = \'6434359225614336\''%(yesterday, today))
+      answers = Answer.gql('WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\'', yesterday, today)
       
       if answers.count() == 0:
           raise Exception('No answers') 
@@ -941,7 +943,6 @@ class CreateMap(BaseRequestHandler):
           if answer.location:
             lat = answer.location.lat
             lng = answer.location.lon
-            print "%s %s"%(lat, lng)
             
             for region in regions:
                 id = str(region.key().id())
@@ -1085,8 +1086,6 @@ class UpdateFacebook(BaseRequestHandler):
     try:
       user_id = self.request.get('user_id')
       facebook_id = self.request.get('facebook_id')
-      
-      print "facebook_id: %s"%facebook_id
       
       if not user_id:
          raise Exception('Devi specificare un user_id')

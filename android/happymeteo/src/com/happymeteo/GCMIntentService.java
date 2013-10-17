@@ -1,7 +1,5 @@
 package com.happymeteo;
 
-import java.util.UUID;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -84,15 +82,15 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if(collapse_key.equals("questions"))
 			return "Il momento delle domande!";
 		if(collapse_key.equals("request_challenge"))
-			return "Ti sfido!";
+			return "Gioca con me!";
 		if(collapse_key.equals("accepted_challenge_turn1_true"))
-			return "L'utente ha accettato la tua sfida";
+			return "L'utente vuole giocare con te";
 		if(collapse_key.equals("accepted_challenge_turn1_false"))
-			return "L'utente non ha accettato la tua sfida";
+			return "L'utente non vuole giocare con te";
 		if(collapse_key.equals("accepted_challenge_turn2"))
 			return "E' il tuo turno!";
 		if(collapse_key.equals("accepted_challenge_turn3"))
-			return "La sfida è finita!";
+			return "Il gioco è finito!";
 		return collapse_key;
 	}
 	
@@ -121,7 +119,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if(user_id != null && SessionCache.getUser_id(context) != null && user_id.equals(SessionCache.getUser_id(context))) {
 			int icon = R.drawable.ic_launcher;
 			long when = System.currentTimeMillis();
-			String notificationTag = String.valueOf(UUID.randomUUID());
+//			String notificationTag = String.valueOf(UUID.randomUUID());
 			NotificationManager notificationManager = (NotificationManager) context
 					.getSystemService(Context.NOTIFICATION_SERVICE);
 			
@@ -161,7 +159,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	
 			// Vibrate if vibrate is enabled
 			notification.defaults |= Notification.DEFAULT_VIBRATE;
-			notificationManager.notify(notificationTag, 0, notification);
+			notificationManager.notify(message, 0, notification);
 		}
 	}
 }
