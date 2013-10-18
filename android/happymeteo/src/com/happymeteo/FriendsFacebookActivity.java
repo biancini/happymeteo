@@ -52,49 +52,6 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 		}
 	}
 	
-	private void attachFriendToView(View rowView, final Friend friend) {
-		ProfilePictureView profilePictureView = (ProfilePictureView) rowView
-				.findViewById(R.id.picker_profile_pic_stub);
-		profilePictureView.setProfileId(friend.getId());
-
-		/* Set Profile name */
-		TextView picker_title = (TextView) rowView.findViewById(R.id.picker_title);
-		picker_title.setText(friend.getName());
-
-		/* Set Button text */
-		Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
-		
-		if (friend.isInstalled()) {
-			picker_title.setBackgroundColor(getResources().getColor(R.color.black));
-			picker_title.setTextColor(getResources().getColor(R.color.white));
-			picker_button.setBackgroundResource(R.drawable.pulsante_gioca);
-			picker_button.setOnClickListener(new OnClickListener() {
-				
-				public void onClick(View view) {
-					ServerUtilities.requestChallenge(
-						FriendsFacebookActivity.this, 
-						SessionCache.getUser_id(view.getContext()),
-						friend.getId(),
-						GCMRegistrar.getRegistrationId(view.getContext()));
-				}
-			});
-		} else {
-			/* Feed Dialog: https://developers.facebook.com/docs/reference/dialogs/feed/ */
-			picker_button.setBackgroundResource(R.drawable.pulsante_invita);
-			picker_button.setOnClickListener(new OnClickListener() {
-				
-				public void onClick(View view) {
-					FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(FriendsFacebookActivity.this, Session.getActiveSession());
-					feedDialogBuilder.setDescription("Vieni in appymeteo!");
-					feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
-					feedDialogBuilder.setTo(friend.getId());
-					WebDialog webDialog = feedDialogBuilder.build();
-					webDialog.show();
-				}
-			});
-		}
-	}
-
 	@Override
 	public void onGetExecute(String result) {
 		RelativeLayout wait = (RelativeLayout) findViewById(R.id.waitFriendsWithApp);
@@ -150,6 +107,51 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 			@Override
 			public int compare(Friend o1, Friend o2) {
 				return o1.getName().compareTo(o2.getName());
+			}
+		}
+		
+		private void attachFriendToView(View rowView, Friend friend) {
+			ProfilePictureView profilePictureView = (ProfilePictureView) rowView
+					.findViewById(R.id.picker_profile_pic_stub);
+			profilePictureView.setProfileId(friend.getId());
+
+			/* Set Profile name */
+			TextView picker_title = (TextView) rowView.findViewById(R.id.picker_title);
+			picker_title.setText(friend.getName());
+
+			/* Set Button text */
+			Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
+			
+			final String friendId = friend.getId();
+			
+			if (friend.isInstalled()) {
+				picker_title.setBackgroundColor(getResources().getColor(R.color.black));
+				picker_title.setTextColor(getResources().getColor(R.color.white));
+				picker_button.setBackgroundResource(R.drawable.pulsante_gioca);
+				picker_button.setOnClickListener(new OnClickListener() {
+					
+					public void onClick(View view) {
+						ServerUtilities.requestChallenge(
+							FriendsFacebookActivity.this, 
+							SessionCache.getUser_id(view.getContext()),
+							friendId,
+							GCMRegistrar.getRegistrationId(view.getContext()));
+					}
+				});
+			} else {
+				/* Feed Dialog: https://developers.facebook.com/docs/reference/dialogs/feed/ */
+				picker_button.setBackgroundResource(R.drawable.pulsante_invita);
+				picker_button.setOnClickListener(new OnClickListener() {
+					
+					public void onClick(View view) {
+						FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(FriendsFacebookActivity.this, Session.getActiveSession());
+						feedDialogBuilder.setDescription("Vieni in appymeteo!");
+						feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
+						feedDialogBuilder.setTo(friendId);
+						WebDialog webDialog = feedDialogBuilder.build();
+						webDialog.show();
+					}
+				});
 			}
 		}
 

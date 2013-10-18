@@ -396,7 +396,9 @@ class SendMessageHandler(BaseRequestHandler):
     devices = Device.all()
     for device in devices:
         if device.user_id != "":
-            sendMessage(device.registration_id, collapse_key='questions', payload={'user_id': device.user_id, 'timestamp': '%s'%ts})
+            response_json = sendMessage(device.registration_id, collapse_key='questions', payload={'user_id': device.user_id, 'timestamp': '%s'%ts})
+            if response_json['failure'] == 1:
+                db.delete(device)
         else:
             db.delete(device)
 
@@ -450,7 +452,7 @@ class SubmitQuestionsHandler(BaseRequestHandler):
             answer.put()
         
         data = { 'message': 'ok' }
-        (today_value, yesterday_value, tomorrow_value) = happymeteo(int(user_id))
+        (today_value, yesterday_value, tomorrow_value) = happymeteo(user_id)
         data['today'] = today_value
         data['yesterday'] = yesterday_value
         data['tomorrow'] = tomorrow_value
@@ -834,7 +836,7 @@ class GetAppinessByDayHandler(BaseRequestHandler):
         
         firstOfMonth = mkFirstOfMonth(date.today())
         
-        answers = Answer.gql("WHERE user_id = :1 AND date >= DATE(:2) AND question_id = \'6434359225614336\'", user_id, formatDate(firstOfMonth))
+        answers = Answer.gql("WHERE user_id = :1 AND date >= DATE(:2) AND question_id = \'6434359225614336\'", '%s'%user_id, formatDate(firstOfMonth))
         
         if answers.count() > 0:
             for answer in answers:
@@ -885,7 +887,7 @@ class GetAppinessByMonthHandler(BaseRequestHandler):
             firstOfMonth = mkDateTime("%s-%s-%s"%(dYear,dMonth,dDay))
             lastOfMonth = mkLastOfMonth(firstOfMonth)
             
-            answers = Answer.gql("WHERE user_id = :1 AND date >= DATE(:2) AND date <= DATE(:3) AND question_id = \'6434359225614336\'", user_id, formatDate(firstOfMonth), formatDate(lastOfMonth))
+            answers = Answer.gql("WHERE user_id = :1 AND date >= DATE(:2) AND date <= DATE(:3) AND question_id = \'6434359225614336\'", '%s'%user_id, formatDate(firstOfMonth), formatDate(lastOfMonth))
             
             if answers.count() > 0:
                 count[index] = 0
