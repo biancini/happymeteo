@@ -4,63 +4,78 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.facebook.Session;
-import com.facebook.widget.ProfilePictureView;
-import com.facebook.widget.WebDialog;
-import com.facebook.widget.WebDialog.FeedDialogBuilder;
-import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.models.Friend;
-import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.GetRequest;
-import com.happymeteo.utils.ServerUtilities;
+import com.happymeteo.utils.ListFriend;
 import com.happymeteo.utils.OnGetExecuteListener;
 
-public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements OnGetExecuteListener {
+public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
+		OnGetExecuteListener {
+
+	public static int FRIENDS_WITH_APP_TYPE = 1;
+	public static int FRIENDS_NO_APP_TYPE = 0;
+
+	private String[] counter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_friends_facebook);
 		super.onCreate(savedInstanceState);
-		
+
 		if (Session.getActiveSession() == null) {
 			invokeActivity(IndexActivity.class, null);
-		}
-		else {
+		} else {
+			counter = new String[2];
+			counter[FRIENDS_WITH_APP_TYPE] = null;
+			counter[FRIENDS_NO_APP_TYPE] = null;
 			String accessToken = Session.getActiveSession().getAccessToken();
-			String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token=" + accessToken;
+			String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token="
+					+ accessToken;
 			new GetRequest(this, this).execute(serverUrl);
 		}
 	}
-	
+
+	private class MyFriendComparable implements Comparator<Friend> {
+
+		@Override
+		public int compare(Friend o1, Friend o2) {
+			return o1.getName().compareTo(o2.getName());
+		}
+	}
+
 	@Override
 	public void onGetExecute(String result) {
-		RelativeLayout wait = (RelativeLayout) findViewById(R.id.waitFriendsWithApp);
-		wait.setVisibility(View.GONE);
-		
-		RelativeLayout wait2 = (RelativeLayout) findViewById(R.id.waitFriendsNoApp);
-		wait2.setVisibility(View.GONE);
-		
-		List<Friend> friendsWithApp = new ArrayList<Friend>();
-		List<Friend> friendsNoApp = new ArrayList<Friend>();
+		final RelativeLayout waitFriendsWithApp = (RelativeLayout) findViewById(R.id.waitFriendsWithApp);
+		final RelativeLayout waitFriendsNoApp = (RelativeLayout) findViewById(R.id.waitFriendsNoApp);
+
+		final LinearLayout facebookPickerListViewWithApp = (LinearLayout) findViewById(R.id.facebookPickerListViewWithApp);
+		final LinearLayout facebookPickerListViewNoApp = (LinearLayout) findViewById(R.id.facebookPickerListViewNoApp);
+
+		EditText searchFriendsWithApp = (EditText) findViewById(R.id.searchFriendsWithApp);
+		EditText searchFriendsNoApp = (EditText) findViewById(R.id.searchFriendsNoApp);
+
+		final List<Friend> friendsWithApp = new ArrayList<Friend>();
+		final List<Friend> friendsNoApp = new ArrayList<Friend>();
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			JSONArray data = jsonObject.getJSONArray("data");
@@ -70,128 +85,154 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 					Friend friend = new Friend();
 					friend.setId(profile.getString("id"));
 					friend.setName(profile.getString("name"));
-					
+
 					try {
-						friend.setInstalled(profile.getString("installed") != null && profile.getBoolean("installed"));
+						friend.setInstalled(profile.getString("installed") != null
+								&& profile.getBoolean("installed"));
 					} catch (JSONException e) {
 						friend.setInstalled(false);
 					}
-					
-					if (friend.isInstalled()) friendsWithApp.add(friend);
-					else friendsNoApp.add(friend);
+
+					if (friend.isInstalled())
+						friendsWithApp.add(friend);
+					else
+						friendsNoApp.add(friend);
 				}
 			}
-			
-			new ListFriend(this, friendsWithApp, friendsNoApp).execute();
+
+			Collections.sort(friendsWithApp, new MyFriendComparable());
+			Collections.sort(friendsNoApp, new MyFriendComparable());
+
+			searchFriendsWithApp.addTextChangedListener(new TextWatcher() {
+
+				@Override
+				public void onTextChanged(CharSequence cs, int start,
+						int before, int count) {
+					Log.i(Const.TAG, "onTextChanged: " + cs.toString());
+
+					List<Friend> newFriends = new ArrayList<Friend>();
+					if (friendsWithApp != null) {
+						for (Friend friend : friendsWithApp) {
+							if (friend
+									.getName()
+									.toLowerCase(Locale.getDefault())
+									.contains(
+											cs.toString().toLowerCase(
+													Locale.getDefault()))) {
+								newFriends.add(friend);
+							}
+						}
+					}
+
+					new ListFriend(FRIENDS_WITH_APP_TYPE,
+							FriendsFacebookActivity.this, newFriends,
+							facebookPickerListViewWithApp, waitFriendsWithApp)
+							.execute();
+				}
+
+				@Override
+				public void beforeTextChanged(CharSequence s, int start,
+						int count, int after) {
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+					Log.i(Const.TAG, "afterTextChanged: " + s.toString());
+				}
+			});
+
+			searchFriendsNoApp.addTextChangedListener(new TextWatcher() {
+
+				@Override
+				public void onTextChanged(CharSequence cs, int start,
+						int before, int count) {
+					Log.i(Const.TAG, "onTextChanged: " + cs.toString());
+
+					List<Friend> newFriends = new ArrayList<Friend>();
+					if (friendsNoApp != null) {
+						for (Friend friend : friendsNoApp) {
+							if (friend
+									.getName()
+									.toLowerCase(Locale.getDefault())
+									.contains(
+											cs.toString().toLowerCase(
+													Locale.getDefault()))) {
+								newFriends.add(friend);
+							}
+						}
+					}
+
+					new ListFriend(FRIENDS_NO_APP_TYPE,
+							FriendsFacebookActivity.this, newFriends,
+							facebookPickerListViewNoApp, waitFriendsNoApp)
+							.execute();
+				}
+
+				@Override
+				public void beforeTextChanged(CharSequence s, int start,
+						int count, int after) {
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+					Log.i(Const.TAG, "afterTextChanged: " + s.toString());
+				}
+			});
+
+			new ListFriend(FRIENDS_WITH_APP_TYPE, this, friendsWithApp,
+					facebookPickerListViewWithApp, waitFriendsWithApp)
+					.execute();
+			new ListFriend(FRIENDS_NO_APP_TYPE, this, friendsNoApp,
+					facebookPickerListViewNoApp, waitFriendsNoApp).execute();
 		} catch (Exception e) {
 			Log.e(Const.TAG, e.getMessage(), e);
 		}
 	}
-	
-	private class ListFriend extends AsyncTask<String, Void, Void> {
-		private Activity activity;
-		private List<Friend> friendsWithApp;
-		private List<Friend> friendsNoApp;
-		
-		public ListFriend(Activity activity, List<Friend> friendsWithApp, List<Friend> friendsNoApp) {
-			this.activity = activity;
-			this.friendsWithApp = friendsWithApp;
-			this.friendsNoApp = friendsNoApp;
-		}
-		
-		private class MyFriendComparable implements Comparator<Friend> {
-			@Override
-			public int compare(Friend o1, Friend o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		}
-		
-		private void attachFriendToView(View rowView, Friend friend) {
-			ProfilePictureView profilePictureView = (ProfilePictureView) rowView.findViewById(R.id.picker_profile_pic_stub);
-			profilePictureView.setProfileId(friend.getId());
 
-			/* Set Profile name */
-			TextView picker_title = (TextView) rowView.findViewById(R.id.picker_title);
-			picker_title.setText(friend.getName());
-
-			/* Set Button text */
-			Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
-			
-			final String friendId = friend.getId();
-			
-			if (friend.isInstalled()) {
-				picker_title.setBackgroundColor(getResources().getColor(R.color.black));
-				picker_title.setTextColor(getResources().getColor(R.color.white));
-				picker_button.setBackgroundResource(R.drawable.pulsante_gioca);
-				picker_button.setOnClickListener(new OnClickListener() {
-					
-					public void onClick(View view) {
-						ServerUtilities.requestChallenge(
-							FriendsFacebookActivity.this, 
-							SessionCache.getUser_id(view.getContext()),
-							friendId,
-							GCMRegistrar.getRegistrationId(view.getContext()));
-					}
-				});
-			} else {
-				/* Feed Dialog: https://developers.facebook.com/docs/reference/dialogs/feed/ */
-				picker_button.setBackgroundResource(R.drawable.pulsante_invita);
-				picker_button.setOnClickListener(new OnClickListener() {
-					
-					public void onClick(View view) {
-						FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(FriendsFacebookActivity.this, Session.getActiveSession());
-						feedDialogBuilder.setDescription("Vieni in appymeteo!");
-						feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
-						feedDialogBuilder.setTo(friendId);
-						WebDialog webDialog = feedDialogBuilder.build();
-						webDialog.show();
-					}
-				});
-			}
-		}
-
-		@Override
-		protected Void doInBackground(String... params) {
-			Collections.sort(friendsWithApp, new MyFriendComparable());
-			Collections.sort(friendsNoApp, new MyFriendComparable());
-			
-			final LinearLayout facebookPickerListViewWithApp = (LinearLayout) activity.findViewById(R.id.facebookPickerListViewWithApp);
-			
-			for (int i = 0; i < friendsWithApp.size(); i++) {
-				Friend friend = friendsWithApp.get(i);
-				final View vi = getLayoutInflater().inflate(R.layout.activity_friends_facebook_list_row, null);
-				attachFriendToView(vi, friend);
-				runOnUiThread(new Runnable() {
-				     public void run() {
-				    	 facebookPickerListViewWithApp.addView(vi);
-				    }
-				});
-			}
-
-			final LinearLayout facebookPickerListViewNoApp = (LinearLayout) activity.findViewById(R.id.facebookPickerListViewNoApp);
-			
-			for (int i = 0; i < friendsNoApp.size(); i++) {
-				Friend friend = friendsNoApp.get(i);
-				final View vi = getLayoutInflater().inflate(
-						R.layout.activity_friends_facebook_list_row, null);
-				attachFriendToView(vi, friend);
-				runOnUiThread(new Runnable() {
-				     public void run() {
-				    	 facebookPickerListViewNoApp.addView(vi);
-				    }
-				});
-			}
-			
-			return null;
-		}
-	}
-	
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		AlertDialogManager.showNotification(this, R.string.empty, R.string.request_challenge_notification_msg, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				// Do nothing
+		AlertDialogManager.showNotification(this, R.string.empty,
+				R.string.request_challenge_notification_msg,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				});
+	}
+
+	public String clear(final int type, final LinearLayout pickerLayout,
+			final RelativeLayout waitLayout) {
+		String id = null;
+
+		synchronized (counter) {
+			counter[type] = String.valueOf(UUID.randomUUID());
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					waitLayout.setVisibility(View.VISIBLE);
+					pickerLayout.removeAllViews();
+					
+				}
+			});
+			id = counter[type];
+		}
+
+		return id;
+	}
+
+	public void populate(final int type, final String id,
+			final LinearLayout pickerLayout, final RelativeLayout waitLayout, final List<View> views) {
+		synchronized (counter) {
+			if (counter[type] != null && id != null && id.equals(counter[type])) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						waitLayout.setVisibility(View.GONE);
+						for (View view : views) {
+							pickerLayout.addView(view);
+						}
+					}
+				});
 			}
-		});
+		}
 	}
 }

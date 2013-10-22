@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">appymeteo</string>
-    <string name="version">Versione 0.3.0.1</string>
+    <string name="version">Versione 0.3.1</string>
     <string name="app_id">405414319576008</string>
     <string name="information_page">info</string>
     <string name="happy_meteo">my meteo</string>
@@ -86,8 +85,7 @@
 	<string name="not_confirmed_user_notification_msg">Presto verrà inviata una email di conferma all\'email indicata</string>
 	<string name="request_challenge_notification_msg">Richiesta di gioco inviata con successo</string>
 	<string name="retry">Riprova</string>
-	
 	<string name="email">Mail</string>
 	<string name="facebook">Facebook</string>
-	
+	<string name="search">Cerca..</string>
 </resources>

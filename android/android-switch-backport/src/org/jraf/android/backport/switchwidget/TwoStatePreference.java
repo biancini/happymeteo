@@ -291,7 +291,6 @@ public abstract class TwoStatePreference extends Preference {
             super(superState);
         }
 
-        @SuppressWarnings("hiding")
         public static final Parcelable.Creator<SavedState> CREATOR =
                 new Parcelable.Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {

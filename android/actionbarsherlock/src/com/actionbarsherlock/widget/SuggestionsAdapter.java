@@ -677,29 +677,29 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
         return mContext.getPackageManager().getDefaultActivityIcon();
     }
 
-    /**
-     * Gets the activity or application icon for an activity.
-     * Uses the local icon cache for fast repeated lookups.
-     *
-     * @param component Name of an activity.
-     * @return A drawable, or {@code null} if neither the activity nor the application
-     *         has an icon set.
-     */
-    private Drawable getActivityIconWithCache(ComponentName component) {
-        // First check the icon cache
-        String componentIconKey = component.flattenToShortString();
-        // Using containsKey() since we also store null values.
-        if (mOutsideDrawablesCache.containsKey(componentIconKey)) {
-            Drawable.ConstantState cached = mOutsideDrawablesCache.get(componentIconKey);
-            return cached == null ? null : cached.newDrawable(mProviderContext.getResources());
-        }
-        // Then try the activity or application icon
-        Drawable drawable = getActivityIcon(component);
-        // Stick it in the cache so we don't do this lookup again.
-        Drawable.ConstantState toCache = drawable == null ? null : drawable.getConstantState();
-        mOutsideDrawablesCache.put(componentIconKey, toCache);
-        return drawable;
-    }
+//    /**
+//     * Gets the activity or application icon for an activity.
+//     * Uses the local icon cache for fast repeated lookups.
+//     *
+//     * @param component Name of an activity.
+//     * @return A drawable, or {@code null} if neither the activity nor the application
+//     *         has an icon set.
+//     */
+//    private Drawable getActivityIconWithCache(ComponentName component) {
+//        // First check the icon cache
+//        String componentIconKey = component.flattenToShortString();
+//        // Using containsKey() since we also store null values.
+//        if (mOutsideDrawablesCache.containsKey(componentIconKey)) {
+//            Drawable.ConstantState cached = mOutsideDrawablesCache.get(componentIconKey);
+//            return cached == null ? null : cached.newDrawable(mProviderContext.getResources());
+//        }
+//        // Then try the activity or application icon
+//        Drawable drawable = getActivityIcon(component);
+//        // Stick it in the cache so we don't do this lookup again.
+//        Drawable.ConstantState toCache = drawable == null ? null : drawable.getConstantState();
+//        mOutsideDrawablesCache.put(componentIconKey, toCache);
+//        return drawable;
+//    }
 
     /**
      * Gets the activity or application icon for an activity.

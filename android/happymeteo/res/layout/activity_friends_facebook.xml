@@ -46,6 +46,15 @@
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
+            <EditText
+                android:id="@+id/searchFriendsWithApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dip"
+                android:ems="10"
+                android:hint="@string/search"
+                android:inputType="text" />
+
             <RelativeLayout
                 android:id="@+id/waitFriendsWithApp"
                 android:layout_width="match_parent"
@@ -73,6 +82,15 @@
                 android:text="@string/titleNoApp"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
+            
+            <EditText
+                android:id="@+id/searchFriendsNoApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dip"
+                android:ems="10"
+                android:hint="@string/search"
+                android:inputType="text" />
 
             <RelativeLayout
                 android:id="@+id/waitFriendsNoApp"
