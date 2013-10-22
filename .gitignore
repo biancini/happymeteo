@@ -10,3 +10,4 @@ android/actionbarsherlock/gen
 android/sidenavigation/gen
 android/*/gen
 android/*/bin
+*.class

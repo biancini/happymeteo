@@ -50,7 +50,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements OnPostE
 		});
 		
 		if(SessionCache.isInitialized(getApplicationContext())) {
-			invokeActivity(HappyMeteoActivity.class);
+			invokeActivity(AppyMeteoActivity.class);
 		}
 	}
 
@@ -120,11 +120,11 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements OnPostE
 				if (SessionCache.getRegistered(this) == SessionCache.USER_NOT_REGISTERED) {
 					invokeActivity(CreateAccountActivity.class);
 				} else {
-					invokeActivity(HappyMeteoActivity.class);
+					invokeActivity(AppyMeteoActivity.class);
 				}
 				return;
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(Const.TAG, e.getMessage(), e);
 			}
 		}
 	}

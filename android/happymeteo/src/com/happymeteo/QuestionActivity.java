@@ -199,7 +199,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements OnPost
 									try {
 										questions.put(id_question,value);
 									} catch (JSONException e) {
-										e.printStackTrace();
+										Log.e(Const.TAG, e.getMessage(), e);
 									}
 									tvText.setText(value + "�");
 
@@ -240,10 +240,9 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements OnPost
 										CompoundButton buttonView,
 										boolean isChecked) {
 									try {
-										questions.put(id_question,
-												isChecked ? "0" : "1");
+										questions.put(id_question, isChecked ? "0" : "1");
 									} catch (JSONException e) {
-										e.printStackTrace();
+										Log.e(Const.TAG, e.getMessage(), e);
 									}
 								}
 							});
@@ -259,11 +258,11 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements OnPost
 							questions.put(id_question, "0");
 						}
 					} catch (JSONException e) {
-						e.printStackTrace();
+						Log.e(Const.TAG, e.getMessage(), e);
 					}
 				}
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(Const.TAG, e.getMessage(), e);
 			}
 			break;
 		case Const.SUBMIT_QUESTIONS_URL_ID:
@@ -275,7 +274,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements OnPost
 
 				SessionCache.setMeteo(this, today, yesterday, tomorrow);
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(Const.TAG, e.getMessage(), e);
 			}
 
 			finish();

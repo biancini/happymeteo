@@ -131,7 +131,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 				if (challenges.length() == 0) return;
 				new ListChallenges(this, challenges).execute();
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(Const.TAG, e.getMessage(), e);
 			}
 		}
 		
@@ -192,7 +192,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 						});
 					}
 				} catch (JSONException e) {
-					e.printStackTrace();
+					Log.e(Const.TAG, e.getMessage(), e);
 				}
 			}
 			

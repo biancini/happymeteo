@@ -9,6 +9,7 @@ import ua.org.zasadnyy.zvalidations.validations.NotEmpty;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -47,7 +48,7 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements O
 						password = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY,
 								normal_login_password.getText().toString());
 					} catch (Exception e) {
-						e.printStackTrace();
+						Log.e(Const.TAG, e.getMessage(), e);
 					}
 
 					ServerUtilities.normalLogin(NormalLoginActivity.this, email, password);
@@ -90,10 +91,10 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements O
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			SessionCache.initialize(this, jsonObject);
-			invokeActivity(HappyMeteoActivity.class);
+			invokeActivity(AppyMeteoActivity.class);
 			return;
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e(Const.TAG, e.getMessage(), e);
 		}
 	}
 

@@ -36,10 +36,12 @@ public class GetRequest extends AsyncTask<String, Void, String> {
 	
 				InputStream inputStream = response.getEntity().getContent();
 				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-				String inputLine;
+				String inputLine = "";
+				
 				while ((inputLine = bufferedReader.readLine()) != null) {
 					output.append(inputLine);
 				}
+				
 				bufferedReader.close();
 				inputStream.close();
 			} catch(Exception e) {

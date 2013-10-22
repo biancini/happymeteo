@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-public class HappyMapActivity extends AppyMeteoLoggedActivity {
+public class AppyMapActivity extends AppyMeteoLoggedActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

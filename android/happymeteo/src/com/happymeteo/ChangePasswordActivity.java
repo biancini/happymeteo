@@ -69,7 +69,7 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements O
 								newPassword = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY,
 										changePassword_password.getText().toString());
 							} catch (Exception e) {
-								e.printStackTrace();
+								Log.e(Const.TAG, e.getMessage(), e);
 								newPassword = "";
 							}	
 							
@@ -78,7 +78,7 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements O
 							try {
 								oldPassword = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, changePassword_old_password.getText().toString());
 							} catch (Exception e) {
-								e.printStackTrace();
+								Log.e(Const.TAG, e.getMessage(), e);
 								oldPassword = "";
 							}
 							

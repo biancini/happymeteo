@@ -46,6 +46,7 @@
     <string name="modify_account">Modifica Profilo</string>
     <string name="link_user_to_facebook">COLLEGATI</string>
     <string name="unlink_user_to_facebook">SCOLLEGATI</string>
+    <string name="today">Oggi</string>
     <string name="yesterday">Ieri</string>
     <string name="tomorrow">Domani</string>
     <string name="empty"></string>
@@ -85,4 +86,8 @@
 	<string name="not_confirmed_user_notification_msg">Presto verrà inviata una email di conferma all\'email indicata</string>
 	<string name="request_challenge_notification_msg">Richiesta di gioco inviata con successo</string>
 	<string name="retry">Riprova</string>
+	
+	<string name="email">Mail</string>
+	<string name="facebook">Facebook</string>
+	
 </resources>

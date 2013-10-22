@@ -133,7 +133,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			Intent notificationIntent = null;
 			
 			if(clazz == null) {
-				notificationIntent = new Intent(context, HappyMeteoActivity.class);
+				notificationIntent = new Intent(context, AppyMeteoActivity.class);
 			} else {
 				notificationIntent = new Intent(context, clazz);
 			}

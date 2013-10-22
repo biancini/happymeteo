@@ -142,7 +142,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 							Typeface billabong = Typeface.createFromAsset(getAssets(), "billabong.ttf");
 							textView.setTypeface(billabong);
 						} catch (Exception e) {
-							e.printStackTrace();
+							Log.e(Const.TAG, e.getMessage(), e);
 						}
 
 						linearLayout.addView(textView);
@@ -193,7 +193,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 									try {
 										questions.put(id_question, value);
 									} catch (JSONException e) {
-										e.printStackTrace();
+										Log.e(Const.TAG, e.getMessage(), e);
 									}
 									tvText.setText(value + "?");
 									
@@ -236,7 +236,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 										try {
 											questions.put(id_question, isChecked ? "0" : "1");
 										} catch (JSONException e) {
-											e.printStackTrace();
+											Log.e(Const.TAG, e.getMessage(), e);
 										}
 									}
 								});
@@ -252,11 +252,11 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 							questions.put(id_question, "0");
 						}
 					} catch (JSONException e) {
-						e.printStackTrace();
+						Log.e(Const.TAG, e.getMessage(), e);
 					}
 				}
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(Const.TAG, e.getMessage(), e);
 			}
 			break;
 		case Const.SUBMIT_CHALLENGE_URL_ID:
@@ -271,9 +271,9 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 				String enemyScore = intentParameters.get(SCORE);
 				if (enemyScore != null) extras.putString("tuChallenge", enemyScore);
 				
-				invokeActivity(HappyMeteoActivity.class, extras);
+				invokeActivity(AppyMeteoActivity.class, extras);
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(Const.TAG, e.getMessage(), e);
 			}
 		}
 	}

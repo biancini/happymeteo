@@ -65,12 +65,12 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.HappyMeteoActivity"
+            android:name="com.happymeteo.AppyMeteoActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.HappyMapActivity"
+            android:name="com.happymeteo.AppyMapActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

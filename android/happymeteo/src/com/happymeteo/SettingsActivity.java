@@ -156,7 +156,7 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements OnGetEx
 			String userId = SessionCache.getUser_id(this);
 			ServerUtilities.updateFacebook(SettingsActivity.this, userId, facebookId);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e(Const.TAG, e.getMessage(), e);
 		}
 	}
 
@@ -169,7 +169,7 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements OnGetEx
 			String facebook_id = jsonObject.getString("facebook_id");
 			changeFacebookId(facebook_id, true);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			Log.e(Const.TAG, e.getMessage(), e);
 		}
 	}
 	

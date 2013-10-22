@@ -175,8 +175,9 @@ public class GraphView extends LinearLayout {
 	 * one data set for a graph series
 	 */
 	static public class GraphViewData implements GraphViewDataInterface {
-		public final double valueX;
-		public final double valueY;
+		public double valueX;
+		public double valueY;
+		
 		public GraphViewData(double valueX, double valueY) {
 			super();
 			this.valueX = valueX;
@@ -308,7 +309,7 @@ public class GraphView extends LinearLayout {
 			if (i > 0) {
 				// fill space between last and current point
 				double numSpace = ((endX - lastEndX) / 3f) +1;
-				for (int xi=0; xi<numSpace; xi++) {
+				for (int xi = 0; xi < numSpace; xi++) {
 					float spaceX = (float) (lastEndX + ((endX-lastEndX)*xi/(numSpace-1)));
 					float spaceY = (float) (lastEndY + ((endY-lastEndY)*xi/(numSpace-1)));
 
@@ -385,13 +386,13 @@ public class GraphView extends LinearLayout {
 			double highest = 0;
 			if (graphSeries.size() > 0) {
 				GraphViewDataInterface[] values = graphSeries.get(0).values;
-				if (values.length == 0) {
-					highest = 0;
-				} else {
-					highest = values[values.length-1].getX();
-				}
-				for (int i=1; i<graphSeries.size(); i++) {
+				
+				if (values.length == 0) highest = 0;
+				else highest = values[values.length-1].getX();
+				
+				for (int i = 1; i < graphSeries.size(); i++) {
 					values = graphSeries.get(i).values;
+					
 					if (values.length > 0) {
 						highest = Math.max(highest, values[values.length-1].getX());
 					}
@@ -414,9 +415,11 @@ public class GraphView extends LinearLayout {
 			largest = Integer.MIN_VALUE;
 			for (int i=0; i<graphSeries.size(); i++) {
 				GraphViewDataInterface[] values = _values(i);
-				for (int ii=0; ii<values.length; ii++)
-					if (values[ii].getY() > largest)
+				for (int ii=0; ii<values.length; ii++) {
+					if (values[ii].getY() > largest) {
 						largest = values[ii].getY();
+					}
+				}
 			}
 		}
 		return largest;
@@ -439,11 +442,9 @@ public class GraphView extends LinearLayout {
 			double lowest = 0;
 			if (graphSeries.size() > 0) {
 				GraphViewDataInterface[] values = graphSeries.get(0).values;
-				if (values.length == 0) {
-					lowest = 0;
-				} else {
-					lowest = values[0].getX();
-				}
+				if (values.length == 0) lowest = 0;
+				else lowest = values[0].getX();
+				
 				for (int i=1; i<graphSeries.size(); i++) {
 					values = graphSeries.get(i).values;
 					if (values.length > 0) {

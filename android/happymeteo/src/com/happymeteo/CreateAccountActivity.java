@@ -117,7 +117,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 										create_account_password.getText()
 												.toString());
 							} catch (Exception e) {
-								e.printStackTrace();
+								Log.e(Const.TAG, e.getMessage(), e);
 								password = "";
 							}
 						}
@@ -163,7 +163,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 							create_account_work.getSelectedItemPosition(),
 							create_account_cap.getText().toString(),
 							SessionCache.USER_REGISTERED, 1, 1, 1);
-					invokeActivity(HappyMeteoActivity.class);
+					invokeActivity(AppyMeteoActivity.class);
 				} else { // NOT_CONFIRMED
 					AlertDialogManager.showNotification(this,
 							R.string.not_confirmed_user_notification_title,
@@ -176,7 +176,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 							});
 				}
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(Const.TAG, e.getMessage(), e);
 			}
 		}
 	}

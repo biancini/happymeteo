@@ -114,11 +114,11 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 			break;
 
 		case R.id.side_navigation_menu_item2:
-			invokeActivity(HappyMeteoActivity.class);
+			invokeActivity(AppyMeteoActivity.class);
 			break;
 
 		case R.id.side_navigation_menu_item3:
-			invokeActivity(HappyMapActivity.class);
+			invokeActivity(AppyMapActivity.class);
 			break;
 
 		case R.id.side_navigation_menu_item4:
@@ -180,8 +180,8 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 		if (sideNavigationView.isShown()) {
 			sideNavigationView.hideMenu();
 		} else {
-			Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " " + HappyMeteoActivity.class);
-			if (!this.getClass().equals(HappyMeteoActivity.class)) super.onBackPressed();
+			Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " " + AppyMeteoActivity.class);
+			if (!this.getClass().equals(AppyMeteoActivity.class)) super.onBackPressed();
 		}
 	}
 

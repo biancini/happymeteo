@@ -9,25 +9,27 @@ import ua.org.zasadnyy.zvalidations.validations.IsEmail;
 import ua.org.zasadnyy.zvalidations.validations.IsPositiveInteger;
 import ua.org.zasadnyy.zvalidations.validations.NotEmpty;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.OnPostExecuteListener;
 
 public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements OnPostExecuteListener {
-	private String user_id;
-	private EditText create_account_fist_name;
-	private EditText create_account_last_name;
-	private Spinner create_account_gender;
-	private EditText create_account_email;
-	private Spinner create_account_age;
-	private Spinner create_account_education;
-	private Spinner create_account_work;
-	private EditText create_account_cap;
+	private String user_id = null;
+	private EditText create_account_fist_name = null;
+	private EditText create_account_last_name = null;
+	private Spinner create_account_gender = null;
+	private EditText create_account_email = null;
+	private Spinner create_account_age = null;
+	private Spinner create_account_education = null;
+	private Spinner create_account_work = null;
+	private EditText create_account_cap = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,7 @@ public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements O
 	    btnCreateUser.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(mForm.isValid()) {
+				if (mForm.isValid()) {
 					ServerUtilities.createAccount(
 							SettingsUtenteActivity.this, user_id, 
 							SessionCache.getFacebook_id(view.getContext()), 
@@ -82,7 +84,7 @@ public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements O
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if(exception == null) {
+		if (exception == null) {
 			try {
 				JSONObject jsonObject = new JSONObject(result);
 				if (jsonObject.get("message").equals("CONFIRMED_OR_FACEBOOK")) { // CONFIRMED_OR_FACEBOOK
@@ -99,10 +101,10 @@ public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements O
 							create_account_cap.getText().toString(),
 							SessionCache.USER_REGISTERED, jsonObject.getInt("today"), 
 							jsonObject.getInt("yesterday"), jsonObject.getInt("tomorrow"));
-					invokeActivity(HappyMeteoActivity.class);
+					invokeActivity(AppyMeteoActivity.class);
 				}
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(Const.TAG, e.getMessage(), e);
 			}
 		}
 	}

@@ -37,6 +37,7 @@ public class GraphViewSeries {
 		public GraphViewSeriesStyle() {
 			super();
 		}
+		
 		public GraphViewSeriesStyle(int color, int thickness) {
 			super();
 			this.color = color;
@@ -45,7 +46,7 @@ public class GraphViewSeries {
 	}
 
 	final GraphViewSeriesStyle style;
-	GraphViewDataInterface[] values;
+	GraphViewDataInterface[] values = null;
 	private final List<GraphView> graphViews = new ArrayList<GraphView>();
 
 	public GraphViewSeries(GraphViewDataInterface[] values) {
@@ -55,9 +56,8 @@ public class GraphViewSeries {
 
 	public GraphViewSeries(GraphViewSeriesStyle style, GraphViewDataInterface[] values) {
 		super();
-		if (style == null) {
-			style = new GraphViewSeriesStyle();
-		}
+		if (style == null) style = new GraphViewSeriesStyle();
+		
 		this.style = style;
 		this.values = values;
 	}
@@ -74,46 +74,28 @@ public class GraphViewSeries {
 	 * add one data to current data
 	 * @param value the new data to append
 	 * @param scrollToEnd true => graphview will scroll to the end (maxX)
-	 * @deprecated please use {@link #appendData(GraphViewDataInterface, boolean, int)} to avoid memory overflow
-	 */
-	@Deprecated
-	public void appendData(GraphViewDataInterface value, boolean scrollToEnd) {
-		GraphViewDataInterface[] newValues = new GraphViewDataInterface[values.length + 1];
-		int offset = values.length;
-		System.arraycopy(values, 0, newValues, 0, offset);
-
-		newValues[values.length] = value;
-		values = newValues;
-		for (GraphView g : graphViews) {
-			if (scrollToEnd) {
-				g.scrollToEnd();
-			}
-		}
-	}
-
-	/**
-	 * add one data to current data
-	 * @param value the new data to append
-	 * @param scrollToEnd true => graphview will scroll to the end (maxX)
 	 * @param maxDataCount if max data count is reached, the oldest data value will be lost
 	 */
 	public void appendData(GraphViewDataInterface value, boolean scrollToEnd, int maxDataCount) {
 		synchronized (values) {
 			int curDataCount = values.length;
-			GraphViewDataInterface[] newValues;
+			GraphViewDataInterface[] newValues = null;
+			
 			if (curDataCount < maxDataCount) {
 				// enough space
 				newValues = new GraphViewDataInterface[curDataCount + 1];
 				System.arraycopy(values, 0, newValues, 0, curDataCount);
 				// append new data
 				newValues[curDataCount] = value;
-			} else {
+			}
+			else {
 				// we have to trim one data
 				newValues = new GraphViewDataInterface[maxDataCount];
 				System.arraycopy(values, 1, newValues, 0, curDataCount-1);
 				// append new data
 				newValues[maxDataCount-1] = value;
 			}
+			
 			values = newValues;
 		}
 
@@ -147,8 +129,6 @@ public class GraphViewSeries {
 	 */
 	public void resetData(GraphViewDataInterface[] values) {
 		this.values = values;
-		for (GraphView g : graphViews) {
-			g.redrawAll();
-		}
+		for (GraphView g : graphViews) g.redrawAll();
 	}
 }

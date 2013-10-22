@@ -39,6 +39,7 @@
                     android:id="@+id/today_pic"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:contentDescription="@string/today"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true" />
 
@@ -56,6 +57,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/email"
                         android:src="@drawable/mail" />
 
                     <ImageView
@@ -63,6 +65,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_margin="5dp"
+                        android:contentDescription="@string/facebook"
                         android:src="@drawable/facebook" />
                 </LinearLayout>
             </RelativeLayout>
@@ -83,7 +86,7 @@
                 </RelativeLayout>
             </RelativeLayout>
 
-            <RelativeLayout
+            <!-- RelativeLayout
                 android:id="@+id/relativeLayoutMeteoUpGraphByMonth"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -97,7 +100,7 @@
 
                     <include layout="@layout/indeterminate_progress_action" />
                 </RelativeLayout>
-            </RelativeLayout>
+            </RelativeLayout-->
         </ViewFlipper>
 
         <LinearLayout
@@ -156,7 +159,8 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:layout_marginBottom="20sp"
-                        android:layout_marginRight="20sp" />
+                        android:layout_marginRight="20sp"
+                        android:contentDescription="@string/yesterday" />
                 </RelativeLayout>
 
                 <View
@@ -186,7 +190,8 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:layout_marginBottom="20sp"
-                        android:layout_marginRight="20sp" />
+                        android:layout_marginRight="20sp"
+						android:contentDescription="@string/tomorrow"/>
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
