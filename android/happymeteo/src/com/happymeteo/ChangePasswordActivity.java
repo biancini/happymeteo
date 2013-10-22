@@ -19,9 +19,9 @@ import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.utils.OnPostExecuteListener;
 
-public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements onPostExecuteListener {
+public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements OnPostExecuteListener {
 	
 	private ImageView changePassword_imageCaptcha;
 	private Captcha captcha;
@@ -58,16 +58,16 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements o
         
         btnChangePassword.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				
 				Log.i(Const.TAG, "captcha.checkAnswer: "+captcha.checkAnswer(changePassword_textCaptcha.getText().toString()));
 				
-				if(mForm.isValid()) {
-					if(captcha.checkAnswer(changePassword_textCaptcha.getText().toString())) {
-						if(changePassword_password.getText().toString().equals(changePassword_confirm_password.getText().toString())) {
+				if (mForm.isValid()) {
+					if (captcha.checkAnswer(changePassword_textCaptcha.getText().toString())) {
+						if (changePassword_password.getText().toString().equals(changePassword_confirm_password.getText().toString())) {
 							String newPassword = "";
 							
 							try {
-								newPassword = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, changePassword_password.getText().toString().toString());
+								newPassword = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY,
+										changePassword_password.getText().toString());
 							} catch (Exception e) {
 								e.printStackTrace();
 								newPassword = "";
@@ -82,7 +82,8 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements o
 								oldPassword = "";
 							}
 							
-							ServerUtilities.changePassword(ChangePasswordActivity.this, SessionCache.getUser_id(view.getContext()),
+							ServerUtilities.changePassword(ChangePasswordActivity.this,
+									SessionCache.getUser_id(view.getContext()),
 									newPassword, oldPassword);
 						} else {
 							changePassword_confirm_password.setError(getApplicationContext().getString(R.string.error_password));
@@ -104,10 +105,7 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements o
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if(exception != null) {
-			return;
-		}
-		
+		if (exception != null) return;
 		finish();
 	}
 }

@@ -22,23 +22,22 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.widget.AppyMeteoSeekBar;
-import com.happymeteo.widget.AppyMeteoSeekBar.OnAppyMeteoSeekBarChangeListener;
+import com.happymeteo.widget.OnAppyMeteoSeekBarChangeListener;
 
-public class QuestionActivity extends AppyMeteoImpulseActivity implements
-		onPostExecuteListener, LocationListener {
+public class QuestionActivity extends AppyMeteoImpulseActivity implements OnPostExecuteListener, LocationListener {
 	private Map<String, String> params;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
@@ -68,8 +67,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 		if (localLocation != null) {
 			onLocationChanged(localLocation);
 		} else {
-			Toast.makeText(this, "location not available",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "location not available", Toast.LENGTH_LONG).show();
 		}
 
 		params = new HashMap<String, String>();
@@ -89,14 +87,11 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 				if (location != null) {
 					Log.i(Const.TAG, "Latitude: " + location.getLatitude()
 							+ ", Longitude: " + location.getLongitude());
-					params.put("latitude",
-							String.valueOf(location.getLatitude()));
-					params.put("longitude",
-							String.valueOf(location.getLongitude()));
+					params.put("latitude", String.valueOf(location.getLatitude()));
+					params.put("longitude", String.valueOf(location.getLongitude()));
 				}
 
-				params.put("user_id",
-						SessionCache.getUser_id(view.getContext()));
+				params.put("user_id", SessionCache.getUser_id(view.getContext()));
 				params.put("questions", questions.toString());
 				params.put("timestamp", intentParameters.get(TIMESTAMP));
 
@@ -114,9 +109,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if (exception != null) {
-			return;
-		}
+		if (exception != null) return;
 
 		switch (id) {
 		case Const.GET_QUESTIONS_URL_ID:
@@ -130,8 +123,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 					try {
 						jsonObject = jsonArray.getJSONObject(i);
 						final String id_question = jsonObject.getString("id");
-						final String question = jsonObject
-								.getString("question");
+						final String question = jsonObject.getString("question");
 						final int type = jsonObject.getInt("type");
 						final String textYes = jsonObject.getString("textYes");
 						final String textNo = jsonObject.getString("textNo");
@@ -142,20 +134,19 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 								LayoutParams.WRAP_CONTENT);
 						llp.setMargins(10, 10, 10, 10);
 
-						TextView textView = new TextView(
-								getApplicationContext());
+						TextView textView = new TextView(getApplicationContext());
 						textView.setText(question);
 						textView.setLayoutParams(llp);
-						textView.setTextColor(getResources().getColor(
-								R.color.black));
+						textView.setTextColor(getResources().getColor(R.color.black));
 						textView.setBackgroundResource(R.drawable.fascia);
 						textView.setGravity(Gravity.CENTER);
 						textView.setTextSize(25.0f);
+						
 						try {
-							Typeface billabong = Typeface.createFromAsset(
-									getAssets(), "billabong.ttf");
+							Typeface billabong = Typeface.createFromAsset(getAssets(), "billabong.ttf");
 							textView.setTypeface(billabong);
 						} catch (Exception e) {
+							// Do nothing
 						}
 
 						linearLayout.addView(textView);
@@ -168,8 +159,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 							llpImg.gravity = Gravity.CENTER_VERTICAL;
 
 							LinearLayout linearLayout1 = new LinearLayout(this);
-							linearLayout1
-									.setOrientation(LinearLayout.HORIZONTAL);
+							linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
 
 							ImageView imageView1 = new ImageView(this);
 							imageView1.setImageResource(R.drawable.triste);
@@ -181,53 +171,46 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 									LayoutParams.WRAP_CONTENT);
 							llp_seekBar.weight = 80;
 
-							final AppyMeteoSeekBar appyMeteoSeekBar = new AppyMeteoSeekBar(
-									this);
+							final AppyMeteoSeekBar appyMeteoSeekBar = new AppyMeteoSeekBar(this);
 							appyMeteoSeekBar.setMax(90);
 							appyMeteoSeekBar.setProgress(0);
 							appyMeteoSeekBar.setLayoutParams(llp_seekBar);
 
 							final TextView tvText = new TextView(this);
-							tvText.setText("1°");
+							tvText.setText("1ï¿½");
 							tvText.setBackgroundResource(R.drawable.baloon);
 							tvText.setGravity(Gravity.CENTER);
-							tvText.setTextColor(getResources().getColor(
-									R.color.white));
+							tvText.setTextColor(getResources().getColor(R.color.white));
 							tvText.setTextSize(15.0f);
 							LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
 									LayoutParams.WRAP_CONTENT,
 									LayoutParams.WRAP_CONTENT);
-							llpBaloon.leftMargin = appyMeteoSeekBar
-									.getProgressPosX();
+							llpBaloon.leftMargin = appyMeteoSeekBar.getProgressPosX();
 							tvText.setLayoutParams(llpBaloon);
 							tvText.setPadding(0, 0, 0, 10);
 							linearLayout.addView(tvText);
 
-							appyMeteoSeekBar
-									.setOnAppyMeteoSeekBarChangeListener(new OnAppyMeteoSeekBarChangeListener() {
+							appyMeteoSeekBar.setOnAppyMeteoSeekBarChangeListener(new OnAppyMeteoSeekBarChangeListener() {
+								@Override
+								public void onProgressPosXChanged(
+										AppyMeteoSeekBar seekBar,
+										int progress, int progressPosX) {
+									String value = String.valueOf((progress / 10) + 1);
+									try {
+										questions.put(id_question,value);
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+									tvText.setText(value + "ï¿½");
 
-										@Override
-										public void onProgressPosXChanged(
-												AppyMeteoSeekBar seekBar,
-												int progress, int progressPosX) {
-											String value = String
-													.valueOf((progress / 10) + 1);
-											try {
-												questions.put(id_question,
-														value);
-											} catch (JSONException e) {
-												e.printStackTrace();
-											}
-											tvText.setText(value + "°");
+									LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
+											LinearLayout.LayoutParams.WRAP_CONTENT,
+											LinearLayout.LayoutParams.WRAP_CONTENT);
 
-											LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
-													LinearLayout.LayoutParams.WRAP_CONTENT,
-													LinearLayout.LayoutParams.WRAP_CONTENT);
-
-											llpBaloon.leftMargin = progressPosX;
-											tvText.setLayoutParams(llpBaloon);
-										}
-									});
+									llpBaloon.leftMargin = progressPosX;
+									tvText.setLayoutParams(llpBaloon);
+								}
+							});
 
 							linearLayout1.addView(appyMeteoSeekBar);
 
@@ -237,13 +220,10 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 							linearLayout1.addView(imageView2);
 
 							linearLayout.addView(linearLayout1);
-
 							questions.put(id_question, "1");
 						} else {
-							LinearLayout linearLayout1 = new LinearLayout(
-									getApplicationContext());
-							linearLayout1
-									.setOrientation(LinearLayout.HORIZONTAL);
+							LinearLayout linearLayout1 = new LinearLayout(getApplicationContext());
+							linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
 							linearLayout1.setGravity(Gravity.CENTER);
 							
 							TextView textYesView = new TextView(this);
@@ -254,21 +234,19 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 							final Switch switchButton = new Switch(this);
 							switchButton.setLayoutParams(llp);
 							switchButton.setChecked(true);
-							switchButton
-									.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-										@Override
-										public void onCheckedChanged(
-												CompoundButton buttonView,
-												boolean isChecked) {
-											try {
-												questions.put(id_question,
-														isChecked ? "0" : "1");
-											} catch (JSONException e) {
-												e.printStackTrace();
-											}
-										}
-									});
+							switchButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+								@Override
+								public void onCheckedChanged(
+										CompoundButton buttonView,
+										boolean isChecked) {
+									try {
+										questions.put(id_question,
+												isChecked ? "0" : "1");
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+								}
+							});
 
 							linearLayout1.addView(switchButton);
 
@@ -323,19 +301,16 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		Toast.makeText(this, "onProviderDisabled: " + provider,
-				Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "onProviderDisabled: " + provider, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		Toast.makeText(this, "onProviderEnabled: " + provider,
-				Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "onProviderEnabled: " + provider, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		Toast.makeText(this, "onStatusChanged: " + provider + " " + status,
-				Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "onStatusChanged: " + provider + " " + status, Toast.LENGTH_LONG).show();
 	}
 }

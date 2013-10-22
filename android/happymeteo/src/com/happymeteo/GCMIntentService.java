@@ -90,7 +90,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if(collapse_key.equals("accepted_challenge_turn2"))
 			return "E' il tuo turno!";
 		if(collapse_key.equals("accepted_challenge_turn3"))
-			return "Il gioco è finito!";
+			return "Il gioco Ã¨ finito!";
 		return collapse_key;
 	}
 	
@@ -113,6 +113,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
+	@SuppressWarnings("deprecation")
 	public static void generateNotification(Context context, Bundle extras) {
 		String user_id = extras.getString("user_id");
 		
@@ -120,12 +121,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 			int icon = R.drawable.ic_launcher;
 			long when = System.currentTimeMillis();
 //			String notificationTag = String.valueOf(UUID.randomUUID());
-			NotificationManager notificationManager = (NotificationManager) context
-					.getSystemService(Context.NOTIFICATION_SERVICE);
+			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			
 			String collapse_key = extras.getString("collapse_key");
-			if(collapse_key == null || collapse_key.equals("do_not_collapse"))
+			if(collapse_key == null || collapse_key.equals("do_not_collapse")) {
 				collapse_key = extras.getString("appy_key");
+			}
 			
 			String message = getMessageFromCollapseKey(collapse_key);
 			Class<? extends AppyMeteoImpulseActivity> clazz = getActivityFromCollapseKey(collapse_key);

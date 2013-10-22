@@ -18,19 +18,16 @@ import com.facebook.SessionState;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 
-public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
-		implements ISideNavigationCallback {
+public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implements ISideNavigationCallback {
 
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private SideNavigationView sideNavigationView;
 
 	private void inShow() {
 		if (!SessionCache.isFacebookSession(this)) {
-			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4,
-					R.drawable.icona_sfidagrigio);
+			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4, R.drawable.icona_sfidagrigio);
 		} else {
-			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4,
-					R.drawable.icona_sfida);
+			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4, R.drawable.icona_sfida);
 		}
 	}
 
@@ -46,8 +43,7 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 		/* Home icon */
 		ImageView icon = (ImageView) findViewById(android.R.id.home);
 		if (icon != null) {
-			FrameLayout.LayoutParams iconLp = (FrameLayout.LayoutParams) icon
-					.getLayoutParams();
+			FrameLayout.LayoutParams iconLp = (FrameLayout.LayoutParams) icon.getLayoutParams();
 			iconLp.topMargin = iconLp.bottomMargin = 0;
 			iconLp.leftMargin = iconLp.rightMargin = 20;
 			icon.setLayoutParams(iconLp);
@@ -66,9 +62,9 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 		addContentView(sideNavigationView, layoutParams);
 
 		if (SessionCache.isFacebookSession(this)) {
-			if(Session.getActiveSession() == null) {
+			if (Session.getActiveSession() == null) {
 				onFacebookConnect(statusCallback, true);
-			} else if(!Session.getActiveSession().isOpened()) {
+			} else if (!Session.getActiveSession().isOpened()) {
 				onFacebookConnect(statusCallback, false);
 			}
 		}
@@ -79,22 +75,19 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-
 		inShow();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 		inShow();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.main_menu, menu);
-		menu.findItem(R.id.settings).setShowAsAction(
-				MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		menu.findItem(R.id.settings).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -129,9 +122,7 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 			break;
 
 		case R.id.side_navigation_menu_item4:
-			if (SessionCache.isFacebookSession(this)) {
-				invokeActivity(ChallengeActivity.class);
-			}
+			if (SessionCache.isFacebookSession(this)) invokeActivity(ChallengeActivity.class);
 			break;
 
 //		case R.id.side_navigation_menu_item5a:
@@ -189,10 +180,8 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 		if (sideNavigationView.isShown()) {
 			sideNavigationView.hideMenu();
 		} else {
-			Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " "
-					+ HappyMeteoActivity.class);
-			if (!this.getClass().equals(HappyMeteoActivity.class))
-				super.onBackPressed();
+			Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " " + HappyMeteoActivity.class);
+			if (!this.getClass().equals(HappyMeteoActivity.class)) super.onBackPressed();
 		}
 	}
 
@@ -207,8 +196,7 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 
 	private class SessionStatusCallback implements Session.StatusCallback {
 		@Override
-		public void call(Session session, SessionState state,
-				Exception exception) {
+		public void call(Session session, SessionState state, Exception exception) {
 			Log.i(Const.TAG, "SessionStatusCallback state: " + state);
 			
 			if (exception != null) {

@@ -22,23 +22,22 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.widget.AppyMeteoSeekBar;
-import com.happymeteo.widget.AppyMeteoSeekBar.OnAppyMeteoSeekBarChangeListener;
+import com.happymeteo.widget.OnAppyMeteoSeekBarChangeListener;
 
-public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity implements
-		onPostExecuteListener, LocationListener {
+public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity implements OnPostExecuteListener, LocationListener {
 	private Map<String, String> params;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
@@ -60,7 +59,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 		// Get the location manager
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		
-		// Define the criteria how to select the locatioin provider -> use
+		// Define the criteria how to select the location provider -> use
 		// default
 		Criteria criteria = new Criteria();
 		provider = locationManager.getBestProvider(criteria, false);
@@ -70,8 +69,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 		if (localLocation != null) {
 			onLocationChanged(localLocation);
 		} else {
-			Toast.makeText(this, "location not available",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "location not available", Toast.LENGTH_LONG).show();
 		}
 
 		params = new HashMap<String, String>();
@@ -83,18 +81,15 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 		
 		final Button btnBeginChallengeQuestions = (Button) findViewById(R.id.btnBeginChallengeQuestions);
 		btnBeginChallengeQuestions.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View view) {
 				Log.d(Const.TAG, "location: " + location);
 
 				if (location != null) {
-					Log.i(Const.TAG, "Latitude: " + location.getLatitude()
-							+ ", Longitude: " + location.getLongitude());
-					params.put("latitude",
-							String.valueOf(location.getLatitude()));
-					params.put("longitude",
-							String.valueOf(location.getLongitude()));
+					Log.i(Const.TAG, "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude());
+					
+					params.put("latitude", String.valueOf(location.getLatitude()));
+					params.put("longitude", String.valueOf(location.getLongitude()));
 				}
 
 				params.put("user_id", SessionCache.getUser_id(view.getContext()));
@@ -109,9 +104,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if(exception != null) {
-			return;
-		}
+		if (exception != null) return;
 		
 		switch (id) {
 		case Const.QUESTIONS_CHALLENGE_URL_ID:
@@ -121,7 +114,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 			try {
 				JSONArray jsonArray = new JSONArray(result);
 				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject jsonObject;
+					JSONObject jsonObject = null;
 					try {
 						jsonObject = jsonArray.getJSONObject(i);
 						final String id_question = jsonObject.getString("id");
@@ -137,20 +130,19 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 								LayoutParams.WRAP_CONTENT);
 						llp.setMargins(10, 10, 10, 10);
 
-						TextView textView = new TextView(
-								getApplicationContext());
+						TextView textView = new TextView(getApplicationContext());
 						textView.setText(question);
 						textView.setLayoutParams(llp);
-						textView.setTextColor(getResources().getColor(
-								R.color.black));
+						textView.setTextColor(getResources().getColor(R.color.black));
 						textView.setBackgroundResource(R.drawable.fascia);
 						textView.setGravity(Gravity.CENTER);
 						textView.setTextSize(25.0f);
+						
 						try {
-							Typeface billabong = Typeface.createFromAsset(
-									getAssets(), "billabong.ttf");
+							Typeface billabong = Typeface.createFromAsset(getAssets(), "billabong.ttf");
 							textView.setTypeface(billabong);
 						} catch (Exception e) {
+							e.printStackTrace();
 						}
 
 						linearLayout.addView(textView);
@@ -182,11 +174,10 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 							appyMeteoSeekBar.setLayoutParams(llp_seekBar);
 							
 							final TextView tvText = new TextView(this);
-							tvText.setText("1°");
+							tvText.setText("1ï¿½");
 							tvText.setBackgroundResource(R.drawable.baloon);
 							tvText.setGravity(Gravity.CENTER);
-							tvText.setTextColor(getResources().getColor(
-									R.color.white));
+							tvText.setTextColor(getResources().getColor(R.color.white));
 							tvText.setTextSize(15.0f);
 							LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
 									LayoutParams.WRAP_CONTENT,
@@ -196,25 +187,21 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 							linearLayout.addView(tvText);
 							
 							appyMeteoSeekBar.setOnAppyMeteoSeekBarChangeListener(new OnAppyMeteoSeekBarChangeListener() {
-								
 								@Override
-								public void onProgressPosXChanged(AppyMeteoSeekBar seekBar, int progress,
-										int progressPosX) {
-									String value = String
-											.valueOf((progress / 10) + 1);
+								public void onProgressPosXChanged(AppyMeteoSeekBar seekBar, int progress, int progressPosX) {
+									String value = String.valueOf((progress / 10) + 1);
 									try {
 										questions.put(id_question, value);
 									} catch (JSONException e) {
 										e.printStackTrace();
 									}
-									tvText.setText(value + "°");
+									tvText.setText(value + "?");
 									
 									LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
 											LinearLayout.LayoutParams.WRAP_CONTENT,
 											LinearLayout.LayoutParams.WRAP_CONTENT);
 
 									llpBaloon.leftMargin = progressPosX;
-									
 									tvText.setLayoutParams(llpBaloon);
 								}
 							});
@@ -227,7 +214,6 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 							linearLayout1.addView(imageView2);
 
 							linearLayout.addView(linearLayout1);
-
 							questions.put(id_question, "1");
 						} else {
 							LinearLayout linearLayout1 = new LinearLayout(
@@ -244,21 +230,16 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 							final Switch switchButton = new Switch(this);
 							switchButton.setLayoutParams(llp);
 							switchButton.setChecked(true);
-							switchButton
-									.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-										@Override
-										public void onCheckedChanged(
-												CompoundButton buttonView,
-												boolean isChecked) {
-											try {
-												questions.put(id_question,
-														isChecked ? "0" : "1");
-											} catch (JSONException e) {
-												e.printStackTrace();
-											}
+							switchButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+									@Override
+									public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+										try {
+											questions.put(id_question, isChecked ? "0" : "1");
+										} catch (JSONException e) {
+											e.printStackTrace();
 										}
-									});
+									}
+								});
 
 							linearLayout1.addView(switchButton);
 
@@ -288,9 +269,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 				extras.putString("tuName", jsonObject.getString("tuName"));
 				
 				String enemyScore = intentParameters.get(SCORE);
-				if(enemyScore != null) {
-					extras.putString("tuChallenge", enemyScore);
-				}
+				if (enemyScore != null) extras.putString("tuChallenge", enemyScore);
 				
 				invokeActivity(HappyMeteoActivity.class, extras);
 			} catch (JSONException e) {
@@ -311,6 +290,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 	@Override
 	public void onLocationChanged(Location location) {
 		this.location = location;
+		
 		Toast.makeText(
 				this,
 				"location: " + Double.toString(location.getLatitude()) + " "
@@ -320,19 +300,16 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		Toast.makeText(this, "onProviderDisabled: " + provider,
-				Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "onProviderDisabled: " + provider, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		Toast.makeText(this, "onProviderEnabled: " + provider,
-				Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "onProviderEnabled: " + provider, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		Toast.makeText(this, "onStatusChanged: " + provider + " " + status,
-				Toast.LENGTH_LONG).show();
+		Toast.makeText(this, "onStatusChanged: " + provider + " " + status, Toast.LENGTH_LONG).show();
 	}
 }

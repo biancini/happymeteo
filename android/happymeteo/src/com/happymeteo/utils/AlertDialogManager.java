@@ -2,7 +2,6 @@ package com.happymeteo.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 
 import com.happymeteo.R;
@@ -13,8 +12,8 @@ public class AlertDialogManager {
 		.setTitle(activity.getString(com.happymeteo.R.string.error))
 		.setMessage(error)
 		.setPositiveButton(activity.getString(com.happymeteo.R.string.ok), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,
-					int which) {
+			public void onClick(DialogInterface dialog, int which) {
+				// Do nothing
 			}
 		})
 		.setIcon(R.drawable.fail)
@@ -27,8 +26,8 @@ public class AlertDialogManager {
 		.setMessage(error)
 		.setPositiveButton(activity.getString(com.happymeteo.R.string.retry), retryClickListener)
 		.setNegativeButton(activity.getString(com.happymeteo.R.string.cancel), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,
-					int which) {
+			public void onClick(DialogInterface dialog, int which) {
+				// Do nothing
 			}
 		})
 		.setIcon(R.drawable.fail)

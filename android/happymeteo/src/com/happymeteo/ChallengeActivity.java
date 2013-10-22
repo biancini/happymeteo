@@ -33,36 +33,25 @@ import com.happymeteo.utils.ServerUtilities;
 public class ChallengeActivity extends AppyMeteoLoggedActivity {
 
 	private View attachChallengeToView(final Challenge challenge) {
-		View rowView = getLayoutInflater().inflate(
-				R.layout.activity_challenge_row, null);
-		ProfilePictureView profilePictureView = (ProfilePictureView) rowView
-				.findViewById(R.id.picker_profile_pic_stub);
-		profilePictureView.setProfileId(challenge.getAdversary()
-				.getFacebook_id());
+		View rowView = getLayoutInflater().inflate(R.layout.activity_challenge_row, null);
+		ProfilePictureView profilePictureView = (ProfilePictureView) rowView.findViewById(R.id.picker_profile_pic_stub);
+		profilePictureView.setProfileId(challenge.getAdversary().getFacebook_id());
 
-		TextView picker_title = (TextView) rowView
-				.findViewById(R.id.picker_title);
+		TextView picker_title = (TextView) rowView.findViewById(R.id.picker_title);
 		picker_title.setText("Hai giocato con "
 				+ challenge.getAdversary().getFirst_name() +
 				" il "+challenge.getCreated());
 
-		TextView picker_result = (TextView) rowView
-				.findViewById(R.id.picker_result);
-		
+		TextView picker_result = (TextView) rowView.findViewById(R.id.picker_result);
 		Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
-		
 		final AppyMeteoLoggedActivity activity = this;
-		
-		if(challenge.getTurn() == 3) {
-			picker_button.setVisibility(View.GONE);
-		}
+		if (challenge.getTurn() == 3) picker_button.setVisibility(View.GONE);
 		
 		boolean viewToAdd = false;
 		
-		if(challenge.getTurn() == 0) {
+		if (challenge.getTurn() == 0) {
 			picker_button.setBackgroundResource(R.drawable.rilancio);
 			picker_button.setOnClickListener(new OnClickListener() {
-				
 				public void onClick(View view) {
 					ServerUtilities.requestChallenge(
 						ChallengeActivity.this, 
@@ -74,24 +63,22 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 			viewToAdd = true;
 		}
 		
-		if(challenge.getTurn() == 1 && SessionCache.getUser_id(this).equals(challenge.getUser_id_a()) || 
+		if (challenge.getTurn() == 1 && SessionCache.getUser_id(this).equals(challenge.getUser_id_a()) || 
 			challenge.getTurn() == 2 && SessionCache.getUser_id(this).equals(challenge.getUser_id_b())) {
 			picker_button.setBackgroundResource(R.drawable.rispondi);
 			picker_button.setOnClickListener(new OnClickListener() {
-				
 				public void onClick(View view) {
 					Bundle extras = new Bundle();
 					extras.putString("challenge_id", challenge.getChallenge_id());
 					extras.putString("turn", String.valueOf(challenge.getTurn()));
-					if(challenge.getTurn() == 2)
-						extras.putString("score", String.valueOf(challenge.getScore_a()));
+					if (challenge.getTurn() == 2) extras.putString("score", String.valueOf(challenge.getScore_a()));
 					activity.invokeActivity(ChallengeQuestionsActivity.class, extras);
 				}
 			});
 			viewToAdd = true;
 		}
 
-		if(challenge.getTurn() == 3) {
+		if (challenge.getTurn() == 3) {
 			Float ioScore = null;
 			Float tuScore = null;
 	
@@ -105,16 +92,12 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 				tuScore = Float.valueOf(challenge.getScore_a());
 			}
 			
-			picker_result.setText("Ecco il risultato.  " + ioScore.toString() + "-"
-					+ tuScore.toString());
-			
+			picker_result.setText("Ecco il risultato.  " + ioScore.toString() + "-" + tuScore.toString());
 			viewToAdd = true;
 		}
 		
-		if(viewToAdd)
-			return rowView;
-		else
-			return null;
+		if (viewToAdd) return rowView;
+		else return null;
 	}
 
 	@Override
@@ -127,8 +110,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 		btnChallengeNew.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Context context = view.getContext();
-				Intent intent = new Intent(context,
-						FriendsFacebookActivity.class);
+				Intent intent = new Intent(context, FriendsFacebookActivity.class);
 				context.startActivity(intent);
 			}
 		});
@@ -138,20 +120,15 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if (exception != null) {
-			return;
-		}
+		if (exception != null) return;
 		
-		if(id == Const.GET_CHALENGES_URL_ID) {
+		if (id == Const.GET_CHALENGES_URL_ID) {
 			RelativeLayout waitGetChallenges = (RelativeLayout) findViewById(R.id.waitGetChallenges);
 			waitGetChallenges.setVisibility(View.GONE);
 	
 			try {
 				JSONArray challenges = new JSONArray(result);
-	
-				if (challenges.length() == 0)
-					return;
-	
+				if (challenges.length() == 0) return;
 				new ListChallenges(this, challenges).execute();
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -160,8 +137,8 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 		
 		if(id == Const.REQUEST_CHALLENGE_URL_ID) {
 			AlertDialogManager.showNotification(this, R.string.empty, R.string.request_challenge_notification_msg, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog,
-						int which) {
+				public void onClick(DialogInterface dialog, int which) {
+					// Do nothing
 				}
 			});
 		}
@@ -204,7 +181,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 					
 					final View view = attachChallengeToView(challenge);
 					
-					if(view != null) {
+					if (view != null) {
 						runOnUiThread(new Runnable() {
 							public void run() {
 								Log.i(Const.TAG, "turn: "+challenge.getTurn());
@@ -221,8 +198,8 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 			
 			runOnUiThread(new Runnable() {
 				public void run() {
-					for(int i = 0; i < 4; i++) {
-						if(visibility.get(i)) {
+					for (int i = 0; i < 4; i++) {
+						if (visibility.get(i)) {
 							Log.i(Const.TAG, "end visibility: "+i+" "+visibility.get(i));
 							challengeTurns.get(i).setVisibility(View.VISIBLE);
 							imageTurns.get(i).setVisibility(View.VISIBLE);
@@ -233,6 +210,5 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 
 			return null;
 		}
-
 	}
 }

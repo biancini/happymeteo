@@ -10,11 +10,7 @@ public class AppyMeteoSeekBar extends SeekBar {
 	private Rect barBounds;
 	private int progressPosX;
 	
-	public interface OnAppyMeteoSeekBarChangeListener {
-		void onProgressPosXChanged(AppyMeteoSeekBar seekBar, int progress, int progressPosX);
-	}
-	
-	 private OnAppyMeteoSeekBarChangeListener mOnAppyMeteoSeekBarChangeListener;
+	private OnAppyMeteoSeekBarChangeListener mOnAppyMeteoSeekBarChangeListener;
 	
 	public AppyMeteoSeekBar(Context context) {
 		super(context);

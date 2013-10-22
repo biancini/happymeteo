@@ -28,12 +28,12 @@ import com.happymeteo.AppyMeteoNotLoggedActivity;
 public class PostRequest extends AsyncTask<String, Void, String> {
 	private int id;
 	private Context context;
-	private onPostExecuteListener onPostExecuteListener;
+	private OnPostExecuteListener onPostExecuteListener;
 	private List<NameValuePair> nvps;
 	private Exception exception;
 	private String url;
 	
-	public PostRequest(int id, Context context, onPostExecuteListener onPostExecuteListener, List<NameValuePair> nvps) {
+	public PostRequest(int id, Context context, OnPostExecuteListener onPostExecuteListener, List<NameValuePair> nvps) {
 		this.id = id;
 		this.context = context;
 		this.nvps = nvps;
@@ -46,7 +46,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		this.context = (Context) appyMeteoNotLoggedActivity;
 		this.nvps = nvps;
 		this.exception = null;
-		this.onPostExecuteListener = (onPostExecuteListener) appyMeteoNotLoggedActivity;
+		this.onPostExecuteListener = (OnPostExecuteListener) appyMeteoNotLoggedActivity;
 	}
 	
 	public PostRequest(int id, Context context, List<NameValuePair> nvps) {
@@ -116,8 +116,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 				HttpResponse response = client.execute(request);
 
 				InputStream inputStream = response.getEntity().getContent();
-				BufferedReader bufferedReader = new BufferedReader(
-						new InputStreamReader(inputStream));
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 				String inputLine;
 				while ((inputLine = bufferedReader.readLine()) != null) {
 					output.append(inputLine);

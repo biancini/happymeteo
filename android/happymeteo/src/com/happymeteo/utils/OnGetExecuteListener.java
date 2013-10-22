@@ -1,5 +1,5 @@
 package com.happymeteo.utils;
 
-public interface onGetExecuteListener {
+public interface OnGetExecuteListener {
 	public void onGetExecute(String result);
 }

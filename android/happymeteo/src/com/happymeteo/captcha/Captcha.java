@@ -17,14 +17,16 @@ public abstract class Captcha {
 	
 	protected abstract Bitmap image();
 
-	public static int color(){
+	public static int color() {
     	Random r = new Random();
-    	int number;
-    	do{
+    	int number = 0;
+    	
+    	do {
     		number = r.nextInt(9);
-    	}while(usedColors.contains(number));
+    	} while(usedColors.contains(number));
+    	
     	usedColors.add(number);
-    	switch(number){
+    	switch(number) {
 	    	case 0: return Color.BLACK;
 	    	case 1: return Color.BLUE;
 	    	case 2: return Color.CYAN;
@@ -44,21 +46,21 @@ public abstract class Captcha {
     }
     
     public void setWidth(int width){
-    	if(width > 0 && width < 10000){
+    	if (width > 0 && width < 10000) {
     		this.width = width;
-    	}else{
+    	} else {
     		this.width = 300;
     	}
     }
     
-    public int getHeight(){
+    public int getHeight() {
     	return this.height;
     }
     
-    public void setHeight(int height){
-    	if(height > 0 && height < 10000){
+    public void setHeight(int height) {
+    	if (height > 0 && height < 10000) {
     		this.height = height;
-    	}else{
+    	} else {
     		this.height = 100;
     	}
     }

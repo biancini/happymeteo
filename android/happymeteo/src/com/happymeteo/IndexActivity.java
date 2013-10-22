@@ -18,10 +18,9 @@ import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.utils.OnPostExecuteListener;
 
-public class IndexActivity extends AppyMeteoNotLoggedActivity implements
-		onPostExecuteListener {
+public class IndexActivity extends AppyMeteoNotLoggedActivity implements OnPostExecuteListener {
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 
 	@Override
@@ -86,8 +85,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 	private class SessionStatusCallback implements Session.StatusCallback {
 		@Override
-		public void call(Session session, SessionState state,
-				Exception exception) {
+		public void call(Session session, SessionState state, Exception exception) {
 			Log.i(Const.TAG, "SessionStatusCallback state: " + state);
 
 			if (exception != null) {
@@ -101,9 +99,8 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements
 
 	private void updateView(Session session) {
 		if (session.isOpened()) {
-			Log.i(Const.TAG, "permissions: "+Session.getActiveSession().getPermissions());
-			ServerUtilities.facebookLogin(this, Session
-					.getActiveSession().getAccessToken());
+			Log.i(Const.TAG, "permissions: " + Session.getActiveSession().getPermissions());
+			ServerUtilities.facebookLogin(this, Session.getActiveSession().getAccessToken());
 		}
 	}
 

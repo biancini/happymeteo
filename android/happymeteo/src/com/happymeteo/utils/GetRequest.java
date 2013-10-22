@@ -13,9 +13,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class GetRequest extends AsyncTask<String, Void, String> {
-	private onGetExecuteListener onGetExecuteListener;
+	private OnGetExecuteListener onGetExecuteListener;
 	
-	public GetRequest(Context context, onGetExecuteListener onGetExecuteListener) {
+	public GetRequest(Context context, OnGetExecuteListener onGetExecuteListener) {
 		this.onGetExecuteListener = onGetExecuteListener;
 	}
 	

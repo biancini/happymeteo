@@ -19,10 +19,10 @@ import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
-import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.utils.OnPostExecuteListener;
 
 public abstract class AppyMeteoNotLoggedActivity extends SherlockActivity implements
-	onPostExecuteListener {
+	OnPostExecuteListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,15 +75,13 @@ public abstract class AppyMeteoNotLoggedActivity extends SherlockActivity implem
 		super.onResume();
 	}
 
-	private void openActiveSession(Session.StatusCallback statusCallback,
-			Session session, boolean allowLoginUI) {
+	private void openActiveSession(Session.StatusCallback statusCallback, Session session, boolean allowLoginUI) {
 		if (session == null) {
 			Log.i(Const.TAG, "session null");
 			session = new Session(this);
 		}
 		Session.setActiveSession(session);
-		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)
-				|| allowLoginUI) {
+		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED) || allowLoginUI) {
 			Log.i(Const.TAG, "CREATED_TOKEN_LOADED");
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(
 					Arrays.asList(Const.FACEBOOK_PERMISSIONS)).setCallback(
@@ -93,8 +91,7 @@ public abstract class AppyMeteoNotLoggedActivity extends SherlockActivity implem
 		}
 	}
 
-	public void onFacebookConnect(Session.StatusCallback statusCallback,
-			boolean renew) {
+	public void onFacebookConnect(Session.StatusCallback statusCallback, boolean renew) {
 		if (renew) {
 			Session session = new Session(this, null, null, false);
 			Session.setActiveSession(session);
@@ -102,8 +99,7 @@ public abstract class AppyMeteoNotLoggedActivity extends SherlockActivity implem
 
 		Session session = Session.getActiveSession();
 
-		if (!session.isOpened() && !session.isClosed()
-				&& session.getState() != SessionState.OPENING) {
+		if (!session.isOpened() && !session.isClosed() && session.getState() != SessionState.OPENING) {
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(
 					Arrays.asList(Const.FACEBOOK_PERMISSIONS)).setCallback(
 					statusCallback));
@@ -112,8 +108,7 @@ public abstract class AppyMeteoNotLoggedActivity extends SherlockActivity implem
 				session = new Session(this, null, null, false);
 				Session.setActiveSession(session);
 				session.openForSimon(new Session.OpenRequest(this)
-						.setPermissions(
-								Arrays.asList(Const.FACEBOOK_PERMISSIONS))
+						.setPermissions(Arrays.asList(Const.FACEBOOK_PERMISSIONS))
 						.setCallback(statusCallback));
 			} else {
 				Log.i(Const.TAG, "onClickLogin openActiveSession");
@@ -124,38 +119,36 @@ public abstract class AppyMeteoNotLoggedActivity extends SherlockActivity implem
 
 	public void onClickLogout() {
 		new AlertDialog.Builder(this)
-		.setTitle(getApplicationContext().getString(com.happymeteo.R.string.empty))
-		.setMessage(getApplicationContext().getString(com.happymeteo.R.string.are_you_sure))
-		.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,
-					int which) {
-				/* Clear every data */
-				SharedPreferences preferences = getApplicationContext()
-						.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
+			.setTitle(getApplicationContext().getString(com.happymeteo.R.string.empty))
+			.setMessage(getApplicationContext().getString(com.happymeteo.R.string.are_you_sure))
+			.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					/* Clear every data */
+					SharedPreferences preferences = getApplicationContext()
+							.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
 			
-				Editor editor = preferences.edit();
-				editor.clear();
-				editor.commit();
+					Editor editor = preferences.edit();
+					editor.clear();
+					editor.commit();
 
-				/* Clear Facebook session */
-//				Session session = new Session(AppyMeteoNotLoggedActivity.this, null, null, false);
-				if(Session.getActiveSession() != null) {
-					Session.getActiveSession().closeAndClearTokenInformation();
+					/* Clear Facebook session */
+					//Session session = new Session(AppyMeteoNotLoggedActivity.this, null, null, false);
+					if(Session.getActiveSession() != null) {
+						Session.getActiveSession().closeAndClearTokenInformation();
+					}
+
+					/* Terminate PushNotificationsService */
+					PushNotificationsService.terminate(getApplicationContext());
+
+					/* Go to Index */
+					invokeActivity(IndexActivity.class);
 				}
-
-				/* Terminate PushNotificationsService */
-				PushNotificationsService.terminate(getApplicationContext());
-
-				/* Go to Index */
-				invokeActivity(IndexActivity.class);
-			}
-		})
-		.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,
-					int which) {
-				
-			}
-		}).show();
+			})
+			.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					// Do nothing
+				}
+			}).show();
 	}
 
 	public void invokeActivity(Class<? extends Activity> clazz) {
@@ -168,9 +161,7 @@ public abstract class AppyMeteoNotLoggedActivity extends SherlockActivity implem
 		if (!this.getClass().equals(clazz)) {
 			Intent intent = new Intent(this, clazz);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			if (extras != null) {
-				intent.putExtras(extras);
-			}
+			if (extras != null) intent.putExtras(extras);
 			startActivity(intent);
 		}
 	}

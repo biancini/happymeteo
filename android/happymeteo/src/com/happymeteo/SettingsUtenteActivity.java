@@ -16,10 +16,9 @@ import android.widget.Spinner;
 
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.utils.OnPostExecuteListener;
 
-public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements
-		onPostExecuteListener {
+public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements OnPostExecuteListener {
 	private String user_id;
 	private EditText create_account_fist_name;
 	private EditText create_account_last_name;
@@ -62,7 +61,6 @@ public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements
 	    mForm.addField(Field.using(create_account_cap).validate(NotEmpty.build(this)).validate(IsPositiveInteger.build(this)));
 		
 	    btnCreateUser.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View view) {
 				if(mForm.isValid()) {

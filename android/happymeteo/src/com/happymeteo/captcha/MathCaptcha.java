@@ -14,12 +14,12 @@ public class MathCaptcha extends Captcha {
 	
 	protected MathOptions options;
 	
-	public enum MathOptions{
+	public enum MathOptions {
 		PLUS_MINUS,
 		PLUS_MINUS_MULTIPLY
 	}
 	
-	public MathCaptcha(int width, int height, MathOptions opt){
+	public MathCaptcha(int width, int height, MathOptions opt) {
 		setHeight(height);
     	setWidth(width);
     	this.options = opt;
@@ -49,7 +49,8 @@ public class MathCaptcha extends Captcha {
 	    Random r = new Random(System.currentTimeMillis());
 		one = r.nextInt(9) + 1;
 		two = r.nextInt(9) + 1;
-		math = r.nextInt((options == MathOptions.PLUS_MINUS_MULTIPLY)?3:2);
+		math = r.nextInt((options == MathOptions.PLUS_MINUS_MULTIPLY) ? 3 : 2);
+		
 		if (one < two) {
 			Integer temp = one;
 			one = two;
@@ -67,7 +68,8 @@ public class MathCaptcha extends Captcha {
 				this.answer = (one * two) + "";
 			    break;
 		}
-	    char[] data = new char[]{String.valueOf(one).toCharArray()[0], oper(math), String.valueOf(two).toCharArray()[0]};
+		
+	    char[] data = new char[] { String.valueOf(one).toCharArray()[0], oper(math), String.valueOf(two).toCharArray()[0] };
 	    for (int i=0; i<data.length; i++) {
 	        x += 30 + (Math.abs(r.nextInt()) % 65);
 	        y = 50 + Math.abs(r.nextInt()) % 50;

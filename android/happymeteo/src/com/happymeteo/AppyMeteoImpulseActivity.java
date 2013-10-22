@@ -10,8 +10,7 @@ import android.util.Log;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 
-public abstract class AppyMeteoImpulseActivity extends
-		AppyMeteoNotLoggedActivity {
+public abstract class AppyMeteoImpulseActivity extends AppyMeteoNotLoggedActivity {
 
 	protected HashMap<String, String> intentParameters;
 
@@ -20,14 +19,12 @@ public abstract class AppyMeteoImpulseActivity extends
 		super.onCreate(savedInstanceState);
 
 		intentParameters = new HashMap<String, String>();
-		
 		initialize(getIntent());
 	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		
 		initialize(intent);
 	}
 

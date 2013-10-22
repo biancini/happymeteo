@@ -32,22 +32,21 @@ import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.GetRequest;
 import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.onGetExecuteListener;
+import com.happymeteo.utils.OnGetExecuteListener;
 
-public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
-		onGetExecuteListener {
+public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements OnGetExecuteListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_friends_facebook);
 		super.onCreate(savedInstanceState);
 		
-		if (Session.getActiveSession() == null)
+		if (Session.getActiveSession() == null) {
 			invokeActivity(IndexActivity.class, null);
+		}
 		else {
 			String accessToken = Session.getActiveSession().getAccessToken();
-			String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token="
-					+ accessToken;
+			String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token=" + accessToken;
 			new GetRequest(this, this).execute(serverUrl);
 		}
 	}
@@ -71,17 +70,15 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 					Friend friend = new Friend();
 					friend.setId(profile.getString("id"));
 					friend.setName(profile.getString("name"));
+					
 					try {
-						friend.setInstalled(profile.getString("installed") != null
-								&& profile.getBoolean("installed"));
+						friend.setInstalled(profile.getString("installed") != null && profile.getBoolean("installed"));
 					} catch (JSONException e) {
 						friend.setInstalled(false);
 					}
-					if (friend.isInstalled()) {
-						friendsWithApp.add(friend);
-					} else {
-						friendsNoApp.add(friend);
-					}
+					
+					if (friend.isInstalled()) friendsWithApp.add(friend);
+					else friendsNoApp.add(friend);
 				}
 			}
 			
@@ -103,7 +100,6 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 		}
 		
 		private class MyFriendComparable implements Comparator<Friend> {
-
 			@Override
 			public int compare(Friend o1, Friend o2) {
 				return o1.getName().compareTo(o2.getName());
@@ -111,8 +107,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 		}
 		
 		private void attachFriendToView(View rowView, Friend friend) {
-			ProfilePictureView profilePictureView = (ProfilePictureView) rowView
-					.findViewById(R.id.picker_profile_pic_stub);
+			ProfilePictureView profilePictureView = (ProfilePictureView) rowView.findViewById(R.id.picker_profile_pic_stub);
 			profilePictureView.setProfileId(friend.getId());
 
 			/* Set Profile name */
@@ -164,8 +159,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 			
 			for (int i = 0; i < friendsWithApp.size(); i++) {
 				Friend friend = friendsWithApp.get(i);
-				final View vi = getLayoutInflater().inflate(
-						R.layout.activity_friends_facebook_list_row, null);
+				final View vi = getLayoutInflater().inflate(R.layout.activity_friends_facebook_list_row, null);
 				attachFriendToView(vi, friend);
 				runOnUiThread(new Runnable() {
 				     public void run() {
@@ -195,8 +189,8 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
 		AlertDialogManager.showNotification(this, R.string.empty, R.string.request_challenge_notification_msg, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,
-					int which) {
+			public void onClick(DialogInterface dialog, int which) {
+				// Do nothing
 			}
 		});
 	}

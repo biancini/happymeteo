@@ -24,10 +24,9 @@ import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.utils.OnPostExecuteListener;
 
-public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
-		onPostExecuteListener {
+public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements OnPostExecuteListener {
 	private String user_id;
 	private String facebook_id;
 	private EditText create_account_fist_name;
@@ -100,7 +99,6 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 		}
 
 		btnCreateUser.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View view) {
 				if (mForm.isValid()) {
@@ -108,8 +106,8 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 					if (create_account_password
 							.getText()
 							.toString()
-							.equals(create_account_confirm_password.getText()
-									.toString())) {
+							.equals(create_account_confirm_password.getText().toString())) {
+						
 						String password = "";
 
 						if (!SessionCache.isFacebookSession(view.getContext())) {
@@ -133,20 +131,15 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 								create_account_gender.getSelectedItemPosition(),
 								create_account_email.getText().toString(),
 								create_account_age.getSelectedItemPosition(),
-								create_account_education
-										.getSelectedItemPosition(),
+								create_account_education.getSelectedItemPosition(),
 								create_account_work.getSelectedItemPosition(),
 								create_account_cap.getText().toString(),
 								password);
 
-						Log.i(Const.TAG,
-								"facebook_id: "
-										+ SessionCache.getFacebook_id(view
-												.getContext()));
+						Log.i(Const.TAG, "facebook_id: " + SessionCache.getFacebook_id(view.getContext()));
 					} else {
 						create_account_confirm_password
-								.setError(getApplicationContext().getString(
-										R.string.error_password));
+							.setError(getApplicationContext().getString(R.string.error_password));
 					}
 				}
 			}

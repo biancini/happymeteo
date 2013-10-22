@@ -32,8 +32,7 @@ public class SplashActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if (scheduled)
-			splashTimer.cancel();
+		if (scheduled) splashTimer.cancel();
 		splashTimer.purge();
 	}
 }

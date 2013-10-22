@@ -18,19 +18,20 @@ import android.widget.LinearLayout;
 
 import com.happymeteo.R;
 
-abstract public class GraphView extends LinearLayout {
+public class GraphView extends LinearLayout {
 	static final private class GraphViewConfig {
 		static final float BORDER = 20;
 	}
 
 	private class GraphViewContentView extends View {
 		private float lastTouchEventX;
-		private float graphwidth;
+		protected float graphwidth;
 		private boolean scrollingStarted;
 
 		/**
 		 * @param context
 		 */
+		@SuppressWarnings("deprecation")
 		public GraphViewContentView(Context context) {
 			super(context);
 			setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
@@ -41,10 +42,7 @@ abstract public class GraphView extends LinearLayout {
 		 */
 		@Override
 		protected void onDraw(Canvas canvas) {
-
 			paint.setAntiAlias(true);
-
-			// normal
 			paint.setStrokeWidth(0);
 
 			float border = GraphViewConfig.BORDER;
@@ -77,47 +75,37 @@ abstract public class GraphView extends LinearLayout {
 			paint.setTextAlign(Align.LEFT);
 			// horizontal labels + lines
 			int hors = horlabels.length - 1;
-			if(hors < 1) {
-				hors = 1;
-			}
-			for (int i = 0; i < horlabels.length; i++) {
-				paint.setColor(getResources().getColor(R.color.black));
-				paint.setStyle(Style.FILL);
-				float x = ((graphwidth / hors) * i) + horstart;
-				float x_next = ((graphwidth / hors) * (i+1)) + horstart;
-				canvas.drawRect(x, height, x_next, height - border, paint);
-				paint.setTextAlign(Align.CENTER);
-				float x_text = ((graphwidth / (horlabels.length*2)) * ((i*2)+1)) + horstart;
-				paint.setColor(graphViewStyle.getHorizontalLabelsColor());
-				canvas.drawText(horlabels[i], x_text, height - 8, paint);
+			if (hors < 1) hors = 1;
+			
+			Log.i("GraphView", "graphwidth: " + graphwidth);
+			Log.i("GraphView", "graphheight: " + graphheight);
+			Log.i("GraphView", "horlabels.length: " + horlabels.length);
+
+			if (maxY == minY) {
+				// if min/max is the same, fake it so that we can render a line
+				if (maxY == 0) {
+					// if both are zero, change the values to prevent division by zero
+					maxY = 1.0d;
+					minY = 0.0d;
+				} else {
+					maxY = maxY * 1.05d;
+					minY = minY * 0.95d;
+				}
 			}
 			
-			// horizontal lines
-			Log.i("GraphView", "graphwidth:"+graphwidth);
-			Log.i("GraphView", "horlabels.length:"+horlabels.length);
+			/* horizontal lines
 			for (int i = 0; i < hors; i++) {
 				paint.setColor(graphViewStyle.getGridColor());
 				float x = ((graphwidth / horlabels.length) * (i+1)) + horstart;
 				canvas.drawLine(x, height, x, border, paint);
 			}
+			*/
 			
-			drawHorizontalLabels(canvas, horlabels, width, border, horstart, height);
-
 			for (int i=0; i<graphSeries.size(); i++) {
 				drawSeries(canvas, _values(i), graphwidth, graphheight, border, minX, minY, diffX, diffY, horstart);
 			}
-
-			if (maxY == minY) {
-				// if min/max is the same, fake it so that we can render a line
-				if(maxY == 0) {
-					// if both are zero, change the values to prevent division by zero
-					maxY = 1.0d;
-					minY = 0.0d;
-				} else {
-					maxY = maxY*1.05d;
-					minY = minY*0.95d;
-				}
-			}
+			
+			drawHorizontalLabels(canvas, horlabels, graphwidth, graphheight, border, horstart);
 		}
 
 		private void onMoveGesture(float f) {
@@ -241,6 +229,7 @@ abstract public class GraphView extends LinearLayout {
 	 * @param context
 	 * @param title [optional]
 	 */
+	@SuppressWarnings("deprecation")
 	public GraphView(Context context) {
 		super(context);
 		setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
@@ -295,9 +284,67 @@ abstract public class GraphView extends LinearLayout {
 		redrawAll();
 	}
 
-	abstract protected void drawSeries(Canvas canvas, GraphViewDataInterface[] values, float graphwidth, float graphheight, float border, double minX, double minY, double diffX, double diffY, float horstart);
+	public void drawSeries(Canvas canvas, GraphViewDataInterface[] values, float graphwidth, float graphheight, float border, double minX, double minY, double diffX, double diffY, float horstart) {
+		paint.setColor(getResources().getColor(R.color.yellow));
+		paint.setStrokeWidth(3.0f);
+		
+		// draw background
+		double lastEndY = minY / diffY * graphwidth;
+		double lastEndX = minX / diffX * graphwidth;
+		
+		float startY = graphheight + border;
+		for (int i = 0; i < values.length; i++) {
+			double valY = values[i].getY() - minY;
+			double ratY = valY / diffY;
+			double y = graphheight * ratY;
 
-	abstract protected void drawHorizontalLabels(Canvas canvas, String[] horlabels, float graphwidth, float border, float horstart, float height);
+			double valX = values[i].getX() - minX;
+			double ratX = valX / diffX;
+			double x = graphwidth * ratX;
+
+			float endX = (float) x + (horstart + 1);
+			float endY = (float) (border - y) + graphheight +2;
+
+			if (i > 0) {
+				// fill space between last and current point
+				double numSpace = ((endX - lastEndX) / 3f) +1;
+				for (int xi=0; xi<numSpace; xi++) {
+					float spaceX = (float) (lastEndX + ((endX-lastEndX)*xi/(numSpace-1)));
+					float spaceY = (float) (lastEndY + ((endY-lastEndY)*xi/(numSpace-1)));
+
+					// start => bottom edge
+					float startX = spaceX;
+
+					// do not draw over the left edge
+					if (startX-horstart > 1) {
+						canvas.drawLine(startX, startY, spaceX, spaceY, paint);
+					}
+				}
+			}
+
+			lastEndY = endY;
+			lastEndX = endX;
+		}
+	}
+
+	protected void drawHorizontalLabels(Canvas canvas, String[] horlabels, float graphwidth, float graphheight, float border, float horstart) {
+		paint.setTextSize(20f);
+		paint.setTextAlign(Align.LEFT);
+
+		int hors = horlabels.length - 1;
+		if (hors < 1) hors = 1;
+
+		paint.setColor(getResources().getColor(R.color.black));
+		paint.setStyle(Style.FILL);
+		canvas.drawRect(0, graphheight + border, graphwidth, graphheight + (2 * border), paint);
+		
+		for (int i = 0; i < horlabels.length; i++) {
+			paint.setTextAlign(Align.CENTER);
+			float x_text = ((graphwidth / (horlabels.length*2)) * ((i*2)+1)) + horstart;
+			paint.setColor(getResources().getColor(R.color.white));
+			canvas.drawText(horlabels[i], x_text, graphheight + border + (border/2), paint);
+		}
+	}
 	
 	/**
 	 * @return the graphview style. it will never be null.

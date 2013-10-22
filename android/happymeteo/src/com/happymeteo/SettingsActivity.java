@@ -10,8 +10,8 @@ import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.GetRequest;
 import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.onGetExecuteListener;
-import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.utils.OnGetExecuteListener;
+import com.happymeteo.utils.OnPostExecuteListener;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -24,7 +24,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetExecuteListener, onPostExecuteListener {
+public class SettingsActivity extends AppyMeteoLoggedActivity implements OnGetExecuteListener, OnPostExecuteListener {
 	private TextView settingsFacebookText;
 	private Switch settingsFacebookSwitch;
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
@@ -42,7 +42,6 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 		settingsFacebookSwitch  = (Switch) findViewById(R.id.settingsFacebookSwitch);
 		
 		btnCreateUser.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View view) {
 				invokeActivity(SettingsUtenteActivity.class);
@@ -50,7 +49,6 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 		});
 		
 		btnChangePassword.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View view) {
 				invokeActivity(ChangePasswordActivity.class);
@@ -60,20 +58,17 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 		changeFacebookId(SessionCache.getFacebook_id(this), false);
 		
 		settingsFacebookSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				final boolean checked = isChecked;
-				
-				Log.i(Const.TAG, "nextTime: "+nextTime);
+				Log.i(Const.TAG, "nextTime: " + nextTime);
 				
 				if(nextTime) {
 					new AlertDialog.Builder(SettingsActivity.this)
 					.setTitle(getApplicationContext().getString(com.happymeteo.R.string.empty))
 					.setMessage(getApplicationContext().getString(com.happymeteo.R.string.are_you_sure))
 					.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int which) {
+						public void onClick(DialogInterface dialog, int which) {
 							if (checked) {
 								onFacebookConnect(statusCallback, true);
 							} else {
@@ -84,8 +79,7 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 						}
 					})
 					.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int which) {
+						public void onClick(DialogInterface dialog, int which) {
 							nextTime = false;
 							settingsFacebookSwitch.setChecked(!settingsFacebookSwitch.isChecked());
 						}
@@ -128,8 +122,7 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 
 	private class SessionStatusCallback implements Session.StatusCallback {
 		@Override
-		public void call(Session session, SessionState state,
-				Exception exception) {
+		public void call(Session session, SessionState state, Exception exception) {
 			Log.i(Const.TAG, "SessionStatusCallback state: " + state);
 
 			// If there is an exception...
@@ -157,7 +150,6 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 	
 	@Override
 	public void onGetExecute(String result) {
-		
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			String facebookId = jsonObject.getString("id");
@@ -170,9 +162,8 @@ public class SettingsActivity extends AppyMeteoLoggedActivity implements onGetEx
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if(exception != null) {
-			return;
-		}
+		if(exception != null) return;
+
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			String facebook_id = jsonObject.getString("facebook_id");

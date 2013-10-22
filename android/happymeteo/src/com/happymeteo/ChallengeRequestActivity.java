@@ -2,6 +2,7 @@ package com.happymeteo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +14,9 @@ import com.facebook.widget.ProfilePictureView;
 import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.onPostExecuteListener;
+import com.happymeteo.utils.OnPostExecuteListener;
 
-public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
-		implements onPostExecuteListener {
+public class ChallengeRequestActivity extends AppyMeteoImpulseActivity implements OnPostExecuteListener {
 
 	private final String CHALLENGE_ID = "challenge_id";
 	private final String ADVERSARY_FACEBOOK_ID = "adversary_facebook_id";
@@ -29,15 +29,11 @@ public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
 		
 		ProfilePictureView adversaryPic = (ProfilePictureView) findViewById(R.id.adversaryPic);
 		String adversaryFacebookId = intentParameters.get(ADVERSARY_FACEBOOK_ID);
-		if(adversaryFacebookId != null) {
-			adversaryPic.setProfileId(adversaryFacebookId);
-		}
+		if (adversaryFacebookId != null) adversaryPic.setProfileId(adversaryFacebookId);
 
 		TextView adversaryPicTextView = (TextView) findViewById(R.id.adversaryName);
 		String adversaryName = intentParameters.get(ADVERSARY_NAME);
-		if(adversaryName != null) {
-			adversaryPicTextView.setText(adversaryName.toUpperCase());
-		}
+		if (adversaryName != null) adversaryPicTextView.setText(adversaryName.toUpperCase(Locale.ITALY));
 
 		Button btnAcceptChallenge = (Button) findViewById(R.id.btnAcceptChallenge);
 		btnAcceptChallenge.setOnClickListener(new OnClickListener() {
@@ -62,10 +58,7 @@ public class ChallengeRequestActivity extends AppyMeteoImpulseActivity
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if (exception != null) {
-			return;
-		}
-		
+		if (exception != null) return;
 		finish();
 	}
 

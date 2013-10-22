@@ -2,6 +2,7 @@ package com.happymeteo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +25,7 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 		TextView ioChallengeTextView = (TextView) findViewById(R.id.ioChallenge);
 		ProfilePictureView ioPic = (ProfilePictureView) findViewById(R.id.ioPic);
 		TextView ioNameTextView = (TextView) findViewById(R.id.ioName);
-//		TextView ioSubnameTextView = (TextView) findViewById(R.id.ioSubname);
+		//TextView ioSubnameTextView = (TextView) findViewById(R.id.ioSubname);
 		
 		String ioChallenge = intentParameters.get(IO_CHALLENGE);
 		if(ioChallenge != null) {
@@ -33,7 +34,7 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 		}
 		
 		ioPic.setProfileId(SessionCache.getFacebook_id(this));
-		ioNameTextView.setText(SessionCache.getFirst_name(this).toUpperCase());
+		ioNameTextView.setText(SessionCache.getFirst_name(this).toUpperCase(Locale.ITALY));
 		
 		TextView tuChallengeTextView = (TextView) findViewById(R.id.tuChallenge);
 		ProfilePictureView tuPic = (ProfilePictureView) findViewById(R.id.tuPic);
@@ -46,14 +47,10 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 		}
 		
 		String tuFacebookId = intentParameters.get(TU_FACEBOOK_ID);
-		if(tuFacebookId != null) {
-			tuPic.setProfileId(tuFacebookId);
-		}
+		if (tuFacebookId != null) tuPic.setProfileId(tuFacebookId);
 
 		String tuName = intentParameters.get(TU_NAME);
-		if(tuName != null) {
-			tuNameTextView.setText(tuName.toUpperCase());
-		}
+		if (tuName != null) tuNameTextView.setText(tuName.toUpperCase(Locale.ITALY));
 	}
 
 	@Override
