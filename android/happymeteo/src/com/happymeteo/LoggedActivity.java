@@ -1,5 +1,6 @@
 package com.happymeteo;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.facebook.SessionState;
 import com.happymeteo.challenge.ChallengeActivity;
 import com.happymeteo.information.InformationPageActivity;
 import com.happymeteo.map.MapActivity;
+import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.settings.SettingsActivity;
 import com.happymeteo.utils.Const;
@@ -36,6 +38,7 @@ public abstract class LoggedActivity extends NotLoggedActivity implements ISideN
 	}
 
 	@Override
+	@SuppressLint("InlinedApi")
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -45,7 +48,6 @@ public abstract class LoggedActivity extends NotLoggedActivity implements ISideN
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 		/* Home icon */
-		//TODO: il field home, dice Eclipse, c'è solo dalla versione 11 delleAPI
 		ImageView icon = (ImageView) findViewById(android.R.id.home);
 		if (icon != null) {
 			FrameLayout.LayoutParams iconLp = (FrameLayout.LayoutParams) icon.getLayoutParams();
@@ -119,7 +121,7 @@ public abstract class LoggedActivity extends NotLoggedActivity implements ISideN
 			break;
 
 		case R.id.side_navigation_menu_item2:
-			invokeActivity(Activity.class);
+			invokeActivity(MeteoActivity.class);
 			break;
 
 		case R.id.side_navigation_menu_item3:
@@ -185,8 +187,8 @@ public abstract class LoggedActivity extends NotLoggedActivity implements ISideN
 		if (sideNavigationView.isShown()) {
 			sideNavigationView.hideMenu();
 		} else {
-			Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " " + Activity.class);
-			if (!this.getClass().equals(Activity.class)) super.onBackPressed();
+			Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " " + MeteoActivity.class);
+			if (!this.getClass().equals(MeteoActivity.class)) super.onBackPressed();
 		}
 	}
 

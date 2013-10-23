@@ -15,9 +15,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.happymeteo.Activity;
 import com.happymeteo.NotLoggedActivity;
 import com.happymeteo.R;
+import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
@@ -94,7 +94,7 @@ public class NormalLoginActivity extends NotLoggedActivity implements OnPostExec
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			SessionCache.initialize(this, jsonObject);
-			invokeActivity(Activity.class);
+			invokeActivity(MeteoActivity.class);
 			return;
 		} catch (JSONException e) {
 			Log.e(Const.TAG, e.getMessage(), e);

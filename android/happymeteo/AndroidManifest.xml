@@ -60,12 +60,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.happymeteo.meteo.IndexActivity"
+            android:name="com.happymeteo.IndexActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.Activity"
+            android:name="com.happymeteo.meteo.MeteoActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

@@ -1,4 +1,4 @@
-package com.happymeteo;
+package com.happymeteo.meteo;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,11 +29,9 @@ import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
+import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.challenge.ChallengeScoreActivity;
-import com.happymeteo.meteo.GraphView;
-import com.happymeteo.meteo.GraphViewSeries;
-import com.happymeteo.meteo.GraphViewStyle;
 import com.happymeteo.meteo.GraphView.GraphViewData;
 import com.happymeteo.meteo.GraphViewSeries.GraphViewSeriesStyle;
 import com.happymeteo.models.SessionCache;
@@ -42,7 +40,7 @@ import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
 
-public class Activity extends LoggedActivity implements OnPostExecuteListener {
+public class MeteoActivity extends LoggedActivity implements OnPostExecuteListener {
 	
 	private TextView welcomeToday = null;
 	private GestureDetector gestureDetector = null;
@@ -204,7 +202,7 @@ public class Activity extends LoggedActivity implements OnPostExecuteListener {
 				try {
 					startActivity(Intent.createChooser(i, view.getContext().getString(R.string.mail)));
 				} catch (android.content.ActivityNotFoundException ex) {
-					Toast.makeText(Activity.this,
+					Toast.makeText(MeteoActivity.this,
 							"Non ci sono mail client installati.",
 							Toast.LENGTH_SHORT).show();
 				}
@@ -229,7 +227,7 @@ public class Activity extends LoggedActivity implements OnPostExecuteListener {
 		setupView();
 		
 		ServerUtilities.getAppynessByDay(this, SessionCache.getUser_id(this));
-		ServerUtilities.getAppynessByMonth(this, SessionCache.getUser_id(this));
+		//ServerUtilities.getAppynessByMonth(this, SessionCache.getUser_id(this));
 	}
 
 	@Override

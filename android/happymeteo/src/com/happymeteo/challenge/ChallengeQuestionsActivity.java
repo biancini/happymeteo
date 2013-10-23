@@ -30,9 +30,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.happymeteo.Activity;
 import com.happymeteo.ImpulseActivity;
 import com.happymeteo.R;
+import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
@@ -274,7 +274,7 @@ public class ChallengeQuestionsActivity extends ImpulseActivity implements OnPos
 				String enemyScore = intentParameters.get(SCORE);
 				if (enemyScore != null) extras.putString("tuChallenge", enemyScore);
 				
-				invokeActivity(Activity.class, extras);
+				invokeActivity(MeteoActivity.class, extras);
 			} catch (JSONException e) {
 				Log.e(Const.TAG, e.getMessage(), e);
 			}

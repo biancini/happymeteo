@@ -19,9 +19,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.happymeteo.Activity;
 import com.happymeteo.NotLoggedActivity;
 import com.happymeteo.R;
+import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
@@ -166,7 +166,7 @@ public class CreateAccountActivity extends NotLoggedActivity implements OnPostEx
 							create_account_work.getSelectedItemPosition(),
 							create_account_cap.getText().toString(),
 							SessionCache.USER_REGISTERED, 1, 1, 1);
-					invokeActivity(Activity.class);
+					invokeActivity(MeteoActivity.class);
 				} else { // NOT_CONFIRMED
 					AlertDialogManager.showNotification(this,
 							R.string.not_confirmed_user_notification_title,

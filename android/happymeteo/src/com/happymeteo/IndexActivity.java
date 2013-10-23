@@ -1,4 +1,4 @@
-package com.happymeteo.meteo;
+package com.happymeteo;
 
 import java.util.Arrays;
 
@@ -14,9 +14,8 @@ import android.widget.Button;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.happymeteo.Activity;
-import com.happymeteo.NotLoggedActivity;
 import com.happymeteo.R;
+import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.settings.CreateAccountActivity;
 import com.happymeteo.settings.NormalLoginActivity;
@@ -55,7 +54,7 @@ public class IndexActivity extends NotLoggedActivity implements OnPostExecuteLis
 		});
 		
 		if(SessionCache.isInitialized(getApplicationContext())) {
-			invokeActivity(Activity.class);
+			invokeActivity(MeteoActivity.class);
 		}
 	}
 
@@ -125,7 +124,7 @@ public class IndexActivity extends NotLoggedActivity implements OnPostExecuteLis
 				if (SessionCache.getRegistered(this) == SessionCache.USER_NOT_REGISTERED) {
 					invokeActivity(CreateAccountActivity.class);
 				} else {
-					invokeActivity(Activity.class);
+					invokeActivity(MeteoActivity.class);
 				}
 				return;
 			} catch (JSONException e) {

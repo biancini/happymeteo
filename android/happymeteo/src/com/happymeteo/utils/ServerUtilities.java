@@ -149,6 +149,7 @@ public class ServerUtilities {
 		new PostRequest(Const.GET_APPINESS_BY_DAY_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_APPINESS_BY_DAY_URL);
 	}
 
+	/*
 	public static void getAppynessByMonth(
 			NotLoggedActivity appyMeteoNotLoggedActivity,
 			String userId) {
@@ -157,6 +158,7 @@ public class ServerUtilities {
 		nvps.add(new BasicNameValuePair("user_id", userId));
 		new PostRequest(Const.GET_APPINESS_BY_MONTH_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_APPINESS_BY_MONTH_URL);
 	}
+	*/
 
 	public static void lostPassword(
 			NotLoggedActivity appyMeteoNotLoggedActivity,

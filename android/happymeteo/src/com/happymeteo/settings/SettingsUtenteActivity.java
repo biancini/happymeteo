@@ -15,9 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.happymeteo.Activity;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
+import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
@@ -104,7 +104,7 @@ public class SettingsUtenteActivity extends LoggedActivity implements OnPostExec
 							create_account_cap.getText().toString(),
 							SessionCache.USER_REGISTERED, jsonObject.getInt("today"), 
 							jsonObject.getInt("yesterday"), jsonObject.getInt("tomorrow"));
-					invokeActivity(Activity.class);
+					invokeActivity(MeteoActivity.class);
 				}
 			} catch (JSONException e) {
 				Log.e(Const.TAG, e.getMessage(), e);

@@ -23,9 +23,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.facebook.Session;
+import com.happymeteo.IndexActivity;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
-import com.happymeteo.meteo.IndexActivity;
 import com.happymeteo.models.Friend;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;

@@ -7,8 +7,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.happymeteo.IndexActivity;
 import com.happymeteo.R;
-import com.happymeteo.meteo.IndexActivity;
 
 public class SplashActivity extends Activity {
 	private static final long DELAY = 3000;
