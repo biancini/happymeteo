@@ -50,7 +50,7 @@
         
         <!-- Activities -->
         <activity
-            android:name="com.happymeteo.SplashActivity"
+            android:name="com.happymeteo.splash.SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -60,71 +60,71 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.happymeteo.IndexActivity"
+            android:name="com.happymeteo.meteo.IndexActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.AppyMeteoActivity"
+            android:name="com.happymeteo.meteo.AppyMeteoActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.AppyMapActivity"
+            android:name="com.happymeteo.map.AppyMapActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.QuestionActivity"
+            android:name="com.happymeteo.question.QuestionActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.FriendsFacebookActivity"
+            android:name="com.happymeteo.challenge.FriendsFacebookActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.ChallengeRequestActivity"
+            android:name="com.happymeteo.challenge.ChallengeRequestActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.ChallengeQuestionsActivity"
+            android:name="com.happymeteo.challenge.ChallengeQuestionsActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.ChallengeScoreActivity"
+            android:name="com.happymeteo.challenge.ChallengeScoreActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.InformationPageActivity"
+            android:name="com.happymeteo.information.InformationPageActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.CreateAccountActivity"
+            android:name="com.happymeteo.settings.CreateAccountActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.SettingsActivity"
+            android:name="com.happymeteo.settings.SettingsActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.SettingsUtenteActivity"
+        	android:name="com.happymeteo.settings.SettingsUtenteActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.ChangePasswordActivity"
+            android:name="com.happymeteo.settings.ChangePasswordActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.NormalLoginActivity"
+        	android:name="com.happymeteo.settings.NormalLoginActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.happymeteo.ChallengeActivity"
+            android:name="com.happymeteo.challenge.ChallengeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
@@ -152,7 +152,7 @@
         </receiver>
 
         <!-- DEVE ESSERE nello stesso package delle classi che lo usano, meglio se in quello specificato nell'AndroidManifest.xml -->
-        <service android:name="com.happymeteo.GCMIntentService" />
+        <service android:name="com.happymeteo.service.GCMIntentService" />
     </application>
 
 </manifest>

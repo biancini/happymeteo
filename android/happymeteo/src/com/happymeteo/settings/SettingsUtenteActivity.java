@@ -1,4 +1,4 @@
-package com.happymeteo;
+package com.happymeteo.settings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,10 +15,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.R;
+import com.happymeteo.meteo.AppyMeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.OnPostExecuteListener;
+import com.happymeteo.utils.ServerUtilities;
 
 public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements OnPostExecuteListener {
 	private String user_id = null;

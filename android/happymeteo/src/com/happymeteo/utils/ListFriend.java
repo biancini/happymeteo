@@ -16,8 +16,8 @@ import com.facebook.widget.ProfilePictureView;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.google.android.gcm.GCMRegistrar;
-import com.happymeteo.FriendsFacebookActivity;
 import com.happymeteo.R;
+import com.happymeteo.challenge.FriendsFacebookActivity;
 import com.happymeteo.models.Friend;
 import com.happymeteo.models.SessionCache;
 

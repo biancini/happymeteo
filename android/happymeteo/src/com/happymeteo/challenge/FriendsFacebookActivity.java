@@ -1,4 +1,4 @@
-package com.happymeteo;
+package com.happymeteo.challenge;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +22,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.facebook.Session;
+import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.R;
+import com.happymeteo.meteo.IndexActivity;
 import com.happymeteo.models.Friend;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;

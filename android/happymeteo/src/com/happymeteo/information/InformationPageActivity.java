@@ -1,8 +1,11 @@
-package com.happymeteo;
+package com.happymeteo.information;
 
 import android.os.Bundle;
 import android.text.Html;
 import android.widget.TextView;
+
+import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.R;
 
 public class InformationPageActivity extends AppyMeteoLoggedActivity {
 	

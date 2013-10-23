@@ -1,14 +1,18 @@
-package com.happymeteo;
+package com.happymeteo.map;
 
-import com.happymeteo.utils.Const;
-
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.R;
+import com.happymeteo.utils.Const;
+
 public class AppyMapActivity extends AppyMeteoLoggedActivity {
 
 	@Override
+	@SuppressLint("SetJavaScriptEnabled")
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_happy_map);
 		super.onCreate(savedInstanceState);

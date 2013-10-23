@@ -1,4 +1,4 @@
-package com.happymeteo;
+package com.happymeteo.meteo;
 
 import java.util.Arrays;
 
@@ -14,11 +14,15 @@ import android.widget.Button;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.happymeteo.AppyMeteoNotLoggedActivity;
+import com.happymeteo.R;
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.settings.CreateAccountActivity;
+import com.happymeteo.settings.NormalLoginActivity;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.OnPostExecuteListener;
+import com.happymeteo.utils.ServerUtilities;
 
 public class IndexActivity extends AppyMeteoNotLoggedActivity implements OnPostExecuteListener {
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();

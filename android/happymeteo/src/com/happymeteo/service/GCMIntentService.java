@@ -1,4 +1,4 @@
-package com.happymeteo;
+package com.happymeteo.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -9,7 +9,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
+import com.happymeteo.AppyMeteoImpulseActivity;
+import com.happymeteo.R;
+import com.happymeteo.challenge.ChallengeQuestionsActivity;
+import com.happymeteo.challenge.ChallengeRequestActivity;
+import com.happymeteo.challenge.ChallengeScoreActivity;
+import com.happymeteo.meteo.AppyMeteoActivity;
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.question.QuestionActivity;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 

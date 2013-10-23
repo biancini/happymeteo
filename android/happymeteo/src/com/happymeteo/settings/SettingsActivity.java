@@ -1,17 +1,8 @@
-package com.happymeteo;
+package com.happymeteo.settings;
 
 import org.jraf.android.backport.switchwidget.Switch;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.happymeteo.models.SessionCache;
-import com.happymeteo.utils.Const;
-import com.happymeteo.utils.GetRequest;
-import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.OnGetExecuteListener;
-import com.happymeteo.utils.OnPostExecuteListener;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -21,8 +12,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView;
+
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.R;
+import com.happymeteo.models.SessionCache;
+import com.happymeteo.utils.Const;
+import com.happymeteo.utils.GetRequest;
+import com.happymeteo.utils.OnGetExecuteListener;
+import com.happymeteo.utils.OnPostExecuteListener;
+import com.happymeteo.utils.ServerUtilities;
 
 public class SettingsActivity extends AppyMeteoLoggedActivity implements OnGetExecuteListener, OnPostExecuteListener {
 	private TextView settingsFacebookText;

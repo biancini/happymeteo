@@ -1,4 +1,4 @@
-package com.happymeteo;
+package com.happymeteo.meteo;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,6 +29,9 @@ import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
+import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.R;
+import com.happymeteo.challenge.ChallengeScoreActivity;
 import com.happymeteo.graph.GraphView;
 import com.happymeteo.graph.GraphView.GraphViewData;
 import com.happymeteo.graph.GraphViewSeries;
@@ -37,8 +40,8 @@ import com.happymeteo.graph.GraphViewStyle;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.OnPostExecuteListener;
+import com.happymeteo.utils.ServerUtilities;
 
 public class AppyMeteoActivity extends AppyMeteoLoggedActivity implements OnPostExecuteListener {
 	

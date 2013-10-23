@@ -1,4 +1,4 @@
-package com.happymeteo;
+package com.happymeteo.challenge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,11 @@ import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
 import com.google.android.gcm.GCMRegistrar;
+import com.happymeteo.AppyMeteoImpulseActivity;
+import com.happymeteo.R;
 import com.happymeteo.models.SessionCache;
-import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.OnPostExecuteListener;
+import com.happymeteo.utils.ServerUtilities;
 
 public class ChallengeRequestActivity extends AppyMeteoImpulseActivity implements OnPostExecuteListener {
 

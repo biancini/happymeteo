@@ -15,7 +15,12 @@ import com.devspark.sidenavigation.SideNavigationView;
 import com.devspark.sidenavigation.SideNavigationView.Mode;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.happymeteo.challenge.ChallengeActivity;
+import com.happymeteo.information.InformationPageActivity;
+import com.happymeteo.map.AppyMapActivity;
+import com.happymeteo.meteo.AppyMeteoActivity;
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.settings.SettingsActivity;
 import com.happymeteo.utils.Const;
 
 public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implements ISideNavigationCallback {
@@ -41,6 +46,7 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 		/* Home icon */
+		//TODO: il field home, dice Eclipse, c'è solo dalla versione 11 delleAPI
 		ImageView icon = (ImageView) findViewById(android.R.id.home);
 		if (icon != null) {
 			FrameLayout.LayoutParams iconLp = (FrameLayout.LayoutParams) icon.getLayoutParams();

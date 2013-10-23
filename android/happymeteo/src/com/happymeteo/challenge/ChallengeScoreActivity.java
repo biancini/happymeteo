@@ -1,4 +1,4 @@
-package com.happymeteo;
+package com.happymeteo.challenge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
+import com.happymeteo.AppyMeteoImpulseActivity;
+import com.happymeteo.R;
 import com.happymeteo.models.SessionCache;
 
 public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {

@@ -1,4 +1,4 @@
-package com.happymeteo;
+package com.happymeteo.settings;
 
 import ua.org.zasadnyy.zvalidations.Field;
 import ua.org.zasadnyy.zvalidations.Form;
@@ -12,14 +12,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.R;
 import com.happymeteo.captcha.Captcha;
 import com.happymeteo.captcha.TextCaptcha;
 import com.happymeteo.captcha.TextCaptcha.TextOptions;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
+import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
-import com.happymeteo.utils.OnPostExecuteListener;
 
 public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements OnPostExecuteListener {
 	

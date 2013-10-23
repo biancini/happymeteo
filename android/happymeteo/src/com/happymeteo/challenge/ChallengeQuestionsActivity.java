@@ -1,4 +1,4 @@
-package com.happymeteo;
+package com.happymeteo.challenge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,10 +30,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.happymeteo.AppyMeteoImpulseActivity;
+import com.happymeteo.R;
+import com.happymeteo.meteo.AppyMeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
-import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.utils.OnPostExecuteListener;
+import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.widget.AppyMeteoSeekBar;
 import com.happymeteo.widget.OnAppyMeteoSeekBarChangeListener;
 
