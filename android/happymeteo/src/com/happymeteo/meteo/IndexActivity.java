@@ -14,7 +14,8 @@ import android.widget.Button;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.happymeteo.AppyMeteoNotLoggedActivity;
+import com.happymeteo.Activity;
+import com.happymeteo.NotLoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.settings.CreateAccountActivity;
@@ -24,7 +25,7 @@ import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
 
-public class IndexActivity extends AppyMeteoNotLoggedActivity implements OnPostExecuteListener {
+public class IndexActivity extends NotLoggedActivity implements OnPostExecuteListener {
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 
 	@Override
@@ -54,7 +55,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements OnPostE
 		});
 		
 		if(SessionCache.isInitialized(getApplicationContext())) {
-			invokeActivity(AppyMeteoActivity.class);
+			invokeActivity(Activity.class);
 		}
 	}
 
@@ -124,7 +125,7 @@ public class IndexActivity extends AppyMeteoNotLoggedActivity implements OnPostE
 				if (SessionCache.getRegistered(this) == SessionCache.USER_NOT_REGISTERED) {
 					invokeActivity(CreateAccountActivity.class);
 				} else {
-					invokeActivity(AppyMeteoActivity.class);
+					invokeActivity(Activity.class);
 				}
 				return;
 			} catch (JSONException e) {

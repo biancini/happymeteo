@@ -30,7 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.happymeteo.AppyMeteoImpulseActivity;
+import com.happymeteo.ImpulseActivity;
 import com.happymeteo.R;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
@@ -39,7 +39,7 @@ import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.widget.AppyMeteoSeekBar;
 import com.happymeteo.widget.OnAppyMeteoSeekBarChangeListener;
 
-public class QuestionActivity extends AppyMeteoImpulseActivity implements OnPostExecuteListener, LocationListener {
+public class QuestionActivity extends ImpulseActivity implements OnPostExecuteListener, LocationListener {
 	private Map<String, String> params;
 	private JSONObject questions;
 	private LinearLayout linearLayout;

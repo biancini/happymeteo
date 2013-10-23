@@ -15,15 +15,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.Activity;
+import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
-import com.happymeteo.meteo.AppyMeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
 
-public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements OnPostExecuteListener {
+public class SettingsUtenteActivity extends LoggedActivity implements OnPostExecuteListener {
 	private String user_id = null;
 	private EditText create_account_fist_name = null;
 	private EditText create_account_last_name = null;
@@ -104,7 +104,7 @@ public class SettingsUtenteActivity extends AppyMeteoLoggedActivity implements O
 							create_account_cap.getText().toString(),
 							SessionCache.USER_REGISTERED, jsonObject.getInt("today"), 
 							jsonObject.getInt("yesterday"), jsonObject.getInt("tomorrow"));
-					invokeActivity(AppyMeteoActivity.class);
+					invokeActivity(Activity.class);
 				}
 			} catch (JSONException e) {
 				Log.e(Const.TAG, e.getMessage(), e);

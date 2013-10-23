@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
 import com.google.android.gcm.GCMRegistrar;
-import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.models.Challenge;
 import com.happymeteo.models.SessionCache;
@@ -32,7 +32,7 @@ import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.ServerUtilities;
 
-public class ChallengeActivity extends AppyMeteoLoggedActivity {
+public class ChallengeActivity extends LoggedActivity {
 
 	private View attachChallengeToView(final Challenge challenge) {
 		View rowView = getLayoutInflater().inflate(R.layout.activity_challenge_row, null);
@@ -46,7 +46,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 
 		TextView picker_result = (TextView) rowView.findViewById(R.id.picker_result);
 		Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
-		final AppyMeteoLoggedActivity activity = this;
+		final LoggedActivity activity = this;
 		if (challenge.getTurn() == 3) picker_button.setVisibility(View.GONE);
 		
 		boolean viewToAdd = false;

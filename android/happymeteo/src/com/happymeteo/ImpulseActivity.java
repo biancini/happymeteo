@@ -10,7 +10,7 @@ import android.util.Log;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 
-public abstract class AppyMeteoImpulseActivity extends AppyMeteoNotLoggedActivity {
+public abstract class ImpulseActivity extends NotLoggedActivity {
 
 	protected HashMap<String, String> intentParameters;
 

@@ -9,11 +9,11 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
-import com.happymeteo.AppyMeteoImpulseActivity;
+import com.happymeteo.ImpulseActivity;
 import com.happymeteo.R;
 import com.happymeteo.models.SessionCache;
 
-public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
+public class ChallengeScoreActivity extends ImpulseActivity {
 	
 	private final String IO_CHALLENGE = "ioChallenge";
 	private final String TU_CHALLENGE = "tuChallenge";

@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.text.Html;
 import android.widget.TextView;
 
-import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 
-public class InformationPageActivity extends AppyMeteoLoggedActivity {
+public class InformationPageActivity extends LoggedActivity {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

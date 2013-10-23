@@ -25,8 +25,7 @@ public class SplashActivity extends Activity {
 			@Override
 			public void run() {
 				SplashActivity.this.finish();
-				startActivity(new Intent(SplashActivity.this,
-						IndexActivity.class));
+				startActivity(new Intent(SplashActivity.this, IndexActivity.class));
 			}
 		}, DELAY);
 		scheduled = true;

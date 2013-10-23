@@ -30,9 +30,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.happymeteo.AppyMeteoImpulseActivity;
+import com.happymeteo.Activity;
+import com.happymeteo.ImpulseActivity;
 import com.happymeteo.R;
-import com.happymeteo.meteo.AppyMeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
@@ -40,7 +40,7 @@ import com.happymeteo.utils.ServerUtilities;
 import com.happymeteo.widget.AppyMeteoSeekBar;
 import com.happymeteo.widget.OnAppyMeteoSeekBarChangeListener;
 
-public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity implements OnPostExecuteListener, LocationListener {
+public class ChallengeQuestionsActivity extends ImpulseActivity implements OnPostExecuteListener, LocationListener {
 	private Map<String, String> params;
 	private JSONObject questions;
 	private LinearLayout linearLayout;
@@ -274,7 +274,7 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 				String enemyScore = intentParameters.get(SCORE);
 				if (enemyScore != null) extras.putString("tuChallenge", enemyScore);
 				
-				invokeActivity(AppyMeteoActivity.class, extras);
+				invokeActivity(Activity.class, extras);
 			} catch (JSONException e) {
 				Log.e(Const.TAG, e.getMessage(), e);
 			}

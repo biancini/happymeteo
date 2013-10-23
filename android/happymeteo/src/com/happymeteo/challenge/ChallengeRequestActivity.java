@@ -12,13 +12,13 @@ import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
 import com.google.android.gcm.GCMRegistrar;
-import com.happymeteo.AppyMeteoImpulseActivity;
+import com.happymeteo.ImpulseActivity;
 import com.happymeteo.R;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
 
-public class ChallengeRequestActivity extends AppyMeteoImpulseActivity implements OnPostExecuteListener {
+public class ChallengeRequestActivity extends ImpulseActivity implements OnPostExecuteListener {
 
 	private final String CHALLENGE_ID = "challenge_id";
 	private final String ADVERSARY_FACEBOOK_ID = "adversary_facebook_id";

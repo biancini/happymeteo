@@ -17,7 +17,7 @@
  * Copyright Jonas Gehring
  */
 
-package com.happymeteo.graph;
+package com.happymeteo.meteo;
 
 /**
  * the base interface for the graphview data.

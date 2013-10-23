@@ -17,7 +17,7 @@
  * Copyright Jonas Gehring
  */
 
-package com.happymeteo.graph;
+package com.happymeteo.meteo;
 
 import android.graphics.Color;
 

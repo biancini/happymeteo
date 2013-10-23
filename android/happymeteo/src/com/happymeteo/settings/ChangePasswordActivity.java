@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.captcha.Captcha;
 import com.happymeteo.captcha.TextCaptcha;
@@ -23,7 +23,7 @@ import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
 
-public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements OnPostExecuteListener {
+public class ChangePasswordActivity extends LoggedActivity implements OnPostExecuteListener {
 	
 	private ImageView changePassword_imageCaptcha;
 	private Captcha captcha;
@@ -66,7 +66,6 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements O
 					if (captcha.checkAnswer(changePassword_textCaptcha.getText().toString())) {
 						if (changePassword_password.getText().toString().equals(changePassword_confirm_password.getText().toString())) {
 							String newPassword = "";
-							
 							try {
 								newPassword = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY,
 										changePassword_password.getText().toString());
@@ -76,7 +75,6 @@ public class ChangePasswordActivity extends AppyMeteoLoggedActivity implements O
 							}	
 							
 							String oldPassword = "";
-							
 							try {
 								oldPassword = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, changePassword_old_password.getText().toString());
 							} catch (Exception e) {

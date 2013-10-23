@@ -19,9 +19,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.happymeteo.AppyMeteoNotLoggedActivity;
+import com.happymeteo.Activity;
+import com.happymeteo.NotLoggedActivity;
 import com.happymeteo.R;
-import com.happymeteo.meteo.AppyMeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
@@ -29,7 +29,7 @@ import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
 
-public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements OnPostExecuteListener {
+public class CreateAccountActivity extends NotLoggedActivity implements OnPostExecuteListener {
 	private String user_id;
 	private String facebook_id;
 	private EditText create_account_fist_name;
@@ -166,7 +166,7 @@ public class CreateAccountActivity extends AppyMeteoNotLoggedActivity implements
 							create_account_work.getSelectedItemPosition(),
 							create_account_cap.getText().toString(),
 							SessionCache.USER_REGISTERED, 1, 1, 1);
-					invokeActivity(AppyMeteoActivity.class);
+					invokeActivity(Activity.class);
 				} else { // NOT_CONFIRMED
 					AlertDialogManager.showNotification(this,
 							R.string.not_confirmed_user_notification_title,

@@ -1,4 +1,4 @@
-package com.happymeteo.meteo;
+package com.happymeteo;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,21 +29,20 @@ import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
-import com.happymeteo.AppyMeteoLoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.challenge.ChallengeScoreActivity;
-import com.happymeteo.graph.GraphView;
-import com.happymeteo.graph.GraphView.GraphViewData;
-import com.happymeteo.graph.GraphViewSeries;
-import com.happymeteo.graph.GraphViewSeries.GraphViewSeriesStyle;
-import com.happymeteo.graph.GraphViewStyle;
+import com.happymeteo.meteo.GraphView;
+import com.happymeteo.meteo.GraphViewSeries;
+import com.happymeteo.meteo.GraphViewStyle;
+import com.happymeteo.meteo.GraphView.GraphViewData;
+import com.happymeteo.meteo.GraphViewSeries.GraphViewSeriesStyle;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
 
-public class AppyMeteoActivity extends AppyMeteoLoggedActivity implements OnPostExecuteListener {
+public class Activity extends LoggedActivity implements OnPostExecuteListener {
 	
 	private TextView welcomeToday = null;
 	private GestureDetector gestureDetector = null;
@@ -205,7 +204,7 @@ public class AppyMeteoActivity extends AppyMeteoLoggedActivity implements OnPost
 				try {
 					startActivity(Intent.createChooser(i, view.getContext().getString(R.string.mail)));
 				} catch (android.content.ActivityNotFoundException ex) {
-					Toast.makeText(AppyMeteoActivity.this,
+					Toast.makeText(Activity.this,
 							"Non ci sono mail client installati.",
 							Toast.LENGTH_SHORT).show();
 				}

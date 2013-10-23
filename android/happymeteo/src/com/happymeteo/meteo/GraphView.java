@@ -1,4 +1,4 @@
-package com.happymeteo.graph;
+package com.happymeteo.meteo;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;

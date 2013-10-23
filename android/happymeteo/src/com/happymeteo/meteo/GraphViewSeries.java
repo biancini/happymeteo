@@ -17,7 +17,7 @@
  * Copyright Jonas Gehring
  */
 
-package com.happymeteo.graph;
+package com.happymeteo.meteo;
 
 import java.util.ArrayList;
 import java.util.List;

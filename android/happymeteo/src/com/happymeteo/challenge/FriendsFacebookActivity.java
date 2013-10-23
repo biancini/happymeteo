@@ -23,7 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.facebook.Session;
-import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.meteo.IndexActivity;
 import com.happymeteo.models.Friend;
@@ -33,7 +33,7 @@ import com.happymeteo.utils.GetRequest;
 import com.happymeteo.utils.ListFriend;
 import com.happymeteo.utils.OnGetExecuteListener;
 
-public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements OnGetExecuteListener {
+public class FriendsFacebookActivity extends LoggedActivity implements OnGetExecuteListener {
 
 	public static int FRIENDS_WITH_APP_TYPE = 1;
 	public static int FRIENDS_NO_APP_TYPE = 0;

@@ -88,4 +88,10 @@
 	<string name="email">Mail</string>
 	<string name="facebook">Facebook</string>
 	<string name="search">Cerca..</string>
+	<string name="notify_domande">Il momento delle domande!</string>
+	<string name="notify_gioca">Gioca con me!</string>
+	<string name="notify_richiesta">L\'utente vuole giocare con te</string>
+	<string name="notify_rifiuto">L\'utente non vuole giocare con te</string>
+	<string name="notify_turno">E\' il tuo turno!</string>
+	<string name="notify_finegioco">Il gioco \u00E9 finito!</string>
 </resources>

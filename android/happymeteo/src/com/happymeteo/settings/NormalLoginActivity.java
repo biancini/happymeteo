@@ -15,16 +15,16 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.happymeteo.AppyMeteoNotLoggedActivity;
+import com.happymeteo.Activity;
+import com.happymeteo.NotLoggedActivity;
 import com.happymeteo.R;
-import com.happymeteo.meteo.AppyMeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
 
-public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements OnPostExecuteListener {
+public class NormalLoginActivity extends NotLoggedActivity implements OnPostExecuteListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -94,7 +94,7 @@ public class NormalLoginActivity extends AppyMeteoNotLoggedActivity implements O
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			SessionCache.initialize(this, jsonObject);
-			invokeActivity(AppyMeteoActivity.class);
+			invokeActivity(Activity.class);
 			return;
 		} catch (JSONException e) {
 			Log.e(Const.TAG, e.getMessage(), e);

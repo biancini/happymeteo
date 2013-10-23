@@ -17,13 +17,12 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.happymeteo.challenge.ChallengeActivity;
 import com.happymeteo.information.InformationPageActivity;
-import com.happymeteo.map.AppyMapActivity;
-import com.happymeteo.meteo.AppyMeteoActivity;
+import com.happymeteo.map.MapActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.settings.SettingsActivity;
 import com.happymeteo.utils.Const;
 
-public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity implements ISideNavigationCallback {
+public abstract class LoggedActivity extends NotLoggedActivity implements ISideNavigationCallback {
 
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private SideNavigationView sideNavigationView;
@@ -120,11 +119,11 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 			break;
 
 		case R.id.side_navigation_menu_item2:
-			invokeActivity(AppyMeteoActivity.class);
+			invokeActivity(Activity.class);
 			break;
 
 		case R.id.side_navigation_menu_item3:
-			invokeActivity(AppyMapActivity.class);
+			invokeActivity(MapActivity.class);
 			break;
 
 		case R.id.side_navigation_menu_item4:
@@ -186,8 +185,8 @@ public abstract class AppyMeteoLoggedActivity extends AppyMeteoNotLoggedActivity
 		if (sideNavigationView.isShown()) {
 			sideNavigationView.hideMenu();
 		} else {
-			Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " " + AppyMeteoActivity.class);
-			if (!this.getClass().equals(AppyMeteoActivity.class)) super.onBackPressed();
+			Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " " + Activity.class);
+			if (!this.getClass().equals(Activity.class)) super.onBackPressed();
 		}
 	}
 

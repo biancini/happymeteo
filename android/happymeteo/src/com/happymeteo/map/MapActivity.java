@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.utils.Const;
 
-public class AppyMapActivity extends AppyMeteoLoggedActivity {
+public class MapActivity extends LoggedActivity {
 
 	@Override
 	@SuppressLint("SetJavaScriptEnabled")

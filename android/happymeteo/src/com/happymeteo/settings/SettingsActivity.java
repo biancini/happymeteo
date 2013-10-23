@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.happymeteo.AppyMeteoLoggedActivity;
+import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.utils.Const;
@@ -26,7 +26,7 @@ import com.happymeteo.utils.OnGetExecuteListener;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
 
-public class SettingsActivity extends AppyMeteoLoggedActivity implements OnGetExecuteListener, OnPostExecuteListener {
+public class SettingsActivity extends LoggedActivity implements OnGetExecuteListener, OnPostExecuteListener {
 	private TextView settingsFacebookText;
 	private Switch settingsFacebookSwitch;
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();

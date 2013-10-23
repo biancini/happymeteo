@@ -14,7 +14,6 @@ public class AppyMeteoSeekBar extends SeekBar {
 	
 	public AppyMeteoSeekBar(Context context) {
 		super(context);
-		
 		barBounds = new Rect();
 	}
 	

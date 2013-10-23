@@ -9,12 +9,12 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
-import com.happymeteo.AppyMeteoImpulseActivity;
+import com.happymeteo.Activity;
+import com.happymeteo.ImpulseActivity;
 import com.happymeteo.R;
 import com.happymeteo.challenge.ChallengeQuestionsActivity;
 import com.happymeteo.challenge.ChallengeRequestActivity;
 import com.happymeteo.challenge.ChallengeScoreActivity;
-import com.happymeteo.meteo.AppyMeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.question.QuestionActivity;
 import com.happymeteo.utils.Const;
@@ -52,7 +52,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * */
 	@Override
 	protected void onMessage(Context context, Intent intent) {
-		Log.i(Const.TAG, "Received message: "+intent.getExtras());
+		Log.i(Const.TAG, "Received message: " + intent.getExtras());
 
 		/* Notifies user */
 		generateNotification(context, intent.getExtras());
@@ -75,7 +75,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * */
 	@Override
 	public void onError(Context context, String errorId) {
-		Log.i(Const.TAG, "Received error: " + errorId);
+		Log.w(Const.TAG, "Received error: " + errorId);
 	}
 
 	@Override
@@ -85,23 +85,20 @@ public class GCMIntentService extends GCMBaseIntentService {
 		return super.onRecoverableError(context, errorId);
 	}
 	
-	private static String getMessageFromCollapseKey(String collapse_key) {
-		if(collapse_key.equals("questions"))
-			return "Il momento delle domande!";
-		if(collapse_key.equals("request_challenge"))
-			return "Gioca con me!";
-		if(collapse_key.equals("accepted_challenge_turn1_true"))
-			return "L'utente vuole giocare con te";
-		if(collapse_key.equals("accepted_challenge_turn1_false"))
-			return "L'utente non vuole giocare con te";
-		if(collapse_key.equals("accepted_challenge_turn2"))
-			return "E' il tuo turno!";
-		if(collapse_key.equals("accepted_challenge_turn3"))
-			return "Il gioco \u00E9 finito!";
+	private static String getMessageFromCollapseKey(Context context, String collapse_key) {
+		int text = -1;
+		if (collapse_key.equals("questions")) text = R.string.notify_domande;
+		if (collapse_key.equals("request_challenge")) text = R.string.notify_gioca;
+		if (collapse_key.equals("accepted_challenge_turn1_true")) text = R.string.notify_richiesta;
+		if (collapse_key.equals("accepted_challenge_turn1_false")) text = R.string.notify_rifiuto;
+		if (collapse_key.equals("accepted_challenge_turn2")) text = R.string.notify_turno;
+		if (collapse_key.equals("accepted_challenge_turn3")) text = R.string.notify_finegioco;
+		
+		if (text > -1) return context.getString(text);
 		return collapse_key;
 	}
 	
-	private static Class<? extends AppyMeteoImpulseActivity> getActivityFromCollapseKey(String collapse_key) {
+	private static Class<? extends ImpulseActivity> getActivityFromCollapseKey(String collapse_key) {
 		if(collapse_key.equals("questions"))
 			return QuestionActivity.class;
 		if(collapse_key.equals("request_challenge"))
@@ -135,12 +132,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 				collapse_key = extras.getString("appy_key");
 			}
 			
-			String message = getMessageFromCollapseKey(collapse_key);
-			Class<? extends AppyMeteoImpulseActivity> clazz = getActivityFromCollapseKey(collapse_key);
+			String message = getMessageFromCollapseKey(context, collapse_key);
+			Class<? extends ImpulseActivity> clazz = getActivityFromCollapseKey(collapse_key);
 			Intent notificationIntent = null;
 			
 			if(clazz == null) {
-				notificationIntent = new Intent(context, AppyMeteoActivity.class);
+				notificationIntent = new Intent(context, Activity.class);
 			} else {
 				notificationIntent = new Intent(context, clazz);
 			}
