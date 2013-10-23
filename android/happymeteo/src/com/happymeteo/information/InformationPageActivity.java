@@ -21,7 +21,7 @@ public class InformationPageActivity extends AppyMeteoLoggedActivity {
 				"che coprano l\'intero territorio italiano per produrre delle previsioni meteo di felicit\u00E0 su tutto " +
 				"il Paese. Le previsioni riguarderanno sia tu che leggi, sia l\'area geografica che ti sta intorno. " +
 				"Il benessere soggettivo \u00E9 ormai una dimensione universalmente considerata tra le determinanti della " +
-				"qualit\u00E0 della vita, come \u00E9 certificato anche dall'Istat, che lo considera una delle 12 componenti del BES (Benessere Equo e Sostenibile)" +
+				"qualit\u00E0 della vita, come \u00E9 certificato anche dall'Istat, che lo considera una delle 12 componenti del BES (Benessere Equo e Sostenibile).<br/>" +
 				
 				"Noi ci proponiamo l'obiettivo di mappare tutta Italia attraverso una metodologia che sia coinvolgente e partecipativa. " +
 				"Le previsioni meteo della felicit\u00E0, infatti, sono costruite sulla base di quello che tu ci dirai, e di quello che ci " +

@@ -37,9 +37,12 @@ public class ListFriend extends AsyncTask<String, Void, Void> {
 		this.waitLayout = waitLayout;
 	}
 	
+	public void setFriends(List<Friend> friends) {
+		this.friends = friends;
+	}
+
 	private void attachFriendToView(View rowView, Friend friend) {
-		ProfilePictureView profilePictureView = (ProfilePictureView) rowView
-				.findViewById(R.id.picker_profile_pic_stub);
+		ProfilePictureView profilePictureView = (ProfilePictureView) rowView.findViewById(R.id.picker_profile_pic_stub);
 		profilePictureView.setProfileId(friend.getId());
 
 		/* Set Profile name */
@@ -56,7 +59,6 @@ public class ListFriend extends AsyncTask<String, Void, Void> {
 			picker_title.setTextColor(activity.getResources().getColor(R.color.white));
 			picker_button.setBackgroundResource(R.drawable.pulsante_gioca);
 			picker_button.setOnClickListener(new OnClickListener() {
-				
 				public void onClick(View view) {
 					ServerUtilities.requestChallenge(
 						activity, 
@@ -69,7 +71,6 @@ public class ListFriend extends AsyncTask<String, Void, Void> {
 			/* Feed Dialog: https://developers.facebook.com/docs/reference/dialogs/feed/ */
 			picker_button.setBackgroundResource(R.drawable.pulsante_invita);
 			picker_button.setOnClickListener(new OnClickListener() {
-				
 				public void onClick(View view) {
 					FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(activity, Session.getActiveSession());
 					feedDialogBuilder.setDescription("Vieni in appymeteo!");
@@ -89,8 +90,7 @@ public class ListFriend extends AsyncTask<String, Void, Void> {
 		
 		for (int i = 0; i < friends.size() && i < MAX_SIZE; i++) {
 			Friend friend = friends.get(i);
-			final View view = activity.getLayoutInflater().inflate(
-					R.layout.activity_friends_facebook_list_row, null);
+			final View view = activity.getLayoutInflater().inflate(R.layout.activity_friends_facebook_list_row, null);
 			attachFriendToView(view, friend);
 			views.add(view);
 		}

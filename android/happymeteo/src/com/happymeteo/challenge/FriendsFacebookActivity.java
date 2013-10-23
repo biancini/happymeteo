@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.DialogInterface;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -51,8 +52,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 			counter[FRIENDS_WITH_APP_TYPE] = null;
 			counter[FRIENDS_NO_APP_TYPE] = null;
 			String accessToken = Session.getActiveSession().getAccessToken();
-			String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token="
-					+ accessToken;
+			String serverUrl = "https://graph.facebook.com/me/friends?fields=name,installed&access_token=" + accessToken;
 			new GetRequest(this, this).execute(serverUrl);
 		}
 	}
@@ -77,6 +77,10 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 
 		final List<Friend> friendsWithApp = new ArrayList<Friend>();
 		final List<Friend> friendsNoApp = new ArrayList<Friend>();
+		
+		final List<ListFriend> fiendsWithAppTasks = new ArrayList<ListFriend>(); 
+		final List<ListFriend> fiendsNoAppTasks = new ArrayList<ListFriend>(); 
+		
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			JSONArray data = jsonObject.getJSONArray("data");
@@ -119,10 +123,9 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 						}
 					}
 
-					new ListFriend(FRIENDS_WITH_APP_TYPE,
-							FriendsFacebookActivity.this, newFriends,
-							facebookPickerListViewWithApp, waitFriendsWithApp)
-							.execute();
+					ListFriend curTask = new ListFriend(FRIENDS_WITH_APP_TYPE, FriendsFacebookActivity.this, newFriends, facebookPickerListViewWithApp, waitFriendsWithApp);
+					fiendsWithAppTasks.add(curTask);
+					curTask.execute();
 				}
 
 				@Override
@@ -137,7 +140,6 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 			});
 
 			searchFriendsNoApp.addTextChangedListener(new TextWatcher() {
-
 				@Override
 				public void onTextChanged(CharSequence cs, int start,
 						int before, int count) {
@@ -154,10 +156,15 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 						}
 					}
 
-					new ListFriend(FRIENDS_NO_APP_TYPE,
-							FriendsFacebookActivity.this, newFriends,
-							facebookPickerListViewNoApp, waitFriendsNoApp)
-							.execute();
+					for (ListFriend curTask : fiendsNoAppTasks) {
+						if (curTask.getStatus() == Status.RUNNING && !curTask.isCancelled()) curTask.cancel(true);
+						if (curTask.getStatus() == Status.PENDING) curTask.cancel(true);
+					}
+					fiendsNoAppTasks.clear();
+					
+					ListFriend curTask = new ListFriend(FRIENDS_NO_APP_TYPE, FriendsFacebookActivity.this, newFriends, facebookPickerListViewNoApp, waitFriendsNoApp);
+					fiendsNoAppTasks.add(curTask);
+					curTask.execute();
 				}
 
 				@Override
@@ -171,11 +178,13 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements 
 				}
 			});
 
-			new ListFriend(FRIENDS_WITH_APP_TYPE, this, friendsWithApp,
-					facebookPickerListViewWithApp, waitFriendsWithApp)
-					.execute();
-			new ListFriend(FRIENDS_NO_APP_TYPE, this, friendsNoApp,
-					facebookPickerListViewNoApp, waitFriendsNoApp).execute();
+			ListFriend curTaskWith = new ListFriend(FRIENDS_WITH_APP_TYPE, this, friendsWithApp, facebookPickerListViewWithApp, waitFriendsWithApp);
+			fiendsWithAppTasks.add(curTaskWith);
+			curTaskWith.execute();
+			
+			ListFriend curTaskNo = new ListFriend(FRIENDS_NO_APP_TYPE, this, friendsNoApp, facebookPickerListViewNoApp, waitFriendsNoApp);
+			fiendsNoAppTasks.add(curTaskNo);
+			curTaskNo.execute();
 		} catch (Exception e) {
 			Log.e(Const.TAG, e.getMessage(), e);
 		}

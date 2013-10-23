@@ -234,15 +234,15 @@ public class ChallengeQuestionsActivity extends AppyMeteoImpulseActivity impleme
 							switchButton.setLayoutParams(llp);
 							switchButton.setChecked(true);
 							switchButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-									@Override
-									public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-										try {
-											questions.put(id_question, isChecked ? "0" : "1");
-										} catch (JSONException e) {
-											Log.e(Const.TAG, e.getMessage(), e);
-										}
+								@Override
+								public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+									try {
+										questions.put(id_question, isChecked ? "0" : "1");
+									} catch (JSONException e) {
+										Log.e(Const.TAG, e.getMessage(), e);
 									}
-								});
+								}
+							});
 
 							linearLayout1.addView(switchButton);
 

@@ -42,7 +42,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 		TextView picker_title = (TextView) rowView.findViewById(R.id.picker_title);
 		picker_title.setText("Hai giocato con "
 				+ challenge.getAdversary().getFirst_name() +
-				" il "+challenge.getCreated());
+				" il " + challenge.getCreated());
 
 		TextView picker_result = (TextView) rowView.findViewById(R.id.picker_result);
 		Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
@@ -176,7 +176,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 			imageTurns.add((ImageView) activity.findViewById(R.id.partiteTurn3));
 
 			for(int i = 0; i < challenges.length(); i++) {
-				JSONObject jsonObject;
+				JSONObject jsonObject = null;
 				try {
 					jsonObject = challenges.getJSONObject(i);
 					final Challenge challenge = new Challenge(jsonObject);
@@ -186,10 +186,10 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 					if (view != null) {
 						runOnUiThread(new Runnable() {
 							public void run() {
-								Log.i(Const.TAG, "turn: "+challenge.getTurn());
+								Log.i(Const.TAG, "turn: " + challenge.getTurn());
 								challengeTurns.get(challenge.getTurn()).addView(view);
 								visibility.set(challenge.getTurn(), true);
-								Log.i(Const.TAG, "visibility: "+visibility.get(challenge.getTurn()));
+								Log.i(Const.TAG, "visibility: " + visibility.get(challenge.getTurn()));
 							}
 						});
 					}
@@ -202,7 +202,7 @@ public class ChallengeActivity extends AppyMeteoLoggedActivity {
 				public void run() {
 					for (int i = 0; i < 4; i++) {
 						if (visibility.get(i)) {
-							Log.i(Const.TAG, "end visibility: "+i+" "+visibility.get(i));
+							Log.i(Const.TAG, "end visibility: " + i + " " + visibility.get(i));
 							challengeTurns.get(i).setVisibility(View.VISIBLE);
 							imageTurns.get(i).setVisibility(View.VISIBLE);
 						}
