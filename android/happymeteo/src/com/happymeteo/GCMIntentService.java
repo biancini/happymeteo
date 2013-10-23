@@ -90,7 +90,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if(collapse_key.equals("accepted_challenge_turn2"))
 			return "E' il tuo turno!";
 		if(collapse_key.equals("accepted_challenge_turn3"))
-			return "Il gioco è finito!";
+			return "Il gioco \u00E9 finito!";
 		return collapse_key;
 	}
 	

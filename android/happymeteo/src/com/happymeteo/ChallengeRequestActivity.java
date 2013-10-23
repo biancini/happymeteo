@@ -33,7 +33,7 @@ public class ChallengeRequestActivity extends AppyMeteoImpulseActivity implement
 
 		TextView adversaryPicTextView = (TextView) findViewById(R.id.adversaryName);
 		String adversaryName = intentParameters.get(ADVERSARY_NAME);
-		if (adversaryName != null) adversaryPicTextView.setText(adversaryName.toUpperCase(Locale.ITALY));
+		if (adversaryName != null) adversaryPicTextView.setText(adversaryName.toUpperCase(Locale.getDefault()));
 
 		Button btnAcceptChallenge = (Button) findViewById(R.id.btnAcceptChallenge);
 		btnAcceptChallenge.setOnClickListener(new OnClickListener() {

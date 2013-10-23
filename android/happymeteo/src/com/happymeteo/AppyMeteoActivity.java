@@ -67,7 +67,7 @@ public class AppyMeteoActivity extends AppyMeteoLoggedActivity implements OnPost
 				
 				flipper.setInAnimation(context, R.anim.in_from_right);
 				flipper.setOutAnimation(context, R.anim.out_to_left);
-				welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase(Locale.ITALY) + "_DIARIO");
+				welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase(Locale.getDefault()) + "_DIARIO");
 				flipper.showNext();
 				
 				return true;
@@ -80,7 +80,7 @@ public class AppyMeteoActivity extends AppyMeteoLoggedActivity implements OnPost
 				flipper.showPrevious();
 				
 				if (flipper.getDisplayedChild() == 0) {
-					welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase(Locale.ITALY) + "_OGGI");
+					welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase(Locale.getDefault()) + "_OGGI");
 				}
 				
 				return true;
@@ -184,7 +184,7 @@ public class AppyMeteoActivity extends AppyMeteoLoggedActivity implements OnPost
 		PushNotificationsService.register(getApplicationContext());
 
 		welcomeToday = (TextView) findViewById(R.id.welcomeToday);
-		welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase(Locale.ITALY) + "_OGGI");
+		welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase(Locale.getDefault()) + "_OGGI");
 
 		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
 		gestureDetector = new GestureDetector(getBaseContext(), new MyGestureDetector(this, viewFlipper));
@@ -216,7 +216,7 @@ public class AppyMeteoActivity extends AppyMeteoLoggedActivity implements OnPost
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
 				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(view.getContext(), Session.getActiveSession());
-				feedDialogBuilder.setDescription("Ho appena misurato la mia felicità con appymeteo. LINK");
+				feedDialogBuilder.setDescription("Ho appena misurato la mia felicit\u00E0 con appymeteo. LINK");
 				feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
 				WebDialog webDialog = feedDialogBuilder.build();
 				webDialog.show();
@@ -297,7 +297,7 @@ public class AppyMeteoActivity extends AppyMeteoLoggedActivity implements OnPost
 				for (int i = 0; i < groups; ++i) viewDayData[i] = new GraphViewData(i+1, 0.0);
 				
 				boolean future = false;
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALY);
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 				
 				int arrayIndex = 0;
 				double curValue = 0.0;

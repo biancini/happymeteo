@@ -29,8 +29,7 @@ import com.happymeteo.utils.GetRequest;
 import com.happymeteo.utils.ListFriend;
 import com.happymeteo.utils.OnGetExecuteListener;
 
-public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
-		OnGetExecuteListener {
+public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements OnGetExecuteListener {
 
 	public static int FRIENDS_WITH_APP_TYPE = 1;
 	public static int FRIENDS_NO_APP_TYPE = 0;
@@ -56,10 +55,9 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 	}
 
 	private class MyFriendComparable implements Comparator<Friend> {
-
 		@Override
-		public int compare(Friend o1, Friend o2) {
-			return o1.getName().compareTo(o2.getName());
+		public int compare(Friend f1, Friend f2) {
+			return f1.getName().compareTo(f2.getName());
 		}
 	}
 
@@ -79,6 +77,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			JSONArray data = jsonObject.getJSONArray("data");
+			
 			if (data != null) {
 				for (int i = 0; i < data.length(); i++) {
 					JSONObject profile = data.getJSONObject(i);
@@ -87,16 +86,13 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 					friend.setName(profile.getString("name"));
 
 					try {
-						friend.setInstalled(profile.getString("installed") != null
-								&& profile.getBoolean("installed"));
+						friend.setInstalled(profile.getString("installed") != null && profile.getBoolean("installed"));
 					} catch (JSONException e) {
 						friend.setInstalled(false);
 					}
 
-					if (friend.isInstalled())
-						friendsWithApp.add(friend);
-					else
-						friendsNoApp.add(friend);
+					if (friend.isInstalled()) friendsWithApp.add(friend);
+					else friendsNoApp.add(friend);
 				}
 			}
 
@@ -104,10 +100,8 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 			Collections.sort(friendsNoApp, new MyFriendComparable());
 
 			searchFriendsWithApp.addTextChangedListener(new TextWatcher() {
-
 				@Override
-				public void onTextChanged(CharSequence cs, int start,
-						int before, int count) {
+				public void onTextChanged(CharSequence cs, int start, int before, int count) {
 					Log.i(Const.TAG, "onTextChanged: " + cs.toString());
 
 					List<Friend> newFriends = new ArrayList<Friend>();
@@ -116,9 +110,7 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 							if (friend
 									.getName()
 									.toLowerCase(Locale.getDefault())
-									.contains(
-											cs.toString().toLowerCase(
-													Locale.getDefault()))) {
+									.contains(cs.toString().toLowerCase(Locale.getDefault()))) {
 								newFriends.add(friend);
 							}
 						}
@@ -131,8 +123,8 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 				}
 
 				@Override
-				public void beforeTextChanged(CharSequence s, int start,
-						int count, int after) {
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+					// Do nothing
 				}
 
 				@Override
@@ -151,12 +143,9 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 					List<Friend> newFriends = new ArrayList<Friend>();
 					if (friendsNoApp != null) {
 						for (Friend friend : friendsNoApp) {
-							if (friend
-									.getName()
+							if (friend.getName()
 									.toLowerCase(Locale.getDefault())
-									.contains(
-											cs.toString().toLowerCase(
-													Locale.getDefault()))) {
+									.contains(cs.toString().toLowerCase(Locale.getDefault()))) {
 								newFriends.add(friend);
 							}
 						}
@@ -169,8 +158,8 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 				}
 
 				@Override
-				public void beforeTextChanged(CharSequence s, int start,
-						int count, int after) {
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+					// Do nothing
 				}
 
 				@Override
@@ -195,12 +184,12 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 				R.string.request_challenge_notification_msg,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
+						// Do nothing
 					}
 				});
 	}
 
-	public String clear(final int type, final LinearLayout pickerLayout,
-			final RelativeLayout waitLayout) {
+	public String clear(final int type, final LinearLayout pickerLayout, final RelativeLayout waitLayout) {
 		String id = null;
 
 		synchronized (counter) {
@@ -220,7 +209,10 @@ public class FriendsFacebookActivity extends AppyMeteoLoggedActivity implements
 	}
 
 	public void populate(final int type, final String id,
-			final LinearLayout pickerLayout, final RelativeLayout waitLayout, final List<View> views) {
+			final LinearLayout pickerLayout,
+			final RelativeLayout waitLayout,
+			final List<View> views) {
+
 		synchronized (counter) {
 			if (counter[type] != null && id != null && id.equals(counter[type])) {
 				runOnUiThread(new Runnable() {

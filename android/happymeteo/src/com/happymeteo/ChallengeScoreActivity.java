@@ -34,7 +34,7 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 		}
 		
 		ioPic.setProfileId(SessionCache.getFacebook_id(this));
-		ioNameTextView.setText(SessionCache.getFirst_name(this).toUpperCase(Locale.ITALY));
+		ioNameTextView.setText(SessionCache.getFirst_name(this).toUpperCase(Locale.getDefault()));
 		
 		TextView tuChallengeTextView = (TextView) findViewById(R.id.tuChallenge);
 		ProfilePictureView tuPic = (ProfilePictureView) findViewById(R.id.tuPic);
@@ -50,7 +50,7 @@ public class ChallengeScoreActivity extends AppyMeteoImpulseActivity {
 		if (tuFacebookId != null) tuPic.setProfileId(tuFacebookId);
 
 		String tuName = intentParameters.get(TU_NAME);
-		if (tuName != null) tuNameTextView.setText(tuName.toUpperCase(Locale.ITALY));
+		if (tuName != null) tuNameTextView.setText(tuName.toUpperCase(Locale.getDefault()));
 	}
 
 	@Override

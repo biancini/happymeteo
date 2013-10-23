@@ -12,7 +12,7 @@
     <string name="select_gender">Seleziona il sesso</string>
     <string name="male">Maschio</string>
     <string name="female">Femmina</string>
-    <string name="select_age">Seleziona l\'età</string>
+    <string name="select_age">Seleziona l\'et\u00E0</string>
     <string name="agelist1">15&#8211;24 anni</string>
     <string name="agelist2">25&#8211;35</string>
     <string name="agelist3">35&#8211;50</string>
@@ -29,7 +29,7 @@
     <string name="insert_email">Inserisci la tua email</string>
     <string name="insert_fist_name">Inserisci il tuo nome</string>
     <string name="insert_last_name">Inserisci il tuo cognome</string>
-    <string name="insert_location">Inserisci la tua città di residenza</string>
+    <string name="insert_location">Inserisci la tua citt&#224; di residenza</string>
     <string name="insert_password">Inserisci la tua password</string>
     <string name="insert_confirm_password">Inserisci nuovamente la tua password</string>
     <string name="insert_cap">Inserisci il tuo cap</string>
@@ -58,7 +58,7 @@
     <string name="change_password">Modifica password</string>
     <string name="error_captcha">Captcha sbagliato, reinserirlo</string>
     <string name="insert_captcha">Inserisci il testo dell\'immagine</string>
-    <string name="are_you_sure">Sei sicuro che vuoi farlo? Questa operazione è irreversibile</string>
+    <string name="are_you_sure">Sei sicuro che vuoi farlo? Questa operazione &#232; irreversibile</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
     <string name="renew_captcha">Rigenera captcha</string>
@@ -82,7 +82,7 @@
     <string name="ok">OK</string>
     <string name="error_impulse">Errore di configurazione dell\'impulso</string>
 	<string name="not_confirmed_user_notification_title">Account non verificato</string>
-	<string name="not_confirmed_user_notification_msg">Presto verrà inviata una email di conferma all\'email indicata</string>
+	<string name="not_confirmed_user_notification_msg">Presto verr\u00E0 inviata una email di conferma all\'email indicata</string>
 	<string name="request_challenge_notification_msg">Richiesta di gioco inviata con successo</string>
 	<string name="retry">Riprova</string>
 	<string name="email">Mail</string>

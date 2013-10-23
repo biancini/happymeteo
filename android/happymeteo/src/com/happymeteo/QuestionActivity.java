@@ -177,7 +177,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements OnPost
 							appyMeteoSeekBar.setLayoutParams(llp_seekBar);
 
 							final TextView tvText = new TextView(this);
-							tvText.setText("1�");
+							tvText.setText("1\u00B0");
 							tvText.setBackgroundResource(R.drawable.baloon);
 							tvText.setGravity(Gravity.CENTER);
 							tvText.setTextColor(getResources().getColor(R.color.white));
@@ -201,7 +201,7 @@ public class QuestionActivity extends AppyMeteoImpulseActivity implements OnPost
 									} catch (JSONException e) {
 										Log.e(Const.TAG, e.getMessage(), e);
 									}
-									tvText.setText(value + "�");
+									tvText.setText(value + "\u00B0");
 
 									LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
 											LinearLayout.LayoutParams.WRAP_CONTENT,
