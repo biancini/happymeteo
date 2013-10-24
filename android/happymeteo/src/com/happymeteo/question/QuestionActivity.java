@@ -84,11 +84,7 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 
 			@Override
 			public void onClick(View view) {
-				Log.d(Const.TAG, "location: " + location);
-
 				if (location != null) {
-					Log.i(Const.TAG, "Latitude: " + location.getLatitude()
-							+ ", Longitude: " + location.getLongitude());
 					params.put("latitude", String.valueOf(location.getLatitude()));
 					params.put("longitude", String.valueOf(location.getLongitude()));
 				}
@@ -293,25 +289,25 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 	@Override
 	public void onLocationChanged(Location location) {
 		this.location = location;
-		Toast.makeText(
-				this,
-				"location: " + Double.toString(location.getLatitude()) + " "
-						+ Double.toString(location.getLongitude()) + " " + location.getProvider(),
-				Toast.LENGTH_LONG).show();
+//		Toast.makeText(
+//				this,
+//				"location: " + Double.toString(location.getLatitude()) + " "
+//						+ Double.toString(location.getLongitude()) + " " + location.getProvider(),
+//				Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		Toast.makeText(this, "onProviderDisabled: " + provider, Toast.LENGTH_LONG).show();
+//		Toast.makeText(this, "onProviderDisabled: " + provider, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		Toast.makeText(this, "onProviderEnabled: " + provider, Toast.LENGTH_LONG).show();
+//		Toast.makeText(this, "onProviderEnabled: " + provider, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		Toast.makeText(this, "onStatusChanged: " + provider + " " + status, Toast.LENGTH_LONG).show();
+//		Toast.makeText(this, "onStatusChanged: " + provider + " " + status, Toast.LENGTH_LONG).show();
 	}
 }

@@ -6,7 +6,7 @@
 
     <!-- GCM requires Android SDK version 2.2 (API level 8) or above. -->
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="8"
         android:targetSdkVersion="16" />
 
     <!-- GCM connects to Internet Services. -->
@@ -146,8 +146,8 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <!-- DEVE ESSERE il package scritto in cima per forza -->
-                <category android:name="com.happymeteo" />
+                <!-- DEVE ESSERE scritto il package di GCM Service -->
+                <category android:name="com.happymeteo.service" />
             </intent-filter>
         </receiver>
 

@@ -109,8 +109,6 @@ public class FriendsFacebookActivity extends LoggedActivity implements OnGetExec
 			searchFriendsWithApp.addTextChangedListener(new TextWatcher() {
 				@Override
 				public void onTextChanged(CharSequence cs, int start, int before, int count) {
-					Log.i(Const.TAG, "onTextChanged: " + cs.toString());
-
 					List<Friend> newFriends = new ArrayList<Friend>();
 					if (friendsWithApp != null) {
 						for (Friend friend : friendsWithApp) {
@@ -143,8 +141,6 @@ public class FriendsFacebookActivity extends LoggedActivity implements OnGetExec
 				@Override
 				public void onTextChanged(CharSequence cs, int start,
 						int before, int count) {
-					Log.i(Const.TAG, "onTextChanged: " + cs.toString());
-
 					List<Friend> newFriends = new ArrayList<Friend>();
 					if (friendsNoApp != null) {
 						for (Friend friend : friendsNoApp) {
@@ -211,7 +207,7 @@ public class FriendsFacebookActivity extends LoggedActivity implements OnGetExec
 				public void run() {
 					waitLayout.setVisibility(View.VISIBLE);
 					pickerLayout.removeAllViews();
-					
+
 				}
 			});
 			id = counter[type];
@@ -224,7 +220,6 @@ public class FriendsFacebookActivity extends LoggedActivity implements OnGetExec
 			final LinearLayout pickerLayout,
 			final RelativeLayout waitLayout,
 			final List<View> views) {
-
 		synchronized (counter) {
 			if (counter[type] != null && id != null && id.equals(counter[type])) {
 				runOnUiThread(new Runnable() {
