@@ -59,8 +59,6 @@ public class InformationPageActivity extends LoggedActivity {
 		final TextView information_page3 = (TextView) findViewById(R.id.information_page3);
 		information_page3.setText(Html.fromHtml(information3));
 		
-		final int maxLines = 4;
-		
 		TextView information_pagesub1 = (TextView) findViewById(R.id.information_pagesub1);
 		information_pagesub1.setOnClickListener(new OnClickListener() {
 			

@@ -37,8 +37,7 @@ public class GraphView extends LinearLayout {
 		@SuppressWarnings("deprecation")
 		public GraphViewContentView(Context context) {
 			super(context);
-			setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-					LayoutParams.FILL_PARENT));
+			setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		}
 
 		/**
@@ -63,8 +62,7 @@ public class GraphView extends LinearLayout {
 			if (labelTextHeight == null || horLabelTextWidth == null) {
 				paint.setTextSize(getGraphViewStyle().getTextSize());
 				String testLabel = horlabels[0];
-				paint.getTextBounds(testLabel, 0, testLabel.length(),
-						textBounds);
+				paint.getTextBounds(testLabel, 0, testLabel.length(), textBounds);
 				labelTextHeight = (textBounds.height());
 				horLabelTextWidth = (textBounds.width());
 			}
@@ -80,8 +78,7 @@ public class GraphView extends LinearLayout {
 			paint.setTextAlign(Align.LEFT);
 			// horizontal labels + lines
 			int hors = horlabels.length - 1;
-			if (hors < 1)
-				hors = 1;
+			if (hors < 1) hors = 1;
 
 			if (maxY == minY) {
 				// if min/max is the same, fake it so that we can render a line
@@ -356,12 +353,11 @@ public class GraphView extends LinearLayout {
 					float spaceX = (float) (lastEndX + ((endX - lastEndX) * xi / (numSpace - 1)));
 					float spaceY = (float) (lastEndY + ((endY - lastEndY) * xi / (numSpace - 1)));
 
-					// start => bottom edge
 					float startX = spaceX;
+					// start => bottom edge
 
 					// do not draw over the left edge
-					if (startX - horstart > 1) {
-						
+					if (startX - horstart > 1) {						
 						canvas.drawLine(startX, startY, spaceX, spaceY, paint);
 					}
 				}
@@ -378,21 +374,17 @@ public class GraphView extends LinearLayout {
 		paint.setTextAlign(Align.LEFT);
 
 		int hors = horlabels.length - 1;
-		if (hors < 1)
-			hors = 1;
+		if (hors < 1) hors = 1;
 
 		paint.setColor(getResources().getColor(R.color.black));
 		paint.setStyle(Style.FILL);
-		canvas.drawRect(0, graphheight + border, graphwidth, graphheight
-				+ (2 * border), paint);
+		canvas.drawRect(0, graphheight + border, graphwidth, graphheight + (2 * border), paint);
 
 		for (int i = 0; i < horlabels.length; i++) {
 			paint.setTextAlign(Align.CENTER);
-			float x_text = ((graphwidth / (horlabels.length * 2)) * ((i * 2) + 1))
-					+ horstart;
+			float x_text = ((graphwidth / (horlabels.length * 2)) * ((i * 2) + 1)) + horstart;
 			paint.setColor(getResources().getColor(R.color.white));
-			canvas.drawText(horlabels[i], x_text, graphheight + border
-					+ (border / 2), paint);
+			canvas.drawText(horlabels[i], x_text, graphheight + border + (border / 2), paint);
 		}
 	}
 
@@ -552,8 +544,7 @@ public class GraphView extends LinearLayout {
 	 * need to call this manually.
 	 */
 	public void redrawAll() {
-		if (!staticHorizontalLabels)
-			horlabels = null;
+		if (!staticHorizontalLabels) horlabels = null;
 		numberformatter[0] = null;
 		numberformatter[1] = null;
 		labelTextHeight = null;
