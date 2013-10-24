@@ -25,6 +25,6 @@ package com.happymeteo.meteo;
  * this interface.
  */
 public interface GraphViewDataInterface {
-	public double getX();
-	public double getY();
+	public float getX();
+	public float getY();
 }

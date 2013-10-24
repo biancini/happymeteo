@@ -294,13 +294,13 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 				int groupBy = 7;
 				int groups = daysInMonth/groupBy + (((daysInMonth % groupBy) == 0) ? 0 : 1);
 				GraphViewData[] viewDayData = new GraphViewData[groups];
-				for (int i = 0; i < groups; ++i) viewDayData[i] = new GraphViewData(i+1, 0.0);
+				for (int i = 0; i < groups; ++i) viewDayData[i] = new GraphViewData(i+1, 0.0f);
 				
 				boolean future = false;
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 				
 				int arrayIndex = 0;
-				double curValue = 0.0;
+				float curValue = 0.0f;
 				int curElems = 0;
 				for (int i = 0; i < daysInMonth; i++) {
 					String date = dateFormat.format(cal.getTime());
@@ -312,10 +312,10 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 					}
 					
 					if (i % groupBy == 0) {
-						double val = (curElems > 0) ? curValue / curElems : 0.0;
+						float val = (curElems > 0) ? curValue / curElems : 0.0f;
 						viewDayData[arrayIndex].valueY = val;
 						arrayIndex++;
-						curValue = 0.0;
+						curValue = 0.0f;
 						curElems = 0;
 					}
 					

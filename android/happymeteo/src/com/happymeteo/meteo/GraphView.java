@@ -9,12 +9,12 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -53,11 +53,11 @@ public class GraphView extends LinearLayout {
 			float horstart = 0;
 			float height = getHeight();
 			float width = getWidth() - 1;
-			double maxY = getMaxY();
-			double minY = getMinY();
-			double maxX = getMaxX(false);
-			double minX = getMinX(false);
-			double diffX = maxX - minX;
+			float maxY = getMaxY();
+			float minY = getMinY();
+			float maxX = getMaxX(false);
+			float minX = getMinX(false);
+			float diffX = maxX - minX;
 
 			// measure bottom text
 			if (labelTextHeight == null || horLabelTextWidth == null) {
@@ -73,7 +73,7 @@ public class GraphView extends LinearLayout {
 			float graphheight = height - (2 * border);
 			graphwidth = width;
 
-			double diffY = maxY - minY;
+			float diffY = maxY - minY;
 			paint.setStrokeCap(Paint.Cap.ROUND);
 
 			paint.setTextSize(20f);
@@ -83,20 +83,16 @@ public class GraphView extends LinearLayout {
 			if (hors < 1)
 				hors = 1;
 
-			Log.i("GraphView", "graphwidth: " + graphwidth);
-			Log.i("GraphView", "graphheight: " + graphheight);
-			Log.i("GraphView", "horlabels.length: " + horlabels.length);
-
 			if (maxY == minY) {
 				// if min/max is the same, fake it so that we can render a line
 				if (maxY == 0) {
 					// if both are zero, change the values to prevent division
 					// by zero
-					maxY = 1.0d;
-					minY = 0.0d;
+					maxY = 1.0f;
+					minY = 0.0f;
 				} else {
-					maxY = maxY * 1.05d;
-					minY = minY * 0.95d;
+					maxY = maxY * 1.05f;
+					minY = minY * 0.95f;
 				}
 			}
 
@@ -122,8 +118,8 @@ public class GraphView extends LinearLayout {
 				viewportStart -= f * viewportSize / graphwidth;
 
 				// minimal and maximal view limit
-				double minX = getMinX(true);
-				double maxX = getMaxX(true);
+				float minX = getMinX(true);
+				float maxX = getMaxX(true);
 				if (viewportStart < minX) {
 					viewportStart = minX;
 				} else if (viewportStart + viewportSize > maxX) {
@@ -185,22 +181,22 @@ public class GraphView extends LinearLayout {
 	 * one data set for a graph series
 	 */
 	static public class GraphViewData implements GraphViewDataInterface {
-		public double valueX;
-		public double valueY;
+		public float valueX;
+		public float valueY;
 
-		public GraphViewData(double valueX, double valueY) {
+		public GraphViewData(float valueX, float valueY) {
 			super();
 			this.valueX = valueX;
 			this.valueY = valueY;
 		}
 
 		@Override
-		public double getX() {
+		public float getX() {
 			return valueX;
 		}
 
 		@Override
-		public double getY() {
+		public float getY() {
 			return valueY;
 		}
 	}
@@ -213,16 +209,16 @@ public class GraphView extends LinearLayout {
 	private String[] horlabels;
 	private boolean scrollable;
 	private boolean disableTouch;
-	private double viewportStart;
-	private double viewportSize;
+	private float viewportStart;
+	private float viewportSize;
 	private final NumberFormat[] numberformatter = new NumberFormat[2];
 	private final List<GraphViewSeries> graphSeries;
 	private boolean showLegend = false;
 	private float legendWidth = 120;
 	private LegendAlign legendAlign = LegendAlign.MIDDLE;
 	private boolean manualYAxis;
-	private double manualMaxYValue;
-	private double manualMinYValue;
+	private float manualMaxYValue;
+	private float manualMinYValue;
 	private GraphViewStyle graphViewStyle;
 	private final GraphViewContentView graphViewContentView;
 	private Integer labelTextHeight;
@@ -306,44 +302,66 @@ public class GraphView extends LinearLayout {
 		redrawAll();
 	}
 
-	public void drawSeries(Canvas canvas, GraphViewDataInterface[] values, float graphwidth, float graphheight, float border, double minX, double minY, double diffX, double diffY, float horstart) {
-		paint.setColor(getResources().getColor(R.color.yellow));
+	public void drawSeries(Canvas canvas, GraphViewDataInterface[] values,
+			float graphwidth, float graphheight, float border, float minX,
+			float minY, float diffX, float diffY, float horstart) {
+		
 		paint.setStrokeWidth(3.0f);
-		
+
 		// draw background
-		double lastEndY = minY / diffY * graphwidth;
-		double lastEndX = minX / diffX * graphwidth;
+		float lastEndY = minY / diffY * graphwidth;
+		float lastEndX = minX / diffX * graphwidth;
+
+		Resources res = getResources();
+		Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.baloon);
 		
-		 Resources res = getResources();
-		 Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.baloon);
+		Matrix mirror = new Matrix();
+		mirror.preScale(-1, 1);
+		Bitmap mirroredBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mirror, false);
 		
+		float spaceFromPoint = 5;
+
 		float startY = graphheight + border;
 		for (int i = 0; i < values.length; i++) {
-			double valY = values[i].getY() - minY;
-			double ratY = valY / diffY;
-			double y = graphheight * ratY;
+			float valY = values[i].getY() - minY;
+			float ratY = valY / diffY;
+			float y = graphheight * ratY;
 
-			double valX = values[i].getX() - minX;
-			double ratX = valX / diffX;
-			double x = graphwidth * ratX;
-
+			float valX = values[i].getX() - minX;
+			float ratX = valX / diffX;
+			float x = graphwidth * ratX;
+			
 			float endX = (float) x + (horstart + 1);
-			float endY = (float) (border - y) + graphheight +2;
+			float endY = (float) (border - y) + graphheight + 2;
+			
+			paint.setColor(getResources().getColor(R.color.white));
+			
+			if(i ==  values.length-1) {
+				canvas.drawBitmap(mirroredBitmap.copy(Bitmap.Config.ARGB_8888, true), endX - bitmap.getWidth(), endY - bitmap.getHeight() - spaceFromPoint,
+						paint);
+				canvas.drawText(String.valueOf((int) valY), endX - bitmap.getWidth() + bitmap.getWidth()/3 + spaceFromPoint, endY - bitmap.getHeight()/2 - spaceFromPoint, paint);
+			} else {
+				canvas.drawBitmap(bitmap.copy(Bitmap.Config.ARGB_8888, true), endX, endY - bitmap.getHeight() - spaceFromPoint,
+						paint);
+				canvas.drawText(String.valueOf((int) valY), endX + bitmap.getWidth()/3 + spaceFromPoint, endY - bitmap.getHeight()/2 - spaceFromPoint, paint);
+			}
+			
+			paint.setColor(getResources().getColor(R.color.yellow));
 
 			if (i > 0) {
 				// fill space between last and current point
-				double numSpace = ((endX - lastEndX) / 3f) +1;
+				float numSpace = ((endX - lastEndX) / 3f) + 1;
 				for (int xi = 0; xi < numSpace; xi++) {
-					float spaceX = (float) (lastEndX + ((endX-lastEndX)*xi/(numSpace-1)));
-					float spaceY = (float) (lastEndY + ((endY-lastEndY)*xi/(numSpace-1)));
+					float spaceX = (float) (lastEndX + ((endX - lastEndX) * xi / (numSpace - 1)));
+					float spaceY = (float) (lastEndY + ((endY - lastEndY) * xi / (numSpace - 1)));
 
 					// start => bottom edge
 					float startX = spaceX;
 
 					// do not draw over the left edge
-					if (startX-horstart > 1) {
+					if (startX - horstart > 1) {
+						
 						canvas.drawLine(startX, startY, spaceX, spaceY, paint);
-						canvas.drawBitmap(bitmap.copy(Bitmap.Config.ARGB_8888, true), startX, startY, paint);
 					}
 				}
 			}
@@ -409,7 +427,7 @@ public class GraphView extends LinearLayout {
 	 *            warning: only override this, if you really know want you're
 	 *            doing!
 	 */
-	protected double getMaxX(boolean ignoreViewport) {
+	protected float getMaxX(boolean ignoreViewport) {
 		// if viewport is set, use this
 		if (!ignoreViewport && viewportSize != 0) {
 			return viewportStart + viewportSize;
@@ -417,7 +435,7 @@ public class GraphView extends LinearLayout {
 			// otherwise use the max x value
 			// values must be sorted by x, so the last value has the largest X
 			// value
-			double highest = 0;
+			float highest = 0;
 			if (graphSeries.size() > 0) {
 				GraphViewDataInterface[] values = graphSeries.get(0).values;
 
@@ -444,8 +462,8 @@ public class GraphView extends LinearLayout {
 	 * 
 	 * warning: only override this, if you really know want you're doing!
 	 */
-	protected double getMaxY() {
-		double largest;
+	protected float getMaxY() {
+		float largest;
 		if (manualYAxis) {
 			largest = manualMaxYValue;
 		} else {
@@ -467,11 +485,8 @@ public class GraphView extends LinearLayout {
 	 * otherwise minimal X value of all data.
 	 * 
 	 * @param ignoreViewport
-	 * 
-	 *            warning: only override this, if you really know want you're
-	 *            doing!
 	 */
-	protected double getMinX(boolean ignoreViewport) {
+	protected float getMinX(boolean ignoreViewport) {
 		// if viewport is set, use this
 		if (!ignoreViewport && viewportSize != 0) {
 			return viewportStart;
@@ -479,7 +494,7 @@ public class GraphView extends LinearLayout {
 			// otherwise use the min x value
 			// values must be sorted by x, so the first value has the smallest X
 			// value
-			double lowest = 0;
+			float lowest = 0;
 			if (graphSeries.size() > 0) {
 				GraphViewDataInterface[] values = graphSeries.get(0).values;
 				if (values.length == 0)
@@ -503,8 +518,8 @@ public class GraphView extends LinearLayout {
 	 * 
 	 * warning: only override this, if you really know want you're doing!
 	 */
-	protected double getMinY() {
-		double smallest;
+	protected float getMinY() {
+		float smallest;
 		if (manualYAxis) {
 			smallest = manualMinYValue;
 		} else {
@@ -594,7 +609,7 @@ public class GraphView extends LinearLayout {
 	public void scrollToEnd() {
 		if (!scrollable)
 			throw new IllegalStateException("This GraphView is not scrollable.");
-		double max = getMaxX(true);
+		float max = getMaxX(true);
 		viewportStart = max - viewportSize;
 		redrawAll();
 	}
@@ -649,7 +664,7 @@ public class GraphView extends LinearLayout {
 	}
 
 	/**
-	 * you have to set the bounds {@link #setManualYAxisBounds(double, double)}.
+	 * you have to set the bounds {@link #setManualYAxisBounds(float, float)}.
 	 * That automatically enables manualYAxis-flag. if you want to disable the
 	 * menual y axis, call this method with false.
 	 * 
@@ -665,7 +680,7 @@ public class GraphView extends LinearLayout {
 	 * @param max
 	 * @param min
 	 */
-	public void setManualYAxisBounds(double max, double min) {
+	public void setManualYAxisBounds(float max, float min) {
 		manualMaxYValue = max;
 		manualMinYValue = min;
 		manualYAxis = true;
@@ -673,7 +688,7 @@ public class GraphView extends LinearLayout {
 
 	/**
 	 * the user can scroll (horizontal) the graph. This is only useful if you
-	 * use a viewport {@link #setViewPort(double, double)} which doesn't
+	 * use a viewport {@link #setViewPort(float, float)} which doesn't
 	 * displays all data.
 	 * 
 	 * @param scrollable
@@ -689,12 +704,12 @@ public class GraphView extends LinearLayout {
 	/**
 	 * set's the viewport for the graph.
 	 * 
-	 * @see #setManualYAxisBounds(double, double) to limit the y-viewport
+	 * @see #setManualYAxisBounds(float, float) to limit the y-viewport
 	 * @param start
 	 *            x-value
 	 * @param size
 	 */
-	public void setViewPort(double start, double size) {
+	public void setViewPort(float start, float size) {
 		viewportStart = start;
 		viewportSize = size;
 	}
