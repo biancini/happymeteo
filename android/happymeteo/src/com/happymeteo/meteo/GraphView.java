@@ -315,10 +315,10 @@ public class GraphView extends LinearLayout {
 		Resources res = getResources();
 		Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.baloon);
 		
-		Matrix mirror = new Matrix();
-		mirror.preScale(-1, 1);
-		Bitmap mirroredBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mirror, false);
-		
+//		Matrix mirror = new Matrix();
+//		mirror.preScale(-1, 1);
+//		Bitmap mirroredBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mirror, false);
+//		
 		float spaceFromPoint = 5;
 
 		float startY = graphheight + border;
@@ -336,11 +336,12 @@ public class GraphView extends LinearLayout {
 			
 			paint.setColor(getResources().getColor(R.color.white));
 			
-			if(i ==  values.length-1) {
-				canvas.drawBitmap(mirroredBitmap.copy(Bitmap.Config.ARGB_8888, true), endX - bitmap.getWidth(), endY - bitmap.getHeight() - spaceFromPoint,
-						paint);
-				canvas.drawText(String.valueOf((int) valY), endX - bitmap.getWidth() + bitmap.getWidth()/3 + spaceFromPoint, endY - bitmap.getHeight()/2 - spaceFromPoint, paint);
-			} else {
+//			if(i ==  values.length-1) {
+//				canvas.drawBitmap(mirroredBitmap.copy(Bitmap.Config.ARGB_8888, true), endX - bitmap.getWidth(), endY - bitmap.getHeight() - spaceFromPoint,
+//						paint);
+//				canvas.drawText(String.valueOf((int) valY), endX - bitmap.getWidth() + bitmap.getWidth()/3 + spaceFromPoint, endY - bitmap.getHeight()/2 - spaceFromPoint, paint);
+//			} else {
+			if(i < values.length-1) {
 				canvas.drawBitmap(bitmap.copy(Bitmap.Config.ARGB_8888, true), endX, endY - bitmap.getHeight() - spaceFromPoint,
 						paint);
 				canvas.drawText(String.valueOf((int) valY), endX + bitmap.getWidth()/3 + spaceFromPoint, endY - bitmap.getHeight()/2 - spaceFromPoint, paint);

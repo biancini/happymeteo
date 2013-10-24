@@ -2,8 +2,11 @@ package com.happymeteo.information;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 
@@ -30,7 +33,6 @@ public class InformationPageActivity extends LoggedActivity {
 				"Nuvole di cattivo umore si addensano nel tuo futuro? Ti interessa tenere un diario della tua felicit\u00E0? " +
 				"Vuoi confrontare la tua felicit\u00E0 con quella dei tuoi amici? Questa \u00E9 l'app giusta per te! </body></html>";
 		
-		
 		String information2 = "<html><body>" +	
 				"<b>Come funziona</b><br/>" +
 				"Una volta iscritta/o, riceverai 4 impulsi in momenti casuali, durante la giornata. Con il minimo sforzo, " +
@@ -48,14 +50,61 @@ public class InformationPageActivity extends LoggedActivity {
 				"&#8226; E poi perch\u00E9 ogni risposta ti fa guadagnare punti, cos\u00EC come invitare i tuoi amici a scaricare l'app e giocare. E una classifica aggiornata ti dir\u00E0 dove ti posizioni. <br/><br/>" +
 				"Buon divertimento! E appymeteo! </body></html>";
 		
-		TextView information_page1 = (TextView) findViewById(R.id.information_page1);
+		final TextView information_page1 = (TextView) findViewById(R.id.information_page1);
 		information_page1.setText(Html.fromHtml(information1));
 		
-		TextView information_page2 = (TextView) findViewById(R.id.information_page2);
+		final TextView information_page2 = (TextView) findViewById(R.id.information_page2);
 		information_page2.setText(Html.fromHtml(information2));
 		
-		TextView information_page3 = (TextView) findViewById(R.id.information_page3);
+		final TextView information_page3 = (TextView) findViewById(R.id.information_page3);
 		information_page3.setText(Html.fromHtml(information3));
+		
+		final int maxLines = 4;
+		
+		TextView information_pagesub1 = (TextView) findViewById(R.id.information_pagesub1);
+		information_pagesub1.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View view) {
+				view.setVisibility(View.GONE);
+				ObjectAnimator animation = ObjectAnimator.ofInt(
+						information_page1,
+				        "maxLines",
+				        50);
+				animation.setDuration(1000);
+				animation.start();
+			}
+		});
+		
+		TextView information_pagesub2 = (TextView) findViewById(R.id.information_pagesub2);
+		information_pagesub2.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View view) {
+				view.setVisibility(View.GONE);
+				ObjectAnimator animation = ObjectAnimator.ofInt(
+						information_page2,
+				        "maxLines",
+				        50);
+				animation.setDuration(1000);
+				animation.start();
+			}
+		});
+		
+		TextView information_pagesub3 = (TextView) findViewById(R.id.information_pagesub3);
+		information_pagesub3.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View view) {
+				view.setVisibility(View.GONE);
+				ObjectAnimator animation = ObjectAnimator.ofInt(
+						information_page3,
+				        "maxLines",
+				        50);
+				animation.setDuration(1000);
+				animation.start();
+			}
+		});
 	}
 
 	@Override
