@@ -18,13 +18,14 @@ public class InformationPageActivity extends LoggedActivity {
 		super.onCreate(savedInstanceState);
 		
 		String information1 = "<html><body>" +
-				"Per prima cosa, vorremmo che tu sapessi che <b>stai partecipando a un progetto di ricerca scientifico</b>. " +
+				"Per prima cosa, vorremmo che tu sapessi che <b>stai partecipando a un progetto di ricerca scientifica</b>. " +
 				"Lo diciamo perch\u00E9, oltre al divertimento di usare la app, stai contribuendo a qualcosa di utile per tutti. " +
 				"Lo scopo di appymeteo \u00E9, infatti, quello di raccogliere una mole di dati " +
 				"che coprano l\'intero territorio italiano per produrre delle previsioni meteo di felicit\u00E0 su tutto " +
 				"il Paese. Le previsioni riguarderanno sia tu che leggi, sia l\'area geografica che ti sta intorno. " +
 				"Il benessere soggettivo \u00E9 ormai una dimensione universalmente considerata tra le determinanti della " +
-				"qualit\u00E0 della vita, come \u00E9 certificato anche dall'Istat, che lo considera una delle 12 componenti del BES (Benessere Equo e Sostenibile).<br/>" +
+				"qualit\u00E0 della vita, come \u00E9 certificato anche dall'Istat, che lo considera una delle 12 componenti del "+
+				"BES (Benessere Equo e Sostenibile).<br/>" +
 				
 				"Noi ci proponiamo l'obiettivo di mappare tutta Italia attraverso una metodologia che sia coinvolgente e partecipativa. " +
 				"Le previsioni meteo della felicit\u00E0, infatti, sono costruite sulla base di quello che tu ci dirai, e di quello che ci " +
@@ -60,47 +61,83 @@ public class InformationPageActivity extends LoggedActivity {
 		information_page3.setText(Html.fromHtml(information3));
 		
 		TextView information_pagesub1 = (TextView) findViewById(R.id.information_pagesub1);
-		information_pagesub1.setOnClickListener(new OnClickListener() {
-			
+		information_pagesub1.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View view) {
-				view.setVisibility(View.GONE);
-				ObjectAnimator animation = ObjectAnimator.ofInt(
-						information_page1,
-				        "maxLines",
-				        50);
-				animation.setDuration(1000);
-				animation.start();
+				//view.setVisibility(View.GONE);
+				if (((TextView) view).getText().equals(getResources().getText(R.string.continue_to_read))) {
+					ObjectAnimator animation = ObjectAnimator.ofInt(
+							information_page1,
+					        "maxLines",
+					        50);
+					animation.setDuration(1000);
+					animation.start();
+					
+					((TextView) view).setText(getResources().getText(R.string.close_read));
+				} else {
+					ObjectAnimator animation = ObjectAnimator.ofInt(
+							information_page1,
+					        "maxLines",
+					        4);
+					animation.setDuration(1000);
+					animation.start();
+					
+					((TextView) view).setText(getResources().getText(R.string.continue_to_read));
+				}
 			}
 		});
 		
 		TextView information_pagesub2 = (TextView) findViewById(R.id.information_pagesub2);
 		information_pagesub2.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View view) {
-				view.setVisibility(View.GONE);
-				ObjectAnimator animation = ObjectAnimator.ofInt(
-						information_page2,
-				        "maxLines",
-				        50);
-				animation.setDuration(1000);
-				animation.start();
+				//view.setVisibility(View.GONE);
+				if (((TextView) view).getText().equals(getResources().getText(R.string.continue_to_read))) {
+					ObjectAnimator animation = ObjectAnimator.ofInt(
+							information_page2,
+					        "maxLines",
+					        50);
+					animation.setDuration(1000);
+					animation.start();
+					
+					((TextView) view).setText(getResources().getText(R.string.close_read));
+				} else {
+					ObjectAnimator animation = ObjectAnimator.ofInt(
+							information_page2,
+					        "maxLines",
+					        4);
+					animation.setDuration(1000);
+					animation.start();
+					
+					((TextView) view).setText(getResources().getText(R.string.continue_to_read));
+				}
 			}
 		});
 		
 		TextView information_pagesub3 = (TextView) findViewById(R.id.information_pagesub3);
 		information_pagesub3.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View view) {
-				view.setVisibility(View.GONE);
-				ObjectAnimator animation = ObjectAnimator.ofInt(
-						information_page3,
-				        "maxLines",
-				        50);
-				animation.setDuration(1000);
-				animation.start();
+				//view.setVisibility(View.GONE);
+				if (((TextView) view).getText().equals(getResources().getText(R.string.continue_to_read))) {
+					ObjectAnimator animation = ObjectAnimator.ofInt(
+							information_page3,
+					        "maxLines",
+					        50);
+					animation.setDuration(1000);
+					animation.start();
+					
+					((TextView) view).setText(getResources().getText(R.string.close_read));
+				} else {
+					ObjectAnimator animation = ObjectAnimator.ofInt(
+							information_page3,
+					        "maxLines",
+					        4);
+					animation.setDuration(1000);
+					animation.start();
+					
+					((TextView) view).setText(getResources().getText(R.string.continue_to_read));
+				}
 			}
 		});
 	}

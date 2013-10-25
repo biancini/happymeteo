@@ -94,4 +94,5 @@
 	<string name="notify_turno">E\' il tuo turno!</string>
 	<string name="notify_finegioco">Il gioco \u00E9 finito!</string>
 	<string name="continue_to_read">Continua a leggere..</string>
+	<string name="close_read">Chiudi</string>
 </resources>

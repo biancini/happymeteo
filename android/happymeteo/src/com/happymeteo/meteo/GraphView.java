@@ -9,7 +9,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
@@ -105,8 +104,7 @@ public class GraphView extends LinearLayout {
 						minX, minY, diffX, diffY, horstart);
 			}
 
-			drawHorizontalLabels(canvas, horlabels, graphwidth, graphheight,
-					border, horstart);
+			drawHorizontalLabels(canvas, horlabels, graphwidth, graphheight, border, horstart);
 		}
 
 		private void onMoveGesture(float f) {
@@ -124,8 +122,7 @@ public class GraphView extends LinearLayout {
 				}
 
 				// labels have to be regenerated
-				if (!staticHorizontalLabels)
-					horlabels = null;
+				if (!staticHorizontalLabels) horlabels = null;
 			}
 			invalidate();
 		}
@@ -141,35 +138,26 @@ public class GraphView extends LinearLayout {
 
 			boolean handled = false;
 
-			if (!handled) {
-				// Log.d("GraphView",
-				// "on touch event scale not handled+"+lastTouchEventX);
-				// if not scaled, scroll
-				if ((event.getAction() & MotionEvent.ACTION_DOWN) == MotionEvent.ACTION_DOWN) {
-					scrollingStarted = true;
-					handled = true;
-				}
-				if ((event.getAction() & MotionEvent.ACTION_UP) == MotionEvent.ACTION_UP) {
-					scrollingStarted = false;
-					lastTouchEventX = 0;
-					handled = true;
-				}
-				if ((event.getAction() & MotionEvent.ACTION_MOVE) == MotionEvent.ACTION_MOVE) {
-					if (scrollingStarted) {
-						if (lastTouchEventX != 0) {
-							onMoveGesture(event.getX() - lastTouchEventX);
-						}
-						lastTouchEventX = event.getX();
-						handled = true;
-					}
-				}
-				if (handled)
-					invalidate();
-			} else {
-				// currently scaling
+			if ((event.getAction() & MotionEvent.ACTION_DOWN) == MotionEvent.ACTION_DOWN) {
+				scrollingStarted = true;
+				handled = true;
+			}
+			if ((event.getAction() & MotionEvent.ACTION_UP) == MotionEvent.ACTION_UP) {
 				scrollingStarted = false;
 				lastTouchEventX = 0;
+				handled = true;
 			}
+			if ((event.getAction() & MotionEvent.ACTION_MOVE) == MotionEvent.ACTION_MOVE) {
+				if (scrollingStarted) {
+					if (lastTouchEventX != 0) {
+						onMoveGesture(event.getX() - lastTouchEventX);
+					}
+					lastTouchEventX = event.getX();
+					handled = true;
+				}
+			}
+
+			if (handled) invalidate();
 			return handled;
 		}
 	}
@@ -226,10 +214,9 @@ public class GraphView extends LinearLayout {
 	public GraphView(Context context, AttributeSet attrs) {
 		this(context);
 
-		int width = attrs.getAttributeIntValue("android", "layout_width",
-				LayoutParams.MATCH_PARENT);
-		int height = attrs.getAttributeIntValue("android", "layout_height",
-				LayoutParams.MATCH_PARENT);
+		int width = attrs.getAttributeIntValue("android", "layout_width", LayoutParams.MATCH_PARENT);
+		int height = attrs.getAttributeIntValue("android", "layout_height", LayoutParams.MATCH_PARENT);
+		
 		setLayoutParams(new LayoutParams(width, height));
 	}
 
@@ -241,8 +228,7 @@ public class GraphView extends LinearLayout {
 	@SuppressWarnings("deprecation")
 	public GraphView(Context context) {
 		super(context);
-		setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT));
+		setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
 		graphViewStyle = new GraphViewStyle();
 
@@ -252,8 +238,7 @@ public class GraphView extends LinearLayout {
 		// viewVerLabels = new VerLabelsView(context);
 		// addView(viewVerLabels);
 		graphViewContentView = new GraphViewContentView(context);
-		addView(graphViewContentView, new LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1));
+		addView(graphViewContentView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1));
 	}
 
 	private GraphViewDataInterface[] _values(int idxSeries) {
@@ -268,8 +253,7 @@ public class GraphView extends LinearLayout {
 				for (int i = 0; i < values.length; i++) {
 					if (values[i].getX() >= viewportStart) {
 						if (values[i].getX() > viewportStart + viewportSize) {
-							listData.add(values[i]); // one more for nice
-														// scrolling
+							listData.add(values[i]); // one more for nice scrolling
 							break;
 						} else {
 							listData.add(values[i]);
@@ -278,12 +262,10 @@ public class GraphView extends LinearLayout {
 						if (listData.isEmpty()) {
 							listData.add(values[i]);
 						}
-						listData.set(0, values[i]); // one before, for nice
-													// scrolling
+						listData.set(0, values[i]); // one before, for nice scrolling
 					}
 				}
-				return listData.toArray(new GraphViewDataInterface[listData
-						.size()]);
+				return listData.toArray(new GraphViewDataInterface[listData.size()]);
 			}
 		}
 	}
@@ -339,8 +321,7 @@ public class GraphView extends LinearLayout {
 //				canvas.drawText(String.valueOf((int) valY), endX - bitmap.getWidth() + bitmap.getWidth()/3 + spaceFromPoint, endY - bitmap.getHeight()/2 - spaceFromPoint, paint);
 //			} else {
 			if(i < values.length-1) {
-				canvas.drawBitmap(bitmap.copy(Bitmap.Config.ARGB_8888, true), endX, endY - bitmap.getHeight() - spaceFromPoint,
-						paint);
+				canvas.drawBitmap(bitmap.copy(Bitmap.Config.ARGB_8888, true), endX, endY - bitmap.getHeight() - spaceFromPoint, paint);
 				canvas.drawText(String.valueOf((int) valY), endX + bitmap.getWidth()/3 + spaceFromPoint, endY - bitmap.getHeight()/2 - spaceFromPoint, paint);
 			}
 			
@@ -441,8 +422,7 @@ public class GraphView extends LinearLayout {
 					values = graphSeries.get(i).values;
 
 					if (values.length > 0) {
-						highest = Math.max(highest,
-								values[values.length - 1].getX());
+						highest = Math.max(highest, values[values.length - 1].getX());
 					}
 				}
 			}
@@ -519,9 +499,11 @@ public class GraphView extends LinearLayout {
 			smallest = Integer.MAX_VALUE;
 			for (int i = 0; i < graphSeries.size(); i++) {
 				GraphViewDataInterface[] values = _values(i);
-				for (int ii = 0; ii < values.length; ii++)
-					if (values[ii].getY() < smallest)
+				for (int ii = 0; ii < values.length; ii++) {
+					if (values[ii].getY() < smallest){
 						smallest = values[ii].getY();
+					}
+				}
 			}
 		}
 		return smallest;
@@ -599,8 +581,7 @@ public class GraphView extends LinearLayout {
 	 *             if scrollable == false
 	 */
 	public void scrollToEnd() {
-		if (!scrollable)
-			throw new IllegalStateException("This GraphView is not scrollable.");
+		if (!scrollable) throw new IllegalStateException("This GraphView is not scrollable.");
 		float max = getMaxX(true);
 		viewportStart = max - viewportSize;
 		redrawAll();
