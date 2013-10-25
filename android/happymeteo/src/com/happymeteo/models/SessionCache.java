@@ -44,7 +44,7 @@ public class SessionCache {
 		int yesterday = 1;
 		int tomorrow = 1;
 		
-		if(registered == USER_REGISTERED) {
+		if (registered == USER_REGISTERED) {
 			today = jsonObject.getInt("today");
 			yesterday = jsonObject.getInt("yesterday");
 			tomorrow = jsonObject.getInt("tomorrow");

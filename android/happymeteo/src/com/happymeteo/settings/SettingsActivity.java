@@ -27,8 +27,8 @@ import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
 
 public class SettingsActivity extends LoggedActivity implements OnGetExecuteListener, OnPostExecuteListener {
-	private TextView settingsFacebookText;
-	private Switch settingsFacebookSwitch;
+	private TextView settingsFacebookText = null;
+	private Switch settingsFacebookSwitch = null;
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private boolean nextTime = true;
 
@@ -65,27 +65,27 @@ public class SettingsActivity extends LoggedActivity implements OnGetExecuteList
 				final boolean checked = isChecked;
 				Log.i(Const.TAG, "nextTime: " + nextTime);
 				
-				if(nextTime) {
+				if (nextTime) {
 					new AlertDialog.Builder(SettingsActivity.this)
-					.setTitle(getApplicationContext().getString(com.happymeteo.R.string.empty))
-					.setMessage(getApplicationContext().getString(com.happymeteo.R.string.are_you_sure))
-					.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							if (checked) {
-								onFacebookConnect(statusCallback, true);
-							} else {
-								settingsFacebookText.setText(R.string.link_user_to_facebook);
-								String userId = SessionCache.getUser_id(SettingsActivity.this);
-								ServerUtilities.updateFacebook(SettingsActivity.this, userId, "");
+						.setTitle(getApplicationContext().getString(com.happymeteo.R.string.empty))
+						.setMessage(getApplicationContext().getString(com.happymeteo.R.string.are_you_sure))
+						.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								if (checked) {
+									onFacebookConnect(statusCallback, true);
+								} else {
+									settingsFacebookText.setText(R.string.link_user_to_facebook);
+									String userId = SessionCache.getUser_id(SettingsActivity.this);
+									ServerUtilities.updateFacebook(SettingsActivity.this, userId, "");
+								}
 							}
-						}
-					})
-					.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							nextTime = false;
-							settingsFacebookSwitch.setChecked(!settingsFacebookSwitch.isChecked());
-						}
-					}).show();
+						})
+						.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								nextTime = false;
+								settingsFacebookSwitch.setChecked(!settingsFacebookSwitch.isChecked());
+							}
+						}).show();
 				} else {
 					nextTime = true;
 				}
@@ -177,7 +177,7 @@ public class SettingsActivity extends LoggedActivity implements OnGetExecuteList
 	
 	private void changeFacebookId(String facebook_id, boolean changeValue) {
 		Log.i(Const.TAG, "changeValue: "+changeValue);
-		if(changeValue) {
+		if (changeValue) {
 			Log.i(Const.TAG, "facebook_id: "+facebook_id);
 			SessionCache.setFacebook_id(this, facebook_id);
 			Log.i(Const.TAG, "facebook_id after: "+SessionCache.getFacebook_id(this));

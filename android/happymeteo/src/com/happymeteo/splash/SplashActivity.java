@@ -13,7 +13,7 @@ import com.happymeteo.R;
 public class SplashActivity extends Activity {
 	private static final long DELAY = 3000;
 	private boolean scheduled = false;
-	private Timer splashTimer;
+	private Timer splashTimer = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

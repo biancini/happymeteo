@@ -54,13 +54,11 @@ public class ServerUtilities {
 		new PostRequest(Const.NORMAL_LOGIN_URL_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.NORMAL_LOGIN_URL);
 	}
 
-	public static void registerDevice(Context context, String registrationId,
-			String userId) {
+	public static void registerDevice(Context context, String registrationId, String userId) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("registrationId", registrationId));
 		nvps.add(new BasicNameValuePair("userId", userId));
-		new PostRequest(Const.REGISTER_URL_ID, context, nvps)
-				.execute(Const.REGISTER_URL);
+		new PostRequest(Const.REGISTER_URL_ID, context, nvps).execute(Const.REGISTER_URL);
 	}
 
 	public static void unregisterDevice(Context context, String registrationId) {
@@ -69,19 +67,13 @@ public class ServerUtilities {
 		new PostRequest(Const.UNREGISTER_URL_ID, context, nvps).execute(Const.REGISTER_URL);
 	}
 
-	public static void getQuestions(
-			NotLoggedActivity appyMeteoNotLoggedActivity,
-			String userId) {
-		
+	public static void getQuestions(NotLoggedActivity appyMeteoNotLoggedActivity, String userId) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("userId", userId));
 		new PostRequest(Const.GET_QUESTIONS_URL_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_QUESTIONS_URL);
 	}
 
-	public static void submitQuestions(
-			NotLoggedActivity appyMeteoNotLoggedActivity,
-			Map<String, String> params) {
-		
+	public static void submitQuestions(NotLoggedActivity appyMeteoNotLoggedActivity, Map<String, String> params) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		for (String key : params.keySet()) {
 			nvps.add(new BasicNameValuePair(key, params.get(key)));
@@ -89,9 +81,7 @@ public class ServerUtilities {
 		new PostRequest(Const.SUBMIT_QUESTIONS_URL_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.SUBMIT_QUESTIONS_URL);
 	}
 
-	public static void requestChallenge(NotLoggedActivity appyMeteoNotLoggedActivity, String userId,
-			String facebookId, String registrationId) {
-		
+	public static void requestChallenge(NotLoggedActivity appyMeteoNotLoggedActivity, String userId, String facebookId, String registrationId) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("userId", userId));
 		nvps.add(new BasicNameValuePair("facebookId", facebookId));
@@ -99,11 +89,7 @@ public class ServerUtilities {
 		new PostRequest(Const.REQUEST_CHALLENGE_URL_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.REQUEST_CHALLENGE_URL);
 	}
 
-	public static void acceptChallenge(
-			NotLoggedActivity appyMeteoNotLoggedActivity,
-			String challengeId, Boolean accepted, String registrationId,
-			String userId) {
-		
+	public static void acceptChallenge(NotLoggedActivity appyMeteoNotLoggedActivity, String challengeId, Boolean accepted, String registrationId, String userId) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("challengeId", challengeId));
 		nvps.add(new BasicNameValuePair("accepted", accepted.toString()));
@@ -112,20 +98,14 @@ public class ServerUtilities {
 		new PostRequest(Const.ACCEPT_CHALLENGE_URL_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.ACCEPT_CHALLENGE_URL);
 	}
 
-	public static void getChallengeQuestions(
-			NotLoggedActivity appyMeteoNotLoggedActivity,
-			String challengeId, String turn) {
-		
+	public static void getChallengeQuestions(NotLoggedActivity appyMeteoNotLoggedActivity, String challengeId, String turn) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("challengeId", challengeId));
 		nvps.add(new BasicNameValuePair("turn", turn));
 		new PostRequest(Const.QUESTIONS_CHALLENGE_URL_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.QUESTIONS_CHALLENGE_URL);
 	}
 
-	public static void submitChallenge(
-			NotLoggedActivity appyMeteoNotLoggedActivity,
-			Map<String, String> params) {
-		
+	public static void submitChallenge(NotLoggedActivity appyMeteoNotLoggedActivity, Map<String, String> params) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		for (String key : params.keySet()) {
 			nvps.add(new BasicNameValuePair(key, params.get(key)));
@@ -140,39 +120,27 @@ public class ServerUtilities {
 		new PostRequest(Const.GET_CHALENGES_URL_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_CHALLENGES_URL);
 	}
 
-	public static void getAppynessByDay(
-			NotLoggedActivity appyMeteoNotLoggedActivity,
-			String userId) {
-		
+	public static void getAppynessByDay(NotLoggedActivity appyMeteoNotLoggedActivity, String userId) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("user_id", userId));
 		new PostRequest(Const.GET_APPINESS_BY_DAY_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_APPINESS_BY_DAY_URL);
 	}
 
 	/*
-	public static void getAppynessByMonth(
-			NotLoggedActivity appyMeteoNotLoggedActivity,
-			String userId) {
-		
+	public static void getAppynessByMonth(NotLoggedActivity appyMeteoNotLoggedActivity, String userId) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("user_id", userId));
 		new PostRequest(Const.GET_APPINESS_BY_MONTH_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_APPINESS_BY_MONTH_URL);
 	}
 	*/
 
-	public static void lostPassword(
-			NotLoggedActivity appyMeteoNotLoggedActivity,
-			String email) {
-		
+	public static void lostPassword(NotLoggedActivity appyMeteoNotLoggedActivity, String email) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("email", email));
 		new PostRequest(Const.LOST_PASSWORD_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.LOST_PASSWORD_URL);
 	}
 
-	public static void changePassword(
-			NotLoggedActivity appyMeteoNotLoggedActivity,
-			String userId, String newPassowrd, String oldPassword) {
-		
+	public static void changePassword(NotLoggedActivity appyMeteoNotLoggedActivity, String userId, String newPassowrd, String oldPassword) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("user_id", userId));
 		nvps.add(new BasicNameValuePair("new_password", newPassowrd));
@@ -180,10 +148,7 @@ public class ServerUtilities {
 		new PostRequest(Const.CHANGE_PASSWORD_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.CHANGE_PASSWORD_URL);
 	}
 
-	public static void updateFacebook(
-			NotLoggedActivity appyMeteoNotLoggedActivity,
-			String userId, String facebookId) {
-		
+	public static void updateFacebook(NotLoggedActivity appyMeteoNotLoggedActivity, String userId, String facebookId) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("user_id", userId));
 		nvps.add(new BasicNameValuePair("facebook_id", facebookId));

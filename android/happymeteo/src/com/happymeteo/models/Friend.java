@@ -1,10 +1,10 @@
 package com.happymeteo.models;
 
 public class Friend {
-	private String name;
-	private boolean installed;
-	private String id;
-	private boolean loaded;
+	private String name = null;
+	private boolean installed = false;
+	private String id = null;
+	private boolean loaded = false;
 	
 	public Friend() {
 		id = "";

@@ -45,9 +45,9 @@ public class GraphViewSeries {
 		}
 	}
 
-	final GraphViewSeriesStyle style;
 	GraphViewDataInterface[] values = null;
 	private final List<GraphView> graphViews = new ArrayList<GraphView>();
+	final GraphViewSeriesStyle style;
 
 	public GraphViewSeries(GraphViewDataInterface[] values) {
 		style = new GraphViewSeriesStyle();

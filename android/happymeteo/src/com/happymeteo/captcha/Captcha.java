@@ -7,13 +7,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 
 public abstract class Captcha {
-	protected Bitmap image;
+	protected Bitmap image = null;
 	protected String answer = "";
-	private int width;
-	private int height;
+	private int width = 0;
+	private int height = 0;
 	protected int x = 0;
 	protected int y = 0;
-	protected static List<Integer> usedColors;
+	protected static List<Integer> usedColors = null;
 	
 	protected abstract Bitmap image();
 
@@ -41,16 +41,12 @@ public abstract class Captcha {
     	}
     }
     
-    public int getWidth(){
+    public int getWidth() {
     	return this.width;
     }
     
-    public void setWidth(int width){
-    	if (width > 0 && width < 10000) {
-    		this.width = width;
-    	} else {
-    		this.width = 300;
-    	}
+    public void setWidth(int width) {
+    	this.width = (width > 0 && width < 10000) ? width : 300;
     }
     
     public int getHeight() {
@@ -58,11 +54,7 @@ public abstract class Captcha {
     }
     
     public void setHeight(int height) {
-    	if (height > 0 && height < 10000) {
-    		this.height = height;
-    	} else {
-    		this.height = 100;
-    	}
+    	this.height = (height > 0 && height < 10000) ? height : 100;
     }
     
 	public Bitmap getImage() {

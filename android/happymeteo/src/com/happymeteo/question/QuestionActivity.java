@@ -40,15 +40,15 @@ import com.happymeteo.widget.AppyMeteoSeekBar;
 import com.happymeteo.widget.OnAppyMeteoSeekBarChangeListener;
 
 public class QuestionActivity extends ImpulseActivity implements OnPostExecuteListener, LocationListener {
-	private Map<String, String> params;
-	private JSONObject questions;
-	private LinearLayout linearLayout;
+	private Map<String, String> params = null;
+	private JSONObject questions = null;
+	private LinearLayout linearLayout = null;
 
 	private final String TIMESTAMP = "timestamp";
 
-	private LocationManager locationManager;
-	private String provider;
-	private Location location;
+	private LocationManager locationManager = null;
+	private String provider = null;
+	private Location location = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,6 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 
 		final Button btnAnswerQuestions = (Button) findViewById(R.id.btnAnswerQuestions);
 		btnAnswerQuestions.setOnClickListener(new View.OnClickListener() {
-
 			@Override
 			public void onClick(View view) {
 				if (location != null) {
@@ -101,7 +100,6 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 		locationManager.requestLocationUpdates(provider, 400, 1, this);
 	}
 
@@ -127,9 +125,7 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 						final String textNo = jsonObject.getString("textNo");
 						Log.i(Const.TAG, jsonObject.toString());
 
-						LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-								LayoutParams.WRAP_CONTENT,
-								LayoutParams.WRAP_CONTENT);
+						LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 						llp.setMargins(10, 10, 10, 10);
 
 						TextView textView = new TextView(getApplicationContext());
@@ -150,9 +146,7 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 						linearLayout.addView(textView);
 
 						if (type == 1) {
-							LinearLayout.LayoutParams llpImg = new LinearLayout.LayoutParams(
-									LinearLayout.LayoutParams.WRAP_CONTENT,
-									LinearLayout.LayoutParams.WRAP_CONTENT);
+							LinearLayout.LayoutParams llpImg = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 							llpImg.weight = 10;
 							llpImg.gravity = Gravity.CENTER_VERTICAL;
 
@@ -164,9 +158,7 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 							imageView1.setLayoutParams(llpImg);
 							linearLayout1.addView(imageView1);
 
-							LinearLayout.LayoutParams llp_seekBar = new LinearLayout.LayoutParams(
-									LayoutParams.MATCH_PARENT,
-									LayoutParams.WRAP_CONTENT);
+							LinearLayout.LayoutParams llp_seekBar = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 							llp_seekBar.weight = 80;
 
 							final AppyMeteoSeekBar appyMeteoSeekBar = new AppyMeteoSeekBar(this);
@@ -180,9 +172,7 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 							tvText.setGravity(Gravity.CENTER);
 							tvText.setTextColor(getResources().getColor(R.color.white));
 							tvText.setTextSize(15.0f);
-							LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
-									LayoutParams.WRAP_CONTENT,
-									LayoutParams.WRAP_CONTENT);
+							LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 							llpBaloon.leftMargin = appyMeteoSeekBar.getProgressPosX();
 							tvText.setLayoutParams(llpBaloon);
 							tvText.setPadding(0, 0, 0, 10);
@@ -190,9 +180,7 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 
 							appyMeteoSeekBar.setOnAppyMeteoSeekBarChangeListener(new OnAppyMeteoSeekBarChangeListener() {
 								@Override
-								public void onProgressPosXChanged(
-										AppyMeteoSeekBar seekBar,
-										int progress, int progressPosX) {
+								public void onProgressPosXChanged(AppyMeteoSeekBar seekBar, int progress, int progressPosX) {
 									String value = String.valueOf((progress / 10) + 1);
 									try {
 										questions.put(id_question,value);
@@ -201,10 +189,7 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 									}
 									tvText.setText(value + "\u00B0");
 
-									LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
-											LinearLayout.LayoutParams.WRAP_CONTENT,
-											LinearLayout.LayoutParams.WRAP_CONTENT);
-
+									LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 									llpBaloon.leftMargin = progressPosX;
 									tvText.setLayoutParams(llpBaloon);
 								}
@@ -234,9 +219,7 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 							switchButton.setChecked(true);
 							switchButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 								@Override
-								public void onCheckedChanged(
-										CompoundButton buttonView,
-										boolean isChecked) {
+								public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 									try {
 										questions.put(id_question, isChecked ? "0" : "1");
 									} catch (JSONException e) {

@@ -21,9 +21,7 @@ import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
 
-public abstract class NotLoggedActivity extends SherlockActivity implements
-	OnPostExecuteListener {
-
+public abstract class NotLoggedActivity extends SherlockActivity implements OnPostExecuteListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

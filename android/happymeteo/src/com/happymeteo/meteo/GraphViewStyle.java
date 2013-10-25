@@ -27,13 +27,13 @@ import android.graphics.Color;
  *
  */
 public class GraphViewStyle {
-	private int verticalLabelsColor;
-	private int horizontalLabelsColor;
-	private int gridColor;
+	private int verticalLabelsColor = 0;
+	private int horizontalLabelsColor = 0;
+	private int gridColor = 0;
 	private float textSize = 30f;
-	private int verticalLabelsWidth;
-	private int numVerticalLabels;
-	private int numHorizontalLabels;
+	private int verticalLabelsWidth = 0;
+	private int numVerticalLabels = 0;
+	private int numHorizontalLabels = 0;
 
 	public GraphViewStyle() {
 		verticalLabelsColor = Color.WHITE;

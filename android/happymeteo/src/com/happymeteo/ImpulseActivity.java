@@ -11,8 +11,7 @@ import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 
 public abstract class ImpulseActivity extends NotLoggedActivity {
-
-	protected HashMap<String, String> intentParameters;
+	protected HashMap<String, String> intentParameters = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public abstract class ImpulseActivity extends NotLoggedActivity {
 		}
 		
 		for(String key : keyIntentParamteres) {
-			Log.i(Const.TAG, "initialize: "+key+" => "+intent.getExtras().getString(key));
+			Log.i(Const.TAG, "initialize: " + key + " => " + intent.getExtras().getString(key));
 			intentParameters.put(key, intent.getExtras().getString(key));
 		}
 	}

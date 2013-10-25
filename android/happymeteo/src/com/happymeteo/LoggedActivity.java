@@ -27,7 +27,7 @@ import com.happymeteo.utils.Const;
 public abstract class LoggedActivity extends NotLoggedActivity implements ISideNavigationCallback {
 
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
-	private SideNavigationView sideNavigationView;
+	private SideNavigationView sideNavigationView = null;
 
 	private void inShow() {
 		if (!SessionCache.isFacebookSession(this)) {
@@ -69,11 +69,7 @@ public abstract class LoggedActivity extends NotLoggedActivity implements ISideN
 		addContentView(sideNavigationView, layoutParams);
 
 		if (SessionCache.isFacebookSession(this)) {
-			if (Session.getActiveSession() == null) {
-				onFacebookConnect(statusCallback, true);
-			} else if (!Session.getActiveSession().isOpened()) {
-				onFacebookConnect(statusCallback, false);
-			}
+			onFacebookConnect(statusCallback, (Session.getActiveSession() == null));
 		}
 
 		inShow();

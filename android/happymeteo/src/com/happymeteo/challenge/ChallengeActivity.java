@@ -40,9 +40,17 @@ public class ChallengeActivity extends LoggedActivity {
 		profilePictureView.setProfileId(challenge.getAdversary().getFacebook_id());
 
 		TextView picker_title = (TextView) rowView.findViewById(R.id.picker_title);
-		picker_title.setText("Hai giocato con "
-				+ challenge.getAdversary().getFirst_name() +
-				" il " + challenge.getCreated());
+		//String titleText = getString(R.string.finegioco_message) + " " + challenge.getAdversary().getFirst_name();
+		if (!challenge.getCreated().equals("")) {
+			String titleText = getString(R.string.finegioco_message);
+			titleText = titleText.replaceAll("\\[USER\\]", challenge.getAdversary().getFirst_name());
+			picker_title.setText(titleText);
+		} else {
+			String titleText = getString(R.string.finegioco_message_date);
+			titleText = titleText.replaceAll("\\[USER\\]", challenge.getAdversary().getFirst_name());
+			titleText = titleText.replaceAll("\\[DATE\\]", challenge.getCreated());
+			picker_title.setText(titleText);
+		}
 
 		TextView picker_result = (TextView) rowView.findViewById(R.id.picker_result);
 		Button picker_button = (Button) rowView.findViewById(R.id.picker_button);
@@ -94,7 +102,10 @@ public class ChallengeActivity extends LoggedActivity {
 				tuScore = Float.valueOf(challenge.getScore_a());
 			}
 			
-			picker_result.setText("Ecco il risultato.  " + ioScore.toString() + "-" + tuScore.toString());
+			String resultText = getString(R.string.finegioco_result);
+			resultText = resultText.replaceAll("\\[MYSCORE\\]", ioScore.toString());
+			resultText = resultText.replaceAll("\\[YOURSCORE\\]", tuScore.toString());
+			picker_result.setText(resultText);
 			viewToAdd = true;
 		}
 		
@@ -137,7 +148,7 @@ public class ChallengeActivity extends LoggedActivity {
 			}
 		}
 		
-		if(id == Const.REQUEST_CHALLENGE_URL_ID) {
+		if (id == Const.REQUEST_CHALLENGE_URL_ID) {
 			AlertDialogManager.showNotification(this, R.string.empty, R.string.request_challenge_notification_msg, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					// Do nothing
@@ -147,8 +158,8 @@ public class ChallengeActivity extends LoggedActivity {
 	}
 
 	private class ListChallenges extends AsyncTask<String, Void, Void> {
-		private Activity activity;
-		private JSONArray challenges;
+		private Activity activity = null;
+		private JSONArray challenges = null;
 
 		public ListChallenges(Activity activity, JSONArray challenges) {
 			this.activity = activity;

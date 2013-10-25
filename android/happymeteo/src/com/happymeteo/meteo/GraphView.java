@@ -21,14 +21,36 @@ import android.widget.LinearLayout;
 import com.happymeteo.R;
 
 public class GraphView extends LinearLayout {
+	private String[] horlabels = null;
+	private boolean scrollable = false;
+	private boolean disableTouch = false;
+	private float viewportStart = 0;
+	private float viewportSize = 0;
+	private boolean showLegend = false;
+	private float legendWidth = 120;
+	private LegendAlign legendAlign = LegendAlign.MIDDLE;
+	private boolean manualYAxis = false;
+	private float manualMaxYValue = 0;
+	private float manualMinYValue = 0;
+	private GraphViewStyle graphViewStyle = null;
+	private Integer labelTextHeight = null;
+	private Integer horLabelTextWidth = null;
+	private boolean staticHorizontalLabels = false;
+	
+	protected final Paint paint;
+	private final Rect textBounds = new Rect();
+	private final NumberFormat[] numberformatter = new NumberFormat[2];
+	private final GraphViewContentView graphViewContentView;
+	private final List<GraphViewSeries> graphSeries;
+	
 	static final private class GraphViewConfig {
 		static final float BORDER = 20;
 	}
 
 	private class GraphViewContentView extends View {
-		private float lastTouchEventX;
-		protected float graphwidth;
-		private boolean scrollingStarted;
+		private float lastTouchEventX = 0;
+		protected float graphwidth = 0;
+		private boolean scrollingStarted = false;
 
 		/**
 		 * @param context
@@ -100,8 +122,7 @@ public class GraphView extends LinearLayout {
 			 */
 
 			for (int i = 0; i < graphSeries.size(); i++) {
-				drawSeries(canvas, _values(i), graphwidth, graphheight, border,
-						minX, minY, diffX, diffY, horstart);
+				drawSeries(canvas, _values(i), graphwidth, graphheight, border, minX, minY, diffX, diffY, horstart);
 			}
 
 			drawHorizontalLabels(canvas, horlabels, graphwidth, graphheight, border, horstart);
@@ -190,27 +211,6 @@ public class GraphView extends LinearLayout {
 		TOP, MIDDLE, BOTTOM
 	}
 
-	protected final Paint paint;
-	private String[] horlabels;
-	private boolean scrollable;
-	private boolean disableTouch;
-	private float viewportStart;
-	private float viewportSize;
-	private final NumberFormat[] numberformatter = new NumberFormat[2];
-	private final List<GraphViewSeries> graphSeries;
-	private boolean showLegend = false;
-	private float legendWidth = 120;
-	private LegendAlign legendAlign = LegendAlign.MIDDLE;
-	private boolean manualYAxis;
-	private float manualMaxYValue;
-	private float manualMinYValue;
-	private GraphViewStyle graphViewStyle;
-	private final GraphViewContentView graphViewContentView;
-	private Integer labelTextHeight;
-	private Integer horLabelTextWidth;
-	private final Rect textBounds = new Rect();
-	private boolean staticHorizontalLabels;
-
 	public GraphView(Context context, AttributeSet attrs) {
 		this(context);
 
@@ -243,6 +243,7 @@ public class GraphView extends LinearLayout {
 
 	private GraphViewDataInterface[] _values(int idxSeries) {
 		GraphViewDataInterface[] values = graphSeries.get(idxSeries).values;
+		
 		synchronized (values) {
 			if (viewportStart == 0 && viewportSize == 0) {
 				// all data
@@ -265,6 +266,7 @@ public class GraphView extends LinearLayout {
 						listData.set(0, values[i]); // one before, for nice scrolling
 					}
 				}
+				
 				return listData.toArray(new GraphViewDataInterface[listData.size()]);
 			}
 		}
@@ -299,8 +301,8 @@ public class GraphView extends LinearLayout {
 //		Bitmap mirroredBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mirror, false);
 //		
 		float spaceFromPoint = 5;
-
 		float startY = graphheight + border;
+		
 		for (int i = 0; i < values.length; i++) {
 			float valY = values[i].getY() - minY;
 			float ratY = valY / diffY;
@@ -349,8 +351,7 @@ public class GraphView extends LinearLayout {
 		}
 	}
 
-	protected void drawHorizontalLabels(Canvas canvas, String[] horlabels,
-			float graphwidth, float graphheight, float border, float horstart) {
+	protected void drawHorizontalLabels(Canvas canvas, String[] horlabels, float graphwidth, float graphheight, float border, float horstart) {
 		paint.setTextSize(20f);
 		paint.setTextAlign(Align.LEFT);
 
@@ -412,11 +413,7 @@ public class GraphView extends LinearLayout {
 			float highest = 0;
 			if (graphSeries.size() > 0) {
 				GraphViewDataInterface[] values = graphSeries.get(0).values;
-
-				if (values.length == 0)
-					highest = 0;
-				else
-					highest = values[values.length - 1].getX();
+				highest = (values.length == 0) ? 0 : values[values.length - 1].getX();
 
 				for (int i = 1; i < graphSeries.size(); i++) {
 					values = graphSeries.get(i).values;
@@ -470,10 +467,7 @@ public class GraphView extends LinearLayout {
 			float lowest = 0;
 			if (graphSeries.size() > 0) {
 				GraphViewDataInterface[] values = graphSeries.get(0).values;
-				if (values.length == 0)
-					lowest = 0;
-				else
-					lowest = values[0].getX();
+				lowest = (values.length == 0) ? 0 : values[0].getX();
 
 				for (int i = 1; i < graphSeries.size(); i++) {
 					values = graphSeries.get(i).values;
@@ -492,10 +486,9 @@ public class GraphView extends LinearLayout {
 	 * warning: only override this, if you really know want you're doing!
 	 */
 	protected float getMinY() {
-		float smallest;
-		if (manualYAxis) {
-			smallest = manualMinYValue;
-		} else {
+		float smallest = manualMinYValue;
+		
+		if (!manualYAxis) {
 			smallest = Integer.MAX_VALUE;
 			for (int i = 0; i < graphSeries.size(); i++) {
 				GraphViewDataInterface[] values = _values(i);
@@ -506,6 +499,7 @@ public class GraphView extends LinearLayout {
 				}
 			}
 		}
+	
 		return smallest;
 	}
 

@@ -2,15 +2,12 @@ package com.happymeteo.captcha;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 public class CaptchaActivityExample extends Activity {
 
-	ImageView im;
-	Button btn;
-	TextView ans;
+//	ImageView im = null;
+//	Button btn = null;
+//	TextView ans = null;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {

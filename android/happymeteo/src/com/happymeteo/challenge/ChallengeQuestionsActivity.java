@@ -35,6 +35,7 @@ import com.happymeteo.ImpulseActivity;
 import com.happymeteo.R;
 import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
@@ -269,7 +270,7 @@ public class ChallengeQuestionsActivity extends ImpulseActivity implements OnPos
 		llp.gravity = Gravity.CENTER;
 		
 		int gender = SessionCache.getGender(getApplicationContext());
-		if (gender == 1) questionText = questionText.replaceAll("\\[o/a\\]", "a");
+		if (gender == User.GENDER_MALE) questionText = questionText.replaceAll("\\[o/a\\]", "a");
 		else questionText = questionText.replaceAll("\\[o/a\\]", "o");
 		
 		TextView textView = new TextView(getApplicationContext());

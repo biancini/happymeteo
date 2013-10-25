@@ -81,7 +81,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected boolean onRecoverableError(Context context, String errorId) {
 		Log.i(Const.TAG, "Received recoverable error: " + errorId);
-
 		return super.onRecoverableError(context, errorId);
 	}
 	
@@ -124,7 +123,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			
 			String collapse_key = extras.getString("collapse_key");
-			if(collapse_key == null || collapse_key.equals("do_not_collapse")) {
+			if (collapse_key == null || collapse_key.equals("do_not_collapse")) {
 				collapse_key = extras.getString("appy_key");
 			}
 			

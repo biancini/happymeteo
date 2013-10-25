@@ -34,11 +34,10 @@ import com.happymeteo.utils.ListFriend;
 import com.happymeteo.utils.OnGetExecuteListener;
 
 public class FriendsFacebookActivity extends LoggedActivity implements OnGetExecuteListener {
-
 	public static int FRIENDS_WITH_APP_TYPE = 1;
 	public static int FRIENDS_NO_APP_TYPE = 0;
 
-	private String[] counter;
+	private String[] counter = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -112,10 +111,7 @@ public class FriendsFacebookActivity extends LoggedActivity implements OnGetExec
 					List<Friend> newFriends = new ArrayList<Friend>();
 					if (friendsWithApp != null) {
 						for (Friend friend : friendsWithApp) {
-							if (friend
-									.getName()
-									.toLowerCase(Locale.getDefault())
-									.contains(cs.toString().toLowerCase(Locale.getDefault()))) {
+							if (friend.getName().toLowerCase(Locale.getDefault()).contains(cs.toString().toLowerCase(Locale.getDefault()))) {
 								newFriends.add(friend);
 							}
 						}
@@ -139,14 +135,11 @@ public class FriendsFacebookActivity extends LoggedActivity implements OnGetExec
 
 			searchFriendsNoApp.addTextChangedListener(new TextWatcher() {
 				@Override
-				public void onTextChanged(CharSequence cs, int start,
-						int before, int count) {
+				public void onTextChanged(CharSequence cs, int start, int before, int count) {
 					List<Friend> newFriends = new ArrayList<Friend>();
 					if (friendsNoApp != null) {
 						for (Friend friend : friendsNoApp) {
-							if (friend.getName()
-									.toLowerCase(Locale.getDefault())
-									.contains(cs.toString().toLowerCase(Locale.getDefault()))) {
+							if (friend.getName().toLowerCase(Locale.getDefault()).contains(cs.toString().toLowerCase(Locale.getDefault()))) {
 								newFriends.add(friend);
 							}
 						}

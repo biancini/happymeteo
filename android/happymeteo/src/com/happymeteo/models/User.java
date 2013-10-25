@@ -4,17 +4,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class User {
-	private String user_id;
-	private String facebook_id;
-	private String first_name;
-	private String last_name;
-	private int gender;
-	private String email;
-	private int age;
-	private int education;
-	private int work;
-	private String cap;
-	private int registered;
+	public static final int GENDER_MALE = 0;
+	public static final int GENDER_FEMALE = 1;
+	
+	private String user_id = null;
+	private String facebook_id = null;
+	private String first_name = null;
+	private String last_name = null;
+	private int gender = GENDER_MALE;
+	private String email = null;
+	private int age = -1;
+	private int education = -1;
+	private int work = -1;
+	private String cap = null;
+	private int registered = -1;
 	
 	public User(JSONObject jsonObject) throws JSONException {
 		user_id = jsonObject.getString("user_id");

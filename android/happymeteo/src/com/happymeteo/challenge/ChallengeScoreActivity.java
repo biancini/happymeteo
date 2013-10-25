@@ -30,7 +30,7 @@ public class ChallengeScoreActivity extends ImpulseActivity {
 		//TextView ioSubnameTextView = (TextView) findViewById(R.id.ioSubname);
 		
 		String ioChallenge = intentParameters.get(IO_CHALLENGE);
-		if(ioChallenge != null) {
+		if (ioChallenge != null) {
 			ioScore = Float.valueOf(ioChallenge).intValue();
 			ioChallengeTextView.setText(ioScore.toString());
 		}
@@ -43,7 +43,7 @@ public class ChallengeScoreActivity extends ImpulseActivity {
 		TextView tuNameTextView = (TextView) findViewById(R.id.tuName);
 		
 		String tuChallenge = intentParameters.get(TU_CHALLENGE);
-		if(tuChallenge != null) {
+		if (tuChallenge != null) {
 			tuScore = Float.valueOf(tuChallenge).intValue();
 			tuChallengeTextView.setText(tuScore.toString());
 		}
@@ -59,14 +59,12 @@ public class ChallengeScoreActivity extends ImpulseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_challenge_score);
 		super.onCreate(savedInstanceState);
-		
 		setValues();
 	}
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		
 		setValues();
 	}
 	

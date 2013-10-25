@@ -25,10 +25,10 @@ import com.happymeteo.utils.ServerUtilities;
 
 public class ChangePasswordActivity extends LoggedActivity implements OnPostExecuteListener {
 	
-	private ImageView changePassword_imageCaptcha;
-	private Captcha captcha;
-	private int captchaWidth;
-	private int captchaHeight;
+	private ImageView changePassword_imageCaptcha = null;
+	private Captcha captcha = null;
+	private int captchaWidth = 0;
+	private int captchaHeight = 0;
 	
 	private void newCapthca() {
 		captcha = new TextCaptcha(captchaWidth, captchaHeight, 5, TextOptions.NUMBERS_AND_LETTERS);

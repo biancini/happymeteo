@@ -4,11 +4,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public abstract class SuperTimerTask extends TimerTask {
-	private int count;
-	private Timer timer;
+	private int count = 0;
+	private Timer timer = null;
 	
 	public SuperTimerTask(Timer timer) {
-		this.count = 0;
 		this.timer = timer;
 	}
 

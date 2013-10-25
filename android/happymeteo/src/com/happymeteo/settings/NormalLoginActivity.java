@@ -48,8 +48,7 @@ public class NormalLoginActivity extends NotLoggedActivity implements OnPostExec
 					String password = "";
 					
 					try {
-						password = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY,
-								normal_login_password.getText().toString());
+						password = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, normal_login_password.getText().toString());
 					} catch (Exception e) {
 						Log.e(Const.TAG, e.getMessage(), e);
 					}
@@ -69,18 +68,15 @@ public class NormalLoginActivity extends NotLoggedActivity implements OnPostExec
 					.setView(input)
 					.setPositiveButton(R.string.next,
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int which) {
-									String email = input.getText()
-											.toString();
+								public void onClick(DialogInterface dialog, int which) {
+									String email = input.getText().toString();
 									ServerUtilities.lostPassword(NormalLoginActivity.this, email);
 								}
 							})
 					.setNegativeButton(R.string.cancel,
 							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int which) {
-
+								public void onClick(DialogInterface dialog, int which) {
+									// Do nothing
 								}
 							}).show();
 			}

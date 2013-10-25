@@ -12,7 +12,7 @@ import android.graphics.Shader;
 
 public class MathCaptcha extends Captcha {
 	
-	protected MathOptions options;
+	protected MathOptions options = null;
 	
 	public enum MathOptions {
 		PLUS_MINUS,
@@ -74,8 +74,7 @@ public class MathCaptcha extends Captcha {
 	        x += 30 + (Math.abs(r.nextInt()) % 65);
 	        y = 50 + Math.abs(r.nextInt()) % 50;
 	        Canvas cc = new Canvas(bitmap);
-	        if(i != 1)
-	        	tp.setTextSkewX(r.nextFloat() - r.nextFloat());
+	        if (i != 1) tp.setTextSkewX(r.nextFloat() - r.nextFloat());
 	        cc.drawText(data, i, 1, x, y, tp);
 	        tp.setTextSkewX(0);
 	    }

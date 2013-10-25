@@ -30,18 +30,18 @@ import com.happymeteo.utils.SHA1;
 import com.happymeteo.utils.ServerUtilities;
 
 public class CreateAccountActivity extends NotLoggedActivity implements OnPostExecuteListener {
-	private String user_id;
-	private String facebook_id;
-	private EditText create_account_fist_name;
-	private EditText create_account_last_name;
-	private Spinner create_account_gender;
-	private EditText create_account_email;
-	private EditText create_account_password;
-	private EditText create_account_confirm_password;
-	private Spinner create_account_age;
-	private Spinner create_account_education;
-	private Spinner create_account_work;
-	private EditText create_account_cap;
+	private String user_id = null;
+	private String facebook_id = null;
+	private EditText create_account_fist_name = null;
+	private EditText create_account_last_name = null;
+	private Spinner create_account_gender = null;
+	private EditText create_account_email = null;
+	private EditText create_account_password = null;
+	private EditText create_account_confirm_password = null;
+	private Spinner create_account_age = null;
+	private Spinner create_account_education = null;
+	private Spinner create_account_work = null;
+	private EditText create_account_cap = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,25 +80,17 @@ public class CreateAccountActivity extends NotLoggedActivity implements OnPostEx
 		create_account_cap.setText(SessionCache.getCap(this));
 
 		final Form mForm = new Form();
-		mForm.addField(Field.using(create_account_fist_name).validate(
-				NotEmpty.build(this)));
-		mForm.addField(Field.using(create_account_last_name).validate(
-				NotEmpty.build(this)));
-		mForm.addField(Field.using(create_account_email)
-				.validate(NotEmpty.build(this)).validate(IsEmail.build(this)));
-		mForm.addField(Field.using(create_account_cap)
-				.validate(NotEmpty.build(this))
-				.validate(IsPositiveInteger.build(this)));
+		mForm.addField(Field.using(create_account_fist_name).validate(NotEmpty.build(this)));
+		mForm.addField(Field.using(create_account_last_name).validate(NotEmpty.build(this)));
+		mForm.addField(Field.using(create_account_email).validate(NotEmpty.build(this)).validate(IsEmail.build(this)));
+		mForm.addField(Field.using(create_account_cap).validate(NotEmpty.build(this)).validate(IsPositiveInteger.build(this)));
 
 		if (SessionCache.isFacebookSession(this)) {
 			create_account_password.setVisibility(View.GONE);
 			create_account_confirm_password.setVisibility(View.GONE);
 		} else {
-			mForm.addField(Field.using(create_account_password)
-					.validate(NotEmpty.build(this))
-					.validate(IsPassword.build(this)));
-			mForm.addField(Field.using(create_account_confirm_password)
-					.validate(NotEmpty.build(this)));
+			mForm.addField(Field.using(create_account_password).validate(NotEmpty.build(this)).validate(IsPassword.build(this)));
+			mForm.addField(Field.using(create_account_confirm_password).validate(NotEmpty.build(this)));
 		}
 
 		btnCreateUser.setOnClickListener(new View.OnClickListener() {
@@ -106,19 +98,12 @@ public class CreateAccountActivity extends NotLoggedActivity implements OnPostEx
 			public void onClick(View view) {
 				if (mForm.isValid()) {
 
-					if (create_account_password
-							.getText()
-							.toString()
-							.equals(create_account_confirm_password.getText().toString())) {
-						
+					if (create_account_password.getText().toString().equals(create_account_confirm_password.getText().toString())) {
 						String password = "";
 
 						if (!SessionCache.isFacebookSession(view.getContext())) {
 							try {
-								password = SHA1.hexdigest(
-										Const.PASSWORD_SECRET_KEY,
-										create_account_password.getText()
-												.toString());
+								password = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, create_account_password.getText().toString());
 							} catch (Exception e) {
 								Log.e(Const.TAG, e.getMessage(), e);
 								password = "";

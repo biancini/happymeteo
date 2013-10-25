@@ -14,8 +14,8 @@ import android.util.Log;
 
 public class TextCaptcha extends Captcha {
 	
-	protected TextOptions options;
-	private int wordLength;
+	protected TextOptions options = null;
+	private int wordLength = 0;
 	
 	public enum TextOptions {
 		UPPERCASE_ONLY,

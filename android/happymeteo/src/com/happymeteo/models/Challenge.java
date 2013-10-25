@@ -4,14 +4,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Challenge {
-	private String challenge_id;
-	private String user_id_a;
-	private String user_id_b;
-	private String score_a;
-	private String score_b;
-	private int turn;
-	private User adversary;
-	private String created;
+	private String challenge_id = null;
+	private String user_id_a = null;
+	private String user_id_b = null;
+	private String score_a = null;
+	private String score_b = null;
+	private int turn = 0;
+	private User adversary = null;
+	private String created = null;
 	
 	public Challenge(JSONObject jsonObject) throws JSONException {
 		this.challenge_id = jsonObject.getString("challenge_id");
