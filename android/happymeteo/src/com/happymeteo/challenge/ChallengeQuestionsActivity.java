@@ -270,8 +270,8 @@ public class ChallengeQuestionsActivity extends ImpulseActivity implements OnPos
 		llp.gravity = Gravity.CENTER;
 		
 		int gender = SessionCache.getGender(getApplicationContext());
-		if (gender == User.GENDER_MALE) questionText = questionText.replaceAll("\\[o/a\\]", "a");
-		else questionText = questionText.replaceAll("\\[o/a\\]", "o");
+		if (gender == User.GENDER_MALE) questionText = questionText.replaceAll("\\[o/a\\]", "o");
+		else questionText = questionText.replaceAll("\\[o/a\\]", "a");
 		
 		TextView textView = new TextView(getApplicationContext());
 		textView.setText(questionText);
