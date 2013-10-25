@@ -148,9 +148,7 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 		tomorrow_pic.setImageResource(getGrayIcon(tomorrow_int));
 
 		RelativeLayout relativeLayoutMeteoUpToday = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUpToday);
-		GradientDrawable gradientDrawable = new GradientDrawable(
-				GradientDrawable.Orientation.TOP_BOTTOM,
-				getColorByToday(today_int));
+		GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, getColorByToday(today_int));
 		relativeLayoutMeteoUpToday.setBackgroundDrawable(gradientDrawable);
 
 		try {
@@ -196,15 +194,13 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 				Intent i = new Intent(Intent.ACTION_SEND);
 				i.setType("message/rfc822");
 				i.putExtra(Intent.EXTRA_EMAIL, new String[] { "" });
-				i.putExtra(Intent.EXTRA_SUBJECT, "appymeteo");
-				i.putExtra(Intent.EXTRA_TEXT, "Ciao, io mi sto divertendo con appymeteo, vuoi farlo anche tu?");
+				i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
+				i.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_text));
 				
 				try {
-					startActivity(Intent.createChooser(i, view.getContext().getString(R.string.mail)));
+					startActivity(Intent.createChooser(i, getString(R.string.mail)));
 				} catch (android.content.ActivityNotFoundException ex) {
-					Toast.makeText(MeteoActivity.this,
-							"Non ci sono mail client installati.",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(MeteoActivity.this, getString(R.string.missing_mailclient), Toast.LENGTH_SHORT).show();
 				}
 				
 				return false;
@@ -216,7 +212,7 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
 				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(view.getContext(), Session.getActiveSession());
-				feedDialogBuilder.setDescription("Ho appena misurato la mia felicit\u00E0 con appymeteo. LINK");
+				feedDialogBuilder.setDescription(getString(R.string.facebook_text));
 				feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
 				WebDialog webDialog = feedDialogBuilder.build();
 				webDialog.show();

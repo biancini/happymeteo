@@ -29,7 +29,7 @@ public class GetRequest extends AsyncTask<String, Void, String> {
 		StringBuffer output = new StringBuffer();
 		for (String url : urls) {
 			try {
-				Log.i(Const.TAG, "GetRequest url: "+url);
+				Log.i(Const.TAG, "GetRequest url: " + url);
 				DefaultHttpClient client = new DefaultHttpClient();
 				HttpGet request = new HttpGet(url);
 				HttpResponse response = client.execute(request);
@@ -54,7 +54,7 @@ public class GetRequest extends AsyncTask<String, Void, String> {
 	
 	@Override
     protected void onPostExecute(String result) {
-		Log.i(Const.TAG, "GetRequest result: " + result);
+		Log.d(Const.TAG, "GetRequest result: " + result);
 		if(onGetExecuteListener != null && result != null) {
 			onGetExecuteListener.onGetExecute(result);
 		}

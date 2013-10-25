@@ -22,15 +22,13 @@ public class AppyMeteoSeekBar extends SeekBar {
     }
 	
     @Override
-    protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-     {
+    protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         viewWidth = getMeasuredWidth();
     }
 
     @Override
-    protected synchronized void onDraw(Canvas canvas)
-    {
+    protected synchronized void onDraw(Canvas canvas) {
         barBounds.left = getPaddingLeft();
         barBounds.right = barBounds.left + viewWidth - getPaddingRight() - getPaddingLeft();
 

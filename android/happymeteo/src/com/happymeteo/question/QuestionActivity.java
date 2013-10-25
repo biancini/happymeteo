@@ -123,7 +123,7 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 						final int type = jsonObject.getInt("type");
 						final String textYes = jsonObject.getString("textYes");
 						final String textNo = jsonObject.getString("textNo");
-						Log.i(Const.TAG, jsonObject.toString());
+						Log.d(Const.TAG, jsonObject.toString());
 
 						LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 						llp.setMargins(10, 10, 10, 10);

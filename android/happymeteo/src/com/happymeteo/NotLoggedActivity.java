@@ -39,25 +39,25 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 
 	@Override
 	protected void onDestroy() {
-		Log.i(Const.TAG, this.getClass() + " onDestroy");
+		//Log.d(Const.TAG, this.getClass() + " onDestroy");
 		super.onDestroy();
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		Log.i(Const.TAG, this.getClass() + " onSaveInstanceState");
+		//Log.d(Const.TAG, this.getClass() + " onSaveInstanceState");
 		super.onSaveInstanceState(outState);
 	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		Log.i(Const.TAG, this.getClass() + " onNewIntent");
+		//Log.d(Const.TAG, this.getClass() + " onNewIntent");
 		super.onNewIntent(intent);
 	}
 
 	@Override
 	public void onStart() {
-		Log.i(Const.TAG, this.getClass() + " onStart");
+		//Log.d(Const.TAG, this.getClass() + " onStart");
 		super.onStart();
 	}
 
@@ -69,18 +69,18 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 
 	@Override
 	protected void onResume() {
-		Log.i(Const.TAG, this.getClass() + " onResume");
+		//Log.d(Const.TAG, this.getClass() + " onResume");
 		super.onResume();
 	}
 
 	private void openActiveSession(Session.StatusCallback statusCallback, Session session, boolean allowLoginUI) {
 		if (session == null) {
-			Log.i(Const.TAG, "session null");
+			Log.d(Const.TAG, "session null");
 			session = new Session(this);
 		}
 		Session.setActiveSession(session);
 		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED) || allowLoginUI) {
-			Log.i(Const.TAG, "CREATED_TOKEN_LOADED");
+			Log.d(Const.TAG, "CREATED_TOKEN_LOADED");
 			session.openForSimon(new Session.OpenRequest(this).setPermissions(
 					Arrays.asList(Const.FACEBOOK_PERMISSIONS)).setCallback(
 					statusCallback));
@@ -109,7 +109,7 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 						.setPermissions(Arrays.asList(Const.FACEBOOK_PERMISSIONS))
 						.setCallback(statusCallback));
 			} else {
-				Log.i(Const.TAG, "onClickLogin openActiveSession");
+				Log.d(Const.TAG, "onClickLogin openActiveSession");
 				openActiveSession(statusCallback, session, false);
 			}
 		}
@@ -122,16 +122,14 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 			.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					/* Clear every data */
-					SharedPreferences preferences = getApplicationContext()
-							.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
-			
+					SharedPreferences preferences = getApplicationContext().getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
 					Editor editor = preferences.edit();
 					editor.clear();
 					editor.commit();
 
 					/* Clear Facebook session */
 					//Session session = new Session(AppyMeteoNotLoggedActivity.this, null, null, false);
-					if(Session.getActiveSession() != null) {
+					if (Session.getActiveSession() != null) {
 						Session.getActiveSession().closeAndClearTokenInformation();
 					}
 
@@ -154,7 +152,7 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 	}
 
 	public void invokeActivity(Class<? extends Activity> clazz, Bundle extras) {
-		Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " " + clazz);
+		Log.d(Const.TAG, "invokeActivity: " + this.getClass() + " " + clazz);
 
 		if (!this.getClass().equals(clazz)) {
 			Intent intent = new Intent(this, clazz);

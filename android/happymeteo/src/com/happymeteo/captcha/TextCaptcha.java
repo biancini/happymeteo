@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
-import android.graphics.Bitmap.Config;
-import android.util.Log;
 
 public class TextCaptcha extends Captcha {
 	
@@ -86,13 +85,13 @@ public class TextCaptcha extends Captcha {
 	    	this.x = (this.x % (width / this.wordLength)) + (width / this.wordLength * i);
 	    	this.y = height/2 + Math.abs(r.nextInt()) % height/2;
 	    	
-	    	Log.i("Captcha", "coord: " + this.x + " " + this.y);
+	    	//Log.d("Captcha", "coord: " + this.x + " " + this.y);
 	    	
 	        Canvas cc = new Canvas(bitmap);
         	tp.setTextSkewX(r.nextFloat() - r.nextFloat());
 	        tp.setColor(color());
 	        
-	        Log.i("Captcha", "drawText: " + this.x + " " + data[i]);
+	        //Log.d("Captcha", "drawText: " + this.x + " " + data[i]);
 	        
 	        cc.drawText(data, i, 1, this.x, this.y, tp);
 	        tp.setTextSkewX(0);

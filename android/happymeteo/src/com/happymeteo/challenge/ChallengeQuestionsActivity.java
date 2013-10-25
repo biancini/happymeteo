@@ -71,11 +71,8 @@ public class ChallengeQuestionsActivity extends ImpulseActivity implements OnPos
 		Location localLocation = locationManager.getLastKnownLocation(provider);
 
 		// Initialize the location fields
-		if (localLocation != null) {
-			onLocationChanged(localLocation);
-		} else {
-			Toast.makeText(this, "location not available", Toast.LENGTH_LONG).show();
-		}
+		if (localLocation != null) onLocationChanged(localLocation);
+		else Toast.makeText(this, "location not available", Toast.LENGTH_LONG).show();
 
 		params = new HashMap<String, String>();
 		questions = new JSONObject();
@@ -91,7 +88,7 @@ public class ChallengeQuestionsActivity extends ImpulseActivity implements OnPos
 				Log.d(Const.TAG, "location: " + location);
 
 				if (location != null) {
-					Log.i(Const.TAG, "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude());
+					Log.d(Const.TAG, "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude());
 					
 					params.put("latitude", String.valueOf(location.getLatitude()));
 					params.put("longitude", String.valueOf(location.getLongitude()));
@@ -167,9 +164,7 @@ public class ChallengeQuestionsActivity extends ImpulseActivity implements OnPos
 	}
 
 	private void drawYesNoAnswer(final String id_question, final String textYes, final String textNo) {
-		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		llp.setMargins(10, 10, 10, 10);
 		
 		LinearLayout linearLayout1 = new LinearLayout(getApplicationContext());

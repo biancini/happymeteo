@@ -98,6 +98,10 @@
 	<string name="finegioco_result">Ecco il risultato. [MYSCORE]-[YOURSCORE]</string>
 	<string name="continue_to_read">Continua a leggere..</string>
 	<string name="close_read">Chiudi</string>
+	<string name="email_subject">appymeteo</string>
+	<string name="email_text">Ciao, io mi sto divertendo con appymeteo, vuoi farlo anche tu</string>
+	<string name="facebook_text">Ho appena misurato la mia felicit\u00E0 con appymeteo. LINK</string>
+	<string name="missing_mailclient">Non ci sono mail client installati.</string>
 	<string name="information1"><![CDATA[
 	    <html><body>
 	    Per prima cosa, vorremmo che tu sapessi che <b>stai partecipando a un progetto di ricerca scientifica</b>. 

@@ -26,12 +26,12 @@ import android.util.Log;
 import com.happymeteo.NotLoggedActivity;
 
 public class PostRequest extends AsyncTask<String, Void, String> {
-	private int id;
-	private Context context;
-	private OnPostExecuteListener onPostExecuteListener;
-	private List<NameValuePair> nvps;
-	private Exception exception;
-	private String url;
+	private int id = 0;
+	private Context context = null;
+	private OnPostExecuteListener onPostExecuteListener = null;
+	private List<NameValuePair> nvps = null;
+	private Exception exception = null;
+	private String url = null;
 	
 	public PostRequest(int id, Context context, OnPostExecuteListener onPostExecuteListener, List<NameValuePair> nvps) {
 		this.id = id;
@@ -58,8 +58,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	}
 
 	private void searchError(String json) {
-		if(json == null)
-			return;
+		if (json == null) return;
 		
 		try {
 			JSONObject jsonObject = new JSONObject(json);
@@ -68,7 +67,9 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 				String error = jsonObject.getString("error");
 				exception = new Exception(error);
 			}
-		} catch (JSONException e) {}
+		} catch (JSONException e) {
+			Log.e(Const.TAG, e.getMessage(), e);
+		}
 	}
 
 	@Override
@@ -80,9 +81,11 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	protected String doInBackground(String... urls) {
 		ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+	    
 	    if (networkInfo != null && networkInfo.isConnected()) {
 	    	StringBuffer output = new StringBuffer();
 	    	url = urls[0];
+	    	
 			try {
 				Log.i(Const.TAG, "PostRequest url: " + url);
 				DefaultHttpClient client = new DefaultHttpClient();
@@ -91,7 +94,6 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 				boolean first = true;
 
 				Collections.sort(nvps, new Comparator<NameValuePair>() {
-
 					@Override
 					public int compare(NameValuePair lhs, NameValuePair rhs) {
 						return lhs.getName().compareTo(rhs.getName());
@@ -100,17 +102,14 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 
 				for (NameValuePair pair : nvps) {
 					String value = "";
-					if(pair.getValue() != null)
-						value = pair.getValue();
-					if (!first)
-						query_string += "&";
+					if (pair.getValue() != null) value = pair.getValue();
+					if (!first) query_string += "&";
 
 					query_string += pair.getName() + "=" + value;
 					first = false;
 				}
-				Log.i(Const.TAG, "query_string: " + query_string);
-				nvps.add(new BasicNameValuePair("hashing", SHA1.hexdigest(
-						Const.CALL_SECRET_KEY, query_string)));
+				Log.d(Const.TAG, "query_string: " + query_string);
+				nvps.add(new BasicNameValuePair("hashing", SHA1.hexdigest(Const.CALL_SECRET_KEY, query_string)));
 
 				request.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
 				HttpResponse response = client.execute(request);
@@ -141,8 +140,8 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		
 		searchError(result);
 
-		Log.i(Const.TAG, id + " PostRequest result: " + result);
-		Log.i(Const.TAG, id + " PostRequest exception: " + exception);
+		Log.d(Const.TAG, id + " PostRequest result: " + result);
+		Log.w(Const.TAG, id + " PostRequest exception: " + exception);
 		
 		if (exception != null) {
 			if (context instanceof Activity) { // for "Unable to add window -- token null is not for an application"

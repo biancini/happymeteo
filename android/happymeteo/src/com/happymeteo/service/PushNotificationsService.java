@@ -16,9 +16,9 @@ public class PushNotificationsService {
 		String registrationId = GCMRegistrar.getRegistrationId(context);
 		String userId = SessionCache.getUser_id(context);
 		
-		Log.i(Const.TAG, "registrationId: " + registrationId);
+		Log.d(Const.TAG, "registrationId: " + registrationId);
 		if (registrationId.equals("")) {
-			Log.i(Const.TAG, "Register now: " + GCMRegistrar.isRegisteredOnServer(context));
+			Log.d(Const.TAG, "Register now: " + GCMRegistrar.isRegisteredOnServer(context));
 			GCMRegistrar.register(context, Const.GOOGLE_ID);
 		}
 		

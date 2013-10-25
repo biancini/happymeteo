@@ -62,10 +62,7 @@ public abstract class LoggedActivity extends NotLoggedActivity implements ISideN
 		sideNavigationView.setMenuClickCallback(this);
 		sideNavigationView.setMode(Mode.LEFT);
 
-		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.MATCH_PARENT,
-				RelativeLayout.LayoutParams.MATCH_PARENT);
-
+		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
 		addContentView(sideNavigationView, layoutParams);
 
 		if (SessionCache.isFacebookSession(this)) {

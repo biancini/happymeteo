@@ -200,7 +200,7 @@ public class ChallengeActivity extends LoggedActivity {
 								Log.i(Const.TAG, "turn: " + challenge.getTurn());
 								challengeTurns.get(challenge.getTurn()).addView(view);
 								visibility.set(challenge.getTurn(), true);
-								Log.i(Const.TAG, "visibility: " + visibility.get(challenge.getTurn()));
+								Log.d(Const.TAG, "visibility: " + visibility.get(challenge.getTurn()));
 							}
 						});
 					}
@@ -213,7 +213,7 @@ public class ChallengeActivity extends LoggedActivity {
 				public void run() {
 					for (int i = 0; i < 4; i++) {
 						if (visibility.get(i)) {
-							Log.i(Const.TAG, "end visibility: " + i + " " + visibility.get(i));
+							Log.d(Const.TAG, "end visibility: " + i + " " + visibility.get(i));
 							challengeTurns.get(i).setVisibility(View.VISIBLE);
 							imageTurns.get(i).setVisibility(View.VISIBLE);
 						}

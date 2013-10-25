@@ -303,52 +303,52 @@ public class GraphView extends LinearLayout {
 		float spaceFromPoint = 5;
 		float startY = graphheight + border;
 		
+		float[] valY = new float[values.length];
+		float[] endX = new float[values.length];
+		float[] endY = new float[values.length];
+		
 		for (int i = 0; i < values.length; i++) {
-			float valY = values[i].getY() - minY;
-			float ratY = valY / diffY;
-			float y = graphheight * ratY;
+			valY[i] = values[i].getY() - minY;
+			float y = graphheight * valY[i] / diffY;
 
 			float valX = values[i].getX() - minX;
-			float ratX = valX / diffX;
-			float x = graphwidth * ratX;
+			float x = graphwidth * valX / diffX;
 			
-			float endX = (float) x + (horstart + 1);
-			float endY = (float) (border - y) + graphheight + 2;
-			
-			paint.setColor(getResources().getColor(R.color.white));
-			
-//			if(i ==  values.length-1) {
-//				canvas.drawBitmap(mirroredBitmap.copy(Bitmap.Config.ARGB_8888, true), endX - bitmap.getWidth(), endY - bitmap.getHeight() - spaceFromPoint,
-//						paint);
-//				canvas.drawText(String.valueOf((int) valY), endX - bitmap.getWidth() + bitmap.getWidth()/3 + spaceFromPoint, endY - bitmap.getHeight()/2 - spaceFromPoint, paint);
-//			} else {
-			if(i < values.length-1) {
-				canvas.drawBitmap(bitmap.copy(Bitmap.Config.ARGB_8888, true), endX, endY - bitmap.getHeight() - spaceFromPoint, paint);
-				canvas.drawText(String.valueOf((int) valY), endX + bitmap.getWidth()/3 + spaceFromPoint, endY - bitmap.getHeight()/2 - spaceFromPoint, paint);
-			}
-			
-			paint.setColor(getResources().getColor(R.color.yellow));
-
-			if (i > 0) {
-				// fill space between last and current point
-				float numSpace = ((endX - lastEndX) / 3f) + 1;
-				for (int xi = 0; xi < numSpace; xi++) {
-					float spaceX = (float) (lastEndX + ((endX - lastEndX) * xi / (numSpace - 1)));
-					float spaceY = (float) (lastEndY + ((endY - lastEndY) * xi / (numSpace - 1)));
-
-					float startX = spaceX;
-					// start => bottom edge
-
-					// do not draw over the left edge
-					if (startX - horstart > 1) {						
-						canvas.drawLine(startX, startY, spaceX, spaceY, paint);
-					}
-				}
-			}
-
-			lastEndY = endY;
-			lastEndX = endX;
+			endX[i] = (float) x + (horstart + 1);
+			endY[i] = (float) (border - y) + graphheight + 2;
 		}
+		
+		lastEndY = endY[0];
+		lastEndX = endX[0];
+		
+		paint.setColor(getResources().getColor(R.color.yellow));
+		for (int i = 1; i < values.length; i++) {
+			// fill space between last and current point
+			float numSpace = ((endX[i] - lastEndX) / 3f) + 1;
+			for (int xi = 0; xi < numSpace; xi++) {
+				float spaceX = (float) (lastEndX + ((endX[i] - lastEndX) * xi / (numSpace - 1)));
+				float spaceY = (float) (lastEndY + ((endY[i] - lastEndY) * xi / (numSpace - 1)));
+				float startX = spaceX;
+
+				if (startX - horstart > 1) canvas.drawLine(startX, startY, spaceX, spaceY, paint);
+			}
+
+			lastEndY = endY[i];
+			lastEndX = endX[i];
+		}
+		
+		paint.setColor(getResources().getColor(R.color.white));
+		for (int i = 0; i < values.length; i++) {			
+//			if (i ==  values.length-1) {
+//				canvas.drawBitmap(mirroredBitmap.copy(Bitmap.Config.ARGB_8888, true), endX[i] - bitmap.getWidth(), endY[i] - bitmap.getHeight() - spaceFromPoint, paint);
+//				canvas.drawText(String.valueOf((int) valY[i]), endX[i] - bitmap.getWidth() + bitmap.getWidth()/3 + spaceFromPoint, endY[i] - bitmap.getHeight()/2 - spaceFromPoint, paint);
+//			}
+			if (i < values.length-1) {
+				canvas.drawBitmap(bitmap.copy(Bitmap.Config.ARGB_8888, true), endX[i], endY[i] - bitmap.getHeight() - spaceFromPoint, paint);
+				canvas.drawText(String.valueOf((int) valY[i]), endX[i] + bitmap.getWidth()/3 + spaceFromPoint, endY[i] - bitmap.getHeight()/2 - spaceFromPoint, paint);
+			}
+		}
+
 	}
 
 	protected void drawHorizontalLabels(Canvas canvas, String[] horlabels, float graphwidth, float graphheight, float border, float horstart) {

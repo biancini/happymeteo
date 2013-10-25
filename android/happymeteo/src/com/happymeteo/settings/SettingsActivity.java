@@ -63,7 +63,7 @@ public class SettingsActivity extends LoggedActivity implements OnGetExecuteList
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				final boolean checked = isChecked;
-				Log.i(Const.TAG, "nextTime: " + nextTime);
+				Log.d(Const.TAG, "nextTime: " + nextTime);
 				
 				if (nextTime) {
 					new AlertDialog.Builder(SettingsActivity.this)
@@ -138,14 +138,13 @@ public class SettingsActivity extends LoggedActivity implements OnGetExecuteList
 	}
 
 	private void updateView(Session session) {
-		Log.i(Const.TAG, "state: " + session.getState());
-		Log.i(Const.TAG, "session.isOpened(): " + session.isOpened());
+		Log.d(Const.TAG, "state: " + session.getState());
+		Log.d(Const.TAG, "session.isOpened(): " + session.isOpened());
 
 		if (session.isOpened()) {
 			String accessToken = session.getAccessToken();
-			Log.i(Const.TAG, "accessToken: " + accessToken);
-			String serverUrl = "https://graph.facebook.com/me?access_token="
-					+ accessToken;
+			Log.d(Const.TAG, "accessToken: " + accessToken);
+			String serverUrl = "https://graph.facebook.com/me?access_token=" + accessToken;
 			new GetRequest(this, this).execute(serverUrl);
 		}
 	}

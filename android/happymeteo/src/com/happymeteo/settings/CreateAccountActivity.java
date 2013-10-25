@@ -126,8 +126,7 @@ public class CreateAccountActivity extends NotLoggedActivity implements OnPostEx
 
 						Log.i(Const.TAG, "facebook_id: " + SessionCache.getFacebook_id(view.getContext()));
 					} else {
-						create_account_confirm_password
-							.setError(getApplicationContext().getString(R.string.error_password));
+						create_account_confirm_password.setError(getApplicationContext().getString(R.string.error_password));
 					}
 				}
 			}

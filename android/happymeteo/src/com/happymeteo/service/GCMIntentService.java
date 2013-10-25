@@ -119,7 +119,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if(user_id != null && SessionCache.getUser_id(context) != null && user_id.equals(SessionCache.getUser_id(context))) {
 			int icon = R.drawable.ic_launcher;
 			long when = System.currentTimeMillis();
-//			String notificationTag = String.valueOf(UUID.randomUUID());
+			//String notificationTag = String.valueOf(UUID.randomUUID());
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			
 			String collapse_key = extras.getString("collapse_key");
@@ -135,7 +135,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	
 			notificationIntent.putExtras(extras);
 			
-			Log.i(Const.TAG, "extras: "+extras.toString());
+			Log.d(Const.TAG, "extras: " + extras.toString());
 			
 			// set intent so it does not start a new activity
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

@@ -60,15 +60,14 @@ public class ChangePasswordActivity extends LoggedActivity implements OnPostExec
         
         btnChangePassword.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				Log.i(Const.TAG, "captcha.checkAnswer: "+captcha.checkAnswer(changePassword_textCaptcha.getText().toString()));
+				Log.i(Const.TAG, "captcha.checkAnswer: " + captcha.checkAnswer(changePassword_textCaptcha.getText().toString()));
 				
 				if (mForm.isValid()) {
 					if (captcha.checkAnswer(changePassword_textCaptcha.getText().toString())) {
 						if (changePassword_password.getText().toString().equals(changePassword_confirm_password.getText().toString())) {
 							String newPassword = "";
 							try {
-								newPassword = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY,
-										changePassword_password.getText().toString());
+								newPassword = SHA1.hexdigest(Const.PASSWORD_SECRET_KEY, changePassword_password.getText().toString());
 							} catch (Exception e) {
 								Log.e(Const.TAG, e.getMessage(), e);
 								newPassword = "";

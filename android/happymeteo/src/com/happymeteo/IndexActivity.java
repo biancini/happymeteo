@@ -90,7 +90,7 @@ public class IndexActivity extends NotLoggedActivity implements OnPostExecuteLis
 	private class SessionStatusCallback implements Session.StatusCallback {
 		@Override
 		public void call(Session session, SessionState state, Exception exception) {
-			Log.i(Const.TAG, "SessionStatusCallback state: " + state);
+			Log.d(Const.TAG, "SessionStatusCallback state: " + state);
 
 			if (exception != null) {
 				AlertDialogManager.showError(IndexActivity.this, exception.getMessage());

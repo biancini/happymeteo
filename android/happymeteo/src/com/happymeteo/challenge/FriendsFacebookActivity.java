@@ -163,7 +163,7 @@ public class FriendsFacebookActivity extends LoggedActivity implements OnGetExec
 
 				@Override
 				public void afterTextChanged(Editable s) {
-					Log.i(Const.TAG, "afterTextChanged: " + s.toString());
+					Log.d(Const.TAG, "afterTextChanged: " + s.toString());
 				}
 			});
 
