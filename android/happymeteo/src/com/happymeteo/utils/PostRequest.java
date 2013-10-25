@@ -63,7 +63,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 		try {
 			JSONObject jsonObject = new JSONObject(json);
 
-			if (jsonObject != null && jsonObject.getString("error") != null) {
+			if (jsonObject != null && jsonObject.has("error") && jsonObject.getString("error") != null) {
 				String error = jsonObject.getString("error");
 				exception = new Exception(error);
 			}

@@ -20,11 +20,7 @@
 <!--     <item -->
 <!--         android:id="@+id/side_navigation_menu_item5a" -->
 <!--         android:icon="@drawable/icona_contesto" -->
-<!--         android:title="fake accetta"/> -->
-<!--     <item -->
-<!--         android:id="@+id/side_navigation_menu_item5b" -->
-<!--         android:icon="@drawable/icona_contesto" -->
-<!--         android:title="fake resoconto"/> -->
+<!--         android:title="@string/app_name"/> -->
 	<item
         android:id="@+id/side_navigation_menu_item6"
         android:icon="@drawable/logout"
