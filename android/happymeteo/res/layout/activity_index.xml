@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:cropToPadding="false"
-            android:src="@drawable/indexlogo" />
+            android:src="@drawable/indexlogo"
+            android:contentDescription="@string/fake" />
     </RelativeLayout>
 
     <LinearLayout

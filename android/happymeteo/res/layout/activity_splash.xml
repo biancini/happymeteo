@@ -15,7 +15,8 @@
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
         android:cropToPadding="false"
-        android:src="@drawable/indexlogo" />
+        android:src="@drawable/indexlogo"
+        android:contentDescription="@string/fake" />
 
     <TextView
         android:layout_width="fill_parent"

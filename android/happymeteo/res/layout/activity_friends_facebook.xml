@@ -20,13 +20,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:adjustViewBounds="true"
-            android:src="@drawable/appygame"/>
+            android:src="@drawable/appygame"
+        	android:contentDescription="@string/fake" />
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/appy_game_title" />
+            android:src="@drawable/appy_game_title"
+        	android:contentDescription="@string/fake" />
 
         <LinearLayout
             android:layout_width="match_parent"

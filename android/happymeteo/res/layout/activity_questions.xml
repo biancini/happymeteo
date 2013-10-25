@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="5dip"
-        android:background="@color/white" >
+        android:background="@color/white">
 
         <include layout="@layout/indeterminate_progress_action" />
     </RelativeLayout>
@@ -27,7 +27,7 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp" >
+            android:paddingRight="16dp">
         </LinearLayout>
     </ScrollView>
 
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="10dip" >
+        android:paddingBottom="10dip">
 
         <Button
             android:id="@+id/btnAnswerQuestions"

@@ -31,7 +31,8 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:layout_marginTop="20dip"
-                android:src="@drawable/indexlogo" />
+                android:src="@drawable/indexlogo"
+        		android:contentDescription="@string/fake" />
         </RelativeLayout>
 
         <LinearLayout
@@ -45,7 +46,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/welcome_registrati" />
+                android:src="@drawable/welcome_registrati"
+        		android:contentDescription="@string/fake" />
 
             <LinearLayout
                 android:layout_width="match_parent"
