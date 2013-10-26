@@ -17,6 +17,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 import com.happymeteo.ImpulseActivity;
 import com.happymeteo.R;
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
@@ -66,11 +68,8 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 		Location localLocation = locationManager.getLastKnownLocation(provider);
 
 		// Initialize the location fields
-		if (localLocation != null) {
-			onLocationChanged(localLocation);
-		} else {
-			Toast.makeText(this, "location not available", Toast.LENGTH_LONG).show();
-		}
+		if (localLocation != null) onLocationChanged(localLocation);
+		else Toast.makeText(this, "location not available", Toast.LENGTH_LONG).show();
 
 		params = new HashMap<String, String>();
 		questions = new JSONObject();
@@ -115,11 +114,15 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 			try {
 				JSONArray jsonArray = new JSONArray(result);
 				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject jsonObject;
 					try {
-						jsonObject = jsonArray.getJSONObject(i);
+						JSONObject jsonObject = jsonArray.getJSONObject(i);
 						final String id_question = jsonObject.getString("id");
-						final String question = jsonObject.getString("question");
+						
+						String questionText = Html.fromHtml(jsonObject.getString("question")).toString();
+						int gender = SessionCache.getGender(getApplicationContext());
+						if (gender == User.GENDER_MALE) questionText = questionText.replaceAll("\\[o/a\\]", "o");
+						else questionText = questionText.replaceAll("\\[o/a\\]", "a");
+						
 						final int type = jsonObject.getInt("type");
 						final String textYes = jsonObject.getString("textYes");
 						final String textNo = jsonObject.getString("textNo");
@@ -129,7 +132,7 @@ public class QuestionActivity extends ImpulseActivity implements OnPostExecuteLi
 						llp.setMargins(10, 10, 10, 10);
 
 						TextView textView = new TextView(getApplicationContext());
-						textView.setText(question);
+						textView.setText(questionText);
 						textView.setLayoutParams(llp);
 						textView.setTextColor(getResources().getColor(R.color.black));
 						textView.setBackgroundResource(R.drawable.fascia);
