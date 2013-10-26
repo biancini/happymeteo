@@ -36,6 +36,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 				context,
 				registrationId,
 				SessionCache.getUser_id(this));
+		
+		Log.i(Const.TAG, "Devide registered to appymeteo backend");
 	}
 
 	/**
@@ -45,6 +47,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onUnregistered(Context context, String registrationId) {
 		/* Unregister device on happymeteo backend */
 		ServerUtilities.unregisterDevice(context, registrationId);
+		Log.i(Const.TAG, "Devide unregistered to appymeteo backend");
 	}
 
 	/**

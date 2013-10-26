@@ -138,16 +138,15 @@
 
         <!-- GCM Service -->
         <receiver
-            android:name="com.google.android.gcm.GCMBroadcastReceiver"
+            android:name="com.happymeteo.service.GCMReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
-
                 <!-- Receives the actual messages. -->
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <!-- DEVE ESSERE scritto il package di GCM Service -->
-                <category android:name="com.happymeteo.service" />
+                <!-- The category context for messages, must coinvide with application main package -->
+                <category android:name="com.happymeteo" />
             </intent-filter>
         </receiver>
 
