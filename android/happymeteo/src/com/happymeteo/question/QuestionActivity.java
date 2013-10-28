@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.happymeteo.QuestionImpulseActivity;
 import com.happymeteo.R;
 import com.happymeteo.models.SessionCache;
-import com.happymeteo.models.User;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
@@ -103,12 +102,7 @@ public class QuestionActivity extends QuestionImpulseActivity implements OnPostE
 				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject jsonObject = jsonArray.getJSONObject(i);
 					final String id_question = jsonObject.getString("id");
-					
 					String questionText = Html.fromHtml(jsonObject.getString("question")).toString();
-					int gender = SessionCache.getGender(getApplicationContext());
-					if (gender == User.GENDER_MALE) questionText = questionText.replaceAll("\\[o/a\\]", "o");
-					else questionText = questionText.replaceAll("\\[o/a\\]", "a");
-					
 					final int type = jsonObject.getInt("type");
 					final String textYes = jsonObject.getString("textYes");
 					final String textNo = jsonObject.getString("textNo");

@@ -127,10 +127,11 @@ public abstract class LoggedActivity extends NotLoggedActivity implements ISideN
 
 //		case R.id.side_navigation_menu_item5a:
 //			Bundle extras = new Bundle();
-//			extras.putString("challenge_id", "4642782337564672");
-//			extras.putString("turn", "1");
-//			extras.putString("score", "0");
-//			invokeActivity(ChallengeQuestionsActivity.class, extras);
+////			extras.putString("challenge_id", "4642782337564672");
+////			extras.putString("turn", "1");
+////			extras.putString("score", "0");
+////			invokeActivity(ChallengeQuestionsActivity.class, extras);
+//			invokeActivity(QuestionActivity.class, extras);
 //			break;
 			
 		case R.id.side_navigation_menu_item6:

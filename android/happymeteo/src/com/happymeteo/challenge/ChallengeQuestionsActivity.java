@@ -103,20 +103,16 @@ public class ChallengeQuestionsActivity extends QuestionImpulseActivity implemen
 			try {
 				JSONArray jsonArray = new JSONArray(result);
 				for (int i = 0; i < jsonArray.length(); i++) {
-					try {
-						JSONObject jsonObject = jsonArray.getJSONObject(i);
-						final String id_question = jsonObject.getString("id");
-						String questionText = Html.fromHtml(jsonObject.getString("question")).toString();
-						final int type = jsonObject.getInt("type");
-						final String textYes = jsonObject.getString("textYes");
-						final String textNo = jsonObject.getString("textNo");
-						Log.i(Const.TAG, jsonObject.toString());
+					JSONObject jsonObject = jsonArray.getJSONObject(i);
+					final String id_question = jsonObject.getString("id");
+					String questionText = Html.fromHtml(jsonObject.getString("question")).toString();
+					final int type = jsonObject.getInt("type");
+					final String textYes = jsonObject.getString("textYes");
+					final String textNo = jsonObject.getString("textNo");
+					Log.d(Const.TAG, jsonObject.toString());
 
-						writeQuestionText(questionText);
-						writeQuestionAnswerArea(type, id_question, textYes, textNo);
-					} catch (JSONException e) {
-						Log.e(Const.TAG, e.getMessage(), e);
-					}
+					writeQuestionText(questionText);
+					writeQuestionAnswerArea(type, id_question, textYes, textNo);
 				}
 			} catch (JSONException e) {
 				Log.e(Const.TAG, e.getMessage(), e);
@@ -163,16 +159,16 @@ public class ChallengeQuestionsActivity extends QuestionImpulseActivity implemen
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		Toast.makeText(this, "onProviderDisabled: " + provider, Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, "onProviderDisabled: " + provider, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		Toast.makeText(this, "onProviderEnabled: " + provider, Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, "onProviderEnabled: " + provider, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		Toast.makeText(this, "onStatusChanged: " + provider + " " + status, Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, "onStatusChanged: " + provider + " " + status, Toast.LENGTH_LONG).show();
 	}
 }
