@@ -30,7 +30,6 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity {
 		//llp.setMargins(10, 10, 10, 0);
 		llp.gravity = Gravity.CENTER;
 		
-		
 		int gender = SessionCache.getGender(getApplicationContext());
 		if (gender == User.GENDER_MALE) questionText = questionText.replaceAll("\\[o/a\\]", "o").replaceAll("\\[a/o\\]", "o");
 		else questionText = questionText.replaceAll("\\[o/a\\]", "a").replaceAll("\\[a/o\\]", "a");
