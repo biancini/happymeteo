@@ -17,10 +17,14 @@
         android:id="@+id/side_navigation_menu_item4"
         android:icon="@drawable/icona_sfida"
         android:title="@string/challenge"/>
-<!--     <item -->
-<!--         android:id="@+id/side_navigation_menu_item5a" -->
-<!--         android:icon="@drawable/icona_contesto" -->
-<!--         android:title="@string/app_name"/> -->
+    <item
+        android:id="@+id/side_navigation_menu_item5a"
+        android:icon="@drawable/icona_contesto"
+        android:title="@string/app_name"/>
+    <item
+        android:id="@+id/side_navigation_menu_item5b"
+        android:icon="@drawable/icona_contesto"
+        android:title="@string/app_name"/>
 	<item
         android:id="@+id/side_navigation_menu_item6"
         android:icon="@drawable/logout"

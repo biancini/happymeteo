@@ -58,7 +58,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	}
 
 	private void searchError(String json) {
-		if (json == null) return;
+		if (json == null || json.startsWith("[")) return;
 		
 		try {
 			JSONObject jsonObject = new JSONObject(json);
@@ -137,7 +137,6 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-		
 		searchError(result);
 
 		Log.d(Const.TAG, id + " PostRequest result: " + result);

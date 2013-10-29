@@ -9,8 +9,7 @@
         android:id="@+id/waitGetChallengeQuestions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dip"
-        android:background="@color/white">
+        android:layout_marginTop="5dip">
 
         <include layout="@layout/indeterminate_progress_action" />
     </RelativeLayout>
@@ -22,6 +21,7 @@
 
         <LinearLayout
             android:id="@+id/layoutChallengeQuestions"
+            android:layout_marginTop="5dip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"

@@ -27,7 +27,7 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 		super.onCreate(savedInstanceState);
 		
 		Settings.addLoggingBehavior(LoggingBehavior.CACHE);
-		Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+		//Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 		Settings.addLoggingBehavior(LoggingBehavior.DEVELOPER_ERRORS);
 		
 		Session session = Session.getActiveSession();

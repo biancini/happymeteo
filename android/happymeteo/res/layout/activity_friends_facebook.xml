@@ -63,8 +63,7 @@
                 android:id="@+id/waitFriendsWithApp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dip"
-                android:background="@color/white" >
+                android:layout_marginTop="5dip">
 
                 <include layout="@layout/indeterminate_progress_action" />
             </RelativeLayout>
@@ -100,8 +99,7 @@
                 android:id="@+id/waitFriendsNoApp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dip"
-                android:background="@color/white" >
+                android:layout_marginTop="5dip">
 
                 <include layout="@layout/indeterminate_progress_action" />
             </RelativeLayout>

@@ -27,16 +27,18 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity {
 	
 	protected void writeQuestionText(String questionText) {
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		llp.setMargins(10, 10, 10, 0);
+		//llp.setMargins(10, 10, 10, 0);
 		llp.gravity = Gravity.CENTER;
 		
+		
 		int gender = SessionCache.getGender(getApplicationContext());
-		if (gender == User.GENDER_MALE) questionText = questionText.replaceAll("\\[o/a\\]", "o");
-		else questionText = questionText.replaceAll("\\[o/a\\]", "a");
+		if (gender == User.GENDER_MALE) questionText = questionText.replaceAll("\\[o/a\\]", "o").replaceAll("\\[a/o\\]", "o");
+		else questionText = questionText.replaceAll("\\[o/a\\]", "a").replaceAll("\\[a/o\\]", "a");
 		
 		TextView textView = new TextView(getApplicationContext());
-		textView.setText(questionText);
 		textView.setLayoutParams(llp);
+		textView.setPadding(10, 10, 10, 0);
+		textView.setText(questionText);
 		textView.setBackgroundColor(getResources().getColor(R.color.white));
 		textView.setTextColor(getResources().getColor(R.color.black));
 //		textView.setBackgroundResource(R.drawable.fascia);
@@ -49,14 +51,14 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity {
 		} catch (Exception e) {
 			Log.e(Const.TAG, e.getMessage(), e);
 		}
-
 		linearLayout.addView(textView);
 		
 		LinearLayout.LayoutParams llp2 = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		llp2.setMargins(10, 0, 10, 10);
+		//llp2.setMargins(10, 0, 10, 10);
 		llp2.gravity = Gravity.CENTER;
 		ImageView fascetta = new ImageView(getApplicationContext());
 		fascetta.setLayoutParams(llp2);
+		fascetta.setPadding(10, 0, 10, 10);
 		fascetta.setImageDrawable(getResources().getDrawable(R.drawable.fascia));
 		linearLayout.addView(fascetta);
 	}
@@ -73,19 +75,21 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity {
 	
 	protected void drawYesNoAnswer(final String id_question, final String textYes, final String textNo) {
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		llp.setMargins(10, 10, 10, 10);
+		//llp.setMargins(10, 0, 10, 30);
 		
 		LinearLayout linearLayout1 = new LinearLayout(getApplicationContext());
 		linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
 		linearLayout1.setGravity(Gravity.CENTER);
 
 		TextView textYesView = new TextView(this);
-		textYesView.setText(textYes);
 		textYesView.setLayoutParams(llp);
+		textYesView.setPadding(10, 0, 10, 30);
+		textYesView.setText(textYes);
 		linearLayout1.addView(textYesView);
 
 		final Switch switchButton = new Switch(this);
 		switchButton.setLayoutParams(llp);
+		switchButton.setPadding(10, 0, 10, 30);
 		switchButton.setChecked(true);
 		switchButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
@@ -101,8 +105,9 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity {
 		linearLayout1.addView(switchButton);
 
 		TextView textNoView = new TextView(this);
-		textNoView.setText(textNo);
 		textNoView.setLayoutParams(llp);
+		textNoView.setPadding(10, 0, 10, 30);
+		textNoView.setText(textNo);
 		linearLayout1.addView(textNoView);
 
 		linearLayout.addView(linearLayout1);

@@ -9,8 +9,7 @@
         android:id="@+id/waitGetQuestions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dip"
-        android:background="@color/white">
+        android:layout_marginTop="5dip">
 
         <include layout="@layout/indeterminate_progress_action" />
     </RelativeLayout>
@@ -26,8 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:orientation="vertical"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp">
+            android:paddingLeft="16dip"
+            android:paddingRight="16dip">
         </LinearLayout>
     </ScrollView>
 

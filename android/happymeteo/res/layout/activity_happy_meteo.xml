@@ -75,8 +75,7 @@
             <RelativeLayout
                 android:id="@+id/waitGetAppinessByDay"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white" >
+                android:layout_height="match_parent">
 
                 <include layout="@layout/indeterminate_progress_action" />
             </RelativeLayout>
@@ -91,8 +90,7 @@
             <RelativeLayout
                 android:id="@+id/waitGetAppinessByMonth"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white" >
+                android:layout_height="match_parent">
 
                 <include layout="@layout/indeterminate_progress_action" />
             </RelativeLayout>
