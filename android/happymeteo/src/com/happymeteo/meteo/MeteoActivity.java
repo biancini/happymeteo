@@ -40,8 +40,7 @@ import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
 
-public class MeteoActivity extends LoggedActivity implements
-		OnPostExecuteListener {
+public class MeteoActivity extends LoggedActivity implements OnPostExecuteListener {
 
 	private TextView welcomeToday = null;
 	private GestureDetector gestureDetector = null;
@@ -59,10 +58,8 @@ public class MeteoActivity extends LoggedActivity implements
 			this.context = context;
 		}
 
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
-			if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
-				return false;
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+			if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) return false;
 
 			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
 					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
@@ -70,8 +67,7 @@ public class MeteoActivity extends LoggedActivity implements
 
 				flipper.setInAnimation(context, R.anim.in_from_right);
 				flipper.setOutAnimation(context, R.anim.out_to_left);
-				welcomeToday.setText(SessionCache.getFirst_name(context)
-						.toLowerCase(Locale.getDefault()) + "_DIARIO");
+				welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase(Locale.getDefault()) + "_DIARIO");
 				flipper.showNext();
 
 				return true;
@@ -84,8 +80,7 @@ public class MeteoActivity extends LoggedActivity implements
 				flipper.showPrevious();
 
 				if (flipper.getDisplayedChild() == 0) {
-					welcomeToday.setText(SessionCache.getFirst_name(context)
-							.toLowerCase(Locale.getDefault()) + "_OGGI");
+					welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase(Locale.getDefault()) + "_OGGI");
 				}
 
 				return true;
@@ -96,12 +91,12 @@ public class MeteoActivity extends LoggedActivity implements
 	}
 
 	private int[] getColorByToday(int today) {
-		int[] colors_0 = { 0xff7bccff, 0xff2ea6ff, 0xff0071bc, 0xff93278f,
-				0xffed1e79, 0xffff0000, 0xfff1700d, 0xfff7931e, 0xfff9c33d,
-				0xffffe400 };
-		int[] colors_1 = { 0xff2ea6ff, 0xff0071bc, 0xff4a4998, 0xff4a4998,
-				0xffae3771, 0xfffd3771, 0xfffd3700, 0xfffd6c00, 0xfffd9200,
-				0xfffdc800 };
+		int[] colors_0 = {
+				0xff7bccff, 0xff2ea6ff, 0xff0071bc, 0xff93278f, 0xffed1e79,
+				0xffff0000, 0xfff1700d, 0xfff7931e, 0xfff9c33d, 0xffffe400 };
+		int[] colors_1 = {
+				0xff2ea6ff, 0xff0071bc, 0xff4a4998, 0xff4a4998, 0xffae3771,
+				0xfffd3771, 0xfffd3700, 0xfffd6c00, 0xfffd9200, 0xfffdc800 };
 
 		if (today < 1 || today > 10)
 			return new int[] { colors_0[0], colors_1[0] };
@@ -110,8 +105,7 @@ public class MeteoActivity extends LoggedActivity implements
 	}
 
 	private int getWhiteIcon(int day) {
-		if (day < 1 || day > 10)
-			return R.drawable.white_1happy;
+		if (day < 1 || day > 10) return R.drawable.white_1happy;
 
 		int[] icons = { R.drawable.white_1happy, R.drawable.white_2happy,
 				R.drawable.white_3happy, R.drawable.white_4happy,
@@ -123,8 +117,7 @@ public class MeteoActivity extends LoggedActivity implements
 	}
 
 	private int getGrayIcon(int day) {
-		if (day < 1 || day > 10)
-			return R.drawable.gray_1happy;
+		if (day < 1 || day > 10) return R.drawable.gray_1happy;
 
 		int[] icons = { R.drawable.gray_1happy, R.drawable.gray_2happy,
 				R.drawable.gray_3happy, R.drawable.gray_4happy,
@@ -164,9 +157,7 @@ public class MeteoActivity extends LoggedActivity implements
 		relativeLayoutMeteoUpToday.setBackgroundDrawable(gradientDrawable);
 
 		try {
-			Typeface helveticaneueltstd_ultlt_webfont = Typeface
-					.createFromAsset(getAssets(),
-							"helveticaneueltstd-ultlt-webfont.ttf");
+			Typeface helveticaneueltstd_ultlt_webfont = Typeface.createFromAsset(getAssets(), "helveticaneueltstd-ultlt-webfont.ttf");
 			today_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 			yesterday_text.setTypeface(helveticaneueltstd_ultlt_webfont);
 			tomorrow_text.setTypeface(helveticaneueltstd_ultlt_webfont);
@@ -196,13 +187,10 @@ public class MeteoActivity extends LoggedActivity implements
 		PushNotificationsService.register(getApplicationContext());
 
 		welcomeToday = (TextView) findViewById(R.id.welcomeToday);
-		welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase(
-				Locale.getDefault())
-				+ "_OGGI");
+		welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase(Locale.getDefault()) + "_OGGI");
 
 		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
-		gestureDetector = new GestureDetector(getBaseContext(),
-				new MyGestureDetector(this, viewFlipper));
+		gestureDetector = new GestureDetector(getBaseContext(), new MyGestureDetector(this, viewFlipper));
 
 		ImageView mail = (ImageView) findViewById(R.id.mail);
 		mail.setOnTouchListener(new OnTouchListener() {
@@ -211,17 +199,13 @@ public class MeteoActivity extends LoggedActivity implements
 				Intent i = new Intent(Intent.ACTION_SEND);
 				i.setType("message/rfc822");
 				i.putExtra(Intent.EXTRA_EMAIL, new String[] { "" });
-				i.putExtra(Intent.EXTRA_SUBJECT,
-						getString(R.string.email_subject));
+				i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
 				i.putExtra(Intent.EXTRA_TEXT, getString(R.string.email_text));
 
 				try {
-					startActivity(Intent.createChooser(i,
-							getString(R.string.mail)));
+					startActivity(Intent.createChooser(i, getString(R.string.mail)));
 				} catch (android.content.ActivityNotFoundException ex) {
-					Toast.makeText(MeteoActivity.this,
-							getString(R.string.missing_mailclient),
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(MeteoActivity.this, getString(R.string.missing_mailclient), Toast.LENGTH_SHORT).show();
 				}
 
 				return false;
@@ -232,12 +216,9 @@ public class MeteoActivity extends LoggedActivity implements
 		facebook.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
-				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(
-						view.getContext(), Session.getActiveSession());
-				feedDialogBuilder
-						.setDescription(getString(R.string.facebook_text));
-				feedDialogBuilder.setPicture(Const.BASE_URL
-						+ "/img/facebook_invita.png");
+				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(view.getContext(), Session.getActiveSession());
+				feedDialogBuilder.setDescription(getString(R.string.facebook_text));
+				feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
 				WebDialog webDialog = feedDialogBuilder.build();
 				webDialog.show();
 				return false;
@@ -256,8 +237,7 @@ public class MeteoActivity extends LoggedActivity implements
 		super.onNewIntent(intent);
 
 		if (intent.getExtras() != null) {
-			boolean challengeScoreActivity = intent.getExtras().getBoolean(
-					"ChallengeScoreActivity", false);
+			boolean challengeScoreActivity = intent.getExtras().getBoolean("ChallengeScoreActivity", false);
 
 			if (challengeScoreActivity) {
 				invokeActivity(ChallengeScoreActivity.class, intent.getExtras());
@@ -280,8 +260,7 @@ public class MeteoActivity extends LoggedActivity implements
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
-		if (exception != null)
-			return;
+		if (exception != null) return;
 
 		try {
 			JSONObject jsonObject = new JSONObject(result);
@@ -297,8 +276,7 @@ public class MeteoActivity extends LoggedActivity implements
 					R.string.september, R.string.october, R.string.november,
 					R.string.december };
 
-			GraphViewStyle graphViewStyle = new GraphViewStyle(0xff000000,
-					0xffffffff, 0xffffffff);
+			GraphViewStyle graphViewStyle = new GraphViewStyle(0xff000000, 0xffffffff, 0xffffffff);
 
 			switch (id) {
 			case Const.GET_APPINESS_BY_DAY_ID:
@@ -311,20 +289,19 @@ public class MeteoActivity extends LoggedActivity implements
 				int groups = daysInMonth / groupBy
 						+ (((daysInMonth % groupBy) == 0) ? 0 : 1);
 				GraphViewData[] viewDayData = new GraphViewData[groups];
-				for (int i = 0; i < groups; ++i)
+				for (int i = 0; i < groups; ++i) {
 					viewDayData[i] = new GraphViewData(i + 1, 0.0f);
+				}
 
 				boolean future = false;
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd",
-						Locale.getDefault());
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
 				int arrayIndex = 0;
 				float curValue = 0.0f;
 				int curElems = 0;
 				for (int i = 0; i < daysInMonth; i++) {
 					String date = dateFormat.format(cal.getTime());
-					double y = (jsonObject.isNull(date)) ? 0.0 : jsonObject
-							.getInt(date);
+					double y = (jsonObject.isNull(date)) ? 0.0 : jsonObject.getInt(date);
 
 					if (!future) {
 						curElems += 1;
@@ -339,22 +316,18 @@ public class MeteoActivity extends LoggedActivity implements
 						curElems = 0;
 					}
 
-					if (cal.getTime().equals(today))
-						future = true;
+					if (cal.getTime().equals(today)) future = true;
 					cal.add(Calendar.DATE, 1);
 				}
 
 				// init example series data
 				GraphViewSeries dayDataSeries = new GraphViewSeries(
-						new GraphViewSeriesStyle(getResources().getColor(
-								R.color.yellow), 1), viewDayData);
+						new GraphViewSeriesStyle(getResources().getColor(R.color.yellow), 1), viewDayData);
 
 				GraphView dayBarGraphView = new GraphView(this);
 				dayBarGraphView.setManualYAxisBounds(10, 0);
 				dayBarGraphView.addSeries(dayDataSeries); // data
-				dayBarGraphView
-						.setHorizontalLabels(new String[] { getApplicationContext()
-								.getString(months[month]) });
+				dayBarGraphView.setHorizontalLabels(new String[] { getApplicationContext().getString(months[month]) });
 				dayBarGraphView.setGraphViewStyle(graphViewStyle);
 				relativeLayoutMeteoUpGraphByDay.addView(dayBarGraphView);
 				break;

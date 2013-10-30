@@ -17,12 +17,10 @@ import com.devspark.sidenavigation.SideNavigationView.Mode;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.happymeteo.challenge.ChallengeActivity;
-import com.happymeteo.challenge.ChallengeQuestionsActivity;
 import com.happymeteo.information.InformationPageActivity;
 import com.happymeteo.map.MapActivity;
 import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
-import com.happymeteo.question.QuestionActivity;
 import com.happymeteo.settings.SettingsActivity;
 import com.happymeteo.utils.Const;
 
@@ -127,17 +125,17 @@ public abstract class LoggedActivity extends NotLoggedActivity implements ISideN
 			if (SessionCache.isFacebookSession(this)) invokeActivity(ChallengeActivity.class);
 			break;
 
-		case R.id.side_navigation_menu_item5a:
-			invokeActivity(QuestionActivity.class, new Bundle());
-			break;
-			
-		case R.id.side_navigation_menu_item5b:
-			Bundle extras = new Bundle();
-			extras.putString("challenge_id", "4642782337564672");
-			extras.putString("turn", "1");
-			extras.putString("score", "0");
-			invokeActivity(ChallengeQuestionsActivity.class, extras);
-			break;
+//		case R.id.side_navigation_menu_item5a:
+//			invokeActivity(QuestionActivity.class, new Bundle());
+//			break;
+//			
+//		case R.id.side_navigation_menu_item5b:
+//			Bundle extras = new Bundle();
+//			extras.putString("challenge_id", "4642782337564672");
+//			extras.putString("turn", "1");
+//			extras.putString("score", "0");
+//			invokeActivity(ChallengeQuestionsActivity.class, extras);
+//			break;
 			
 		case R.id.side_navigation_menu_item6:
 			onClickLogout();
