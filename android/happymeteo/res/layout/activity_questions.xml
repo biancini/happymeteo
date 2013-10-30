@@ -15,6 +15,7 @@
     </RelativeLayout>
 
     <ScrollView
+        android:paddingTop="10dip"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1" >

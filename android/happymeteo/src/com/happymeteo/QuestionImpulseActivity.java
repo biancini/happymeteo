@@ -27,7 +27,7 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity {
 	
 	protected void writeQuestionText(String questionText) {
 		LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		//llp.setMargins(10, 10, 10, 0);
+		llp.setMargins(10, 10, 10, 0);
 		llp.gravity = Gravity.CENTER;
 		
 		int gender = SessionCache.getGender(getApplicationContext());
@@ -119,6 +119,7 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity {
 
 		LinearLayout linearLayout1 = new LinearLayout(this);
 		linearLayout1.setOrientation(LinearLayout.HORIZONTAL);
+		linearLayout1.setPadding(10, 0, 10, 10);
 
 		ImageView imageView1 = new ImageView(this);
 		imageView1.setImageResource(R.drawable.triste);
