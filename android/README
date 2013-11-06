@@ -1,0 +1,2 @@
+- Install Android Support Repository
+- Run ./gradlew clean build

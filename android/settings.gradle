@@ -1,0 +1,6 @@
+include ':happymeteo'
+include ':sidenavigation'
+include ':facebook'
+include ':z-validations'
+include ':android-switch-backport'
+include ':actionbarsherlock'

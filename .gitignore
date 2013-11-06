@@ -11,3 +11,5 @@ android/sidenavigation/gen
 android/*/gen
 android/*/bin
 *.class
+android/.gradle/
+android/*/build/
