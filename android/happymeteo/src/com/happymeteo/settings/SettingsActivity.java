@@ -163,12 +163,8 @@ public class SettingsActivity extends LoggedActivity implements OnGetExecuteList
 	
 	@Override
 	public void OnFacebookExecute(Session session, SessionState state) {
-		Log.d(Const.TAG, "state: " + session.getState());
-		Log.d(Const.TAG, "session.isOpened(): " + session.isOpened());
-
 		if (session.isOpened()) {
 			String accessToken = session.getAccessToken();
-			Log.d(Const.TAG, "accessToken: " + accessToken);
 			String serverUrl = "https://graph.facebook.com/me?access_token=" + accessToken;
 			new GetRequest(this, this).execute(serverUrl);
 		}

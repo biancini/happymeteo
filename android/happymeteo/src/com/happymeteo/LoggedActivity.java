@@ -20,6 +20,7 @@ import com.happymeteo.information.InformationPageActivity;
 import com.happymeteo.map.MapActivity;
 import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.question.QuestionActivity;
 import com.happymeteo.settings.SettingsActivity;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.FacebookSessionUtils;
@@ -130,9 +131,11 @@ public abstract class LoggedActivity extends NotLoggedActivity implements
 			if (SessionCache.isFacebookSession(this)) invokeActivity(ChallengeActivity.class);
 			break;
 
-//		case R.id.side_navigation_menu_item5a:
-//			invokeActivity(QuestionActivity.class, new Bundle());
-//			break;
+		case R.id.side_navigation_menu_item5a:
+			Bundle extras = new Bundle();
+			extras.putString("timestamp", "test");
+			invokeActivity(QuestionActivity.class, extras);
+			break;
 //			
 //		case R.id.side_navigation_menu_item5b:
 //			Bundle extras = new Bundle();

@@ -11,6 +11,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
+import com.happymeteo.widget.AppyMeteoTextView;
 
 public class InformationPageActivity extends LoggedActivity {
 	
@@ -19,13 +20,13 @@ public class InformationPageActivity extends LoggedActivity {
 		setContentView(R.layout.activity_information_page);
 		super.onCreate(savedInstanceState);
 		
-		final TextView information_page1 = (TextView) findViewById(R.id.information_page1);
+		final AppyMeteoTextView information_page1 = (AppyMeteoTextView) findViewById(R.id.information_page1);
 		information_page1.setText(Html.fromHtml(getString(R.string.information1)));
 		
-		final TextView information_page2 = (TextView) findViewById(R.id.information_page2);
+		final AppyMeteoTextView information_page2 = (AppyMeteoTextView) findViewById(R.id.information_page2);
 		information_page2.setText(Html.fromHtml(getString(R.string.information2)));
 		
-		final TextView information_page3 = (TextView) findViewById(R.id.information_page3);
+		final AppyMeteoTextView information_page3 = (AppyMeteoTextView) findViewById(R.id.information_page3);
 		information_page3.setText(Html.fromHtml(getString(R.string.information3)));
 		
 		TextView information_pagesub1 = (TextView) findViewById(R.id.information_pagesub1);
@@ -44,7 +45,7 @@ public class InformationPageActivity extends LoggedActivity {
 					animation.setDuration(1000);
 					animation.start();
 					
-					((TextView) view).setText(getResources().getText(R.string.continue_to_read));
+					((TextView) view).setText(getResources().getText(R.string.continue_to_read));  
 				}
 			}
 		});

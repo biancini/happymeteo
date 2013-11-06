@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp" >
@@ -52,7 +52,7 @@
                 android:src="@drawable/icone"
                 android:contentDescription="@string/fake"/>
 
-            <TextView
+            <com.happymeteo.widget.AppyMeteoTextView
                 android:id="@+id/information_page1"
                 android:drawableLeft="@drawable/scienza"
                 android:drawablePadding="2dip"
@@ -83,7 +83,7 @@
                 android:layout_margin="10dp"
                 android:background="@color/yellow" />
 
-          <TextView
+          <com.happymeteo.widget.AppyMeteoTextView
               android:id="@+id/information_page2"
               android:drawableLeft="@drawable/comefunziona"
               android:drawablePadding="2dip"
@@ -114,7 +114,7 @@
                 android:layout_margin="10dp"
                 android:background="@color/yellow" />
 
-            <TextView
+            <com.happymeteo.widget.AppyMeteoTextView
                 android:id="@+id/information_page3"
                 android:drawableLeft="@drawable/domanda"
                 android:drawablePadding="2dip"
