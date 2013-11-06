@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
-from secrets import SESSION_KEY
-
 from webapp2 import WSGIApplication, Route
 
-#import fix_path
+from handlers import CreateAccountHandler, FacebookLoginHandler, \
+    NormalLoginHandler, ConfirmUserHandler, RegisterHandler, UnregisterHandler, \
+    SendQuestionsHandler, GetQuestionsHandler, SubmitQuestionsHandler, \
+    GetChallengesHandler, RequestChallengeHandler, AcceptChallengeHandler, \
+    QuestionsChallengeHandler, SubmitChallengeHandler, GetAppinessByDayHandler, \
+    GetAppinessByMonthHandler, CreateMapHandler, GetDataMapHandler, \
+    LostPasswordHandler, ChangePasswordHandler, UpdateFacebookHandler, \
+    CrashReportHandler
+    
+from secrets import SESSION_KEY
 
 # webapp2 config
 app_config = {
@@ -19,39 +26,38 @@ app_config = {
 # Map URLs to handlers
 routes = [
   # profile user
-  Route('/create_account', handler='handlers.CreateAccountHandler'),
-  Route('/facebook_login', handler='handlers.FacebookLoginHandler'),
-  Route('/normal_login', handler='handlers.NormalLoginHandler'),
-  Route('/confirm_user', handler='handlers.ConfirmUserHandler'),
+  Route('/create_account', handler=CreateAccountHandler),
+  Route('/facebook_login', handler=FacebookLoginHandler),
+  Route('/normal_login', handler=NormalLoginHandler),
+  Route('/confirm_user', handler=ConfirmUserHandler),
 
   # device management
-  Route('/register', handler='handlers.RegisterHandler'),
-  Route('/unregister', handler='handlers.UnregisterHandler'),
-  Route('/send_message', handler='handlers.SendMessageHandler'),
+  Route('/register', handler=RegisterHandler),
+  Route('/unregister', handler=UnregisterHandler),
+  Route('/send_questions', handler=SendQuestionsHandler),
 
   # question management
-  Route('/get_questions', handler='handlers.GetQuestionsHandler'),
-  Route('/submit_questions', handler='handlers.SubmitQuestionsHandler'),
+  Route('/get_questions', handler=GetQuestionsHandler),
+  Route('/submit_questions', handler=SubmitQuestionsHandler),
   
   # challenge management
-  Route('/get_challenges', handler='handlers.GetChallengesHandler'),
-  Route('/request_challenge', handler='handlers.RequestChallengeHandler'),
-  Route('/accept_challenge', handler='handlers.AcceptChallengeHandler'),
-  Route('/questions_challenge', handler='handlers.QuestionsChallengeHandler'),
-  Route('/submit_challenge', handler='handlers.SubmitChallengeHandler'),
+  Route('/get_challenges', handler=GetChallengesHandler),
+  Route('/request_challenge', handler=RequestChallengeHandler),
+  Route('/accept_challenge', handler=AcceptChallengeHandler),
+  Route('/questions_challenge', handler=QuestionsChallengeHandler),
+  Route('/submit_challenge', handler=SubmitChallengeHandler),
   
-  Route('/get_appiness_by_day', handler='handlers.GetAppinessByDayHandler'),
-  Route('/get_appiness_by_month', handler='handlers.GetAppinessByMonthHandler'),
+  Route('/get_appiness_by_day', handler=GetAppinessByDayHandler),
+  Route('/get_appiness_by_month', handler=GetAppinessByMonthHandler),
   
-  Route('/create_map', handler='handlers.CreateMap'),
-  Route('/get_data_map', handler='handlers.GetDataMap'),
+  Route('/create_map', handler=CreateMapHandler),
+  Route('/get_data_map', handler=GetDataMapHandler),
   
-  Route('/lost_password', handler='handlers.LostPassword'),
-  Route('/change_password', handler='handlers.ChangePassword'),
-  Route('/update_facebook', handler='handlers.UpdateFacebook'),
+  Route('/lost_password', handler=LostPasswordHandler),
+  Route('/change_password', handler=ChangePasswordHandler),
+  Route('/update_facebook', handler=UpdateFacebookHandler),
   
-  Route('/crash_report', handler='handlers.CrashReport')
-  #Route('/put_provincie_map', handler='handlers.PutProvincieMap')
+  Route('/crash_report', handler=CrashReportHandler)
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

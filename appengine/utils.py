@@ -12,6 +12,19 @@ from datetime import date, timedelta
 from google.appengine.ext import db
 from google.appengine.api import mail
 
+def check_hash(handler_method):
+    def check_hash(self, *args, **kwargs):
+        if not check_call(self.request):
+            data = {
+              'error': 'access-denied'
+            }
+            
+            self.response.headers['Content-Type'] = 'application/json'
+            self.response.out.write(json.dumps(data))
+        else:
+            handler_method(self, *args, **kwargs)
+    return check_hash
+
 from secrets import GOOGLE_API_KEY, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN,\
     CALL_SECRET_KEY, EMAIL, PASSWORD_SECRET_KEY
 

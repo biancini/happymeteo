@@ -1,6 +1,6 @@
 cron:
 - description: questions
-  url: /send_message
+  url: /send_questions
   schedule: every 4 hours from 08:00 to 20:00
   timezone: Europe/Rome
   
