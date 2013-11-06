@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">appymeteo</string>
-    <string name="version">Versione 0.3.1</string>
+    <string name="version">Versione 0.3.2</string>
     <string name="app_id">405414319576008</string>
     <string name="fake"></string>
     <string name="caricamento">Caricamento contenuti</string>
@@ -63,7 +63,6 @@
     <string name="yes">Si</string>
     <string name="no">No</string>
     <string name="renew_captcha">Rigenera captcha</string>
-    <string name="lost_password">Non ricordo la mia password</string>
     <string name="january">GENNAIO</string>
     <string name="february">FEBBRAIO</string>
     <string name="march">MARZO</string>

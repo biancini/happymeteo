@@ -29,7 +29,6 @@ import com.happymeteo.utils.ServerUtilities;
 public class SettingsActivity extends LoggedActivity implements OnGetExecuteListener, OnPostExecuteListener {
 	private TextView settingsFacebookText = null;
 	private Switch settingsFacebookSwitch = null;
-	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private boolean nextTime = true;
 
 	@Override
@@ -121,33 +120,6 @@ public class SettingsActivity extends LoggedActivity implements OnGetExecuteList
 		Session session = Session.getActiveSession();
 		Session.saveSession(session, outState);
 	}
-
-	private class SessionStatusCallback implements Session.StatusCallback {
-		@Override
-		public void call(Session session, SessionState state, Exception exception) {
-			Log.i(Const.TAG, "SessionStatusCallback state: " + state);
-
-			// If there is an exception...
-			if (exception != null) {
-				Log.e(Const.TAG, "Exception", exception);
-				return;
-			}
-
-			updateView(session);
-		}
-	}
-
-	private void updateView(Session session) {
-		Log.d(Const.TAG, "state: " + session.getState());
-		Log.d(Const.TAG, "session.isOpened(): " + session.isOpened());
-
-		if (session.isOpened()) {
-			String accessToken = session.getAccessToken();
-			Log.d(Const.TAG, "accessToken: " + accessToken);
-			String serverUrl = "https://graph.facebook.com/me?access_token=" + accessToken;
-			new GetRequest(this, this).execute(serverUrl);
-		}
-	}
 	
 	@Override
 	public void onGetExecute(String result) {
@@ -186,6 +158,19 @@ public class SettingsActivity extends LoggedActivity implements OnGetExecuteList
 			settingsFacebookText.setText(R.string.unlink_user_to_facebook);
 		} else {
 			settingsFacebookText.setText(R.string.link_user_to_facebook);
+		}
+	}
+	
+	@Override
+	public void OnFacebookExecute(Session session, SessionState state) {
+		Log.d(Const.TAG, "state: " + session.getState());
+		Log.d(Const.TAG, "session.isOpened(): " + session.isOpened());
+
+		if (session.isOpened()) {
+			String accessToken = session.getAccessToken();
+			Log.d(Const.TAG, "accessToken: " + accessToken);
+			String serverUrl = "https://graph.facebook.com/me?access_token=" + accessToken;
+			new GetRequest(this, this).execute(serverUrl);
 		}
 	}
 }

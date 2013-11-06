@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.happymeteo.IndexActivity;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
@@ -226,5 +227,10 @@ public class FriendsFacebookActivity extends LoggedActivity implements OnGetExec
 				});
 			}
 		}
+	}
+	
+	@Override
+	public void OnFacebookExecute(Session session, SessionState state) {
+		// Do nothing
 	}
 }

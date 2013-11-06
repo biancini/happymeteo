@@ -1,7 +1,5 @@
 package com.happymeteo;
 
-import java.util.Arrays;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -19,6 +17,7 @@ import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
+import com.happymeteo.utils.FacebookSessionUtils;
 import com.happymeteo.utils.OnPostExecuteListener;
 
 public abstract class NotLoggedActivity extends SherlockActivity implements OnPostExecuteListener {
@@ -63,7 +62,7 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 
 	@Override
 	public void onStop() {
-		Log.i(Const.TAG, this.getClass() + " onStop");
+		//Log.i(Const.TAG, this.getClass() + " onStop");
 		super.onStop();
 	}
 
@@ -75,15 +74,11 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 
 	private void openActiveSession(Session.StatusCallback statusCallback, Session session, boolean allowLoginUI) {
 		if (session == null) {
-			Log.d(Const.TAG, "session null");
 			session = new Session(this);
 		}
 		Session.setActiveSession(session);
 		if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED) || allowLoginUI) {
-			Log.d(Const.TAG, "CREATED_TOKEN_LOADED");
-			session.openForSimon(new Session.OpenRequest(this).setPermissions(
-					Arrays.asList(Const.FACEBOOK_PERMISSIONS)).setCallback(
-					statusCallback));
+			FacebookSessionUtils.openReadSession(this, statusCallback, session);
 		} else {
 			statusCallback.call(session, session.getState(), null);
 		}
@@ -98,18 +93,11 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 		Session session = Session.getActiveSession();
 
 		if (!session.isOpened() && !session.isClosed() && session.getState() != SessionState.OPENING) {
-			session.openForSimon(new Session.OpenRequest(this).setPermissions(
-					Arrays.asList(Const.FACEBOOK_PERMISSIONS)).setCallback(
-					statusCallback));
+			FacebookSessionUtils.openReadSession(this, statusCallback, session);
 		} else {
 			if (session.isClosed()) {
-				session = new Session(this, null, null, false);
-				Session.setActiveSession(session);
-				session.openForSimon(new Session.OpenRequest(this)
-						.setPermissions(Arrays.asList(Const.FACEBOOK_PERMISSIONS))
-						.setCallback(statusCallback));
+				FacebookSessionUtils.newNotCachedReadSession(this, statusCallback);
 			} else {
-				Log.d(Const.TAG, "onClickLogin openActiveSession");
 				openActiveSession(statusCallback, session, false);
 			}
 		}

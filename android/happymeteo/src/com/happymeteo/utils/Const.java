@@ -59,7 +59,8 @@ public final class Const {
 	
 	/* Facebook */
 	public static final String FACEBOOK_ID               = "405414319576008";
-	public static final String[] FACEBOOK_PERMISSIONS    = { "email", "user_birthday", "publish_actions" };
+//	public static final String[] FACEBOOK_PERMISSIONS    = { "basic_info", "email", "user_birthday", "publish_actions" };
+	public static final String[] FACEBOOK_R_PERMISSIONS  = { "basic_info", "email", "user_birthday" };
 	
 	/* Password secret key */
 	public static final String PASSWORD_SECRET_KEY       = "f01a1a0bd409957b9305d2dc21c6b066859f51447c04adfb0b21c9fb5cff9eb0a6573c69e62fcb97321d878bfecb7d2cc8e6650ac6db1a1ef3125373d3e81b85";

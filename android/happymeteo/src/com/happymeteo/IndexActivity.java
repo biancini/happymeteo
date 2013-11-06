@@ -1,7 +1,5 @@
 package com.happymeteo;
 
-import java.util.Arrays;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,23 +12,28 @@ import android.widget.Button;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.happymeteo.R;
 import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.settings.CreateAccountActivity;
 import com.happymeteo.settings.NormalLoginActivity;
-import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
+import com.happymeteo.utils.FacebookSessionUtils;
+import com.happymeteo.utils.OnFacebookExecuteListener;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
 
-public class IndexActivity extends NotLoggedActivity implements OnPostExecuteListener {
-	private Session.StatusCallback statusCallback = new SessionStatusCallback();
+public class IndexActivity extends NotLoggedActivity implements
+		OnPostExecuteListener, OnFacebookExecuteListener {
+	private Session.StatusCallback statusCallback;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_index);
 		super.onCreate(savedInstanceState);
+
+		/* Get Facebook Status Callback */
+		statusCallback = FacebookSessionUtils.getSessionStatusCallback(this,
+				this);
 
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		btnCreateAccount.setOnClickListener(new OnClickListener() {
@@ -52,8 +55,8 @@ public class IndexActivity extends NotLoggedActivity implements OnPostExecuteLis
 				onFacebookConnect(statusCallback, false);
 			}
 		});
-		
-		if(SessionCache.isInitialized(getApplicationContext())) {
+
+		if (SessionCache.isInitialized(getApplicationContext())) {
 			invokeActivity(MeteoActivity.class);
 		}
 	}
@@ -76,8 +79,7 @@ public class IndexActivity extends NotLoggedActivity implements OnPostExecuteLis
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		Session session = Session.getActiveSession();
-		session.onActivityResult(this, requestCode,
-					resultCode, data);
+		session.onActivityResult(this, requestCode, resultCode, data);
 	}
 
 	@Override
@@ -87,35 +89,16 @@ public class IndexActivity extends NotLoggedActivity implements OnPostExecuteLis
 		Session.saveSession(session, outState);
 	}
 
-	private class SessionStatusCallback implements Session.StatusCallback {
-		@Override
-		public void call(Session session, SessionState state, Exception exception) {
-			Log.d(Const.TAG, "SessionStatusCallback state: " + state);
-
-			if (exception != null) {
-				AlertDialogManager.showError(IndexActivity.this, exception.getMessage());
-				return;
-			}
-
-			updateView(session);
-		}
+	@Override
+	public void OnFacebookExecute(Session session, SessionState state) {
+		ServerUtilities.facebookLogin(this, Session.getActiveSession()
+				.getAccessToken());
 	}
-
-	private void updateView(Session session) {
-		if (session.isOpened()) {
-			Log.i(Const.TAG, "permissions: " + Session.getActiveSession().getPermissions());
-			ServerUtilities.facebookLogin(this, Session.getActiveSession().getAccessToken());
-		}
-	}
-
+	
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
 		if (exception != null) {
-			Session session = new Session(this, null, null, false);
-			Session.setActiveSession(session);
-			session.openForSimon(new Session.OpenRequest(this).setPermissions(
-					Arrays.asList(Const.FACEBOOK_PERMISSIONS)).setCallback(
-					statusCallback));
+			FacebookSessionUtils.newNotCachedReadSession(this, statusCallback);
 		} else {
 			try {
 				JSONObject jsonObject = new JSONObject(result);

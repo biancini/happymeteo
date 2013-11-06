@@ -7,6 +7,8 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 
@@ -93,5 +95,10 @@ public class InformationPageActivity extends LoggedActivity {
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
 		// Do Nothing
+	}
+	
+	@Override
+	public void OnFacebookExecute(Session session, SessionState state) {
+		// Do nothing
 	}
 }

@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.captcha.Captcha;
@@ -106,5 +108,10 @@ public class ChangePasswordActivity extends LoggedActivity implements OnPostExec
 	public void onPostExecute(int id, String result, Exception exception) {
 		if (exception != null) return;
 		finish();
+	}
+	
+	@Override
+	public void OnFacebookExecute(Session session, SessionState state) {
+		// Do nothing
 	}
 }

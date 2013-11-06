@@ -8,14 +8,12 @@ import java.util.Locale;
 
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -26,6 +24,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.widget.ProfilePictureView;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
@@ -38,57 +37,14 @@ import com.happymeteo.models.SessionCache;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
+import com.happymeteo.utils.OnSwipeExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
+import com.happymeteo.utils.SwipeGestureDetector;
 
-public class MeteoActivity extends LoggedActivity implements OnPostExecuteListener {
+public class MeteoActivity extends LoggedActivity implements OnPostExecuteListener, OnSwipeExecuteListener {
 
 	private TextView welcomeToday = null;
 	private GestureDetector gestureDetector = null;
-
-	class MyGestureDetector extends SimpleOnGestureListener {
-		private ViewFlipper flipper = null;
-		private Context context = null;
-
-		private static final int SWIPE_MIN_DISTANCE = 120;
-		private static final int SWIPE_MAX_OFF_PATH = 250;
-		private static final int SWIPE_THRESHOLD_VELOCITY = 100;
-
-		public MyGestureDetector(Context context, ViewFlipper flipper) {
-			this.flipper = flipper;
-			this.context = context;
-		}
-
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) return false;
-
-			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
-					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-					&& flipper.getDisplayedChild() < flipper.getChildCount() - 1) {
-
-				flipper.setInAnimation(context, R.anim.in_from_right);
-				flipper.setOutAnimation(context, R.anim.out_to_left);
-				welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase(Locale.getDefault()) + "_DIARIO");
-				flipper.showNext();
-
-				return true;
-			} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
-					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-					&& flipper.getDisplayedChild() > 0) {
-
-				flipper.setInAnimation(context, R.anim.in_from_left);
-				flipper.setOutAnimation(context, R.anim.out_to_right);
-				flipper.showPrevious();
-
-				if (flipper.getDisplayedChild() == 0) {
-					welcomeToday.setText(SessionCache.getFirst_name(context).toLowerCase(Locale.getDefault()) + "_OGGI");
-				}
-
-				return true;
-			}
-
-			return false;
-		}
-	}
 
 	private int[] getColorByToday(int today) {
 		int[] colors_0 = {
@@ -190,7 +146,7 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 		welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase(Locale.getDefault()) + "_OGGI");
 
 		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
-		gestureDetector = new GestureDetector(getBaseContext(), new MyGestureDetector(this, viewFlipper));
+		gestureDetector = new GestureDetector(this, new SwipeGestureDetector(this, viewFlipper, this));
 
 		ImageView mail = (ImageView) findViewById(R.id.mail);
 		mail.setOnTouchListener(new OnTouchListener() {
@@ -364,5 +320,19 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 		} catch (Exception e) {
 			Log.e(Const.TAG, e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public void OnSwipeExecute(int child) {
+		if(child == 0) {
+			welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase(Locale.getDefault()) + "_DIARIO");
+		} else {
+			welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase(Locale.getDefault()) + "_OGGI");
+		}
+	}
+	
+	@Override
+	public void OnFacebookExecute(Session session, SessionState state) {
+		// Do nothing
 	}
 }

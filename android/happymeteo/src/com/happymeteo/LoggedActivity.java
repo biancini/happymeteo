@@ -15,7 +15,6 @@ import com.devspark.sidenavigation.ISideNavigationCallback;
 import com.devspark.sidenavigation.SideNavigationView;
 import com.devspark.sidenavigation.SideNavigationView.Mode;
 import com.facebook.Session;
-import com.facebook.SessionState;
 import com.happymeteo.challenge.ChallengeActivity;
 import com.happymeteo.information.InformationPageActivity;
 import com.happymeteo.map.MapActivity;
@@ -23,13 +22,16 @@ import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.settings.SettingsActivity;
 import com.happymeteo.utils.Const;
+import com.happymeteo.utils.FacebookSessionUtils;
+import com.happymeteo.utils.OnFacebookExecuteListener;
 
-public abstract class LoggedActivity extends NotLoggedActivity implements ISideNavigationCallback {
+public abstract class LoggedActivity extends NotLoggedActivity implements
+		ISideNavigationCallback, OnFacebookExecuteListener {
 
-	private Session.StatusCallback statusCallback = new SessionStatusCallback();
-	private SideNavigationView sideNavigationView = null;
+	protected Session.StatusCallback statusCallback;
+	private SideNavigationView sideNavigationView;
 
-	private void inShow() {
+	public void showView() {
 		if (!SessionCache.isFacebookSession(this)) {
 			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4, R.drawable.icona_sfidagrigio);
 		} else {
@@ -41,6 +43,9 @@ public abstract class LoggedActivity extends NotLoggedActivity implements ISideN
 	@SuppressLint("InlinedApi")
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		/* Get Facebook Status Callback */
+		statusCallback = FacebookSessionUtils.getSessionStatusCallback(this, this);
 
 		/* Action bar */
 		getSupportActionBar().setIcon(R.drawable.icona_menu);
@@ -69,19 +74,19 @@ public abstract class LoggedActivity extends NotLoggedActivity implements ISideN
 			onFacebookConnect(statusCallback, (Session.getActiveSession() == null));
 		}
 
-		inShow();
+		showView();
 	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		inShow();
+		showView();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		inShow();
+		showView();
 	}
 
 	@Override
@@ -164,18 +169,6 @@ public abstract class LoggedActivity extends NotLoggedActivity implements ISideN
 			return true;
 		}
 		return super.onKeyUp(keyCode, event);
-	}
-
-	private class SessionStatusCallback implements Session.StatusCallback {
-		@Override
-		public void call(Session session, SessionState state, Exception exception) {
-			Log.i(Const.TAG, "SessionStatusCallback state: " + state);
-			
-			if (exception != null) {
-				Log.e(Const.TAG, exception.getMessage(), exception);
-				return;
-			}
-		}
 	}
 
 	@Override

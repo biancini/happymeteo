@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.meteo.MeteoActivity;
@@ -110,5 +112,10 @@ public class SettingsUtenteActivity extends LoggedActivity implements OnPostExec
 				Log.e(Const.TAG, e.getMessage(), e);
 			}
 		}
+	}
+	
+	@Override
+	public void OnFacebookExecute(Session session, SessionState state) {
+		// Do nothing
 	}
 }
