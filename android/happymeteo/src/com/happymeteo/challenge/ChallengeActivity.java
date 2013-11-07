@@ -124,9 +124,7 @@ public class ChallengeActivity extends LoggedActivity {
 
 		btnChallengeNew.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				Context context = view.getContext();
-				Intent intent = new Intent(context, FriendsFacebookActivity.class);
-				context.startActivity(intent);
+				ChallengeActivity.this.invokeActivity(FriendsFacebookActivity.class);
 			}
 		});
 

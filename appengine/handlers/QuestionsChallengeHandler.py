@@ -1,5 +1,6 @@
 import json
 import logging
+import random
 
 from random import sample
 
@@ -7,7 +8,6 @@ from handlers import BaseRequestHandler
 from models import Challenge, ChallengeQuestion, ChallengeQuestionCategory, \
     ChallengeAnswer
 from utils import check_hash
-
 
 class QuestionsChallengeHandler(BaseRequestHandler):
 
@@ -26,8 +26,6 @@ class QuestionsChallengeHandler(BaseRequestHandler):
             raise Exception('C\'è stato un errore con la sfida')
         
         if turn == "1":
-            import random
-            
             questions = ChallengeQuestion.gql("WHERE category_id = 0")
             data = [questions.get().toJson()]
             

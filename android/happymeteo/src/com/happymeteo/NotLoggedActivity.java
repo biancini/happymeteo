@@ -146,6 +146,7 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 			Intent intent = new Intent(this, clazz);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			if (extras != null) intent.putExtras(extras);
+			finish();
 			startActivity(intent);
 		}
 	}
