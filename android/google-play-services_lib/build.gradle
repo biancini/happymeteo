@@ -1,19 +1,11 @@
-apply plugin: 'android'
+apply plugin: 'android-library'
 
 dependencies {
-    compile 'com.android.support:support-v4:18.0.+'
-    compile files('libs/acra-4.5.0.jar')
-    compile files('libs/gcm.jar')
-    compile project(':sidenavigation')
-    compile project(':facebook')
-    compile project(':z-validations')
-    compile project(':actionbarsherlock')
-    compile project(':android-switch-backport')
-    compile project(':google-play-services_lib')
+    compile fileTree(dir: 'libs', include: '*.jar')
 }
 
 android {
-    compileSdkVersion 18
+    compileSdkVersion 17
     buildToolsVersion "18.1.1"
 
     sourceSets {
