@@ -38,6 +38,33 @@ class User(db.Model):
             'cap': self.cap,
             'registered': '1'
         }
+    
+    @staticmethod
+    def toHeadArray():
+        return [
+            'user_id',
+            'first_name',
+            'last_name',
+            'email',
+            'gender',
+            'age',
+            'education',
+            'work',
+            'cap'
+        ]
+        
+    def toArray(self):
+        return [
+            self.key().id(),
+            self.first_name,
+            self.last_name,
+            self.email,
+            self.gender,
+            self.age,
+            self.education,
+            self.work,
+            self.cap
+        ]
 
 class Challenge(db.Model):
     user_id_a = db.StringProperty() # sfidante
@@ -107,6 +134,27 @@ class Answer(db.Model):
     value = db.StringProperty()
     timestamp = db.StringProperty()
     
+    @staticmethod
+    def toHeadArray():
+        return [
+            'user_id',
+            'question_id',
+            'location',
+            'date',
+            'value',
+            'timestamp'
+        ]
+        
+    def toArray(self):
+        return [
+            self.user_id,
+            self.question_id,
+            self.location,
+            self.date,
+            self.value,
+            self.timestamp
+        ]
+    
 class ChallengeAnswer(db.Model):
     user_id = db.StringProperty()
     question_id = db.StringProperty()
@@ -115,6 +163,29 @@ class ChallengeAnswer(db.Model):
     value = db.StringProperty()
     challenge_id =  db.StringProperty()
     turn = db.StringProperty()
+    
+    @staticmethod
+    def toHeadArray():
+        return [
+            'user_id',
+            'question_id',
+            'location',
+            'date',
+            'value',
+            'challenge_id',
+            'turn'
+        ]
+        
+    def toArray(self):
+        return [
+            self.user_id,
+            self.question_id,
+            self.location,
+            self.date,
+            self.value,
+            self.challenge_id,
+            self.turn
+        ]
     
 class Region(db.Model):
     name = db.StringProperty()
@@ -135,5 +206,7 @@ class Marker(db.Model):
     
 class ErrorReport(db.Model):
     queryString = db.TextProperty()
+    code = db.StringProperty()
+    stackTrace = db.TextProperty()
     created = db.DateTimeProperty(auto_now_add=True)
     

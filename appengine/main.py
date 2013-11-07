@@ -5,12 +5,12 @@ from handlers import CreateAccountHandler, FacebookLoginHandler, \
     NormalLoginHandler, ConfirmUserHandler, RegisterHandler, UnregisterHandler, \
     SendQuestionsHandler, GetQuestionsHandler, SubmitQuestionsHandler, \
     GetChallengesHandler, RequestChallengeHandler, AcceptChallengeHandler, \
-    QuestionsChallengeHandler, SubmitChallengeHandler, GetAppinessByDayHandler, \
-    GetAppinessByMonthHandler, CreateMapHandler, GetDataMapHandler, \
+    QuestionsChallengeHandler, SubmitChallengeHandler, \
+    GetAppinessByDayHandler, CreateMapHandler, GetDataMapHandler, \
     LostPasswordHandler, ChangePasswordHandler, UpdateFacebookHandler, \
-    CrashReportHandler
-    
+    CrashReportHandler, CSVUserHandler, CSVAnswerHandler, CSVChallengeAnswerHandler
 from secrets import SESSION_KEY
+
 
 # webapp2 config
 app_config = {
@@ -47,17 +47,23 @@ routes = [
   Route('/questions_challenge', handler=QuestionsChallengeHandler),
   Route('/submit_challenge', handler=SubmitChallengeHandler),
   
+  # appiness management
   Route('/get_appiness_by_day', handler=GetAppinessByDayHandler),
-  Route('/get_appiness_by_month', handler=GetAppinessByMonthHandler),
-  
   Route('/create_map', handler=CreateMapHandler),
   Route('/get_data_map', handler=GetDataMapHandler),
   
+  # settings management
   Route('/lost_password', handler=LostPasswordHandler),
   Route('/change_password', handler=ChangePasswordHandler),
   Route('/update_facebook', handler=UpdateFacebookHandler),
   
-  Route('/crash_report', handler=CrashReportHandler)
+  # crash management
+  Route('/crash_report', handler=CrashReportHandler),
+  
+  # csv management
+  Route('/csv_user', handler=CSVUserHandler),
+  Route('/csv_answer', handler=CSVAnswerHandler),
+  Route('/csv_challenge_answer', handler=CSVChallengeAnswerHandler)
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

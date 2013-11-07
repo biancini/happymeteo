@@ -19,8 +19,11 @@ class CrashReportHandler(BaseRequestHandler):
         
         query_string = query_string + a + "=" + self.request.get(a)
         first = False
+        
+    APP_VERSION_CODE = self.request.get("APP_VERSION_CODE")
+    STACK_TRACE = self.request.get("STACK_TRACE")
 
-    crashReport = ErrorReport(queryString=db.Text(query_string))
+    crashReport = ErrorReport(queryString=db.Text(query_string), code=APP_VERSION_CODE, stackTrace=STACK_TRACE)
     crashReport.put()
     data = {'message': 'ok'}
     self.response.headers['Content-Type'] = 'application/json'

@@ -1,3 +1,5 @@
+import time
+
 from google.appengine.ext import db
 
 from handlers import BaseRequestHandler
@@ -7,10 +9,7 @@ from utils import sendMessage
 class SendQuestionsHandler(BaseRequestHandler):
 
   def get(self):
-    import time
     ts = time.time()
-    print '%s'%ts
-    
     devices = Device.all()
     for device in devices:
         if device.user_id != "":
