@@ -101,6 +101,18 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.happymeteo.information.InformationPageActivity1"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.happymeteo.information.InformationPageActivity2"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.happymeteo.information.InformationPageActivity3"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.happymeteo.settings.CreateAccountActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />

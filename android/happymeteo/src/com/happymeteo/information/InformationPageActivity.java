@@ -1,5 +1,6 @@
 package com.happymeteo.information;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -11,7 +12,6 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
-import com.happymeteo.widget.AppyMeteoTextView;
 
 public class InformationPageActivity extends LoggedActivity {
 	
@@ -20,32 +20,37 @@ public class InformationPageActivity extends LoggedActivity {
 		setContentView(R.layout.activity_information_page);
 		super.onCreate(savedInstanceState);
 		
-		final AppyMeteoTextView information_page1 = (AppyMeteoTextView) findViewById(R.id.information_page1);
+		final TextView information_page1 = (TextView) findViewById(R.id.information_page1);
 		information_page1.setText(Html.fromHtml(getString(R.string.information1)));
 		
-		final AppyMeteoTextView information_page2 = (AppyMeteoTextView) findViewById(R.id.information_page2);
+		final TextView information_page2 = (TextView) findViewById(R.id.information_page2);
 		information_page2.setText(Html.fromHtml(getString(R.string.information2)));
 		
-		final AppyMeteoTextView information_page3 = (AppyMeteoTextView) findViewById(R.id.information_page3);
+		final TextView information_page3 = (TextView) findViewById(R.id.information_page3);
 		information_page3.setText(Html.fromHtml(getString(R.string.information3)));
 		
 		TextView information_pagesub1 = (TextView) findViewById(R.id.information_pagesub1);
 		information_pagesub1.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View view) {
-				//view.setVisibility(View.GONE);
-				if (((TextView) view).getText().equals(getResources().getText(R.string.continue_to_read))) {
-					ObjectAnimator animation = ObjectAnimator.ofInt(information_page1, "maxLines", 50);
-					animation.setDuration(1000);
-					animation.start();
-					
-					((TextView) view).setText(getResources().getText(R.string.close_read));
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					if (((TextView) view).getText().equals(getResources().getText(R.string.continue_to_read))) {
+						ObjectAnimator animation = ObjectAnimator.ofInt(information_page1, "maxLines", 50);
+						animation.setDuration(1000);
+						animation.start();
+						
+						((TextView) view).setText(getResources().getText(R.string.close_read));
+					} else {
+						ObjectAnimator animation = ObjectAnimator.ofInt(information_page1, "maxLines", 4);
+						animation.setDuration(1000);
+						animation.start();
+						
+						((TextView) view).setText(getResources().getText(R.string.continue_to_read));  
+					}
 				} else {
-					ObjectAnimator animation = ObjectAnimator.ofInt(information_page1, "maxLines", 4);
-					animation.setDuration(1000);
-					animation.start();
-					
-					((TextView) view).setText(getResources().getText(R.string.continue_to_read));  
+					setPersistentActivity(true);
+					invokeActivity(InformationPageActivity1.class);
+					setPersistentActivity(false);
 				}
 			}
 		});
@@ -54,19 +59,24 @@ public class InformationPageActivity extends LoggedActivity {
 		information_pagesub2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//view.setVisibility(View.GONE);
-				if (((TextView) view).getText().equals(getResources().getText(R.string.continue_to_read))) {
-					ObjectAnimator animation = ObjectAnimator.ofInt(information_page2, "maxLines", 50);
-					animation.setDuration(1000);
-					animation.start();
-					
-					((TextView) view).setText(getResources().getText(R.string.close_read));
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					if (((TextView) view).getText().equals(getResources().getText(R.string.continue_to_read))) {
+						ObjectAnimator animation = ObjectAnimator.ofInt(information_page2, "maxLines", 50);
+						animation.setDuration(1000);
+						animation.start();
+						
+						((TextView) view).setText(getResources().getText(R.string.close_read));
+					} else {
+						ObjectAnimator animation = ObjectAnimator.ofInt(information_page2, "maxLines", 4);
+						animation.setDuration(1000);
+						animation.start();
+						
+						((TextView) view).setText(getResources().getText(R.string.continue_to_read));
+					}
 				} else {
-					ObjectAnimator animation = ObjectAnimator.ofInt(information_page2, "maxLines", 4);
-					animation.setDuration(1000);
-					animation.start();
-					
-					((TextView) view).setText(getResources().getText(R.string.continue_to_read));
+					setPersistentActivity(true);
+					invokeActivity(InformationPageActivity2.class);
+					setPersistentActivity(false);
 				}
 			}
 		});
@@ -75,19 +85,24 @@ public class InformationPageActivity extends LoggedActivity {
 		information_pagesub3.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//view.setVisibility(View.GONE);
-				if (((TextView) view).getText().equals(getResources().getText(R.string.continue_to_read))) {
-					ObjectAnimator animation = ObjectAnimator.ofInt(information_page3, "maxLines", 50);
-					animation.setDuration(1000);
-					animation.start();
-					
-					((TextView) view).setText(getResources().getText(R.string.close_read));
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					if (((TextView) view).getText().equals(getResources().getText(R.string.continue_to_read))) {
+						ObjectAnimator animation = ObjectAnimator.ofInt(information_page3, "maxLines", 50);
+						animation.setDuration(1000);
+						animation.start();
+						
+						((TextView) view).setText(getResources().getText(R.string.close_read));
+					} else {
+						ObjectAnimator animation = ObjectAnimator.ofInt(information_page3, "maxLines", 4);
+						animation.setDuration(1000);
+						animation.start();
+						
+						((TextView) view).setText(getResources().getText(R.string.continue_to_read));
+					}
 				} else {
-					ObjectAnimator animation = ObjectAnimator.ofInt(information_page3, "maxLines", 4);
-					animation.setDuration(1000);
-					animation.start();
-					
-					((TextView) view).setText(getResources().getText(R.string.continue_to_read));
+					setPersistentActivity(true);
+					invokeActivity(InformationPageActivity3.class);
+					setPersistentActivity(false);
 				}
 			}
 		});
