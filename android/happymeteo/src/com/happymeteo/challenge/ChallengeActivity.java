@@ -169,8 +169,8 @@ public class ChallengeActivity extends LoggedActivity {
 			final List<LinearLayout> challengeTurns = new ArrayList<LinearLayout>();
 			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn0));
 			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn1));
+			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn1));
 			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn2));
-			challengeTurns.add((LinearLayout) activity.findViewById(R.id.challengeTurn3));
 			
 			final List<Boolean> visibility = new ArrayList<Boolean>();
 			visibility.add(false);
@@ -181,8 +181,8 @@ public class ChallengeActivity extends LoggedActivity {
 			final List<ImageView> imageTurns = new ArrayList<ImageView>();
 			imageTurns.add((ImageView) activity.findViewById(R.id.partiteTurn0));
 			imageTurns.add((ImageView) activity.findViewById(R.id.partiteTurn1));
+			imageTurns.add((ImageView) activity.findViewById(R.id.partiteTurn1));
 			imageTurns.add((ImageView) activity.findViewById(R.id.partiteTurn2));
-			imageTurns.add((ImageView) activity.findViewById(R.id.partiteTurn3));
 
 			for(int i = 0; i < challenges.length(); i++) {
 				JSONObject jsonObject = null;
@@ -195,10 +195,8 @@ public class ChallengeActivity extends LoggedActivity {
 					if (view != null) {
 						runOnUiThread(new Runnable() {
 							public void run() {
-								Log.i(Const.TAG, "turn: " + challenge.getTurn());
 								challengeTurns.get(challenge.getTurn()).addView(view);
 								visibility.set(challenge.getTurn(), true);
-								Log.d(Const.TAG, "visibility: " + visibility.get(challenge.getTurn()));
 							}
 						});
 					}
@@ -211,7 +209,6 @@ public class ChallengeActivity extends LoggedActivity {
 				public void run() {
 					for (int i = 0; i < 4; i++) {
 						if (visibility.get(i)) {
-							Log.d(Const.TAG, "end visibility: " + i + " " + visibility.get(i));
 							challengeTurns.get(i).setVisibility(View.VISIBLE);
 							imageTurns.get(i).setVisibility(View.VISIBLE);
 						}

@@ -14,14 +14,6 @@
         android:orientation="vertical"
         android:padding="5dp" >
 
-        <!-- <Button -->
-        <!-- android:id="@+id/btnChallengeNew" -->
-        <!-- android:layout_width="match_parent" -->
-        <!-- android:layout_height="wrap_content" -->
-        <!-- android:layout_gravity="center_horizontal" -->
-        <!-- android:layout_marginTop="5dip" -->
-        <!-- android:background="@drawable/nuovogioco" /> -->
-
         <ImageView
             android:id="@+id/btnChallengeNew"
             android:layout_width="match_parent"
@@ -91,33 +83,12 @@
             android:layout_marginTop="5dip"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/partiteinsospeso"
-            android:visibility="gone"
-        	android:contentDescription="@string/fake" />
-
-        <LinearLayout
-            android:id="@+id/challengeTurn2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="#E7E7E7"
-            android:orientation="vertical"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/partiteTurn3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dip"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
             android:src="@drawable/partitecompletate"
             android:visibility="gone"
         	android:contentDescription="@string/fake" />
 
         <LinearLayout
-            android:id="@+id/challengeTurn3"
+            android:id="@+id/challengeTurn2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
