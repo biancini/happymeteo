@@ -1,12 +1,14 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
 import logging
+import webapp2
 
-from handlers import BaseRequestHandler
 from models import Challenge, User
 from utils import check_hash
 
-
-class GetChallengesHandler(BaseRequestHandler):
+class GetChallengesHandler(webapp2.RequestHandler):
 
   @check_hash
   def post(self):
@@ -14,7 +16,7 @@ class GetChallengesHandler(BaseRequestHandler):
         user_id = self.request.get('user_id')
         
         if not user_id:
-           raise Exception('You need to specify the user_id') 
+           raise Exception('Devi specificare un\'user_id') 
        
         data = []
         

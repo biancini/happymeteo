@@ -1,13 +1,16 @@
-import datetime
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
 import logging
+import webapp2
 
-from handlers import BaseRequestHandler
+from datetime import datetime
+
 from models import Answer, User
 from utils import check_hash, happymeteo
 
-
-class SubmitQuestionsHandler(BaseRequestHandler):
+class SubmitQuestionsHandler(webapp2.RequestHandler):
 
   @check_hash
   def post(self):
@@ -25,7 +28,7 @@ class SubmitQuestionsHandler(BaseRequestHandler):
         answers = Answer.gql("WHERE user_id = :1 AND timestamp = :2", user_id, timestamp)
         
         if answers.count() > 0:
-            raise Exception('You already answer this impulse')
+            raise Exception('Hai gia risposto a questo impulso')
         
         user = User.get_by_id(int(user_id))
         user.contatore_impulsi = user.contatore_impulsi + 1
@@ -44,7 +47,7 @@ class SubmitQuestionsHandler(BaseRequestHandler):
                answer.location = latitude + "," + longitude
             
             answer.put()
-        
+
         data = { 'message': 'ok' }
         (today_value, yesterday_value, tomorrow_value) = happymeteo(user_id)
         data['today'] = today_value

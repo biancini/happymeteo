@@ -1,14 +1,17 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
 import logging
+import webapp2
 
 from datetime import datetime
 
-from handlers import BaseRequestHandler
 from models import Challenge, User, ChallengeQuestion, ChallengeAnswer
 from utils import check_hash, sendMessage
 
 
-class SubmitChallengeHandler(BaseRequestHandler):
+class SubmitChallengeHandler(webapp2.RequestHandler):
 
   @check_hash
   def post(self):
@@ -27,27 +30,18 @@ class SubmitChallengeHandler(BaseRequestHandler):
             raise Exception('Sfida non trovata')
         
         if not challenge.accepted:
-            raise Exception('C\'è stato un errore con la sfida')
+            raise Exception('C\'è stato un errore con la sfida: stai rispondendo a una sfida non accettata')
         
-        if turn != "1" and challenge.turn == 1:
-            raise Exception('C\'è stato un errore con la sfida')
-        
-        if turn != "2" and challenge.turn == 2:
-            raise Exception('C\'è stato un errore con la sfida')
-        
-        if turn == "1" and challenge.turn != 1:
-            raise Exception('C\'è stato un errore con la sfida')
-        
-        if turn == "2" and challenge.turn != 2:
-            raise Exception('C\'è stato un errore con la sfida')
+        if int(turn) != int(challenge.turn):
+            raise Exception('C\'è stato un errore con la sfida: turno sbagliato')
         
         user_a = User.get_by_id(int(challenge.user_id_a))
         if not user_a:
-            raise Exception('C\'è stato un errore con la sfida')
+            raise Exception('C\'è stato un errore con la sfida: utente sfidante non esiste')
         
         user_b = User.get_by_id(int(challenge.user_id_b))
         if not user_b:
-            raise Exception('C\'è stato un errore con la sfida')
+            raise Exception('C\'è stato un errore con la sfida: utente sfidato non esiste')
         
         questions = json.loads(questions)
         score = 0

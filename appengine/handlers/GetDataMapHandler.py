@@ -1,9 +1,12 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
+import webapp2
 
-from handlers import BaseRequestHandler
 from models import Marker
 
-class GetDataMapHandler(BaseRequestHandler):
+class GetDataMapHandler(webapp2.RequestHandler):
 
   def get(self):
     data = []

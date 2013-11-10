@@ -1,15 +1,17 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
 import logging
-import random
+import webapp2
 
-from random import sample
+from random import sample, random
 
-from handlers import BaseRequestHandler
 from models import Challenge, ChallengeQuestion, ChallengeQuestionCategory, \
     ChallengeAnswer
 from utils import check_hash
 
-class QuestionsChallengeHandler(BaseRequestHandler):
+class QuestionsChallengeHandler(webapp2.RequestHandler):
 
   @check_hash
   def post(self):

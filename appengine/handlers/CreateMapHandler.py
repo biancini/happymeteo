@@ -1,11 +1,15 @@
-from datetime import date, timedelta
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
+import webapp2
 
-from handlers import BaseRequestHandler
+from datetime import date, timedelta
+
 from models import Region, Provincia, Answer, Marker
 from utils import formatDate, point_inside_polygon
 
-class CreateMapHandler(BaseRequestHandler):
+class CreateMapHandler(webapp2.RequestHandler):
 
   def get(self):
       today = date.today()

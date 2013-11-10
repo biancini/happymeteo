@@ -1,8 +1,10 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 from google.appengine.ext import db
+import webapp2
 
-from handlers import BaseRequestHandler
-
-class ConfirmUserHandler(BaseRequestHandler):
+class ConfirmUserHandler(webapp2.RequestHandler):
     def get(self):
         confirmation_code = self.request.get('confirmation_code')
         

@@ -1,10 +1,13 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
+import webapp2
 
-from handlers import BaseRequestHandler
 from models import Device
 from utils import check_hash
 
-class RegisterHandler(BaseRequestHandler):
+class RegisterHandler(webapp2.RequestHandler):
   @check_hash
   def post(self):
     registrationId = self.request.get('registrationId')

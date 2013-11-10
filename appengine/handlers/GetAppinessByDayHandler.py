@@ -1,13 +1,16 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
 import logging
+import webapp2
 
 from datetime import date
 
-from handlers import BaseRequestHandler
 from models import Answer
 from utils import check_hash, mkFirstOfMonth, formatDate
 
-class GetAppinessByDayHandler(BaseRequestHandler):
+class GetAppinessByDayHandler(webapp2.RequestHandler):
 
   @check_hash
   def post(self): 

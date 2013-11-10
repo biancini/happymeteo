@@ -1,11 +1,14 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
+import webapp2
 
 from google.appengine.ext import db
 
-from handlers import BaseRequestHandler
 from utils import check_hash
 
-class UnregisterHandler(BaseRequestHandler):
+class UnregisterHandler(webapp2.RequestHandler):
 
   @check_hash
   def post(self):

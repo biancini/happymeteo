@@ -1,12 +1,15 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
 import logging
+import webapp2
 
-from handlers import BaseRequestHandler
 from models import User
 from secrets import LOST_PASSWORD_EMAIL
 from utils import check_hash, send_new_password
 
-class LostPasswordHandler(BaseRequestHandler):
+class LostPasswordHandler(webapp2.RequestHandler):
 
   @check_hash
   def post(self):

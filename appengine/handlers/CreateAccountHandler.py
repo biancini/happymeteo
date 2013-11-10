@@ -3,13 +3,14 @@
 '''
 import json
 import logging
+import webapp2
 
-from handlers import BaseRequestHandler, check_hash
 from models import User
 from secrets import EMAIL, CREATE_ACCOUNT_EMAIL, CHANGE_FACEBOOK_EMAIL
-from utils import happymeteo, send_new_password
+from utils import happymeteo, send_new_password, check_hash
 
-class CreateAccountHandler(BaseRequestHandler):
+class CreateAccountHandler(webapp2.RequestHandler):
+    
   @check_hash
   def post(self):
       data = {}

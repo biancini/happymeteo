@@ -1,11 +1,14 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
+import webapp2
 
-from handlers import BaseRequestHandler
 from models import Question
 from utils import check_hash
 
 
-class GetQuestionsHandler(BaseRequestHandler):
+class GetQuestionsHandler(webapp2.RequestHandler):
 
   @check_hash
   def post(self):

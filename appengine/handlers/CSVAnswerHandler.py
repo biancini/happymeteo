@@ -1,8 +1,12 @@
-from handlers import BaseRequestHandler
-from models import Answer
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import csv
+import webapp2
 
-class CSVAnswerHandler(BaseRequestHandler):
+from models import Answer
+
+class CSVAnswerHandler(webapp2.RequestHandler):
 
   def get(self):
     answers = Answer.all()

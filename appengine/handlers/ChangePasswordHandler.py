@@ -1,11 +1,14 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
 import logging
+import webapp2
 
-from handlers import BaseRequestHandler
 from models import User
 from utils import check_hash
 
-class ChangePasswordHandler(BaseRequestHandler):
+class ChangePasswordHandler(webapp2.RequestHandler):
 
   @check_hash
   def post(self):

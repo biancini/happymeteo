@@ -1,15 +1,17 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
 import logging
+import webapp2
 
 from google.appengine.ext import db
 from datetime import datetime
 
-from handlers import BaseRequestHandler
 from models import Challenge, User
 from utils import check_hash, sendMessage
 
-
-class AcceptChallengeHandler(BaseRequestHandler):
+class AcceptChallengeHandler(webapp2.RequestHandler):
     
   @check_hash
   def post(self):

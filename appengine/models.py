@@ -210,3 +210,6 @@ class ErrorReport(db.Model):
     stackTrace = db.TextProperty()
     created = db.DateTimeProperty(auto_now_add=True)
     
+class Notification(db.Model):
+    data = db.TextProperty()
+    

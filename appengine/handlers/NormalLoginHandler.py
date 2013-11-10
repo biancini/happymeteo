@@ -1,12 +1,15 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
 import logging
+import webapp2
 
 from google.appengine.ext import db
 
-from handlers import BaseRequestHandler
 from utils import check_hash, happymeteo
 
-class NormalLoginHandler(BaseRequestHandler):
+class NormalLoginHandler(webapp2.RequestHandler):
   @check_hash
   def post(self):
       data = {}

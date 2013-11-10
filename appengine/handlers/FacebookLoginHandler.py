@@ -1,14 +1,17 @@
-import datetime
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import json
 import logging
 import urllib2
+import webapp2
 
+from datetime import datetime
 from google.appengine.ext import db
 
-from handlers import BaseRequestHandler
 from utils import check_hash, happymeteo
 
-class FacebookLoginHandler(BaseRequestHandler):
+class FacebookLoginHandler(webapp2.RequestHandler):
   def calculate_age(self, born):
     today = datetime.date.today()
     try:

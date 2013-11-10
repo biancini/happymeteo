@@ -1,8 +1,12 @@
-from handlers import BaseRequestHandler
-from models import User
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import csv
+import webapp2
 
-class CSVUserHandler(BaseRequestHandler):
+from models import User
+
+class CSVUserHandler(webapp2.RequestHandler):
 
   def get(self):
     users = User.all()

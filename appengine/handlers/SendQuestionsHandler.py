@@ -1,12 +1,15 @@
+'''
+@author: Simon Vocella <voxsim@gmail.com>
+'''
 import time
+import webapp2
 
 from google.appengine.ext import db
 
-from handlers import BaseRequestHandler
 from models import Device
 from utils import sendMessage
 
-class SendQuestionsHandler(BaseRequestHandler):
+class SendQuestionsHandler(webapp2.RequestHandler):
 
   def get(self):
     ts = time.time()
