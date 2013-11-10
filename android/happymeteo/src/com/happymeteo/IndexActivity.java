@@ -30,6 +30,8 @@ public class IndexActivity extends NotLoggedActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_index);
 		super.onCreate(savedInstanceState);
+		
+		setPersistentActivity(true);
 
 		/* Get Facebook Status Callback */
 		statusCallback = FacebookSessionUtils.getSessionStatusCallback(this,

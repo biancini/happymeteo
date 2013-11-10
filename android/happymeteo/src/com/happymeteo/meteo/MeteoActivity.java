@@ -85,7 +85,7 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 	}
 
 	@SuppressWarnings("deprecation")
-	private void setupView() {
+	protected void showViewBasedOnFacebookSession() {
 		int today_int = SessionCache.getToday(this);
 		int yesterday_int = SessionCache.getYesterday(this);
 		int tomorrow_int = SessionCache.getTomorrow(this);
@@ -120,24 +120,14 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 		} catch (Exception e) {
 			Log.e(Const.TAG, e.getMessage(), e);
 		}
-
-		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.profile_picture);
-		ImageView facebook = (ImageView) findViewById(R.id.facebook);
-
-		if (SessionCache.isFacebookSession(this)) {
-			userImage.setProfileId(SessionCache.getFacebook_id(this));
-			userImage.setCropped(true);
-			facebook.setVisibility(View.VISIBLE);
-		} else {
-			userImage.setProfileId(null);
-			facebook.setVisibility(View.GONE);
-		}
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_happy_meteo);
 		super.onCreate(savedInstanceState);
+		
+		setPersistentActivity(true);
 
 		/* Initialize PushNotificationsService */
 		PushNotificationsService.register(getApplicationContext());
@@ -181,11 +171,7 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 			}
 		});
 
-		setupView();
-
 		ServerUtilities.getAppynessByDay(this, SessionCache.getUser_id(this));
-		// ServerUtilities.getAppynessByMonth(this,
-		// SessionCache.getUser_id(this));
 	}
 
 	@Override
@@ -199,14 +185,23 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 				invokeActivity(ChallengeScoreActivity.class, intent.getExtras());
 			}
 		}
-
-		setupView();
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-		setupView();
+	public void onStart() {
+		super.onStart();
+		
+		ProfilePictureView userImage = (ProfilePictureView) findViewById(R.id.profile_picture);
+		ImageView facebook = (ImageView) findViewById(R.id.facebook);
+
+		if (SessionCache.isFacebookSession(this)) {
+			userImage.setProfileId(SessionCache.getFacebook_id(this));
+			userImage.setCropped(true);
+			facebook.setVisibility(View.VISIBLE);
+		} else {
+			userImage.setProfileId(null);
+			facebook.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -287,35 +282,6 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 				dayBarGraphView.setGraphViewStyle(graphViewStyle);
 				relativeLayoutMeteoUpGraphByDay.addView(dayBarGraphView);
 				break;
-			/*
-			 * case Const.GET_APPINESS_BY_MONTH_ID: RelativeLayout
-			 * waitGetAppinessByMonth = (RelativeLayout)
-			 * findViewById(R.id.waitGetAppinessByMonth);
-			 * waitGetAppinessByMonth.setVisibility(View.GONE);
-			 * 
-			 * RelativeLayout relativeLayoutMeteoUpGraphByMonth =
-			 * (RelativeLayout)
-			 * findViewById(R.id.relativeLayoutMeteoUpGraphByMonth); GraphView
-			 * monthBarGraphView = new GraphView(this);
-			 * monthBarGraphView.setManualYAxisBounds(10, 0);
-			 * monthBarGraphView.setGraphViewStyle(graphViewStyle);
-			 * monthBarGraphView.setHorizontalLabels(new String[]
-			 * {months[month-1]});
-			 * 
-			 * int len_months = 5; String[] horLabels = new String[len_months];
-			 * 
-			 * GraphViewData[] viewMonthData = new GraphViewData[len_months];
-			 * for(int i=0; i<len_months; i++) { int id_month =
-			 * (month-len_months+i)%12; double y = 10; if
-			 * (!jsonObject.isNull(String.valueOf(id_month+1))) { y =
-			 * jsonObject.getInt(String.valueOf(id_month+1)); } viewMonthData[i]
-			 * = new GraphViewData(i+1, y); horLabels[i] = months[id_month]; }
-			 * GraphViewSeries monthDataSeries = new GraphViewSeries( new
-			 * GraphViewSeriesStyle(getResources().getColor(R.color.yellow), 1),
-			 * viewMonthData ); monthBarGraphView.addSeries(monthDataSeries); //
-			 * data monthBarGraphView.setHorizontalLabels(horLabels);
-			 * relativeLayoutMeteoUpGraphByMonth.addView(monthBarGraphView);
-			 */
 			}
 		} catch (Exception e) {
 			Log.e(Const.TAG, e.getMessage(), e);

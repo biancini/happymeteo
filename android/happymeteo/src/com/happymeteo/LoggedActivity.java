@@ -31,7 +31,7 @@ public abstract class LoggedActivity extends NotLoggedActivity implements
 	protected Session.StatusCallback statusCallback;
 	private SideNavigationView sideNavigationView;
 
-	public void showView() {
+	protected void showViewBasedOnFacebookSession() {
 		if (!SessionCache.isFacebookSession(this)) {
 			sideNavigationView.changeIcon(R.id.side_navigation_menu_item4, R.drawable.icona_sfidagrigio);
 		} else {
@@ -73,20 +73,6 @@ public abstract class LoggedActivity extends NotLoggedActivity implements
 		if (SessionCache.isFacebookSession(this)) {
 			onFacebookConnect(statusCallback, (Session.getActiveSession() == null));
 		}
-
-		showView();
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		showView();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		showView();
 	}
 
 	@Override
@@ -178,6 +164,7 @@ public abstract class LoggedActivity extends NotLoggedActivity implements
 		super.onStart();
 		Session session = Session.getActiveSession();
 		session.addCallback(statusCallback);
+		showViewBasedOnFacebookSession();
 	}
 
 	@Override

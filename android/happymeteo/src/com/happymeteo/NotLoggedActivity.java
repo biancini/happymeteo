@@ -21,6 +21,13 @@ import com.happymeteo.utils.FacebookSessionUtils;
 import com.happymeteo.utils.OnPostExecuteListener;
 
 public abstract class NotLoggedActivity extends SherlockActivity implements OnPostExecuteListener {
+	
+	protected boolean isPersistentActivity = false;
+	
+	public void setPersistentActivity(boolean isPersistentActivity) {
+		this.isPersistentActivity = isPersistentActivity;
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -146,7 +153,7 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 			Intent intent = new Intent(this, clazz);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			if (extras != null) intent.putExtras(extras);
-			finish();
+			if (!isPersistentActivity) finish();
 			startActivity(intent);
 		}
 	}
