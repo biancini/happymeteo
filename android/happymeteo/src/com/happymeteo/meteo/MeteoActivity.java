@@ -2,8 +2,10 @@ package com.happymeteo.meteo;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.json.JSONObject;
@@ -171,7 +173,7 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 			}
 		});
 
-		ServerUtilities.getAppynessByDay(this, SessionCache.getUser_id(this));
+		ServerUtilities.getAppynessByWeek(this, SessionCache.getUser_id(this));
 	}
 
 	@Override
@@ -216,10 +218,10 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			Calendar cal = Calendar.getInstance();
-			Date today = cal.getTime();
+//			Date today = cal.getTime();
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			int month = cal.get(Calendar.MONTH);
-			int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+//			int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
 			int[] months = new int[] { R.string.january, R.string.february,
 					R.string.march, R.string.april, R.string.may,
@@ -230,47 +232,54 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 			GraphViewStyle graphViewStyle = new GraphViewStyle(0xff000000, 0xffffffff, 0xffffffff);
 
 			switch (id) {
-			case Const.GET_APPINESS_BY_DAY_ID:
+			case Const.GET_APPINESS_BY_WEEK_ID:
 				RelativeLayout wait = (RelativeLayout) findViewById(R.id.waitGetAppinessByDay);
 				wait.setVisibility(View.GONE);
 
 				RelativeLayout relativeLayoutMeteoUpGraphByDay = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUpGraphByDay);
 
-				int groupBy = 7;
-				int groups = daysInMonth / groupBy
-						+ (((daysInMonth % groupBy) == 0) ? 0 : 1);
+//				int groupBy = 7;
+//				int groups = daysInMonth / groupBy
+//						+ (((daysInMonth % groupBy) == 0) ? 0 : 1);
+//				GraphViewData[] viewDayData = new GraphViewData[groups];
+//				for (int i = 0; i < groups; ++i) {
+//					viewDayData[i] = new GraphViewData(i + 1, 0.0f);
+//				}
+//
+//				boolean future = false;
+//				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+//
+//				int arrayIndex = 0;
+//				float curValue = 0.0f;
+//				int curElems = 0;
+//				for (int i = 0; i < daysInMonth; i++) {
+//					String date = dateFormat.format(cal.getTime());
+//					double y = (jsonObject.isNull(date)) ? 0.0 : jsonObject.getInt(date);
+//
+//					if (!future) {
+//						curElems += 1;
+//						curValue += y;
+//					}
+//
+//					if (i % groupBy == 0) {
+//						float val = (curElems > 0) ? curValue / curElems : 0.0f;
+//						viewDayData[arrayIndex].valueY = val;
+//						arrayIndex++;
+//						curValue = 0.0f;
+//						curElems = 0;
+//					}
+//
+//					if (cal.getTime().equals(today)) future = true;
+//					cal.add(Calendar.DATE, 1);
+//				}
+				
+				int groups = jsonObject.length();
 				GraphViewData[] viewDayData = new GraphViewData[groups];
-				for (int i = 0; i < groups; ++i) {
-					viewDayData[i] = new GraphViewData(i + 1, 0.0f);
+				
+				for (int i = 0; i < groups; i++) {
+					viewDayData[i] = new GraphViewData(i + 1, jsonObject.getInt(String.valueOf(i)));
 				}
-
-				boolean future = false;
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-				int arrayIndex = 0;
-				float curValue = 0.0f;
-				int curElems = 0;
-				for (int i = 0; i < daysInMonth; i++) {
-					String date = dateFormat.format(cal.getTime());
-					double y = (jsonObject.isNull(date)) ? 0.0 : jsonObject.getInt(date);
-
-					if (!future) {
-						curElems += 1;
-						curValue += y;
-					}
-
-					if (i % groupBy == 0) {
-						float val = (curElems > 0) ? curValue / curElems : 0.0f;
-						viewDayData[arrayIndex].valueY = val;
-						arrayIndex++;
-						curValue = 0.0f;
-						curElems = 0;
-					}
-
-					if (cal.getTime().equals(today)) future = true;
-					cal.add(Calendar.DATE, 1);
-				}
-
+				
 				// init example series data
 				GraphViewSeries dayDataSeries = new GraphViewSeries(
 						new GraphViewSeriesStyle(getResources().getColor(R.color.yellow), 1), viewDayData);

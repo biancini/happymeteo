@@ -93,7 +93,9 @@ public class IndexActivity extends NotLoggedActivity implements
 
 	@Override
 	public void OnFacebookExecute(Session session, SessionState state) {
-		ServerUtilities.facebookLogin(this, session.getAccessToken());
+		if(!session.getAccessToken().isEmpty()) {
+			ServerUtilities.facebookLogin(this, session.getAccessToken());
+		}
 	}
 	
 	@Override

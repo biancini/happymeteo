@@ -2,7 +2,7 @@ package com.happymeteo.utils;
 
 public final class Const {
 	/* Url */
-	public static final String BASE_URL                  = "https://happymeteo.appspot.com";
+	public static final String BASE_URL                  = "https://webapp2-dev-dot-happymeteo.appspot.com";
 	
 	public static final String CREATE_ACCOUNT            = BASE_URL + "/create_account";
 	public static final String FACEBOOK_LOGIN_URL        = BASE_URL + "/facebook_login";
@@ -20,13 +20,11 @@ public final class Const {
 	public static final String SUBMIT_CHALLENGE_URL      = BASE_URL + "/submit_challenge";
 	public static final String GET_CHALLENGES_URL        = BASE_URL + "/get_challenges";
 	
-	public static final String GET_APPINESS_BY_DAY_URL   = BASE_URL + "/get_appiness_by_day";
+	public static final String GET_APPINESS_BY_WEEK_URL   = BASE_URL + "/get_appiness_by_week";
 	
 	public static final String LOST_PASSWORD_URL         = BASE_URL + "/lost_password";
 	public static final String CHANGE_PASSWORD_URL       = BASE_URL + "/change_password";
 	public static final String UPDATE_FACEBOOK_URL       = BASE_URL + "/update_facebook";
-	
-	public static final String GET_APPINESS_BY_MONTH_URL = BASE_URL + "/get_appiness_by_month";
 	
 	/* Id Post */
 	public static final int CREATE_ACCOUNT_ID            = 1;
@@ -46,13 +44,11 @@ public final class Const {
 	
 	public static final int GET_CHALENGES_URL_ID         = 12;
 	
-	public static final int GET_APPINESS_BY_DAY_ID       = 13;
+	public static final int GET_APPINESS_BY_WEEK_ID      = 13;
 	
 	public static final int LOST_PASSWORD_ID             = 14;
 	public static final int CHANGE_PASSWORD_ID           = 15;
 	public static final int UPDATE_FACEBOOK_ID           = 16;
-	
-	public static final int GET_APPINESS_BY_MONTH_ID     = 17;
 	
 	/* Google */
 	public static final String GOOGLE_ID                 = "347057775979";

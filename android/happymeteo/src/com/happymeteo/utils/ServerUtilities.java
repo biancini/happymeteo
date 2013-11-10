@@ -120,19 +120,11 @@ public class ServerUtilities {
 		new PostRequest(Const.GET_CHALENGES_URL_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_CHALLENGES_URL);
 	}
 
-	public static void getAppynessByDay(NotLoggedActivity appyMeteoNotLoggedActivity, String userId) {
+	public static void getAppynessByWeek(NotLoggedActivity appyMeteoNotLoggedActivity, String userId) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("user_id", userId));
-		new PostRequest(Const.GET_APPINESS_BY_DAY_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_APPINESS_BY_DAY_URL);
+		new PostRequest(Const.GET_APPINESS_BY_WEEK_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_APPINESS_BY_WEEK_URL);
 	}
-
-	/*
-	public static void getAppynessByMonth(NotLoggedActivity appyMeteoNotLoggedActivity, String userId) {
-		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("user_id", userId));
-		new PostRequest(Const.GET_APPINESS_BY_MONTH_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_APPINESS_BY_MONTH_URL);
-	}
-	*/
 
 	public static void lostPassword(NotLoggedActivity appyMeteoNotLoggedActivity, String email) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
