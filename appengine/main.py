@@ -9,7 +9,7 @@ from handlers import CreateAccountHandler, FacebookLoginHandler, \
     GetAppinessByDayHandler, CreateMapHandler, GetDataMapHandler, \
     LostPasswordHandler, ChangePasswordHandler, UpdateFacebookHandler, \
     CSVUserHandler, CSVAnswerHandler, CSVChallengeAnswerHandler,\
-    GetAppinessByWeekHandler, ErrorReportHandler
+    GetAppinessByWeekHandler, ErrorReportHandler, GetNotification
 from secrets import SESSION_KEY
 
 # webapp2 config
@@ -64,7 +64,9 @@ routes = [
   # csv management
   Route('/csv_user', handler=CSVUserHandler.CSVUserHandler),
   Route('/csv_answer', handler=CSVAnswerHandler.CSVAnswerHandler),
-  Route('/csv_challenge_answer', handler=CSVChallengeAnswerHandler.CSVChallengeAnswerHandler)
+  Route('/csv_challenge_answer', handler=CSVChallengeAnswerHandler.CSVChallengeAnswerHandler),
+  
+  Route('/get_notification', handler=GetNotification.GetNotification)
 ]
 
 app = WSGIApplication(routes, config=app_config, debug=True)

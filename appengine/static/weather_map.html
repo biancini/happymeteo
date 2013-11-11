@@ -34,7 +34,7 @@
 	var province = [];
 	var regioni = [];
 
-	var marker_pre = 'https://happymeteo.appspot.com/img/';
+	var marker_pre = 'img/';
 	var markers = ['1happy.png', '2happy.png', '3happy.png', '4happy.png', '5happy.png',
 	               '6happy.png', '7happy.png', '8happy.png', '9happy.png', '10happy.png'];
 
@@ -105,7 +105,7 @@
 	}
 
 	function initializeData() {
-	    $.getJSON( "https://happymeteo.appspot.com/get_data_map", function(response) {
+	    $.getJSON( "get_data_map", function(response) {
 		    $.each(response, function(key, object) {
 		    	if(object.type == 'P') {
 	                var arrCoords = object.coordinate.split(',');

@@ -211,5 +211,5 @@ class ErrorReport(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     
 class Notification(db.Model):
-    data = db.TextProperty()
+    payload = db.TextProperty()
     

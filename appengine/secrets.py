@@ -20,10 +20,6 @@ CALL_SECRET_KEY ='be07735dae6fdd28cd11b8a1840db9ecf7db2f1e9001747cac85c8fd86a147
 EMAIL = 'appymeteo@gmail.com'
 PASSWORD = 'vivaappymeteo!'
 
-REFRESH_TOKEN = "1/wPP3yPNcYI03ShShIiarFkpxZ70MRRM8wqdvVTrxbNs"
-CLIENT_ID = "1098861155184-h0sqvu2qbhufj1lt76aakvpo94vv18gr.apps.googleusercontent.com"
-CLIENT_SECRET = "qI-vQbzlU8qgUpPeWJeH3nhh"
-
 # fusion tables
 DOMANDA = "18GPlkUTN9Qbi_JaZVkAvFKWyiQNgO-OD8v8M5W8"
 SFIDA = "1dRqKaRI4lCRT6TRnbqloYM4U7m2UK3d7oVM4W0o"

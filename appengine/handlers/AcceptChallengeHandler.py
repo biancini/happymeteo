@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 @author: Simon Vocella <voxsim@gmail.com>
 '''
@@ -8,8 +9,8 @@ import webapp2
 from google.appengine.ext import db
 from datetime import datetime
 
-from models import Challenge, User
-from utils import check_hash, sendMessage
+from models import Challenge, User, Notification
+from utils import check_hash, sendNotification
 
 class AcceptChallengeHandler(webapp2.RequestHandler):
     
@@ -52,8 +53,14 @@ class AcceptChallengeHandler(webapp2.RequestHandler):
         challenge.turn = 1
         challenge.created = datetime.now()
         challenge.put()
+            
+        notification = Notification(payload=db.Text(json.dumps({'user_id': challenge.user_id_a, 'appy_key': 'accepted_challenge_turn1_%s' % accepted, 
+                                                 'challenge_id': '%s'%challenge.key().id(), 'turn': '1'})))
+        notification.save()
+        sendNotification(challenge.registration_id_a, notification.key().id())
         
-        sendMessage(challenge.registration_id_a, payload={'user_id': challenge.user_id_a, 'appy_key': 'accepted_challenge_turn1_%s' % accepted, 'challenge_id': '%s'%challenge.key().id(), 'turn': '1'})
+        if accepted == "false":
+            challenge.delete()
         
         data = {
           'message': 'ok'

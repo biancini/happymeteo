@@ -3,21 +3,50 @@
 '''
 import time
 import webapp2
+import logging
 
 from google.appengine.ext import db
 
-from models import Device
-from utils import sendMessage
+from models import Device, Notification
+from utils import sendNotification
+import json
 
 class SendQuestionsHandler(webapp2.RequestHandler):
 
   def get(self):
-    ts = time.time()
-    devices = Device.all()
-    for device in devices:
-        if device.user_id != "":
-            response_json = sendMessage(device.registration_id, collapse_key='questions', payload={'user_id': device.user_id, 'timestamp': '%s'%ts})
-            if response_json['failure'] == 1:
-                db.delete(device)
+    try:
+        user_id = self.request.get('user_id')
+        
+        user_notification = {}
+        
+        if not user_id:
+            devices = Device.all()
         else:
-            db.delete(device)
+            devices = Device.gql("WHERE user_id = :1", user_id)
+            
+        ts = time.time()
+        for device in devices:
+            if device.user_id != "":
+                
+                notification_id = None
+                
+                if device.user_id in user_notification:
+                    print "caso 1"
+                    notification_id = user_notification[device.user_id]
+                else:
+                    print "caso 2"
+                    notification = Notification(payload=db.Text(json.dumps({'user_id': device.user_id, 'timestamp': '%s'%ts, 'collapse_key': 'questions'})))
+                    notification.save()
+                    notification_id = notification.key().id()
+                    user_notification[device.user_id] = notification_id
+                    
+                print "notification_id: %s"%notification_id
+                
+                if notification_id:
+                    response_json = sendNotification(device.registration_id, notification_id, collapse_key='questions')
+                    if response_json['failure'] == 1:
+                        db.delete(device)
+            else:
+                db.delete(device)
+    except Exception as e:
+        logging.exception(e)

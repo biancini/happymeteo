@@ -23,12 +23,12 @@ class SubmitQuestionsHandler(webapp2.RequestHandler):
         timestamp = self.request.get('timestamp')
         
         if not timestamp or timestamp == "":
-            raise Exception('You need to specify the timestamp')
+            raise Exception('Devi specificare un timestamp')
         
         answers = Answer.gql("WHERE user_id = :1 AND timestamp = :2", user_id, timestamp)
         
         if answers.count() > 0:
-            raise Exception('Hai gia risposto a questo impulso')
+            raise Exception('Hai gi&agrave; risposto a questo impulso')
         
         user = User.get_by_id(int(user_id))
         user.contatore_impulsi = user.contatore_impulsi + 1

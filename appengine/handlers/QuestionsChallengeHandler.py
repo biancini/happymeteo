@@ -5,11 +5,11 @@ import json
 import logging
 import webapp2
 
-from random import sample, random
+from random import random
 
 from models import Challenge, ChallengeQuestion, ChallengeQuestionCategory, \
     ChallengeAnswer
-from utils import check_hash
+from utils import check_hash, sample
 
 class QuestionsChallengeHandler(webapp2.RequestHandler):
 
@@ -24,7 +24,7 @@ class QuestionsChallengeHandler(webapp2.RequestHandler):
         if not challenge:
             raise Exception('Nessuna sfida trovata')
         
-        if challenge.turn != int(turn):
+        if int(challenge.turn) != int(turn):
             raise Exception('C\'è stato un errore con la sfida')
         
         if turn == "1":
@@ -34,7 +34,7 @@ class QuestionsChallengeHandler(webapp2.RequestHandler):
             categories = ChallengeQuestionCategory.all()
             for c in categories:
                 questions = ChallengeQuestion.gql("WHERE category_id = :1", c.key().id())
-                question = sample(random.random, questions, 1)
+                question = sample(random, questions, 1)
                 data.append(question[0].toJson())
         else:
             answers = ChallengeAnswer.gql("WHERE challenge_id = :1", challengeId)

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import urllib
 import urllib2
 import json
 import datetime
@@ -11,6 +10,9 @@ import random
 from datetime import date, timedelta
 from google.appengine.ext import db
 from google.appengine.api import mail
+
+from secrets import GOOGLE_API_KEY, \
+    CALL_SECRET_KEY, EMAIL, PASSWORD_SECRET_KEY
 
 def check_hash(handler_method):
     def check_hash(self, *args, **kwargs):
@@ -25,11 +27,34 @@ def check_hash(handler_method):
             handler_method(self, *args, **kwargs)
     return check_hash
 
-from secrets import GOOGLE_API_KEY, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN,\
-    CALL_SECRET_KEY, EMAIL, PASSWORD_SECRET_KEY
+def check_call(request):
+    arguments = request.arguments()
+    arguments.sort()
+    query_string = ""
+    first = True
+    hashing = ""
+    
+    for a in arguments:
+        if a == "hashing":
+            hashing = request.get(a)
+            continue
+        
+        if not first:
+            query_string = query_string + "&"
+        
+        query_string = query_string + a + "=" + request.get(a)
+        first = False
+        
+    hash = hashlib.sha1(CALL_SECRET_KEY + query_string).hexdigest()
+    
+    print "query_string: %s"%query_string
+    print "hashing client side: %s"%hashing
+    print "hashing server side: %s"%hash
+    
+    return (hashing == hash)
 
-def sendMessage(registrationId, collapse_key=None, payload=None):
-    print "send message to %s"%registrationId
+def sendNotification(registrationId, notification_id, collapse_key=None):
+    print "send message to %s with %s"%(registrationId, notification_id)
     
     data = {
       'registration_ids': [registrationId]
@@ -38,8 +63,7 @@ def sendMessage(registrationId, collapse_key=None, payload=None):
     if collapse_key:
        data['collapse_key'] = collapse_key
     
-    if payload:
-       data['data'] = payload
+    data['data'] = { 'notification_id' : notification_id }
     
     req = urllib2.Request('https://android.googleapis.com/gcm/send')
     req.add_header('Content-Type', 'application/json')
@@ -47,41 +71,6 @@ def sendMessage(registrationId, collapse_key=None, payload=None):
     response = urllib2.urlopen(req, json.dumps(data))
     response_json = json.loads(response.read())
     return response_json
-    
-def getGoogleAccessToken():
-    data = urllib.urlencode({
-      'client_id': CLIENT_ID,
-      'client_secret': CLIENT_SECRET,
-      'refresh_token': REFRESH_TOKEN,
-      'grant_type': 'refresh_token'})
-    request = urllib2.Request(
-      url='https://accounts.google.com/o/oauth2/token',
-      data=data)
-    request_open = urllib2.urlopen(request)
-    response = request_open.read()
-    request_open.close()
-    tokens = json.loads(response)
-    return tokens['access_token']
-    
-def sqlGetFusionTable(access_token, sql):
-    request = urllib2.Request(url='https://www.googleapis.com/fusiontables/v1/query?%s' % \
-                              (urllib.urlencode({'access_token': access_token,
-                               'sql': sql})))
-    request_open = urllib2.urlopen(request)
-    response = request_open.read()
-    request_open.close()
-    return response
-
-def sqlPostFusionTable(access_token, sql):
-    print access_token + " " + sql
-    data = urllib.urlencode({'sql': sql})
-    request = urllib2.Request(url='https://www.googleapis.com/fusiontables/v1/query',
-                              data=data)
-    request.add_header('Authorization', 'Bearer %s' % access_token)
-    request_open = urllib2.urlopen(request)
-    response = request_open.read()
-    request_open.close()
-    return response
 
 def happymeteo(user_id):
     today = date.today()
@@ -195,32 +184,6 @@ def sample(random, population, k):
             raise ValueError("TypeError")
     return result
 
-def check_call(request):
-    arguments = request.arguments()
-    arguments.sort()
-    query_string = ""
-    first = True
-    hashing = ""
-    
-    for a in arguments:
-        if a == "hashing":
-            hashing = request.get(a)
-            continue
-        
-        if not first:
-            query_string = query_string + "&"
-        
-        query_string = query_string + a + "=" + request.get(a)
-        first = False
-        
-    hash = hashlib.sha1(CALL_SECRET_KEY + query_string).hexdigest()
-    
-    print "query_string: %s"%query_string
-    print "hashing: %s"%hashing
-    print "hash: %s"%hash
-    
-    return (hashing == hash)
-         
 def point_inside_polygon(lat, lng, coordinates):
     x = lng
     y = lat
@@ -266,12 +229,6 @@ def formatDate(dtDateTime,strFormat="%Y-%m-%d"):
     
     # format a datetime object as YYYY-MM-DD string and return
     return dtDateTime.strftime(strFormat)
-
-def mkFirstOfMonth2(dtDateTime):
-    #what is the first day of the current month
-    ddays = int(dtDateTime.strftime("%d"))-1 #days to subtract to get to the 1st
-    delta = datetime.timedelta(days= ddays)  #create a delta datetime object
-    return dtDateTime - delta                #Subtract delta and return
 
 def mkFirstOfMonth(dtDateTime):
     #what is the first day of the current month
