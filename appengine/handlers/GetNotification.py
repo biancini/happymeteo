@@ -6,6 +6,7 @@ import logging
 
 from models import Notification
 from utils import check_hash
+import json
 
 class GetNotification(webapp2.RequestHandler):
 
@@ -23,12 +24,11 @@ class GetNotification(webapp2.RequestHandler):
             data = notification.payload
             notification.delete()
         else:
-            data = {'message': 'ok'}
+            data = json.dumps({'message': 'ok'})
     except Exception as e:
         logging.exception(e)
-        data = {
-          'error': '%s' % str(e)
-        }
-    
+        data = json.dumps({'error': '%s' % str(e)})
+        
+    print "data: %s"%data
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(data)

@@ -5,9 +5,11 @@ import org.acra.annotation.ReportsCrashes;
 
 import android.app.Application;
 
+import com.happymeteo.utils.Const;
+
 @ReportsCrashes(
     formKey = "", // This is required for backward compatibility but not used
-    formUri = "https://happymeteo.appspot.com/crash_report"
+    formUri = Const.BASE_URL + "/crash_report"
 )
 public class AppyMeteoApplication extends Application {
     @Override

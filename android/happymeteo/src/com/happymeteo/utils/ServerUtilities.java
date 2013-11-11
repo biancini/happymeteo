@@ -157,10 +157,4 @@ public class ServerUtilities {
 				}
 			});
 	}
-	
-	public static void getNotification(Context context, OnPostExecuteListener onPostExecuteListener, String notification_id) {
-		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("notification_id", notification_id));
-		new PostRequest(Const.GET_NOTIFICATION_ID, context, onPostExecuteListener, nvps).execute(Const.GET_NOTIFICATION_URL);
-	}
 }
