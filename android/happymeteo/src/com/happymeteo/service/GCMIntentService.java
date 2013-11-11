@@ -1,5 +1,10 @@
 package com.happymeteo.service;
 
+import java.util.Iterator;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -18,9 +23,10 @@ import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.question.QuestionActivity;
 import com.happymeteo.utils.Const;
+import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
 
-public class GCMIntentService extends GCMBaseIntentService {
+public class GCMIntentService extends GCMBaseIntentService implements OnPostExecuteListener {
 	
 	public GCMIntentService() {
 		super(Const.GOOGLE_ID);
@@ -36,8 +42,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 				context,
 				registrationId,
 				SessionCache.getUser_id(this));
-		
-		Log.i(Const.TAG, "Devide registered to appymeteo backend");
 	}
 
 	/**
@@ -47,7 +51,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onUnregistered(Context context, String registrationId) {
 		/* Unregister device on happymeteo backend */
 		ServerUtilities.unregisterDevice(context, registrationId);
-		Log.i(Const.TAG, "Devide unregistered to appymeteo backend");
 	}
 
 	/**
@@ -56,9 +59,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onMessage(Context context, Intent intent) {
 		Log.i(Const.TAG, "Received message: " + intent.getExtras());
-
-		/* Notifies user */
-		generateNotification(context, intent.getExtras());
+		String notification_id = intent.getExtras().getString("notification_id");
+		ServerUtilities.getNotification(context, this, notification_id);
 	}
 
 	/**
@@ -87,7 +89,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		return super.onRecoverableError(context, errorId);
 	}
 	
-	private static String getMessageFromCollapseKey(Context context, String collapse_key) {
+	private String getMessageFromCollapseKey(Context context, String collapse_key) {
 		int text = -1;
 		
 		if (collapse_key.equals("questions")) text = R.string.notify_domande;
@@ -101,7 +103,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		return collapse_key;
 	}
 	
-	private static Class<? extends ImpulseActivity> getActivityFromCollapseKey(String collapse_key) {
+	private Class<? extends ImpulseActivity> getActivityFromCollapseKey(String collapse_key) {
 		if(collapse_key.equals("questions")) return QuestionActivity.class;
 		if(collapse_key.equals("request_challenge")) return ChallengeRequestActivity.class;
 		if(collapse_key.equals("accepted_challenge_turn1_true")) return ChallengeQuestionsActivity.class;
@@ -114,10 +116,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
+	 * @throws JSONException 
 	 */
 	@SuppressWarnings("deprecation")
-	public static void generateNotification(Context context, Bundle extras) {
-		String user_id = extras.getString("user_id");
+	public void generateNotification(JSONObject jsonObject) throws JSONException {
+		String user_id = jsonObject.getString("user_id");
+		Context context = getApplicationContext();
 		
 		if(user_id != null && SessionCache.getUser_id(context) != null && user_id.equals(SessionCache.getUser_id(context))) {
 			int icon = R.drawable.ic_launcher;
@@ -125,9 +129,9 @@ public class GCMIntentService extends GCMBaseIntentService {
 			//String notificationTag = String.valueOf(UUID.randomUUID());
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			
-			String collapse_key = extras.getString("collapse_key");
+			String collapse_key = jsonObject.getString("collapse_key");
 			if (collapse_key == null || collapse_key.equals("do_not_collapse")) {
-				collapse_key = extras.getString("appy_key");
+				collapse_key = jsonObject.getString("appy_key");
 			}
 			
 			String message = getMessageFromCollapseKey(context, collapse_key);
@@ -135,10 +139,14 @@ public class GCMIntentService extends GCMBaseIntentService {
 			Intent notificationIntent = (clazz == null) ? new Intent(context, MeteoActivity.class) : new Intent(context, clazz);
 			Notification notification = new Notification(icon, message, when);
 			String title = context.getString(R.string.app_name);
-	
-			notificationIntent.putExtras(extras);
 			
-			Log.d(Const.TAG, "extras: " + extras.toString());
+			Bundle extras = new Bundle();
+			Iterator<String> iterator = jsonObject.keys();
+			while(iterator.hasNext()) {
+				String key = iterator.next();
+				extras.putString(key, jsonObject.getString(key));
+			}
+			notificationIntent.putExtras(extras);
 			
 			// set intent so it does not start a new activity
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -155,6 +163,21 @@ public class GCMIntentService extends GCMBaseIntentService {
 			// Vibrate if vibrate is enabled
 			notification.defaults |= Notification.DEFAULT_VIBRATE;
 			notificationManager.notify(message, 0, notification);
+		}
+	}
+
+	@Override
+	public void onPostExecute(int id, String result, Exception exception) {
+		if(exception != null) {
+			return;
+		}
+		
+		try {
+			JSONObject jsonObject = new JSONObject(result);
+			Log.d(Const.TAG, "jsonObject: " + jsonObject.toString());
+			generateNotification(jsonObject);
+		} catch(Exception e) {
+			Log.e(Const.TAG, e.getMessage(), e);
 		}
 	}
 }
