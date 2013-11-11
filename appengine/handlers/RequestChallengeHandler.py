@@ -59,12 +59,13 @@ class RequestChallengeHandler(webapp2.RequestHandler):
           challenge.put()
           
         # Send request to all devices of user_b
-        for device in query2.run():
-            notification = Notification(payload=db.Text(json.dumps({'user_id': challenge.user_id_b, 
+        notification = Notification(payload=db.Text(json.dumps({'user_id': challenge.user_id_b, 
                                                  'challenge_id': '%s'%challenge.key().id(), 
                                                  'adversary_facebook_id': user_a.facebook_id,
                                                  'adversary_name': user_a.first_name })))
-            notification.save()
+        notification.save()
+        
+        for device in query2.run():
             sendNotification(device.registration_id, notification.key().id(), collapse_key='request_challenge')
         
         data = {

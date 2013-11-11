@@ -31,17 +31,13 @@ class SendQuestionsHandler(webapp2.RequestHandler):
                 notification_id = None
                 
                 if device.user_id in user_notification:
-                    print "caso 1"
                     notification_id = user_notification[device.user_id]
                 else:
-                    print "caso 2"
                     notification = Notification(payload=db.Text(json.dumps({'user_id': device.user_id, 'timestamp': '%s'%ts, 'collapse_key': 'questions'})))
                     notification.save()
                     notification_id = notification.key().id()
                     user_notification[device.user_id] = notification_id
                     
-                print "notification_id: %s"%notification_id
-                
                 if notification_id:
                     response_json = sendNotification(device.registration_id, notification_id, collapse_key='questions')
                     if response_json['failure'] == 1:
