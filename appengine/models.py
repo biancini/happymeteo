@@ -76,7 +76,7 @@ class Challenge(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     accepted = db.BooleanProperty(default=False)
     turn = db.IntegerProperty()
-    created = db.DateTimeProperty()
+    last_request = db.IntegerProperty()
     
     def toJson(self):
         return {

@@ -117,12 +117,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	public static void generateNotification(Context context, Bundle extras) {
 		String user_id = extras.getString("user_id");
 		
-		Log.i(Const.TAG, "ENTERED generateNotification user_id: "+user_id);
-		Log.i(Const.TAG, "ENTERED generateNotification SessionCache.getUser_id(context): "+SessionCache.getUser_id(context));
-		Log.i(Const.TAG, "ENTERED generateNotification equals: "+user_id.equals(SessionCache.getUser_id(context)));
-		
 		if(user_id != null && SessionCache.getUser_id(context) != null && user_id.equals(SessionCache.getUser_id(context))) {
-			Log.i(Const.TAG, "ENTERED generateNotification 1");
 			int icon = R.drawable.ic_launcher;
 			long when = System.currentTimeMillis();
 			//String notificationTag = String.valueOf(UUID.randomUUID());
@@ -156,7 +151,5 @@ public class GCMIntentService extends GCMBaseIntentService {
 			notification.defaults |= Notification.DEFAULT_VIBRATE;
 			notificationManager.notify(message, 0, notification);
 		}
-		
-		Log.i(Const.TAG, "ENTERED generateNotification 2");
 	}
 }

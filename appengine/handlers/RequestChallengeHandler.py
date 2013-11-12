@@ -10,6 +10,7 @@ from datetime import datetime
 
 from models import User, Challenge
 from utils import check_hash, sendNotification
+import time
 
 class RequestChallengeHandler(webapp2.RequestHandler):
     
@@ -41,30 +42,37 @@ class RequestChallengeHandler(webapp2.RequestHandler):
         # Save challenge
         query = Challenge.gql("WHERE user_id_a = :1 and user_id_b = :2 and accepted = false and turn = 0", userId, '%s' % user_b.key().id())
         add = False
+        send = False
+        
         if query.count() > 0:
           challenge = query.get()
           
           if challenge:
               challenge.registration_id_a = registrationId
-              challenge.created = datetime.now()
-              challenge.turn = 0
+              last_request = challenge.last_request
+              challenge.last_request = int(round(time.time() * 1000)) # milliseconds
               challenge.put()
+              send = (challenge.last_request - last_request) > 60 * 1000 # 1 minutes
           else:
               add = True
         else:
           add = True
-          
-        if add:
-          challenge = Challenge(user_id_a=userId, user_id_b='%s'%user_b.key().id(), registration_id_a=registrationId, accepted=False, turn=0)
-          challenge.put()
-          
-        # Send request to all devices of user_b
-        for device in query2.run():
-            sendNotification(device.registration_id,    {'user_id': challenge.user_id_b, 
-                                                         'challenge_id': '%s'%challenge.key().id(), 
-                                                         'adversary_facebook_id': user_a.facebook_id,
-                                                         'adversary_name': user_a.first_name }, collapse_key='request_challenge')
         
+        if add:
+           challenge = Challenge(user_id_a=userId, user_id_b='%s'%user_b.key().id(), registration_id_a=registrationId, accepted=False, turn=0)
+           challenge.last_request = int(round(time.time() * 1000)) # milliseconds
+           challenge.put()
+           send = True
+        
+        if send:
+           # Send request to all devices of user_b
+           for device in query2.run():
+                sendNotification(device.registration_id, {'user_id': challenge.user_id_b, 
+                                                          'challenge_id': '%s'%challenge.key().id(), 
+                                                          'adversary_facebook_id': user_a.facebook_id,
+                                                          'adversary_name': user_a.first_name, 
+                                                          'appy_key': 'request_challenge'})
+            
         data = {
           'message': 'ok'
         }
