@@ -46,13 +46,6 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity implements
             CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		mLocationClient = new LocationClient(this, this, this);
-	}
-	
-	@Override
 	public void onStart() {
         super.onStart();
         
@@ -277,4 +270,8 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity implements
                 Toast.LENGTH_SHORT).show();
 	}
 
+	@Override
+	public void onCreation() {
+		mLocationClient = new LocationClient(this, this, this);
+	}
 }

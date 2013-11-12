@@ -32,41 +32,6 @@ public class ChallengeQuestionsActivity extends QuestionImpulseActivity implemen
 	private final String CHALLENGE_ID = "challenge_id";
 	private final String TURN = "turn";
 	private final String SCORE = "score";
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.activity_challenge_questions);
-		super.onCreate(savedInstanceState);
-		
-		params = new HashMap<String, String>();
-		questions = new JSONObject();
-
-		linearLayout = (LinearLayout) findViewById(R.id.layoutChallengeQuestions);
-		
-		ServerUtilities.getChallengeQuestions(this, intentParameters.get(CHALLENGE_ID), intentParameters.get(TURN));
-		
-		final Button btnBeginChallengeQuestions = (Button) findViewById(R.id.btnBeginChallengeQuestions);
-		btnBeginChallengeQuestions.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Location location = mLocationClient.getLastLocation();
-
-				if (location != null) {
-					Log.d(Const.TAG, "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude());
-					
-					params.put("latitude", String.valueOf(location.getLatitude()));
-					params.put("longitude", String.valueOf(location.getLongitude()));
-				}
-
-				params.put("user_id", SessionCache.getUser_id(view.getContext()));
-				params.put("questions", questions.toString());
-				params.put("challenge_id", intentParameters.get(CHALLENGE_ID));
-				params.put("turn", intentParameters.get(TURN));
-
-				ServerUtilities.submitChallenge(ChallengeQuestionsActivity.this, params);
-			}
-		});
-	}
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
@@ -120,5 +85,42 @@ public class ChallengeQuestionsActivity extends QuestionImpulseActivity implemen
 		keyIntentParameters.add(TURN);
 		keyIntentParameters.add(SCORE);
 		return keyIntentParameters;
+	}
+
+	@Override
+	public void showActivity() {
+		params = new HashMap<String, String>();
+		questions = new JSONObject();
+
+		linearLayout = (LinearLayout) findViewById(R.id.layoutChallengeQuestions);
+		
+		ServerUtilities.getChallengeQuestions(this, intentParameters.get(CHALLENGE_ID), intentParameters.get(TURN));
+		
+		final Button btnBeginChallengeQuestions = (Button) findViewById(R.id.btnBeginChallengeQuestions);
+		btnBeginChallengeQuestions.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Location location = mLocationClient.getLastLocation();
+
+				if (location != null) {
+					Log.d(Const.TAG, "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude());
+					
+					params.put("latitude", String.valueOf(location.getLatitude()));
+					params.put("longitude", String.valueOf(location.getLongitude()));
+				}
+
+				params.put("user_id", SessionCache.getUser_id(view.getContext()));
+				params.put("questions", questions.toString());
+				params.put("challenge_id", intentParameters.get(CHALLENGE_ID));
+				params.put("turn", intentParameters.get(TURN));
+
+				ServerUtilities.submitChallenge(ChallengeQuestionsActivity.this, params);
+			}
+		});
+	}
+
+	@Override
+	public int getContentView() {
+		return R.layout.activity_challenge_questions;
 	}
 }

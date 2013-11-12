@@ -2,12 +2,12 @@ package com.happymeteo.service;
 
 import org.json.JSONException;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
@@ -113,43 +113,44 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * Issues a notification to inform the user that server has sent a message.
 	 * @throws JSONException 
 	 */
-	@SuppressWarnings("deprecation")
 	public static void generateNotification(Context context, Bundle extras) {
 		String user_id = extras.getString("user_id");
 		
 		if(user_id != null && SessionCache.getUser_id(context) != null && user_id.equals(SessionCache.getUser_id(context))) {
-			int icon = R.drawable.ic_launcher;
-			long when = System.currentTimeMillis();
-			//String notificationTag = String.valueOf(UUID.randomUUID());
-			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-			
 			String collapse_key = extras.getString("collapse_key");
 			if (collapse_key == null || collapse_key.equals("do_not_collapse")) {
 				collapse_key = extras.getString("appy_key");
 			}
 			
-			String message = getMessageFromCollapseKey(context, collapse_key);
-			Class<? extends ImpulseActivity> clazz = getActivityFromCollapseKey(collapse_key);
-			Intent notificationIntent = (clazz == null) ? new Intent(context, MeteoActivity.class) : new Intent(context, clazz);
-			Notification notification = new Notification(icon, message, when);
-			String title = context.getString(R.string.app_name);
-			notificationIntent.putExtras(extras);
+			String contentTitle = getMessageFromCollapseKey(context, collapse_key);
 			
-			// set intent so it does not start a new activity
-			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-			notification.setLatestEventInfo(context, title, message, pendingIntent);
-			notification.flags |= Notification.FLAG_AUTO_CANCEL;
-	
-			// Play default notification sound
-			notification.defaults |= Notification.DEFAULT_SOUND;
-	
-			// notification.sound = Uri.parse("android.resource://" +
-			// context.getPackageName() + "your_sound_file_name.mp3");
-	
-			// Vibrate if vibrate is enabled
-			notification.defaults |= Notification.DEFAULT_VIBRATE;
-			notificationManager.notify(message, 0, notification);
+			NotificationCompat.Builder mBuilder =
+				    new NotificationCompat.Builder(context)
+				    .setSmallIcon(R.drawable.ic_launcher)
+				    .setContentTitle(contentTitle)
+				    .setAutoCancel(true);
+			
+			Class<? extends ImpulseActivity> clazz = getActivityFromCollapseKey(collapse_key);
+			Intent resultIntent = (clazz == null) ? new Intent(context, MeteoActivity.class) : new Intent(context, clazz);
+			resultIntent.putExtras(extras);
+			
+			// Because clicking the notification opens a new ("special") activity, there's
+			// no need to create an artificial back stack.
+			PendingIntent resultPendingIntent =
+			    PendingIntent.getActivity(
+			    context,
+			    0,
+			    resultIntent,
+			    PendingIntent.FLAG_UPDATE_CURRENT
+			);
+			
+			mBuilder.setContentIntent(resultPendingIntent);
+			
+			// Gets an instance of the NotificationManager service
+			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			
+			// Builds the notification and issues it.
+			notificationManager.notify(contentTitle, 0, mBuilder.build());
 		}
 	}
 }

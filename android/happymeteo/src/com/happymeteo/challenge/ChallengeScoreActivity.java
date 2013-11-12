@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
@@ -20,7 +18,23 @@ public class ChallengeScoreActivity extends ImpulseActivity {
 	private final String TU_FACEBOOK_ID = "tuFacebookId";
 	private final String TU_NAME = "tuName";
 	
-	private void setValues() {
+	@Override
+	public List<String> getKeyIntentParameters() {
+		ArrayList<String> keyIntentParameters = new ArrayList<String>();
+		keyIntentParameters.add(IO_CHALLENGE);
+		keyIntentParameters.add(TU_CHALLENGE);
+		keyIntentParameters.add(TU_FACEBOOK_ID);
+		keyIntentParameters.add(TU_NAME);
+		return keyIntentParameters;
+	}
+	
+	@Override
+	public void onPostExecute(int id, String result, Exception exception) {
+		// Do Nothing
+	}
+
+	@Override
+	public void showActivity() {
 		Integer ioScore = null;
 		Integer tuScore = null;
 
@@ -56,30 +70,13 @@ public class ChallengeScoreActivity extends ImpulseActivity {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.activity_challenge_score);
-		super.onCreate(savedInstanceState);
-		setValues();
+	public int getContentView() {
+		return R.layout.activity_challenge_score;
 	}
-	
+
 	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		setValues();
-	}
-	
-	@Override
-	public List<String> getKeyIntentParameters() {
-		ArrayList<String> keyIntentParameters = new ArrayList<String>();
-		keyIntentParameters.add(IO_CHALLENGE);
-		keyIntentParameters.add(TU_CHALLENGE);
-		keyIntentParameters.add(TU_FACEBOOK_ID);
-		keyIntentParameters.add(TU_NAME);
-		return keyIntentParameters;
-	}
-	
-	@Override
-	public void onPostExecute(int id, String result, Exception exception) {
-		// Do Nothing
+	public void onCreation() {
+		// TODO Auto-generated method stub
+		
 	}
 }

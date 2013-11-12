@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,10 +24,22 @@ public class ChallengeRequestActivity extends ImpulseActivity implements OnPostE
 	private final String ADVERSARY_NAME = "adversary_name";
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.activity_challenge_request);
-		super.onCreate(savedInstanceState);
-		
+	public void onPostExecute(int id, String result, Exception exception) {
+		if (exception != null) return;
+		finish();
+	}
+
+	@Override
+	public List<String> getKeyIntentParameters() {
+		ArrayList<String> keyIntentParameters = new ArrayList<String>();
+		keyIntentParameters.add(CHALLENGE_ID);
+		keyIntentParameters.add(ADVERSARY_FACEBOOK_ID);
+		keyIntentParameters.add(ADVERSARY_NAME);
+		return keyIntentParameters;
+	}
+
+	@Override
+	public void showActivity() {
 		ProfilePictureView adversaryPic = (ProfilePictureView) findViewById(R.id.adversaryPic);
 		String adversaryFacebookId = intentParameters.get(ADVERSARY_FACEBOOK_ID);
 		if (adversaryFacebookId != null) adversaryPic.setProfileId(adversaryFacebookId);
@@ -59,17 +70,13 @@ public class ChallengeRequestActivity extends ImpulseActivity implements OnPostE
 	}
 
 	@Override
-	public void onPostExecute(int id, String result, Exception exception) {
-		if (exception != null) return;
-		finish();
+	public int getContentView() {
+		return R.layout.activity_challenge_request;
 	}
 
 	@Override
-	public List<String> getKeyIntentParameters() {
-		ArrayList<String> keyIntentParameters = new ArrayList<String>();
-		keyIntentParameters.add(CHALLENGE_ID);
-		keyIntentParameters.add(ADVERSARY_FACEBOOK_ID);
-		keyIntentParameters.add(ADVERSARY_NAME);
-		return keyIntentParameters;
+	public void onCreation() {
+		// TODO Auto-generated method stub
+		
 	}
 }

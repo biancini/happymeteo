@@ -14,17 +14,23 @@ public abstract class ImpulseActivity extends NotLoggedActivity {
 	protected HashMap<String, String> intentParameters = null;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public final void onCreate(Bundle savedInstanceState) {
+		setContentView(getContentView());
 		super.onCreate(savedInstanceState);
 
 		intentParameters = new HashMap<String, String>();
+		Log.i(Const.TAG, "initialize onCreate");
 		initialize(getIntent());
+		onCreation();
+		showActivity();
 	}
 
 	@Override
-	protected void onNewIntent(Intent intent) {
+	protected final void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
+		Log.i(Const.TAG, "initialize onNewIntent");
 		initialize(intent);
+		showActivity();
 	}
 
 	public void initialize(Intent intent) {
@@ -42,4 +48,10 @@ public abstract class ImpulseActivity extends NotLoggedActivity {
 	}
 
 	public abstract List<String> getKeyIntentParameters();
+	
+	public abstract void showActivity();
+	
+	public abstract int getContentView();
+	
+	public abstract void onCreation();
 }

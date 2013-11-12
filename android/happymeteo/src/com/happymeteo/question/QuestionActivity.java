@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.location.Location;
-import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -29,42 +28,6 @@ public class QuestionActivity extends QuestionImpulseActivity implements OnPostE
 	private Map<String, String> params = null;
 	
 	private final String TIMESTAMP = "timestamp";
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.activity_questions);
-		super.onCreate(savedInstanceState);
-
-		params = new HashMap<String, String>();
-		questions = new JSONObject();
-		linearLayout = (LinearLayout) findViewById(R.id.layoutQuestions);
-		ServerUtilities.getQuestions(this, SessionCache.getUser_id(this));
-
-		final Button btnAnswerQuestions = (Button) findViewById(R.id.btnAnswerQuestions);
-		btnAnswerQuestions.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				String timestamp = intentParameters.get(TIMESTAMP);
-				Location location = mLocationClient.getLastLocation();
-				
-				if (location != null) {
-					params.put("latitude", String.valueOf(location.getLatitude()));
-					params.put("longitude", String.valueOf(location.getLongitude()));
-				}
-
-				params.put("user_id", SessionCache.getUser_id(view.getContext()));
-				params.put("questions", questions.toString());
-				params.put("timestamp", timestamp);
-
-				ServerUtilities.submitQuestions(QuestionActivity.this, params);
-			}
-		});
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
 
 	@Override
 	public void onPostExecute(int id, String result, Exception exception) {
@@ -113,5 +76,38 @@ public class QuestionActivity extends QuestionImpulseActivity implements OnPostE
 		ArrayList<String> keyIntentParameters = new ArrayList<String>();
 		keyIntentParameters.add(TIMESTAMP);
 		return keyIntentParameters;
+	}
+
+	@Override
+	public void showActivity() {
+		params = new HashMap<String, String>();
+		questions = new JSONObject();
+		linearLayout = (LinearLayout) findViewById(R.id.layoutQuestions);
+		ServerUtilities.getQuestions(this, SessionCache.getUser_id(this));
+
+		final Button btnAnswerQuestions = (Button) findViewById(R.id.btnAnswerQuestions);
+		btnAnswerQuestions.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				String timestamp = intentParameters.get(TIMESTAMP);
+				Location location = mLocationClient.getLastLocation();
+				
+				if (location != null) {
+					params.put("latitude", String.valueOf(location.getLatitude()));
+					params.put("longitude", String.valueOf(location.getLongitude()));
+				}
+
+				params.put("user_id", SessionCache.getUser_id(view.getContext()));
+				params.put("questions", questions.toString());
+				params.put("timestamp", timestamp);
+
+				ServerUtilities.submitQuestions(QuestionActivity.this, params);
+			}
+		});
+	}
+
+	@Override
+	public int getContentView() {
+		return R.layout.activity_questions;
 	}
 }
