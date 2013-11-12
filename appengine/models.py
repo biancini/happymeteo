@@ -133,6 +133,7 @@ class Answer(db.Model):
     date = db.DateTimeProperty()
     value = db.StringProperty()
     timestamp = db.StringProperty()
+    created = db.DateTimeProperty(auto_now_add=True)
     
     @staticmethod
     def toHeadArray():
@@ -142,7 +143,8 @@ class Answer(db.Model):
             'location',
             'date',
             'value',
-            'timestamp'
+            'timestamp',
+            'created'
         ]
         
     def toArray(self):
@@ -152,7 +154,40 @@ class Answer(db.Model):
             self.location,
             self.date,
             self.value,
-            self.timestamp
+            self.timestamp,
+            self.created
+        ]
+        
+class IgnoredAnswer(db.Model):
+    user_id = db.StringProperty()
+    question_id = db.StringProperty()
+    location = db.GeoPtProperty()
+    date = db.DateTimeProperty()
+    value = db.StringProperty()
+    timestamp = db.StringProperty()
+    created = db.DateTimeProperty(auto_now_add=True)
+    
+    @staticmethod
+    def toHeadArray():
+        return [
+            'user_id',
+            'question_id',
+            'location',
+            'date',
+            'value',
+            'timestamp',
+            'created'
+        ]
+        
+    def toArray(self):
+        return [
+            self.user_id,
+            self.question_id,
+            self.location,
+            self.date,
+            self.value,
+            self.timestamp,
+            self.created
         ]
     
 class ChallengeAnswer(db.Model):

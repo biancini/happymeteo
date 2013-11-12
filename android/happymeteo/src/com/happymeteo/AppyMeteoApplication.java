@@ -14,8 +14,14 @@ import com.happymeteo.utils.Const;
 public class AppyMeteoApplication extends Application {
     @Override
     public void onCreate() {
+    	// workaround for http://code.google.com/p/android/issues/detail?id=20915
+        try {
+            Class.forName("android.os.AsyncTask");
+        } catch (ClassNotFoundException e) {
+        }
+    	
         super.onCreate();
-
+        
         // The following line triggers the initialization of ACRA
         ACRA.init(this);
     }

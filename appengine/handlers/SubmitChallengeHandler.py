@@ -7,10 +7,8 @@ import webapp2
 
 from datetime import datetime
 
-from models import Challenge, User, ChallengeQuestion, ChallengeAnswer,\
-    Notification
+from models import Challenge, User, ChallengeQuestion, ChallengeAnswer
 from utils import check_hash, sendNotification
-from google.appengine.ext import db
 
 class SubmitChallengeHandler(webapp2.RequestHandler):
 
@@ -71,20 +69,16 @@ class SubmitChallengeHandler(webapp2.RequestHandler):
         if turn == "1":
             challenge.score_a = float(score)
             challenge.turn = 2
-            notification = Notification(payload=db.Text(json.dumps({'user_id': challenge.user_id_b, 'appy_key': 'accepted_challenge_turn2', 'score': score, 
-                                                 'challenge_id': challenge.key().id(), 'turn': '2'})))
-            notification.save()
-            sendNotification(challenge.registration_id_b, notification.key().id())
+            sendNotification(challenge.registration_id_b, {'user_id': challenge.user_id_b, 'appy_key': 'accepted_challenge_turn2', 'score': score, 
+                                                 'challenge_id': challenge.key().id(), 'turn': '2'})
             data['tuFacebookId'] = user_b.facebook_id
             data['tuName'] = user_b.first_name
         else:
             challenge.score_b = float(score)
             challenge.turn = 3
-            notification = Notification(payload=db.Text(json.dumps({'user_id': challenge.user_id_a, 'appy_key': 'accepted_challenge_turn3', 
+            sendNotification(challenge.registration_id_a, {'user_id': challenge.user_id_a, 'appy_key': 'accepted_challenge_turn3', 
                                                  'ioChallenge': challenge.score_a, 'tuFacebookId': user_b.facebook_id, 
-                                                 'tuName': user_b.first_name, 'tuChallenge': score, 'challenge_id': challenge.key().id(), 'turn': '3'})))
-            notification.save()
-            sendNotification(challenge.registration_id_a, notification.key().id())
+                                                 'tuName': user_b.first_name, 'tuChallenge': score, 'challenge_id': challenge.key().id(), 'turn': '3'})
             data['tuFacebookId'] = user_a.facebook_id
             data['tuName'] = user_a.first_name
             

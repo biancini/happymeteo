@@ -8,7 +8,7 @@ import webapp2
 from google.appengine.ext import db
 from datetime import datetime
 
-from models import User, Challenge, Notification
+from models import User, Challenge
 from utils import check_hash, sendNotification
 
 class RequestChallengeHandler(webapp2.RequestHandler):
@@ -59,14 +59,11 @@ class RequestChallengeHandler(webapp2.RequestHandler):
           challenge.put()
           
         # Send request to all devices of user_b
-        notification = Notification(payload=db.Text(json.dumps({'user_id': challenge.user_id_b, 
-                                                 'challenge_id': '%s'%challenge.key().id(), 
-                                                 'adversary_facebook_id': user_a.facebook_id,
-                                                 'adversary_name': user_a.first_name })))
-        notification.save()
-        
         for device in query2.run():
-            sendNotification(device.registration_id, notification.key().id(), collapse_key='request_challenge')
+            sendNotification(device.registration_id,    {'user_id': challenge.user_id_b, 
+                                                         'challenge_id': '%s'%challenge.key().id(), 
+                                                         'adversary_facebook_id': user_a.facebook_id,
+                                                         'adversary_name': user_a.first_name }, collapse_key='request_challenge')
         
         data = {
           'message': 'ok'

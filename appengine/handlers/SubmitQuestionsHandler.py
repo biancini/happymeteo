@@ -7,7 +7,7 @@ import webapp2
 
 from datetime import datetime
 
-from models import Answer, User
+from models import Answer, User, IgnoredAnswer
 from utils import check_hash, happymeteo
 
 class SubmitQuestionsHandler(webapp2.RequestHandler):
@@ -28,31 +28,45 @@ class SubmitQuestionsHandler(webapp2.RequestHandler):
         answers = Answer.gql("WHERE user_id = :1 AND timestamp = :2", user_id, timestamp)
         
         if answers.count() > 0:
-            raise Exception('Hai gi&agrave; risposto a questo impulso')
-        
-        user = User.get_by_id(int(user_id))
-        user.contatore_impulsi = user.contatore_impulsi + 1
-        user.put()
-        
-        questions = json.loads(questions)
-        for q in questions:
-            answer = Answer(
-                user_id=user_id,
-                question_id=q,
-                date=datetime.now(),
-                value=questions[q],
-                timestamp=timestamp)
+            questions = json.loads(questions)
+            for q in questions:
+                answer = IgnoredAnswer(
+                    user_id=user_id,
+                    question_id=q,
+                    date=datetime.now(),
+                    value=questions[q],
+                    timestamp=timestamp)
+                
+                if latitude and longitude:
+                   answer.location = latitude + "," + longitude
+                
+                answer.put()
+    
+            data = { 'message': 'ok' }
+        else:
+            user = User.get_by_id(int(user_id))
+            user.contatore_impulsi = user.contatore_impulsi + 1
+            user.put()
             
-            if latitude and longitude:
-               answer.location = latitude + "," + longitude
-            
-            answer.put()
-
-        data = { 'message': 'ok' }
-        (today_value, yesterday_value, tomorrow_value) = happymeteo(user_id)
-        data['today'] = today_value
-        data['yesterday'] = yesterday_value
-        data['tomorrow'] = tomorrow_value
+            questions = json.loads(questions)
+            for q in questions:
+                answer = Answer(
+                    user_id=user_id,
+                    question_id=q,
+                    date=datetime.now(),
+                    value=questions[q],
+                    timestamp=timestamp)
+                
+                if latitude and longitude:
+                   answer.location = latitude + "," + longitude
+                
+                answer.put()
+    
+            data = { 'message': 'ok' }
+            (today_value, yesterday_value, tomorrow_value) = happymeteo(user_id)
+            data['today'] = today_value
+            data['yesterday'] = yesterday_value
+            data['tomorrow'] = tomorrow_value
     except Exception as e:
         logging.exception(e)
         data = {

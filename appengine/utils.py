@@ -53,8 +53,8 @@ def check_call(request):
     
     return (hashing == hash)
 
-def sendNotification(registrationId, notification_id, collapse_key=None):
-    print "send message to %s with %s"%(registrationId, notification_id)
+def sendNotification(registrationId, payload, collapse_key=None):
+    print "send message to %s"%registrationId
     
     data = {
       'registration_ids': [registrationId]
@@ -63,7 +63,7 @@ def sendNotification(registrationId, notification_id, collapse_key=None):
     if collapse_key:
        data['collapse_key'] = collapse_key
     
-    data['data'] = { 'notification_id' : notification_id }
+    data['data'] = payload
     
     req = urllib2.Request('https://android.googleapis.com/gcm/send')
     req.add_header('Content-Type', 'application/json')
