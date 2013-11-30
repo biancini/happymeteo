@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.happymeteo.NotLoggedActivity;
 import com.happymeteo.R;
@@ -71,6 +72,7 @@ public class NormalLoginActivity extends NotLoggedActivity implements OnPostExec
 								public void onClick(DialogInterface dialog, int which) {
 									String email = input.getText().toString();
 									ServerUtilities.lostPassword(NormalLoginActivity.this, email);
+									Toast.makeText(getApplicationContext(), "Mail di recupero password inviata.", Toast.LENGTH_SHORT).show();
 								}
 							})
 					.setNegativeButton(R.string.cancel,

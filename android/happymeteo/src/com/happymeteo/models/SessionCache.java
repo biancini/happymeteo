@@ -145,19 +145,31 @@ public class SessionCache {
 		return preferences.getString("cap", null);
 	}
 	
+	private static int normalizeValue(int value) {
+		if (value < 0) return 0;
+		if (value > 9) return 9;
+		return value;
+	}
+	
 	public static int getToday(Context context) {
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
-		return preferences.getInt("today", 1);
+		int value = preferences.getInt("today", 1);
+		value = normalizeValue(value);
+		return value;
 	}
 	
 	public static int getYesterday(Context context) {
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
-		return preferences.getInt("yesterday", 1);
+		int value = preferences.getInt("yesterday", 1);
+		value = normalizeValue(value);
+		return value;
 	}
 	
 	public static int getTomorrow(Context context) {
 		SharedPreferences preferences = context.getSharedPreferences(Const.TAG, Context.MODE_PRIVATE);
-		return preferences.getInt("tomorrow", 1);
+		int value = preferences.getInt("tomorrow", 1);
+		value = normalizeValue(value);
+		return value;
 	}
 	
 	public static void setMeteo(Context context, int today, int yesterday, int tomorrow) {
