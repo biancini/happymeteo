@@ -29,18 +29,18 @@ class SubmitChallengeHandler(webapp2.RequestHandler):
             raise Exception('Sfida non trovata')
         
         if not challenge.accepted:
-            raise Exception('C\'è stato un errore con la sfida: stai rispondendo a una sfida non accettata')
+            raise Exception('C\'e\' stato un errore con la sfida: stai rispondendo a una sfida non accettata')
         
         if int(turn) != int(challenge.turn):
-            raise Exception('C\'è stato un errore con la sfida: turno sbagliato')
+            raise Exception('C\'e\' stato un errore con la sfida: turno sbagliato')
         
         user_a = User.get_by_id(int(challenge.user_id_a))
         if not user_a:
-            raise Exception('C\'è stato un errore con la sfida: utente sfidante non esiste')
+            raise Exception('C\'e\' stato un errore con la sfida: utente sfidante non esiste')
         
         user_b = User.get_by_id(int(challenge.user_id_b))
         if not user_b:
-            raise Exception('C\'è stato un errore con la sfida: utente sfidato non esiste')
+            raise Exception('C\'e\' stato un errore con la sfida: utente sfidato non esiste')
         
         questions = json.loads(questions)
         score = 0

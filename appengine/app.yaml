@@ -6,7 +6,7 @@
 application: happymeteo
 
 #App version
-version: webapp2
+version: 2014-05-04
 
 #Use Python 2.7 runtime here.
 # See this for more info: 

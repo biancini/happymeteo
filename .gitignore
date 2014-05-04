@@ -13,3 +13,4 @@ android/*/bin
 *.class
 android/.gradle/
 android/*/build/
+*~

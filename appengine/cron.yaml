@@ -8,3 +8,4 @@ cron:
   url: /create_map
   schedule: every day 03:00
   timezone: Europe/Rome
+  target: backend-map

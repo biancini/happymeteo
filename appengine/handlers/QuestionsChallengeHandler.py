@@ -25,7 +25,7 @@ class QuestionsChallengeHandler(webapp2.RequestHandler):
             raise Exception('Nessuna sfida trovata')
         
         if int(challenge.turn) != int(turn):
-            raise Exception('C\'è stato un errore con la sfida')
+            raise Exception('C\'e\' stato un errore con la sfida')
         
         if turn == "1":
             questions = ChallengeQuestion.gql("WHERE category_id = 0")

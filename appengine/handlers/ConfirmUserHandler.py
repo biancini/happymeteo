@@ -4,12 +4,15 @@
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 import webapp2
+import os
+import logging
 
 class ConfirmUserHandler(webapp2.RequestHandler):
     def get(self):
         confirmation_code = self.request.get('confirmation_code')
-        
+
         if not confirmation_code:
+            logging.error("No confirmation code passed.")
             self.abort(500)
         
         q = db.GqlQuery("SELECT * FROM User WHERE confirmation_code = :1",
@@ -21,9 +24,10 @@ class ConfirmUserHandler(webapp2.RequestHandler):
            user.confirmation_code = ""
            user.put()
 
-           path = os.path.join(os.path.dirname(__file_), '..', 'templates', 'confirm_user.html')
-           template.render(path, template_vars={
+           path = os.path.join(os.path.dirname(__file__), '..', 'templates', 'confirm_user.html')
+           self.response.out.write(template.render(path, {
             'name': user.first_name,
-            'email': user.email})
+            'email': user.email}))
         else:
+           logging.error("Confirmation code not present in the DB.")
            self.abort(500)

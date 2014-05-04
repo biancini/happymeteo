@@ -25,7 +25,7 @@ class ChangePasswordHandler(webapp2.RequestHandler):
           raise Exception('Devi specificare un utente valido')
       
       if user.password != old_password:
-          raise Exception('La vecchia password specificata è sbagliata')
+          raise Exception('La vecchia password specificata e\' sbagliata')
      
       data = {'message': 'ok'}
     
