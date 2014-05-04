@@ -46,7 +46,7 @@ def check_call(request):
         query_string = query_string + a + "=" + request.get(a)
         first = False
         
-    hashvar = hashlib.sha1(CALL_SECRET_KEY + query_string).hexdigest()
+    hashvar = hashlib.sha1(CALL_SECRET_KEY + query_string.encode('utf-8')).hexdigest()
     
     #logging.info("query_string: %s"%query_string)
     #logging.info("hashing client side: %s"%hashing)

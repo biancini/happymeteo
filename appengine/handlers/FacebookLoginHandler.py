@@ -64,12 +64,18 @@ class FacebookLoginHandler(webapp2.RequestHandler):
         data['yesterday'] = yesterday_value
         data['tomorrow'] = tomorrow_value
       else:
+        if 'email' in facebook_profile:
+            email = facebook_profile['email']
+        else:
+            email = ''
+
+
         data = {
             'user_id': '',
             'facebook_id': facebook_profile['id'],
             'first_name': facebook_profile['first_name'],
             'last_name': facebook_profile['last_name'],
-            'email':  facebook_profile['email'],
+            'email': email,
             'age': self.get_age(facebook_profile['birthday']),
             'education': '0',
             'cap': '',
