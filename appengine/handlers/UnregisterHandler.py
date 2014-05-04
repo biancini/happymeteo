@@ -3,6 +3,7 @@
 '''
 import json
 import webapp2
+import logging
 
 from google.appengine.ext import db
 
@@ -15,7 +16,7 @@ class UnregisterHandler(webapp2.RequestHandler):
     registrationId = self.request.get('registrationId')
     query = db.GqlQuery("SELECT * FROM Device WHERE registration_id = :1", registrationId)
     for device in query.run(limit=1):
-      print "delete %s" % (device.registration_id)
+      logging.info("delete %s" % (device.registration_id))
       db.delete(device)
     
     data = { 'message': 'ok' }

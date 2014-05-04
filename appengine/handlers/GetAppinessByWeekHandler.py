@@ -38,7 +38,7 @@ class GetAppinessByWeekHandler(webapp2.RequestHandler):
             weekDay = int(currentDayOfMonth.strftime("%w"))
             
             if weekDay == 0 or day == daysInMonth-1: # we catch Sunday and the last day of month
-                # print "%s %s new_index"%(currentDayOfMonth, weekDay)
+                # logging.info("%s %s new_index"%(currentDayOfMonth, weekDay))
                 firstDayOfWeek = mkDateTime("%s-%s-%s"%(year, month, day+1-daysCount))
                 answers = Answer.gql("WHERE user_id = :1 AND date >= DATE(:2) AND date <= DATE(:3) AND question_id = \'6434359225614336\'", '%s'%user_id, formatDate(firstDayOfWeek), formatDate(currentDayOfMonth))
                 
@@ -59,7 +59,7 @@ class GetAppinessByWeekHandler(webapp2.RequestHandler):
                 daysCount = 0   
                 arrayIndex += 1
             else:
-                # print "%s %s pass"%(currentDayOfMonth, weekDay)
+                # logging.info("%s %s pass"%(currentDayOfMonth, weekDay))
                 daysCount += 1
     except Exception as e:
        logging.exception(e)

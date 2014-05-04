@@ -6,6 +6,7 @@ import time
 import hashlib
 import string
 import random
+import logging
 
 from datetime import date, timedelta
 from google.appengine.ext import db
@@ -45,16 +46,16 @@ def check_call(request):
         query_string = query_string + a + "=" + request.get(a)
         first = False
         
-    hash = hashlib.sha1(CALL_SECRET_KEY + query_string).hexdigest()
+    hashvar = hashlib.sha1(CALL_SECRET_KEY + query_string).hexdigest()
     
-    print "query_string: %s"%query_string
-    print "hashing client side: %s"%hashing
-    print "hashing server side: %s"%hash
+    logging.info("query_string: %s"%query_string)
+    logging.info("hashing client side: %s"%hashing)
+    logging.info("hashing server side: %s"%hashvar)
     
-    return (hashing == hash)
+    return (hashing == hashvar)
 
 def sendNotification(registrationId, payload, collapse_key=None):
-    print "send message to %s"%registrationId
+    logging.info("send message to %s"%registrationId)
     
     data = {
       'registration_ids': [registrationId]
@@ -214,8 +215,8 @@ def send_new_password(first_name, last_name, email, text):
     message.body = text.encode('utf-8') % (first_name, new_password)
     message.send()
     
-    hash = hashlib.sha1(PASSWORD_SECRET_KEY + new_password).hexdigest()
-    return hash
+    hashvar = hashlib.sha1(PASSWORD_SECRET_KEY + new_password).hexdigest()
+    return hashvar
 
 def mkDateTime(dateString,strFormat="%Y-%m-%d"):
     # Expects "YYYY-MM-DD" string

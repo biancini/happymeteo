@@ -29,6 +29,6 @@ class GetNotification(webapp2.RequestHandler):
         logging.exception(e)
         data = json.dumps({'error': '%s' % str(e)})
         
-    print "data: %s"%data
+    logging.info("data: %s"%data)
     self.response.headers['Content-Type'] = 'application/json'
     self.response.out.write(data)
