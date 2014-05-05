@@ -70,10 +70,9 @@ def getGoogleAccessTokenFromRefreshToken():
 if isFirstTime:
     # Memorize in some way refresh token or just set REFRESH_TOKEN and set isFirstTime = false
     (ACCESS_TOKEN, REFRESH_TOKEN) = firstTime()
-else:
+else if ACCESS_TOKEN == "":
     # You shouldn't generate a new access_token every time but only when you receive an http error =P
-    #ACCESS_TOKEN = getGoogleAccessTokenFromRefreshToken()
-    pass
+    ACCESS_TOKEN = getGoogleAccessTokenFromRefreshToken()
  
 print "access token: %s"%ACCESS_TOKEN
  
