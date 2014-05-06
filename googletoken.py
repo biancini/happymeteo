@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # Create AppEngine application
 # Enter Google APIs Console -> API Access
 # Create Oauth 2.0 Service Key -> (CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
@@ -12,16 +13,16 @@ CLIENT_ID = "347057775979-bvmbcc0nemljubhuuq286mgmjros165e.apps.googleuserconten
 CLIENT_SECRET = "ejXaIovEvd20kz6AuD-ciPNT"
 REDIRECT_URI = "https://www.example.com/oauth2callback"
 API_KEY = "IzaSyAgeaTN-09uTkNofLKp2h8ImIKjRgHkVqc"
-REFRESH_TOKEN = "4/DSmCGENuVVdtcHTjmJwrx4kQA9HA.8j5YDzm0WzcSOl05ti8ZT3bF9cmciwI"
-ACCESS_TOKEN = "ya29.1.AADtN_V5xwP9QmO1MQJidnYQQRN2eMZdJfCKtPBN2iWHs327oCQMKoJD-XghwpEcwj5j"
+REFRESH_TOKEN = "1/px2qMfvpe7zOTPiHfV8ZsyjjITWYNTljqSNi7MJz8HU"
+ACCESS_TOKEN = ""
  
 isFirstTime = False
- 
+
 def generateInstallAppUrl(scope):
     return ('https://accounts.google.com/o/oauth2/auth?'+ \
-                'access_type=offline&response_type=code&' + \
-        'client_id=%s&redirect_uri=%s&' + \
-        'scope=%s')%(CLIENT_ID, REDIRECT_URI, scope)
+            'access_type=offline&response_type=code&' + \
+            'client_id=%s&redirect_uri=%s&' + \
+            'scope=%s')%(CLIENT_ID, REDIRECT_URI, scope)
  
 def firstTime():
     # in this case, the scope is https://www.googleapis.com/auth/drive
@@ -29,7 +30,6 @@ def firstTime():
  
     # Call install app url
     url = generateInstallAppUrl(scope)
-    
     webbrowser.open_new(url)
  
     # get one shot token
@@ -66,15 +66,26 @@ def getGoogleAccessTokenFromRefreshToken():
     request_open.close()
     tokens = json.loads(response)
     return tokens['access_token']
+
+def revokeGoogleToken(token):
+    data = urllib.urlencode({
+      'token': token })
+    request = urllib2.Request(
+      url='https://accounts.google.com/o/oauth2/revoke',
+      data=data)
+    request_open = urllib2.urlopen(request)
+    response = request_open.read()
+    request_open.close()
  
 if isFirstTime:
     # Memorize in some way refresh token or just set REFRESH_TOKEN and set isFirstTime = false
     (ACCESS_TOKEN, REFRESH_TOKEN) = firstTime()
-else if ACCESS_TOKEN == "":
+    print "refresh token: %s" % REFRESH_TOKEN
+else:
     # You shouldn't generate a new access_token every time but only when you receive an http error =P
     ACCESS_TOKEN = getGoogleAccessTokenFromRefreshToken()
  
-print "access token: %s"%ACCESS_TOKEN
+print "access token: %s" % ACCESS_TOKEN
  
 # Create Google Drive Spreadsheet file
 data = {
@@ -89,4 +100,5 @@ request.add_header('Authorization', 'Bearer %s' % ACCESS_TOKEN)
 request_open = urllib2.urlopen(request)
 response = request_open.read()
 request_open.close()
-print response
+
+#revokeGoogleToken(ACCESS_TOKEN)
