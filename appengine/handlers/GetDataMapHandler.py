@@ -24,10 +24,6 @@ class GetDataMapHandler(webapp2.RequestHandler):
     province = self.getProvince()
     regioni = self.getRegioni()
 
-    #markers = Marker.all()
-    #for marker in markers:
-    #    data.append({'name': marker.name, 'coordinate': str(marker.coordinate), 'appyness': marker.appyness, 'type': marker.type })
-
     for key, provincia in province.items():
         data.append({
             'name': provincia['name'],

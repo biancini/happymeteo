@@ -148,19 +148,6 @@ class CreateMapHandler(webapp2.RequestHandler):
 
       logging.info("Computed all new appyness scores.")
 
-      #    marker = Marker.gql('WHERE id = :1', id)
-      #    marker = marker.get()
-          
-      #    if marker:
-      #        marker.coordinate=object['coordinate']
-      #        marker.appyness=appyness
-      #        marker.name=object['name']
-      #        marker.type=object['type']
-      #        marker.put()
-      #    else:
-      #        marker = Marker(id=id, coordinate=object['coordinate'], appyness=appyness, name=object['name'], type=object['type'])
-      #        marker.put()
-
       markerR = MapMarker(date=yesterday, type='Regioni', valore=json.dumps(dataR))
       markerR.put()
 

@@ -232,13 +232,6 @@ class Provincia(db.Model):
     geometry = db.TextProperty()
     coordinate = db.GeoPtProperty()
     
-class Marker(db.Model):
-    id = db.StringProperty()
-    name = db.StringProperty()
-    coordinate = db.GeoPtProperty()
-    appyness = db.IntegerProperty()
-    type = db.StringProperty()
-
 class MapMarker(db.Model):
     date = db.DateProperty()
     type = db.StringProperty()
