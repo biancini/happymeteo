@@ -42,3 +42,9 @@ indexes:
   - name: user_id_b
   - name: created
     direction: desc
+
+- kind: MapMarker
+  properties:
+  - name: type
+  - name: date
+    direction: desc

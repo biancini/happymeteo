@@ -238,6 +238,11 @@ class Marker(db.Model):
     coordinate = db.GeoPtProperty()
     appyness = db.IntegerProperty()
     type = db.StringProperty()
+
+class MapMarker(db.Model):
+    date = db.DateProperty()
+    type = db.StringProperty()
+    valore = db.TextProperty()
     
 class ErrorReport(db.Model):
     queryString = db.TextProperty()
