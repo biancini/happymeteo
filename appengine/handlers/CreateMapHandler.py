@@ -20,7 +20,7 @@ class CreateMapHandler(webapp2.RequestHandler):
       provincie = Provincia.all()
       answers = Answer.gql('WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\'', formatDate(yesterday), formatDate(today))
  
-     logging.info("Read answers, %s" % answers.count())
+      logging.info("Read answers, %s" % answers.count())
 
       if answers.count() == 0:
           raise Exception('No answers') 
