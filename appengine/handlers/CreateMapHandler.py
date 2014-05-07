@@ -3,6 +3,7 @@
 '''
 import json
 import webapp2
+import logging
 
 from datetime import date, timedelta
 
@@ -18,7 +19,9 @@ class CreateMapHandler(webapp2.RequestHandler):
       regions = Region.all()
       provincie = Provincia.all()
       answers = Answer.gql('WHERE date >= DATE(:1) AND date < DATE(:2) AND question_id = \'6434359225614336\'', formatDate(yesterday), formatDate(today))
-      
+ 
+     logging.info("Read answers, %s" % answers.count())
+
       if answers.count() == 0:
           raise Exception('No answers') 
       
@@ -87,6 +90,8 @@ class CreateMapHandler(webapp2.RequestHandler):
                     data[id]['sum'] = data[id]['sum'] + int(answer.value)
                     data[id]['count'] = data[id]['count'] + 1
     
+      logging.info("Computed all new values for counties and regions.")
+
       for id, object in data.iteritems():
           if object['count'] == 0:
               appyness = 1
@@ -105,5 +110,7 @@ class CreateMapHandler(webapp2.RequestHandler):
               marker = Marker(id=id, coordinate=object['coordinate'], appyness=appyness, name=object['name'], type=object['type'])
               marker.put()
       
+      logging.info("Inserted new markers in datastore.")
+
       self.response.headers['Content-Type'] = 'application/json'
       self.response.out.write("ok")
