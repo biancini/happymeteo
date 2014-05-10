@@ -1,8 +1,0 @@
-backends:
-- name: backend-map
-  class: B4
-  options: dynamic
-
-- name: backend-push
-  class: B1
-  options: dynamic

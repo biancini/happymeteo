@@ -1,0 +1,18 @@
+dispatch:
+- url: "*/send_questions"
+  module: backend-push
+
+- url: "*/create_map"
+  module: backend-map
+
+- url: "*/csv_user"
+  module: backend-map
+
+- url: "*/csv_answer"
+  module: backend-map
+
+- url: "*/csv_challenge_answer"
+  module: backend-map
+
+- url: "*/*"
+  module: default
