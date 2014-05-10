@@ -143,4 +143,10 @@
 		Buon divertimento! E appymeteo!
 		</body></html>
 	]]></string>
+	<string name="information4"><![CDATA[
+	    <html><body>
+	    <b>Legenda</b><br/>
+		Di seguito una breve legenda che ti aiuter\u00E0 a leggere la scala dei valori di appiness!
+		</body></html>
+	]]></string>
 </resources>

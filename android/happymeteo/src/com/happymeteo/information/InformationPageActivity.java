@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
@@ -28,6 +32,12 @@ public class InformationPageActivity extends LoggedActivity {
 		
 		final TextView information_page3 = (TextView) findViewById(R.id.information_page3);
 		information_page3.setText(Html.fromHtml(getString(R.string.information3)));
+		
+		final TextView information_page4 = (TextView) findViewById(R.id.information_page4);
+		information_page4.setText(Html.fromHtml(getString(R.string.information4)));
+		
+		final ImageView information_page4img = (ImageView) findViewById(R.id.information_page4img);
+		information_page4img.setVisibility(View.GONE);
 		
 		TextView information_pagesub1 = (TextView) findViewById(R.id.information_pagesub1);
 		information_pagesub1.setOnClickListener(new OnClickListener() {			
@@ -102,6 +112,53 @@ public class InformationPageActivity extends LoggedActivity {
 				} else {
 					setPersistentActivity(true);
 					invokeActivity(InformationPageActivity3.class);
+					setPersistentActivity(false);
+				}
+			}
+		});
+		
+		TextView information_pagesub4 = (TextView) findViewById(R.id.information_pagesub4);
+		information_pagesub4.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					if (((TextView) view).getText().equals(getResources().getText(R.string.continue_to_read))) {
+						Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in);
+						animFadeIn.setDuration(2000);
+						information_page4img.setAnimation(animFadeIn);
+						animFadeIn.setAnimationListener(new AnimationListener() {
+							@Override
+							public void onAnimationStart(Animation animation) {
+								information_page4img.setVisibility(View.VISIBLE);
+							}
+							@Override
+							public void onAnimationRepeat(Animation animation) { }
+							@Override
+							public void onAnimationEnd(Animation animation) { }
+						});
+						
+						((TextView) view).setText(getResources().getText(R.string.close_read));
+					} else {
+						Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
+						animFadeOut.setDuration(1000);
+						information_page4img.setAnimation(animFadeOut);
+						animFadeOut.setAnimationListener(new AnimationListener() {
+							@Override
+							public void onAnimationStart(Animation animation) { }
+							@Override
+							public void onAnimationRepeat(Animation animation) { }
+							@Override
+							public void onAnimationEnd(Animation animation) {
+								information_page4img.setVisibility(View.GONE);
+							}
+						});
+						
+						((TextView) view).setText(getResources().getText(R.string.continue_to_read));
+					}
+				} else {
+					setPersistentActivity(true);
+					invokeActivity(InformationPageActivity4.class);
 					setPersistentActivity(false);
 				}
 			}
