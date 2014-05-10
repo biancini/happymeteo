@@ -1,5 +1,6 @@
 #!/bin/sh
 
+cd android
 if env | grep ANDROID_HOME
 then
 	echo "Clean & Build with Gradle..."

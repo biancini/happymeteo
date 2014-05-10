@@ -26,22 +26,25 @@ SFIDA = "1dRqKaRI4lCRT6TRnbqloYM4U7m2UK3d7oVM4W0o"
 RISPOSTA = "1JMpJQMAWxqF3Kd18TFgqvyCBZUBH8N1Vx6YAZ3Y"
 RISPOSTA_SFIDA = "1xlr5InohkX_CElhTaMU4PZeRhfjBQs--Pe54d2s"
 
-CREATE_ACCOUNT_EMAIL = """Benvenuto %s,\n\n
+CREATE_ACCOUNT_EMAIL = """Benvenuto %s,\n
 Il tuo account su appymeteo ha bisogno di essere verificato, per
 farlo clicca sul link sottostante:
 https://happymeteo.appspot.com/confirm_user?confirmation_code=%s\n\n
+\n
 Saluti,
 appymeteo Team"""
 
-CHANGE_FACEBOOK_EMAIL = """Ciao %s,\n\n
+CHANGE_FACEBOOK_EMAIL = """Ciao %s,\n
 Il tuo account su appymeteo non e' piu' collegato a Facebook, per
 accedere al tuo profilo da ora in poi utilizza la tua email
 e la seguente password: %s
+\n
 Saluti,
 appymeteo Team"""
 
-LOST_PASSWORD_EMAIL = """Ciao %s,\n\n
+LOST_PASSWORD_EMAIL = """Ciao %s,\n
 Per accedere al tuo profilo utilizza la tua email
 e la seguente password: %s
+\n
 Saluti,
 appymeteo Team"""

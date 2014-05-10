@@ -21,18 +21,15 @@ import android.widget.LinearLayout;
 import com.happymeteo.R;
 
 public class GraphView extends LinearLayout {
-	private String[] horlabels = null;
 	private boolean scrollable = false;
 	private boolean disableTouch = false;
 	private float viewportStart = 0;
 	private float viewportSize = 0;
-	private boolean showLegend = false;
-	private float legendWidth = 120;
-	private LegendAlign legendAlign = LegendAlign.MIDDLE;
 	private boolean manualYAxis = false;
 	private float manualMaxYValue = 0;
 	private float manualMinYValue = 0;
 	private GraphViewStyle graphViewStyle = null;
+	private String[] horlabels = null;
 	private Integer labelTextHeight = null;
 	private Integer horLabelTextWidth = null;
 	private boolean staticHorizontalLabels = false;
@@ -43,9 +40,7 @@ public class GraphView extends LinearLayout {
 	private final GraphViewContentView graphViewContentView;
 	private final List<GraphViewSeries> graphSeries;
 	
-	static final private class GraphViewConfig {
-		static final float BORDER = 20;
-	}
+	static private final float BORDER = 20;
 
 	private class GraphViewContentView extends View {
 		private float lastTouchEventX = 0;
@@ -69,7 +64,7 @@ public class GraphView extends LinearLayout {
 			paint.setAntiAlias(true);
 			paint.setStrokeWidth(0);
 
-			float border = GraphViewConfig.BORDER;
+			float border = BORDER;
 			float horstart = 0;
 			float height = getHeight();
 			float width = getWidth() - 1;
@@ -104,8 +99,7 @@ public class GraphView extends LinearLayout {
 			if (maxY == minY) {
 				// if min/max is the same, fake it so that we can render a line
 				if (maxY == 0) {
-					// if both are zero, change the values to prevent division
-					// by zero
+					// if both are zero, change the values to prevent division by zero
 					maxY = 1.0f;
 					minY = 0.0f;
 				} else {
@@ -121,11 +115,13 @@ public class GraphView extends LinearLayout {
 			 * canvas.drawLine(x, height, x, border, paint); }
 			 */
 
+			int numValues = 0;
 			for (int i = 0; i < graphSeries.size(); i++) {
 				drawSeries(canvas, _values(i), graphwidth, graphheight, border, minX, minY, diffX, diffY, horstart);
+				if (_values(i).length > numValues) numValues = _values(i).length;
 			}
 
-			drawHorizontalLabels(canvas, horlabels, graphwidth, graphheight, border, horstart);
+			drawHorizontalLabels(canvas, horlabels, numValues, graphwidth, graphheight, border, horstart);
 		}
 
 		private void onMoveGesture(float f) {
@@ -205,10 +201,6 @@ public class GraphView extends LinearLayout {
 		public float getY() {
 			return valueY;
 		}
-	}
-
-	public enum LegendAlign {
-		TOP, MIDDLE, BOTTOM
 	}
 
 	public GraphView(Context context, AttributeSet attrs) {
@@ -351,7 +343,7 @@ public class GraphView extends LinearLayout {
 
 	}
 
-	protected void drawHorizontalLabels(Canvas canvas, String[] horlabels, float graphwidth, float graphheight, float border, float horstart) {
+	protected void drawHorizontalLabels(Canvas canvas, String[] horlabels, int weekNum, float graphwidth, float graphheight, float border, float horstart) {
 		paint.setTextSize(20f);
 		paint.setTextAlign(Align.LEFT);
 
@@ -360,13 +352,21 @@ public class GraphView extends LinearLayout {
 
 		paint.setColor(getResources().getColor(R.color.black));
 		paint.setStyle(Style.FILL);
+		
+		// left, top, right, bottom
 		canvas.drawRect(0, graphheight + border, graphwidth, graphheight + (2 * border), paint);
 
-		for (int i = 0; i < horlabels.length; i++) {
-			paint.setTextAlign(Align.CENTER);
+		paint.setTextAlign(Align.CENTER);
+		paint.setColor(getResources().getColor(R.color.white));
+
+		for (int i = 0; i < weekNum; ++i){
+			float x_text = ((graphwidth / (weekNum * 2)) * ((i * 2) + 1)) + horstart;
+			canvas.drawText("Week " + (i+1), x_text, graphheight + border + (border / 2) - 3, paint);
+		}
+		
+		for (int i = 0; i < horlabels.length; ++i) {
 			float x_text = ((graphwidth / (horlabels.length * 2)) * ((i * 2) + 1)) + horstart;
-			paint.setColor(getResources().getColor(R.color.white));
-			canvas.drawText(horlabels[i], x_text, graphheight + border + (border / 2), paint);
+			canvas.drawText(horlabels[i], x_text, graphheight + border + (border / 2) + labelTextHeight - 4, paint);
 		}
 	}
 
@@ -375,22 +375,6 @@ public class GraphView extends LinearLayout {
 	 */
 	public GraphViewStyle getGraphViewStyle() {
 		return graphViewStyle;
-	}
-
-	/**
-	 * get the position of the legend
-	 * 
-	 * @return
-	 */
-	public LegendAlign getLegendAlign() {
-		return legendAlign;
-	}
-
-	/**
-	 * @return legend width
-	 */
-	public float getLegendWidth() {
-		return legendWidth;
 	}
 
 	/**
@@ -511,10 +495,6 @@ public class GraphView extends LinearLayout {
 		return scrollable;
 	}
 
-	public boolean isShowLegend() {
-		return showLegend;
-	}
-
 	/**
 	 * forces graphview to invalide all views and caches. Normally there is no
 	 * need to call this manually.
@@ -613,24 +593,6 @@ public class GraphView extends LinearLayout {
 	}
 
 	/**
-	 * legend position
-	 * 
-	 * @param legendAlign
-	 */
-	public void setLegendAlign(LegendAlign legendAlign) {
-		this.legendAlign = legendAlign;
-	}
-
-	/**
-	 * legend width
-	 * 
-	 * @param legendWidth
-	 */
-	public void setLegendWidth(float legendWidth) {
-		this.legendWidth = legendWidth;
-	}
-
-	/**
 	 * you have to set the bounds {@link #setManualYAxisBounds(float, float)}.
 	 * That automatically enables manualYAxis-flag. if you want to disable the
 	 * menual y axis, call this method with false.
@@ -662,10 +624,6 @@ public class GraphView extends LinearLayout {
 	 */
 	public void setScrollable(boolean scrollable) {
 		this.scrollable = scrollable;
-	}
-
-	public void setShowLegend(boolean showLegend) {
-		this.showLegend = showLegend;
 	}
 
 	/**

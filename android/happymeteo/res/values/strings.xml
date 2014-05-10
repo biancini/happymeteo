@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">appymeteo</string>
-    <string name="version">Versione 0.3.3</string>
+    <string name="version">Versione 0.3.4</string>
     <string name="app_id">405414319576008</string>
     <string name="fake"></string>
     <string name="caricamento">Caricamento contenuti</string>
@@ -27,7 +27,8 @@
     <string name="worklist1">Disoccupato</string>
     <string name="worklist2">Impiegato fisso</string>
     <string name="worklist3">Impiegato precario</string>
-    <string name="worklist4">Pensionato</string>
+    <string name="worklist4">Libero professionista</string>
+    <string name="worklist5">Pensionato</string>
     <string name="insert_email">Inserisci la tua email</string>
     <string name="insert_fist_name">Inserisci il tuo nome</string>
     <string name="insert_last_name">Inserisci il tuo cognome</string>

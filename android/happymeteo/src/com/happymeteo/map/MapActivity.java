@@ -18,10 +18,12 @@ public class MapActivity extends LoggedActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_happy_map);
 		super.onCreate(savedInstanceState);
-
+		
 		WebView webmapview = (WebView) findViewById(R.id.webmapview);
 		WebSettings webSettings = webmapview.getSettings();
+		webSettings.setAppCacheEnabled(true);
 		webSettings.setJavaScriptEnabled(true);
+		webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		webmapview.loadUrl(Const.BASE_URL+"/weather_map.html");
 	}
 	

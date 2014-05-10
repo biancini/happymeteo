@@ -24,6 +24,7 @@
         <item>@string/worklist2</item>
         <item>@string/worklist3</item>
         <item>@string/worklist4</item>
+        <item>@string/worklist5</item>
     </string-array>
 
 </resources>
