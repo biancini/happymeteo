@@ -26,7 +26,7 @@ class LostPasswordHandler(webapp2.RequestHandler):
       user = query.get()
      
       data = {'message': 'ok'}
-    
+ 
       new_password = send_new_password(user.first_name, user.last_name, user.email, LOST_PASSWORD_EMAIL)
       user.password = new_password
       user.put()

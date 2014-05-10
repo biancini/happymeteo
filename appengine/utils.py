@@ -7,10 +7,12 @@ import hashlib
 import string
 import random
 import logging
+import os
 
 from datetime import date, timedelta
-from google.appengine.ext import db
 from google.appengine.api import mail
+from google.appengine.ext import db
+from google.appengine.ext.webapp import template
 
 from secrets import GOOGLE_API_KEY, \
     CALL_SECRET_KEY, EMAIL, PASSWORD_SECRET_KEY
@@ -212,7 +214,9 @@ def send_new_password(first_name, last_name, email, text):
     message = mail.EmailMessage(sender="happymeteo <%s>" % EMAIL,
                             subject="Nuova password su Appy Meteo")
     message.to = "%s %s <%s>" % (first_name, last_name, email)
-    message.body = text.encode('utf-8') % (first_name, new_password)
+    path = os.path.join(os.path.dirname(__file__), 'templates', 'base_email.html')
+    body = template.render(path, {'content': text % (first_name, new_password)})
+    message.html = body.encode('utf-8')
     message.send()
     
     hashvar = hashlib.sha1(PASSWORD_SECRET_KEY + new_password).hexdigest()

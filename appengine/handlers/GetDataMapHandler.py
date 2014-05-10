@@ -20,6 +20,9 @@ class GetDataMapHandler(webapp2.RequestHandler):
         return json.loads(regione.valore)
 
   def get(self):
+    self.response.headers["Access-Control-Allow-Origin"] = "*"
+    self.response.headers["Cache-Control"] = "max-age=86400"
+
     data = []
     province = self.getProvince()
     regioni = self.getRegioni()

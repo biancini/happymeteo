@@ -20,7 +20,7 @@ class GetChallengesHandler(webapp2.RequestHandler):
        
         data = []
         
-        challenges = Challenge.gql("WHERE user_id_a = :1 ORDER BY created DESC", user_id)
+        challenges = Challenge.gql("WHERE user_id_a = :1 ORDER BY created DESC LIMIT 5", user_id)
         if challenges.count() > 0:
             for challenge in challenges:
                 user_adversary = User.get_by_id(int(challenge.user_id_b))
@@ -29,7 +29,7 @@ class GetChallengesHandler(webapp2.RequestHandler):
                     c_object['adversary'] = user_adversary.toJson()
                     data.append(c_object)
         
-        challenges = Challenge.gql("WHERE user_id_b = :1 ORDER BY created DESC", user_id)
+        challenges = Challenge.gql("WHERE user_id_b = :1 ORDER BY created DESC LIMIT 5", user_id)
         if challenges.count() > 0:        
             for challenge in challenges:
                 if challenge.turn == 0:

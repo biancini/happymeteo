@@ -4,6 +4,9 @@
 import json
 import logging
 import webapp2
+import os
+
+from google.appengine.ext.webapp import template
 
 from models import User
 from secrets import EMAIL, CREATE_ACCOUNT_EMAIL, CHANGE_FACEBOOK_EMAIL
@@ -67,7 +70,8 @@ class CreateAccountHandler(webapp2.RequestHandler):
                   message = mail.EmailMessage(sender="happymeteo <%s>" % EMAIL,
                                               subject="Conferma del tuo account su Appy Meteo")
                   message.to = "%s %s <%s>" % (first_name, last_name, email)
-                  message.body = CREATE_ACCOUNT_EMAIL % (first_name, user.confirmation_code)
+                  path = os.path.join(os.path.dirname(__file__), '..', 'templates', 'base_email.html')
+                  message.html = template.render(path, {'content': CREATE_ACCOUNT_EMAIL % (first_name, user.confirmation_code)})
                   message.send()
                 
                 user.put()

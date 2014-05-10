@@ -1,11 +1,13 @@
 '''
 @author: Simon Vocella <voxsim@gmail.com>
 '''
-from google.appengine.ext import db
-from google.appengine.ext.webapp import template
+
 import webapp2
 import os
 import logging
+
+from google.appengine.ext import db
+from google.appengine.ext.webapp import template
 
 class ConfirmUserHandler(webapp2.RequestHandler):
     def get(self):
