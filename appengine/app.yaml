@@ -21,6 +21,9 @@ threadsafe: true
 # to 10 minutes.
 default_expiration: "30d"
 
+# Backend configuration
+module: default
+
 # The Python 2.7 runtime includes some additional third-party modules 
 # and makes them available on demand.
 # http://code.google.com/appengine/docs/python/tools/libraries27.html
@@ -75,10 +78,6 @@ handlers:
   static_files: static/\1
   upload: static/robots\.txt
   
-- url: /(weather_map\.html)
-  static_files: static/\1
-  upload: static/weather_map\.html
-
 - url: /(img|css|js)/(.*)
   static_files: static/\1/\2
   upload: static/(img|css|js)/(.*)
