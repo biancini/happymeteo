@@ -110,8 +110,7 @@ public class SettingsActivity extends LoggedActivity implements OnGetExecuteList
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		Session session = Session.getActiveSession();
-		session.onActivityResult(this, requestCode,
-					resultCode, data);
+		session.onActivityResult(this, requestCode, resultCode, data);
 	}
 
 	@Override

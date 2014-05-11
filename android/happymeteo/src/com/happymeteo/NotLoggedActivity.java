@@ -43,42 +43,6 @@ public abstract class NotLoggedActivity extends SherlockActivity implements OnPo
 		}
 	}
 
-	@Override
-	protected void onDestroy() {
-		//Log.d(Const.TAG, this.getClass() + " onDestroy");
-		super.onDestroy();
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		//Log.d(Const.TAG, this.getClass() + " onSaveInstanceState");
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		//Log.d(Const.TAG, this.getClass() + " onNewIntent");
-		super.onNewIntent(intent);
-	}
-
-	@Override
-	public void onStart() {
-		//Log.d(Const.TAG, this.getClass() + " onStart");
-		super.onStart();
-	}
-
-	@Override
-	public void onStop() {
-		//Log.i(Const.TAG, this.getClass() + " onStop");
-		super.onStop();
-	}
-
-	@Override
-	protected void onResume() {
-		//Log.d(Const.TAG, this.getClass() + " onResume");
-		super.onResume();
-	}
-
 	private void openActiveSession(Session.StatusCallback statusCallback, Session session, boolean allowLoginUI) {
 		if (session == null) {
 			session = new Session(this);

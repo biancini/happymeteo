@@ -20,8 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
 import com.facebook.widget.ProfilePictureView;
 import com.google.android.gcm.GCMRegistrar;
 import com.happymeteo.LoggedActivity;
@@ -220,8 +218,4 @@ public class ChallengeActivity extends LoggedActivity {
 		}
 	}
 
-	@Override
-	public void OnFacebookExecute(Session session, SessionState state) {
-		// Do nothing
-	}
 }

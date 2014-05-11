@@ -29,11 +29,6 @@ public class ChallengeScoreActivity extends ImpulseActivity {
 	}
 	
 	@Override
-	public void onPostExecute(int id, String result, Exception exception) {
-		// Do Nothing
-	}
-
-	@Override
 	public void showActivity() {
 		Integer ioScore = null;
 		Integer tuScore = null;
@@ -76,7 +71,11 @@ public class ChallengeScoreActivity extends ImpulseActivity {
 
 	@Override
 	public void onCreation() {
-		// TODO Auto-generated method stub
-		
+		// Do Nothing
+	}
+	
+	@Override
+	public void onPostExecute(int id, String result, Exception exception) {
+		// Do Nothing
 	}
 }

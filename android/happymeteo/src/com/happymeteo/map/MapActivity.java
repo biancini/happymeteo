@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.utils.Const;
@@ -27,13 +25,4 @@ public class MapActivity extends LoggedActivity {
 		webmapview.loadUrl(Const.BASE_URL+"/weather_map.html");
 	}
 	
-	@Override
-	public void onPostExecute(int id, String result, Exception exception) {
-		// Do Nothing
-	}
-	
-	@Override
-	public void OnFacebookExecute(Session session, SessionState state) {
-		// Do nothing
-	}
 }

@@ -15,6 +15,7 @@ import com.devspark.sidenavigation.ISideNavigationCallback;
 import com.devspark.sidenavigation.SideNavigationView;
 import com.devspark.sidenavigation.SideNavigationView.Mode;
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.happymeteo.challenge.ChallengeActivity;
 import com.happymeteo.information.InformationPageActivity;
 import com.happymeteo.map.MapActivity;
@@ -28,8 +29,8 @@ import com.happymeteo.utils.OnFacebookExecuteListener;
 public abstract class LoggedActivity extends NotLoggedActivity implements
 		ISideNavigationCallback, OnFacebookExecuteListener {
 
-	protected Session.StatusCallback statusCallback;
-	private SideNavigationView sideNavigationView;
+	protected Session.StatusCallback statusCallback = null;
+	private SideNavigationView sideNavigationView = null;
 
 	protected void showViewBasedOnFacebookSession() {
 		if (!SessionCache.isFacebookSession(this)) {
@@ -186,5 +187,15 @@ public abstract class LoggedActivity extends NotLoggedActivity implements
 		super.onSaveInstanceState(outState);
 		Session session = Session.getActiveSession();
 		Session.saveSession(session, outState);
+	}
+	
+	@Override
+	public void OnFacebookExecute(Session session, SessionState state) {
+		// Do nothing, method to be eventually implemented in subclasses
+	}
+	
+	@Override
+	public void onPostExecute(int id, String result, Exception exception) {
+		// Do nothing, method to be eventually implemented in subclasses
 	}
 }

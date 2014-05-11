@@ -21,7 +21,6 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.facebook.Session;
-import com.facebook.SessionState;
 import com.facebook.widget.ProfilePictureView;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
@@ -301,10 +300,5 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 		} else {
 			welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase(Locale.getDefault()) + "_OGGI");
 		}
-	}
-	
-	@Override
-	public void OnFacebookExecute(Session session, SessionState state) {
-		// Do nothing
 	}
 }

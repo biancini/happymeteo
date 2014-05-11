@@ -34,8 +34,7 @@ public class IndexActivity extends NotLoggedActivity implements
 		setPersistentActivity(true);
 
 		/* Get Facebook Status Callback */
-		statusCallback = FacebookSessionUtils.getSessionStatusCallback(this,
-				this);
+		statusCallback = FacebookSessionUtils.getSessionStatusCallback(this, this);
 
 		Button btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
 		btnCreateAccount.setOnClickListener(new OnClickListener() {
