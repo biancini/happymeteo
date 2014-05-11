@@ -156,12 +156,14 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 		});
 
 		ImageView facebook = (ImageView) findViewById(R.id.facebook);
+		final int today_int = SessionCache.getToday(this);
 		facebook.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent event) {
 				FeedDialogBuilder feedDialogBuilder = new FeedDialogBuilder(view.getContext(), Session.getActiveSession());
 				feedDialogBuilder.setDescription(getString(R.string.facebook_text));
-				feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
+				//feedDialogBuilder.setPicture(Const.BASE_URL + "/img/facebook_invita.png");
+				feedDialogBuilder.setPicture(Const.BASE_URL_ALT + "/img/facebook-" + today_int +".png");
 				WebDialog webDialog = feedDialogBuilder.build();
 				webDialog.show();
 				return false;

@@ -100,9 +100,9 @@
 	<string name="finegioco_result">Ecco il risultato. [MYSCORE]-[YOURSCORE]</string>
 	<string name="continue_to_read">Continua a leggere..</string>
 	<string name="close_read">Chiudi</string>
-	<string name="email_subject">appymeteo</string>
-	<string name="email_text">Ciao, io mi sto divertendo con appymeteo, vuoi farlo anche tu</string>
-	<string name="facebook_text">Ho appena misurato la mia felicit\u00E0 con appymeteo!</string>
+	<string name="email_subject">Appymeteo, il meteo italiano della felicit\u00E0</string>
+	<string name="email_text">Ciao, io mi sto divertendo con appymeteo, ho appena misurato la mia felicit\u00E0! Vuoi farlo anche tu?</string>
+	<string name="facebook_text">Ho appena misurato la mia felicit\u00E0 con appymeteo! Scarica la app e prova anche tu!</string>
 	<string name="missing_mailclient">Non ci sono mail client installati.</string>
 	<string name="information1"><![CDATA[
 	    <html><body>

@@ -3,6 +3,7 @@ package com.happymeteo.utils;
 public final class Const {
 	/* Url */
 	public static final String BASE_URL                  = "https://happymeteo.appspot.com";
+	public static final String BASE_URL_ALT              = "http://appymeteo.org";
 	
 	public static final String CREATE_ACCOUNT            = BASE_URL + "/create_account";
 	public static final String FACEBOOK_LOGIN_URL        = BASE_URL + "/facebook_login";
