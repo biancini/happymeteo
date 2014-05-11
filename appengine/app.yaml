@@ -94,6 +94,10 @@ handlers:
   static_files: static/\1
   upload: static/terms\.html
 
+- url: /(index\.html)
+  static_files: static/\1
+  upload: static/index\.html
+
 - url: /send_questions
   script: main.app
   login: admin
@@ -103,10 +107,10 @@ handlers:
   login: admin
   
 # dynamic handlers
-- url: /.*
+- url: /(.+)
   script: main.app
   secure: always
-  
+
 # The skip_files element specifies which files in the application directory 
 # are not to be uploaded to App Engine. The value is either a regular 
 # expression, or a list of regular expressions. Any filename that matches 
