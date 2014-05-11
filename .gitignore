@@ -14,4 +14,3 @@ android/*/bin
 android/.gradle/
 android/*/build/
 *~
-*.apk
