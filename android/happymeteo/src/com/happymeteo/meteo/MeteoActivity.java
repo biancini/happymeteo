@@ -27,7 +27,6 @@ import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.challenge.ChallengeScoreActivity;
-import com.happymeteo.meteo.GraphView.GraphViewData;
 import com.happymeteo.meteo.GraphViewSeries.GraphViewSeriesStyle;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.service.PushNotificationsService;
@@ -50,8 +49,9 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 				0xff2ea6ff, 0xff0071bc, 0xff4a4998, 0xff4a4998, 0xffae3771,
 				0xfffd3771, 0xfffd3700, 0xfffd6c00, 0xfffd9200, 0xfffdc800 };
 
-		if (today < 1 || today > 10)
+		if (today < 1 || today > 10) {
 			return new int[] { colors_0[0], colors_1[0] };
+		}
 
 		return new int[] { colors_0[today - 1], colors_1[today - 1] };
 	}
@@ -107,7 +107,6 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 				GradientDrawable.Orientation.TOP_BOTTOM,
 				getColorByToday(today_int));
 		relativeLayoutMeteoUpToday.setBackgroundDrawable(gradientDrawable);
-
 		try {
 			Typeface helveticaneueltstd_ultlt_webfont = Typeface.createFromAsset(getAssets(), "helveticaneueltstd-ultlt-webfont.ttf");
 			today_text.setTypeface(helveticaneueltstd_ultlt_webfont);
@@ -214,10 +213,9 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 		try {
 			JSONObject jsonObject = new JSONObject(result);
 			Calendar cal = Calendar.getInstance();
-//			Date today = cal.getTime();
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			int month = cal.get(Calendar.MONTH);
-//			int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
 
 			int[] months = new int[] { R.string.january, R.string.february,
 					R.string.march, R.string.april, R.string.may,
@@ -225,66 +223,25 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 					R.string.september, R.string.october, R.string.november,
 					R.string.december };
 
-			GraphViewStyle graphViewStyle = new GraphViewStyle(0xff000000, 0xffffffff, 0xffffffff);
-
 			switch (id) {
 			case Const.GET_APPINESS_BY_WEEK_ID:
 				RelativeLayout wait = (RelativeLayout) findViewById(R.id.waitGetAppinessByDay);
 				wait.setVisibility(View.GONE);
 
 				RelativeLayout relativeLayoutMeteoUpGraphByDay = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUpGraphByDay);
-
-//				int groupBy = 7;
-//				int groups = daysInMonth / groupBy
-//						+ (((daysInMonth % groupBy) == 0) ? 0 : 1);
-//				GraphViewData[] viewDayData = new GraphViewData[groups];
-//				for (int i = 0; i < groups; ++i) {
-//					viewDayData[i] = new GraphViewData(i + 1, 0.0f);
-//				}
-//
-//				boolean future = false;
-//				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-//
-//				int arrayIndex = 0;
-//				float curValue = 0.0f;
-//				int curElems = 0;
-//				for (int i = 0; i < daysInMonth; i++) {
-//					String date = dateFormat.format(cal.getTime());
-//					double y = (jsonObject.isNull(date)) ? 0.0 : jsonObject.getInt(date);
-//
-//					if (!future) {
-//						curElems += 1;
-//						curValue += y;
-//					}
-//
-//					if (i % groupBy == 0) {
-//						float val = (curElems > 0) ? curValue / curElems : 0.0f;
-//						viewDayData[arrayIndex].valueY = val;
-//						arrayIndex++;
-//						curValue = 0.0f;
-//						curElems = 0;
-//					}
-//
-//					if (cal.getTime().equals(today)) future = true;
-//					cal.add(Calendar.DATE, 1);
-//				}
 				
 				int groups = jsonObject.length();
 				GraphViewData[] viewDayData = new GraphViewData[groups];
 				
 				for (int i = 0; i < groups; i++) {
-					viewDayData[i] = new GraphViewData(i + 1, jsonObject.getInt(String.valueOf(i)));
+					viewDayData[i] = new GraphViewData((float) i, (float) jsonObject.getInt(String.valueOf(i)));
 				}
 				
 				// init example series data
-				GraphViewSeries dayDataSeries = new GraphViewSeries(
-						new GraphViewSeriesStyle(getResources().getColor(R.color.yellow), 1), viewDayData);
-
+				GraphViewSeries dayDataSeries = new GraphViewSeries(new GraphViewSeriesStyle(getResources().getColor(R.color.yellow), 1), viewDayData);
 				GraphView dayBarGraphView = new GraphView(this);
-				dayBarGraphView.setManualYAxisBounds(10, 0);
 				dayBarGraphView.addSeries(dayDataSeries); // data
 				dayBarGraphView.setHorizontalLabels(new String[] { getApplicationContext().getString(months[month]) });
-				dayBarGraphView.setGraphViewStyle(graphViewStyle);
 				relativeLayoutMeteoUpGraphByDay.addView(dayBarGraphView);
 				break;
 			}

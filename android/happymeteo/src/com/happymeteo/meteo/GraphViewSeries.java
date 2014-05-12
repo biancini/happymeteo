@@ -45,16 +45,16 @@ public class GraphViewSeries {
 		}
 	}
 
-	GraphViewDataInterface[] values = null;
+	GraphViewData[] values = null;
 	private final List<GraphView> graphViews = new ArrayList<GraphView>();
 	final GraphViewSeriesStyle style;
 
-	public GraphViewSeries(GraphViewDataInterface[] values) {
+	public GraphViewSeries(GraphViewData[] values) {
 		style = new GraphViewSeriesStyle();
 		this.values = values;
 	}
 
-	public GraphViewSeries(GraphViewSeriesStyle style, GraphViewDataInterface[] values) {
+	public GraphViewSeries(GraphViewSeriesStyle style, GraphViewData[] values) {
 		super();
 		if (style == null) style = new GraphViewSeriesStyle();
 		
@@ -68,43 +68,6 @@ public class GraphViewSeries {
 	 */
 	public void addGraphView(GraphView graphView) {
 		this.graphViews.add(graphView);
-	}
-
-	/**
-	 * add one data to current data
-	 * @param value the new data to append
-	 * @param scrollToEnd true => graphview will scroll to the end (maxX)
-	 * @param maxDataCount if max data count is reached, the oldest data value will be lost
-	 */
-	public void appendData(GraphViewDataInterface value, boolean scrollToEnd, int maxDataCount) {
-		synchronized (values) {
-			int curDataCount = values.length;
-			GraphViewDataInterface[] newValues = null;
-			
-			if (curDataCount < maxDataCount) {
-				// enough space
-				newValues = new GraphViewDataInterface[curDataCount + 1];
-				System.arraycopy(values, 0, newValues, 0, curDataCount);
-				// append new data
-				newValues[curDataCount] = value;
-			}
-			else {
-				// we have to trim one data
-				newValues = new GraphViewDataInterface[maxDataCount];
-				System.arraycopy(values, 1, newValues, 0, curDataCount-1);
-				// append new data
-				newValues[maxDataCount-1] = value;
-			}
-			
-			values = newValues;
-		}
-
-		// update linked graph views
-		for (GraphView g : graphViews) {
-			if (scrollToEnd) {
-				g.scrollToEnd();
-			}
-		}
 	}
 
 	/**
@@ -127,7 +90,7 @@ public class GraphViewSeries {
 	 * redraws the graphview(s)
 	 * @param values new data
 	 */
-	public void resetData(GraphViewDataInterface[] values) {
+	public void resetData(GraphViewData[] values) {
 		this.values = values;
 		for (GraphView g : graphViews) g.redrawAll();
 	}
