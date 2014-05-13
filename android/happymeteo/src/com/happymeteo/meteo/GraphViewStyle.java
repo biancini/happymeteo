@@ -30,10 +30,19 @@ public class GraphViewStyle {
 	private int verticalLabelsColor = 0;
 	private int horizontalLabelsColor = 0;
 	private int gridColor = 0;
-	private float textSize = 30f;
+	private float textSize = 18f;
 	private int verticalLabelsWidth = 0;
 	private int numVerticalLabels = 0;
 	private int numHorizontalLabels = 0;
+	private float borderSize = 20;
+
+	public float getBorderSize() {
+		return borderSize;
+	}
+
+	public void setBorderSize(float borderSize) {
+		this.borderSize = borderSize;
+	}
 
 	public GraphViewStyle() {
 		verticalLabelsColor = Color.WHITE;

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -27,7 +28,6 @@ import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
 import com.happymeteo.challenge.ChallengeScoreActivity;
-import com.happymeteo.meteo.GraphViewSeries.GraphViewSeriesStyle;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
@@ -40,6 +40,7 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 
 	private TextView welcomeToday = null;
 	private GestureDetector gestureDetector = null;
+	private float scale = 1;
 
 	private int[] getColorByToday(int today) {
 		int[] colors_0 = {
@@ -119,6 +120,10 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		DisplayMetrics metrics = new DisplayMetrics();    
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);    
+		scale = metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT;
+		
 		setContentView(R.layout.activity_happy_meteo);
 		super.onCreate(savedInstanceState);
 		
@@ -225,23 +230,20 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 
 			switch (id) {
 			case Const.GET_APPINESS_BY_WEEK_ID:
+				RelativeLayout relativeLayoutMeteoUpGraphByDay = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUpGraphByDay);
 				RelativeLayout wait = (RelativeLayout) findViewById(R.id.waitGetAppinessByDay);
 				wait.setVisibility(View.GONE);
-
-				RelativeLayout relativeLayoutMeteoUpGraphByDay = (RelativeLayout) findViewById(R.id.relativeLayoutMeteoUpGraphByDay);
 				
 				int groups = jsonObject.length();
-				GraphViewData[] viewDayData = new GraphViewData[groups];
-				
+				float[] viewDayData = new float[groups];
 				for (int i = 0; i < groups; i++) {
-					viewDayData[i] = new GraphViewData((float) i, (float) jsonObject.getInt(String.valueOf(i)));
+					viewDayData[i] = (float) jsonObject.getInt(String.valueOf(i));
 				}
 				
 				// init example series data
-				GraphViewSeries dayDataSeries = new GraphViewSeries(new GraphViewSeriesStyle(getResources().getColor(R.color.yellow), 1), viewDayData);
-				GraphView dayBarGraphView = new GraphView(this);
-				dayBarGraphView.addSeries(dayDataSeries); // data
-				dayBarGraphView.setHorizontalLabels(new String[] { getApplicationContext().getString(months[month]) });
+				GraphViewLayout dayBarGraphView = new GraphViewLayout(this);
+				dayBarGraphView.setScale(scale);
+				dayBarGraphView.setGraphData(viewDayData, new String[] { getApplicationContext().getString(months[month]) });
 				relativeLayoutMeteoUpGraphByDay.addView(dayBarGraphView);
 				break;
 			}
