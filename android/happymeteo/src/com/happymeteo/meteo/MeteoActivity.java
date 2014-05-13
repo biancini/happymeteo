@@ -1,7 +1,6 @@
 package com.happymeteo.meteo;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 import org.json.JSONObject;
 
@@ -132,8 +131,9 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 		/* Initialize PushNotificationsService */
 		PushNotificationsService.register(getApplicationContext());
 
+		String firstName = toTitleCase(SessionCache.getFirst_name(this));
 		welcomeToday = (TextView) findViewById(R.id.welcomeToday);
-		welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase(Locale.getDefault()) + "_OGGI");
+		welcomeToday.setText(firstName + "_OGGI");
 
 		ViewFlipper viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperUp);
 		gestureDetector = new GestureDetector(this, new SwipeGestureDetector(this, viewFlipper, this));
@@ -251,13 +251,19 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 			Log.e(Const.TAG, e.getMessage(), e);
 		}
 	}
+	
+	private String toTitleCase(String givenString) {
+		String[] arr = givenString.split(" ");
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < arr.length; i++) {
+			sb.append(Character.toUpperCase(arr[i].charAt(0))).append(arr[i].substring(1)).append(" ");
+		}          
+		return sb.toString().trim();
+    }  
 
 	@Override
 	public void OnSwipeExecute(int child) {
-		if(child == 0) {
-			welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase(Locale.getDefault()) + "_DIARIO");
-		} else {
-			welcomeToday.setText(SessionCache.getFirst_name(this).toLowerCase(Locale.getDefault()) + "_OGGI");
-		}
+		String firstName = toTitleCase(SessionCache.getFirst_name(this));
+		welcomeToday.setText(firstName + ((child == 0) ? "_DIARIO" : "_OGGI"));
 	}
 }
