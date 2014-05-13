@@ -25,8 +25,4 @@
 <!--         android:id="@+id/side_navigation_menu_item5b" -->
 <!--         android:icon="@drawable/icona_contesto" -->
 <!--         android:title="@string/app_name"/> -->
-	<item
-        android:id="@+id/side_navigation_menu_item6"
-        android:icon="@drawable/logout"
-        android:title="@string/logout"/>
 </menu>

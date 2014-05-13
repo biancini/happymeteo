@@ -130,10 +130,6 @@ public abstract class LoggedActivity extends NotLoggedActivity implements
 //			extras.putString("score", "0");
 //			invokeActivity(ChallengeQuestionsActivity.class, extras);
 //			break;
-			
-		case R.id.side_navigation_menu_item6:
-			onClickLogout();
-			break;
 
 		default:
 			return;

@@ -38,6 +38,7 @@ public class SettingsActivity extends LoggedActivity implements OnGetExecuteList
 		
 		Button btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
 		Button btnChangePassword = (Button) findViewById(R.id.btnChangePassword);
+		Button btnLogout = (Button) findViewById(R.id.btnLogout);
 		
 		settingsFacebookText  = (TextView) findViewById(R.id.settingsFacebookText);
 		settingsFacebookSwitch  = (Switch) findViewById(R.id.settingsFacebookSwitch);
@@ -53,6 +54,13 @@ public class SettingsActivity extends LoggedActivity implements OnGetExecuteList
 			@Override
 			public void onClick(View view) {
 				invokeActivity(ChangePasswordActivity.class);
+			}
+		});
+		
+		btnLogout.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				onClickLogout();
 			}
 		});
 		

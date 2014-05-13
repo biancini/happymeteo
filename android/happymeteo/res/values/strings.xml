@@ -60,7 +60,7 @@
     <string name="change_password">Modifica password</string>
     <string name="error_captcha">Captcha sbagliato, reinserirlo</string>
     <string name="insert_captcha">Inserisci il testo dell\'immagine</string>
-    <string name="are_you_sure">Sei sicuro che vuoi farlo? Questa operazione &#232; irreversibile</string>
+    <string name="are_you_sure">Sei sicuro che vuoi farlo? Questa operazione &#232; irreversibile.</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
     <string name="renew_captcha">Rigenera captcha</string>

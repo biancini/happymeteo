@@ -78,6 +78,14 @@
                     android:layout_height="wrap_content" 
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
+            
+			<Button
+                android:id="@+id/btnLogout"
+                android:layout_width="237dip"
+                android:layout_height="35dip"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dip"
+                android:background="@drawable/logout" />
 
         </LinearLayout>
 
