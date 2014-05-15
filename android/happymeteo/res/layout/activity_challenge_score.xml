@@ -89,6 +89,7 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/result"
         android:layout_width="wrap_content"
         android:layout_height="20dip"
         android:layout_margin="10dp" 

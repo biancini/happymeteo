@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
@@ -17,6 +20,7 @@ public class ChallengeScoreActivity extends ImpulseActivity {
 	protected final static String TU_CHALLENGE = "tuChallenge";
 	protected final static String TU_FACEBOOK_ID = "tuFacebookId";
 	protected final static String TU_NAME = "tuName";
+	protected final static String HAS_CLOSE = "hasClose";
 	
 	@Override
 	public List<String> getKeyIntentParameters() {
@@ -25,6 +29,7 @@ public class ChallengeScoreActivity extends ImpulseActivity {
 		keyIntentParameters.add(TU_CHALLENGE);
 		keyIntentParameters.add(TU_FACEBOOK_ID);
 		keyIntentParameters.add(TU_NAME);
+		keyIntentParameters.add(HAS_CLOSE);
 		return keyIntentParameters;
 	}
 	
@@ -62,6 +67,25 @@ public class ChallengeScoreActivity extends ImpulseActivity {
 
 		String tuName = intentParameters.get(TU_NAME);
 		if (tuName != null) tuNameTextView.setText(tuName.toUpperCase(Locale.getDefault()));
+		
+		Boolean hasClose = Boolean.getBoolean(intentParameters.get(HAS_CLOSE));
+		if (hasClose) {
+			ImageView resultImageView = (ImageView) findViewById(R.id.result);
+			resultImageView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					finish();
+				}
+			});
+		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		Boolean hasClose = Boolean.getBoolean(intentParameters.get(HAS_CLOSE));
+		if (hasClose) {
+			finish();
+		}
 	}
 
 	@Override

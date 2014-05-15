@@ -143,7 +143,8 @@ public abstract class LoggedActivity extends NotLoggedActivity implements
 			sideNavigationView.hideMenu();
 		} else {
 			Log.i(Const.TAG, "invokeActivity: " + this.getClass() + " " + MeteoActivity.class);
-			if (!this.getClass().equals(MeteoActivity.class)) super.onBackPressed();
+			//if (!this.getClass().equals(MeteoActivity.class)) super.onBackPressed();
+			super.onBackPressed();
 		}
 	}
 
