@@ -87,23 +87,37 @@ public class ChallengeActivity extends LoggedActivity {
 		}
 
 		if (challenge.getTurn() == 3) {
-			Float ioScore = null;
-			Float tuScore = null;
+			final Integer ioScore;
+			final Integer tuScore;
 	
 			if (SessionCache.getUser_id(this).equals(challenge.getUser_id_a())) {
-				ioScore = Float.valueOf(challenge.getScore_a());
-				tuScore = Float.valueOf(challenge.getScore_b());
-			}
-	
-			if (SessionCache.getUser_id(this).equals(challenge.getUser_id_b())) {
-				ioScore = Float.valueOf(challenge.getScore_b());
-				tuScore = Float.valueOf(challenge.getScore_a());
+				ioScore = Integer.valueOf(challenge.getScore_a());
+				tuScore = Integer.valueOf(challenge.getScore_b());
+			} else if (SessionCache.getUser_id(this).equals(challenge.getUser_id_b())) {
+				ioScore = Integer.valueOf(challenge.getScore_b());
+				tuScore = Integer.valueOf(challenge.getScore_a());
+			} else  {
+				ioScore = 0;
+				tuScore = 0;
 			}
 			
 			String resultText = getString(R.string.finegioco_result);
 			resultText = resultText.replaceAll("\\[MYSCORE\\]", ioScore.toString());
 			resultText = resultText.replaceAll("\\[YOURSCORE\\]", tuScore.toString());
 			picker_result.setText(resultText);
+			
+			picker_result.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Bundle extras = new Bundle();
+					extras.putInt(ChallengeScoreActivity.IO_CHALLENGE, ioScore);
+					extras.putInt(ChallengeScoreActivity.TU_CHALLENGE, tuScore);
+					extras.putString(ChallengeScoreActivity.TU_FACEBOOK_ID, challenge.getAdversary().getUser_id());
+					extras.putString(ChallengeScoreActivity.TU_NAME, challenge.getAdversary().getFirst_name());
+					ChallengeActivity.this.invokeActivity(ChallengeScoreActivity.class, extras);
+				}
+			});
+			
 			viewToAdd = true;
 		}
 		

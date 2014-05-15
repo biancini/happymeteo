@@ -13,10 +13,10 @@ import com.happymeteo.models.SessionCache;
 
 public class ChallengeScoreActivity extends ImpulseActivity {
 	
-	private final String IO_CHALLENGE = "ioChallenge";
-	private final String TU_CHALLENGE = "tuChallenge";
-	private final String TU_FACEBOOK_ID = "tuFacebookId";
-	private final String TU_NAME = "tuName";
+	protected final static String IO_CHALLENGE = "ioChallenge";
+	protected final static String TU_CHALLENGE = "tuChallenge";
+	protected final static String TU_FACEBOOK_ID = "tuFacebookId";
+	protected final static String TU_NAME = "tuName";
 	
 	@Override
 	public List<String> getKeyIntentParameters() {
