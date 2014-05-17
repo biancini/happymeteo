@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.DialogInterface;
 import android.location.Location;
 import android.text.Html;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.RelativeLayout;
 import com.happymeteo.QuestionImpulseActivity;
 import com.happymeteo.R;
 import com.happymeteo.models.SessionCache;
+import com.happymeteo.utils.AlertDialogManager;
 import com.happymeteo.utils.Const;
 import com.happymeteo.utils.OnPostExecuteListener;
 import com.happymeteo.utils.ServerUtilities;
@@ -27,6 +29,7 @@ import com.happymeteo.utils.ServerUtilities;
 public class QuestionActivity extends QuestionImpulseActivity implements OnPostExecuteListener {
 	private Map<String, String> params = null;
 	
+	private List<String> mandatoryQuestionsId = new ArrayList<String>();
 	private final String TIMESTAMP = "timestamp";
 
 	@Override
@@ -47,9 +50,11 @@ public class QuestionActivity extends QuestionImpulseActivity implements OnPostE
 					final int type = jsonObject.getInt("type");
 					final String textYes = jsonObject.getString("textYes");
 					final String textNo = jsonObject.getString("textNo");
+					final boolean mandatory = jsonObject.getBoolean("mandatory");
+					if (mandatory) mandatoryQuestionsId.add(id_question);
 
 					writeQuestionText(questionText);
-					writeQuestionAnswerArea(type, id_question, textYes, textNo);
+					writeQuestionAnswerArea(type, id_question, mandatory, textYes, textNo);
 				}
 			} catch (JSONException e) {
 				Log.e(Const.TAG, e.getMessage(), e);
@@ -89,19 +94,37 @@ public class QuestionActivity extends QuestionImpulseActivity implements OnPostE
 		btnAnswerQuestions.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				String timestamp = intentParameters.get(TIMESTAMP);
-				Location location = mLocationClient.getLastLocation();
-				
-				if (location != null) {
-					params.put("latitude", String.valueOf(location.getLatitude()));
-					params.put("longitude", String.valueOf(location.getLongitude()));
-				}
-
-				params.put("user_id", SessionCache.getUser_id(view.getContext()));
-				params.put("questions", questions.toString());
-				params.put("timestamp", timestamp);
-
-				ServerUtilities.submitQuestions(QuestionActivity.this, params);
+					for (String mandatoryQuestionId : mandatoryQuestionsId) {
+						try {
+							if (questions.get(mandatoryQuestionId) == null) {
+								throw new JSONException("Object null");
+							}
+						} catch (JSONException e) {
+							AlertDialogManager.showNotification(QuestionActivity.this,
+									R.string.missing_question_answer_notification_title,
+									R.string.missing_question_answer_notification_msg,
+									new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									// Do nothing
+								}
+							});
+							return;
+						}
+					}
+					
+					String timestamp = intentParameters.get(TIMESTAMP);
+					Location location = mLocationClient.getLastLocation();
+					
+					if (location != null) {
+						params.put("latitude", String.valueOf(location.getLatitude()));
+						params.put("longitude", String.valueOf(location.getLongitude()));
+					}
+	
+					params.put("user_id", SessionCache.getUser_id(view.getContext()));
+					params.put("questions", questions.toString());
+					params.put("timestamp", timestamp);
+	
+					ServerUtilities.submitQuestions(QuestionActivity.this, params);
 			}
 		});
 	}

@@ -97,13 +97,13 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity implements
 		linearLayout.addView(fascetta);
 	}
 
-	protected void writeQuestionAnswerArea(final int type, final String id_question, final String textYes, final String textNo) throws JSONException {
+	protected void writeQuestionAnswerArea(final int type, final String id_question, final boolean mandatory, final String textYes, final String textNo) throws JSONException {
 		if (type == 1) {
 			drawOneToTenAnswer(id_question);
-			questions.put(id_question, "1");
+			if (!mandatory) questions.put(id_question, "1");
 		} else {
 			drawYesNoAnswer(id_question, textYes, textNo);
-			questions.put(id_question, "0");
+			if (!mandatory) questions.put(id_question, "0");
 		}
 	}
 
@@ -163,8 +163,7 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity implements
 		imageView1.setLayoutParams(llpImg);
 		linearLayout1.addView(imageView1);
 
-		LinearLayout.LayoutParams llp_seekBar = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams llp_seekBar = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		llp_seekBar.weight = 80;
 
 		final AppyMeteoSeekBar appyMeteoSeekBar = new AppyMeteoSeekBar(this);
@@ -178,30 +177,35 @@ public abstract class QuestionImpulseActivity extends ImpulseActivity implements
 		tvText.setGravity(Gravity.CENTER);
 		tvText.setTextColor(getResources().getColor(R.color.white));
 		tvText.setTextSize(15.0f);
-		LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		llpBaloon.leftMargin = appyMeteoSeekBar.getProgressPosX();
 		tvText.setLayoutParams(llpBaloon);
 		linearLayout.addView(tvText);
 
 		appyMeteoSeekBar.setOnAppyMeteoSeekBarChangeListener(new OnAppyMeteoSeekBarChangeListener() {
-				@Override
-				public void onProgressPosXChanged(AppyMeteoSeekBar seekBar, int progress, int progressPosX) {
-					String value = String.valueOf((progress / 10) + 1);
+			private boolean isFirstSetting = true;
+		
+			@Override
+			public void onProgressPosXChanged(AppyMeteoSeekBar seekBar, int progress, int progressPosX) {
+				String value = String.valueOf((progress / 10) + 1);
+				if (isFirstSetting) {
+					isFirstSetting = false;
+				} else {
 					try {
 						questions.put(id_question, value);
 					} catch (JSONException e) {
 						Log.e(Const.TAG, e.getMessage(), e);
 					}
-					tvText.setText(value + "\u00B0");
-
-					LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
-							LinearLayout.LayoutParams.WRAP_CONTENT,
-							LinearLayout.LayoutParams.WRAP_CONTENT);
-					llpBaloon.leftMargin = progressPosX;
-					tvText.setLayoutParams(llpBaloon);
 				}
-			});
+				tvText.setText(value + "\u00B0");
+
+				LinearLayout.LayoutParams llpBaloon = new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.WRAP_CONTENT,
+						LinearLayout.LayoutParams.WRAP_CONTENT);
+				llpBaloon.leftMargin = progressPosX;
+				tvText.setLayoutParams(llpBaloon);
+			}
+		});
 
 		linearLayout1.addView(appyMeteoSeekBar);
 

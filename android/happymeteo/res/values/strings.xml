@@ -82,6 +82,8 @@
     <string name="success_email">Email impostata con successo</string>
     <string name="ok">OK</string>
     <string name="error_impulse">Errore di configurazione dell\'impulso</string>
+    <string name="missing_question_answer_notification_title">Manca la risposta a una domanda!</string>
+	<string name="missing_question_answer_notification_msg">Prima di inviare le rispsote devi rispondere a tutte le domande!</string>
 	<string name="not_confirmed_user_notification_title">Account non verificato</string>
 	<string name="not_confirmed_user_notification_msg">Presto verr\u00E0 inviata una email di conferma all\'email indicata</string>
 	<string name="request_challenge_notification_msg">Richiesta di gioco inviata con successo</string>

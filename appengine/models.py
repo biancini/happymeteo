@@ -95,6 +95,7 @@ class Question(db.Model):
     order = db.IntegerProperty()
     textYes = db.StringProperty()
     textNo = db.StringProperty()
+    mandatory = db.BooleanProperty(default=False)
     
     def toJson(self):
         return {
@@ -102,7 +103,8 @@ class Question(db.Model):
             'question': self.question,
             'type': self.type,
             'textYes': self.textYes,
-            'textNo': self.textNo
+            'textNo': self.textNo,
+            'mandatory': self.mandatory
         }
         
 class ChallengeQuestion(db.Model):

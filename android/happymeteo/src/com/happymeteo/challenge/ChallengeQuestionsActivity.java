@@ -51,9 +51,10 @@ public class ChallengeQuestionsActivity extends QuestionImpulseActivity implemen
 					final int type = jsonObject.getInt("type");
 					final String textYes = jsonObject.getString("textYes");
 					final String textNo = jsonObject.getString("textNo");
+					final boolean mandatory = false;
 
 					writeQuestionText(questionText);
-					writeQuestionAnswerArea(type, id_question, textYes, textNo);
+					writeQuestionAnswerArea(type, id_question, mandatory, textYes, textNo);
 				}
 			} catch (JSONException e) {
 				Log.e(Const.TAG, e.getMessage(), e);
