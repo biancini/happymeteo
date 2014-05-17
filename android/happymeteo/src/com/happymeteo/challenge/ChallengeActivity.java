@@ -38,8 +38,7 @@ public class ChallengeActivity extends LoggedActivity {
 		profilePictureView.setProfileId(challenge.getAdversary().getFacebook_id());
 
 		TextView picker_title = (TextView) rowView.findViewById(R.id.picker_title);
-		//String titleText = getString(R.string.finegioco_message) + " " + challenge.getAdversary().getFirst_name();
-		if (!challenge.getCreated().equals("")) {
+		if (challenge.getCreated().equals("")) {
 			String titleText = getString(R.string.finegioco_message);
 			titleText = titleText.replaceAll("\\[USER\\]", challenge.getAdversary().getFirst_name());
 			picker_title.setText(titleText);
@@ -102,19 +101,20 @@ public class ChallengeActivity extends LoggedActivity {
 			}
 			
 			String resultText = getString(R.string.finegioco_result);
-			resultText = resultText.replaceAll("\\[MYSCORE\\]", ioScore.toString());
-			resultText = resultText.replaceAll("\\[YOURSCORE\\]", tuScore.toString());
+			resultText = resultText.replaceAll("\\[MYSCORE\\]", "" + ioScore.intValue());
+			resultText = resultText.replaceAll("\\[YOURSCORE\\]", "" + tuScore.intValue());
 			picker_result.setText(resultText);
+			rowView.setBackgroundColor(getResources().getColor((ioScore > tuScore) ? R.color.won_grey : R.color.lost_red));
 			picker_result.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Bundle extras = new Bundle();
-					extras.putFloat(ChallengeScoreActivity.IO_CHALLENGE, ioScore);
-					extras.putFloat(ChallengeScoreActivity.TU_CHALLENGE, tuScore);
+					extras.putString(ChallengeScoreActivity.IO_CHALLENGE, ioScore.toString());
+					extras.putString(ChallengeScoreActivity.TU_CHALLENGE, tuScore.toString());
 					extras.putString(ChallengeScoreActivity.TU_FACEBOOK_ID, challenge.getAdversary().getUser_id());
 					extras.putString(ChallengeScoreActivity.TU_NAME, challenge.getAdversary().getFirst_name());
-					extras.putBoolean(ChallengeScoreActivity.HAS_CLOSE, true);
-					ChallengeActivity.this.invokeActivity(ChallengeScoreActivity.class, extras);
+					extras.putString(ChallengeScoreActivity.HAS_CLOSE, "true");
+					invokeActivity(ChallengeScoreActivity.class, extras);
 				}
 			});
 			

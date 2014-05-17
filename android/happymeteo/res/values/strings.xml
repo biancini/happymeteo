@@ -95,9 +95,9 @@
 	<string name="notify_rifiuto">L\'utente non vuole giocare con te</string>
 	<string name="notify_turno">E\' il tuo turno!</string>
 	<string name="notify_finegioco">Il gioco \u00E9 finito!</string>
-	<string name="finegioco_message">Hai giocato con [USER]</string>
-	<string name="finegioco_message_date">Hai giocato con [USER] il [DATE]</string>
-	<string name="finegioco_result">Ecco il risultato. [MYSCORE]-[YOURSCORE]</string>
+	<string name="finegioco_message">Hai giocato con [USER]!</string>
+	<string name="finegioco_message_date">Hai giocato con [USER] il [DATE]!</string>
+	<string name="finegioco_result">Ecco il risultato: [MYSCORE]-[YOURSCORE]</string>
 	<string name="continue_to_read">Continua a leggere..</string>
 	<string name="close_read">Chiudi</string>
 	<string name="email_subject">Appymeteo, il meteo italiano della felicit\u00E0</string>

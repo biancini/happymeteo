@@ -68,23 +68,21 @@ public class ChallengeScoreActivity extends ImpulseActivity {
 		String tuName = intentParameters.get(TU_NAME);
 		if (tuName != null) tuNameTextView.setText(tuName.toUpperCase(Locale.getDefault()));
 		
-		Boolean hasClose = Boolean.getBoolean(intentParameters.get(HAS_CLOSE));
-		if (hasClose) {
-			ImageView resultImageView = (ImageView) findViewById(R.id.result);
-			resultImageView.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					finish();
-				}
-			});
-		}
+		ImageView resultImageView = (ImageView) findViewById(R.id.result);
+		resultImageView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ChallengeScoreActivity.this.onBackPressed();
+			}
+		});
 	}
 	
 	@Override
 	public void onBackPressed() {
-		Boolean hasClose = Boolean.getBoolean(intentParameters.get(HAS_CLOSE));
+		Boolean hasClose = Boolean.parseBoolean(intentParameters.get(HAS_CLOSE));
 		if (hasClose) {
-			finish();
+			super.onBackPressed();
+			invokeActivity(ChallengeActivity.class);
 		}
 	}
 
