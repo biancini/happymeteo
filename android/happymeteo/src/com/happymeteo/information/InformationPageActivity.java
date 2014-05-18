@@ -1,5 +1,6 @@
 package com.happymeteo.information;
 
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -8,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
@@ -34,8 +35,17 @@ public class InformationPageActivity extends LoggedActivity {
 		final TextView information_page4 = (TextView) findViewById(R.id.information_page4);
 		information_page4.setText(Html.fromHtml(getString(R.string.information4)));
 		
-		final ImageView information_page4img = (ImageView) findViewById(R.id.information_page4img);
-		information_page4img.setVisibility(View.GONE);
+		final LinearLayout information_page4legend = (LinearLayout) findViewById(R.id.legendLayout); 
+		information_page4legend.setVisibility(LinearLayout.GONE);
+		
+		final TextView legendIconaTitle = (TextView) findViewById(R.id.legendIconaTitle);
+		legendIconaTitle.setPaintFlags(legendIconaTitle.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+		
+		final TextView legendColoreTitle = (TextView) findViewById(R.id.legendColoreTitle);
+		legendColoreTitle.setPaintFlags(legendColoreTitle.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+		
+		final TextView legendValoreTitle = (TextView) findViewById(R.id.legendValoreTitle);
+		legendValoreTitle.setPaintFlags(legendValoreTitle.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 		
 		TextView information_pagesub1 = (TextView) findViewById(R.id.information_pagesub1);
 		information_pagesub1.setOnClickListener(new OnClickListener() {			
@@ -119,38 +129,37 @@ public class InformationPageActivity extends LoggedActivity {
 		information_pagesub4.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 					if (((TextView) view).getText().equals(getResources().getText(R.string.continue_to_read))) {
-						Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in);
-						animFadeIn.setDuration(2000);
-						information_page4img.setAnimation(animFadeIn);
-						animFadeIn.setAnimationListener(new AnimationListener() {
+						Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+						animation.setDuration(1000);
+						animation.setAnimationListener(new AnimationListener() {
 							@Override
 							public void onAnimationStart(Animation animation) {
-								information_page4img.setVisibility(View.VISIBLE);
+								information_page4legend.setVisibility(LinearLayout.VISIBLE);
 							}
 							@Override
 							public void onAnimationRepeat(Animation animation) { }
 							@Override
 							public void onAnimationEnd(Animation animation) { }
 						});
+						information_page4legend.startAnimation(animation);
 						
 						((TextView) view).setText(getResources().getText(R.string.close_read));
 					} else {
-						Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_out);
-						animFadeOut.setDuration(1000);
-						information_page4img.setAnimation(animFadeOut);
-						animFadeOut.setAnimationListener(new AnimationListener() {
+						Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up);
+						animation.setDuration(1000);
+						animation.setAnimationListener(new AnimationListener() {
 							@Override
 							public void onAnimationStart(Animation animation) { }
 							@Override
 							public void onAnimationRepeat(Animation animation) { }
 							@Override
 							public void onAnimationEnd(Animation animation) {
-								information_page4img.setVisibility(View.GONE);
+								information_page4legend.setVisibility(LinearLayout.GONE);
 							}
 						});
+						information_page4legend.startAnimation(animation);
 						
 						((TextView) view).setText(getResources().getText(R.string.continue_to_read));
 					}

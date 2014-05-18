@@ -151,4 +151,7 @@
 		Di seguito una breve legenda che ti aiuter\u00E0 a leggere la scala dei valori di appiness!
 		</body></html>
 	]]></string>
+	<string name="legendIconaTitle">ICONA</string>
+	<string name="legendColoreTitle">COLORE</string>
+	<string name="legendValoreTitle">VALORE</string>
 </resources>
