@@ -26,7 +26,7 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.FeedDialogBuilder;
 import com.happymeteo.LoggedActivity;
 import com.happymeteo.R;
-import com.happymeteo.challenge.ChallengeScoreActivity;
+import com.happymeteo.challenge.ChallengeScoreImpulseActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.service.PushNotificationsService;
 import com.happymeteo.utils.Const;
@@ -184,7 +184,7 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 			boolean challengeScoreActivity = intent.getExtras().getBoolean("ChallengeScoreActivity", false);
 
 			if (challengeScoreActivity) {
-				invokeActivity(ChallengeScoreActivity.class, intent.getExtras());
+				invokeActivity(ChallengeScoreImpulseActivity.class, intent.getExtras());
 			}
 		}
 	}

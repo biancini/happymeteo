@@ -15,7 +15,7 @@ import com.happymeteo.ImpulseActivity;
 import com.happymeteo.R;
 import com.happymeteo.challenge.ChallengeQuestionsActivity;
 import com.happymeteo.challenge.ChallengeRequestActivity;
-import com.happymeteo.challenge.ChallengeScoreActivity;
+import com.happymeteo.challenge.ChallengeScoreImpulseActivity;
 import com.happymeteo.meteo.MeteoActivity;
 import com.happymeteo.models.SessionCache;
 import com.happymeteo.question.QuestionActivity;
@@ -104,7 +104,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if(collapse_key.equals("accepted_challenge_turn1_true")) return ChallengeQuestionsActivity.class;
 		//if(collapse_key.equals("accepted_challenge_turn1_false")) return HappyMeteoActivity.class;
 		if(collapse_key.equals("accepted_challenge_turn2")) return ChallengeQuestionsActivity.class;
-		if(collapse_key.equals("accepted_challenge_turn3")) return ChallengeScoreActivity.class;
+		if(collapse_key.equals("accepted_challenge_turn3")) return ChallengeScoreImpulseActivity.class;
 		
 		return null;
 	}

@@ -92,6 +92,11 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.happymeteo.challenge.ChallengeScoreImpulseActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.happymeteo.challenge.ChallengeScoreActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"

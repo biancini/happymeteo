@@ -113,7 +113,6 @@ public class ChallengeActivity extends LoggedActivity {
 					extras.putString(ChallengeScoreActivity.TU_CHALLENGE, tuScore.toString());
 					extras.putString(ChallengeScoreActivity.TU_FACEBOOK_ID, challenge.getAdversary().getFacebook_id());
 					extras.putString(ChallengeScoreActivity.TU_NAME, challenge.getAdversary().getFirst_name());
-					extras.putString(ChallengeScoreActivity.HAS_CLOSE, "true");
 					invokeActivity(ChallengeScoreActivity.class, extras);
 				}
 			});
