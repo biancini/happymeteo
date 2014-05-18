@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.happymeteo.NotLoggedActivity;
+import com.happymeteo.R;
 
 public class PostRequest extends AsyncTask<String, Void, String> {
 	private int id = 0;
@@ -34,6 +35,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	private String url = null;
 	
 	public PostRequest(int id, Context context, OnPostExecuteListener onPostExecuteListener, List<NameValuePair> nvps) {
+		nvps.add(new BasicNameValuePair("app_version", context.getString(R.string.version)));
 		this.id = id;
 		this.context = context;
 		this.nvps = nvps;
@@ -42,6 +44,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	}
 
 	public PostRequest(int id, NotLoggedActivity appyMeteoNotLoggedActivity, List<NameValuePair> nvps) {
+		nvps.add(new BasicNameValuePair("app_version", appyMeteoNotLoggedActivity.getString(R.string.version)));
 		this.id = id;
 		this.context = (Context) appyMeteoNotLoggedActivity;
 		this.nvps = nvps;
@@ -50,6 +53,7 @@ public class PostRequest extends AsyncTask<String, Void, String> {
 	}
 	
 	public PostRequest(int id, Context context, List<NameValuePair> nvps) {
+		nvps.add(new BasicNameValuePair("app_version", context.getString(R.string.version)));
 		this.id = id;
 		this.context = context;
 		this.nvps = nvps;
