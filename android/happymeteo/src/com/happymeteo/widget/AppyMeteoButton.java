@@ -41,23 +41,33 @@ public class AppyMeteoButton extends Button {
 	    TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.AppyMeteoButton);
 	    boolean dark = a.getBoolean(R.styleable.AppyMeteoButton_dark, false); 
 	    text = a.getString(R.styleable.AppyMeteoButton_android_contentDescription);
+	    int marker = a.getInt(R.styleable.AppyMeteoButton_marker, 1);
 		
 	    paint.setAntiAlias(true);
 	    paint.setStyle(Style.FILL);
 	    paint.setTextAlign(Align.CENTER);
 	    paint.setTextSize(textSize * scale);
 		
-		if (dark) {
-			background = BitmapFactory.decodeResource(getResources(), R.drawable.button_dark);
-			paint.setColor(getResources().getColor(R.color.white));
-		} else {
-			background = BitmapFactory.decodeResource(getResources(), R.drawable.button_light);
-			paint.setColor(getResources().getColor(R.color.black));
-		}
+	    switch (marker) {
+	    	case 1: // maggiore
+	    		background = BitmapFactory.decodeResource(getResources(),
+	    				dark ? R.drawable.button_dark : R.drawable.button_light);
+	    		break;
+	    	case 2: // facebook
+	    		// Facebook button is only light
+	    		background = BitmapFactory.decodeResource(getResources(), R.drawable.button_facebook);
+	    		dark = false;
+	    		break;
+	    	case 3: // piu
+	    		// Plus button is only light
+	    		background = BitmapFactory.decodeResource(getResources(), R.drawable.button_plus);
+	    		dark = false;
+	    		break;
+	    }
 		
+	    paint.setColor(dark ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black));
 		paint.getTextBounds(text, 0, text.length(), textBounds);
 		
-	    //Don't forget this
 	    a.recycle();
 	}
 	

@@ -3,5 +3,10 @@
     <declare-styleable name="AppyMeteoButton">
         <attr name="android:contentDescription"/>
         <attr name="dark" format="boolean" />
+        <attr name="marker">
+            <flag name="maggiore" value="1" />
+            <flag name="facebook" value="2" />
+            <flag name="piu" value="3" />
+        </attr>
     </declare-styleable>
 </resources>

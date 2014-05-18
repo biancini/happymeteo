@@ -130,7 +130,7 @@ public class ChallengeActivity extends LoggedActivity {
 		super.onCreate(savedInstanceState);
 
 		ImageView btnChallengeNew = (ImageView) findViewById(R.id.btnChallengeNew);
-
+//		Button btnChallengeNew = (Button) findViewById(R.id.btnChallengeNew);
 		btnChallengeNew.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				ChallengeActivity.this.invokeActivity(FriendsFacebookActivity.class);

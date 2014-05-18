@@ -154,7 +154,14 @@
 	<string name="legendIconaTitle">ICONA</string>
 	<string name="legendColoreTitle">COLORE</string>
 	<string name="legendValoreTitle">VALORE</string>
+	<string name="btn_facebook">FACEBOOK CONNECT</string>
+	<string name="btn_login">LOGIN</string>
+	<string name="btn_logout">LOGOUT</string>
 	<string name="btn_modificadati">MODIFICA DATI UTENTE</string>
 	<string name="btn_modificapw">MODIFICA PASSWORD</string>
-	<string name="btn_logout">LOGOUT</string>
+	<string name="btn_accetta">ACCETTA</string>
+	<string name="btn_rifiuta">RIFIUTA</string>
+	<string name="btn_creaaccount">CREA ACCOUNT</string>
+	<string name="btn_pwddimenticata">DIMENTICATA LA PASSWORD?</string>
+	<string name="btn_nuovogioco">NUOVO GIOCO</string>
 </resources>
