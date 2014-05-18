@@ -154,4 +154,7 @@
 	<string name="legendIconaTitle">ICONA</string>
 	<string name="legendColoreTitle">COLORE</string>
 	<string name="legendValoreTitle">VALORE</string>
+	<string name="btn_modificadati">MODIFICA DATI UTENTE</string>
+	<string name="btn_modificapw">MODIFICA PASSWORD</string>
+	<string name="btn_logout">LOGOUT</string>
 </resources>

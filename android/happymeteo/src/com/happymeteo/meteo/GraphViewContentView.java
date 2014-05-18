@@ -138,7 +138,6 @@ public class GraphViewContentView extends View {
 		float graphwidth = (float) (getWidth() - 1);
 		
 		paint.setTextSize(graphViewStyle.getTextSize() * scale);
-		paint.setTextAlign(Align.LEFT);
 
 		int hors = horlabels.length - 1;
 		if (hors < 1) hors = 1;
