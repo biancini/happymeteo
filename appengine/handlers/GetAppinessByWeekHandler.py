@@ -8,6 +8,7 @@ import webapp2
 from datetime import date
 
 from models import Answer
+from secrets import CUR_VERSION
 from utils import check_hash, mkDateTime, mkLastOfMonth, \
     formatDate
 
@@ -18,6 +19,7 @@ class GetAppinessByWeekHandler(webapp2.RequestHandler):
     data = {}
     
     try:
+        app_version = self.request.get('version', None)
         user_id = self.request.get('user_id')
         
         if not user_id:
@@ -26,6 +28,9 @@ class GetAppinessByWeekHandler(webapp2.RequestHandler):
         data = {}
         arrayIndex = 0
         daysCount = 0
+
+        if app_version:
+            data['newversion'] = (app_version != CUR_VERSION)
         
         today = date.today()
         lastOfMonth = mkLastOfMonth(today)

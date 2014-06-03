@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import com.happymeteo.NotLoggedActivity;
+import com.happymeteo.R;
 
 public class ServerUtilities {
 	// private static final long DELAY = 2000;
@@ -122,6 +123,9 @@ public class ServerUtilities {
 
 	public static void getAppynessByWeek(NotLoggedActivity appyMeteoNotLoggedActivity, String userId) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		if (appyMeteoNotLoggedActivity != null) {
+			nvps.add(new BasicNameValuePair("version", appyMeteoNotLoggedActivity.getString(R.string.version)));
+		}
 		nvps.add(new BasicNameValuePair("user_id", userId));
 		new PostRequest(Const.GET_APPINESS_BY_WEEK_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_APPINESS_BY_WEEK_URL);
 	}

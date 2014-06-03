@@ -164,4 +164,7 @@
 	<string name="btn_creaaccount">CREA ACCOUNT</string>
 	<string name="btn_pwddimenticata">DIMENTICATA LA PASSWORD?</string>
 	<string name="btn_nuovogioco">NUOVO GIOCO</string>
+	<string name="alert_newversion_title">Una nuova versione di Appymeteo \u00E0 disponibile!</string>
+	<string name="alert_newversion_message">Scaricala dal Google Play store per beneficiare da subito delle nuove funzionalit\u00E0!</string>
+	<string name="alert_newversion_download">Scaricala</string>
 </resources>

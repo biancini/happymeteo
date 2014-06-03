@@ -4,9 +4,13 @@ import java.util.Calendar;
 
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -221,7 +225,6 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			int month = cal.get(Calendar.MONTH);
 
-
 			int[] months = new int[] { R.string.january, R.string.february,
 					R.string.march, R.string.april, R.string.may,
 					R.string.june, R.string.july, R.string.august,
@@ -234,7 +237,7 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 				RelativeLayout wait = (RelativeLayout) findViewById(R.id.waitGetAppinessByDay);
 				wait.setVisibility(View.GONE);
 				
-				int groups = jsonObject.length();
+				int groups = jsonObject.length() - 1;
 				float[] viewDayData = new float[groups];
 				for (int i = 0; i < groups; i++) {
 					viewDayData[i] = (float) jsonObject.getInt(String.valueOf(i));
@@ -246,6 +249,21 @@ public class MeteoActivity extends LoggedActivity implements OnPostExecuteListen
 				dayBarGraphView.setGraphData(viewDayData, new String[] { getApplicationContext().getString(months[month]) });
 				relativeLayoutMeteoUpGraphByDay.addView(dayBarGraphView);
 				break;
+			}
+			
+			if (jsonObject.getBoolean("newversion")) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.alert_newversion_title);
+		        builder.setMessage(getString(R.string.alert_newversion_message));
+		        builder.setPositiveButton(getString(R.string.alert_newversion_download), new DialogInterface.OnClickListener() {
+		                   public void onClick(DialogInterface dialog, int id) {
+		                	   final String appPackageName = "com.happymeteo";
+		                	   startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+		                   }
+		               })
+		               .setNegativeButton(R.string.cancel, null);
+		        Dialog dialog = builder.create();
+		        dialog.show();
 			}
 		} catch (Exception e) {
 			Log.e(Const.TAG, e.getMessage(), e);

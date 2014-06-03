@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # Copy this file into secrets.py and set keys, secrets and scopes.
 
+CUR_VERSION = 'Versione 0.3.4'
+
 # This is a session secret key used by webapp2 framework.
 # Get 'a random and long string' from here: 
 # http://clsc.net/tools/random-string-generator.php
