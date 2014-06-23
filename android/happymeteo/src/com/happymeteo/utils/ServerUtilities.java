@@ -71,6 +71,7 @@ public class ServerUtilities {
 	public static void getQuestions(NotLoggedActivity appyMeteoNotLoggedActivity, String userId) {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("userId", userId));
+		nvps.add(new BasicNameValuePair("version", appyMeteoNotLoggedActivity.getString(R.string.version)));
 		new PostRequest(Const.GET_QUESTIONS_URL_ID, appyMeteoNotLoggedActivity, nvps).execute(Const.GET_QUESTIONS_URL);
 	}
 

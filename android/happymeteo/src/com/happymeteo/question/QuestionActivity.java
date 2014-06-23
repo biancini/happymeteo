@@ -50,7 +50,7 @@ public class QuestionActivity extends QuestionImpulseActivity implements OnPostE
 					final int type = jsonObject.getInt("type");
 					final String textYes = jsonObject.getString("textYes");
 					final String textNo = jsonObject.getString("textNo");
-					final boolean mandatory = jsonObject.getBoolean("mandatory");
+					final boolean mandatory = jsonObject.has("mandatory") ? jsonObject.getBoolean("mandatory") : false;
 					if (mandatory) mandatoryQuestionsId.add(id_question);
 
 					writeQuestionText(questionText);
